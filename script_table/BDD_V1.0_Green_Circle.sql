@@ -175,3 +175,16 @@ CREATE TABLE vue_admin.elearning_list(
    PRIMARY KEY(course_id),
    FOREIGN KEY(admin_id) REFERENCES admin(admin_id)
 );
+
+CREATE TABLE vue_admin.event(
+   id_event COUNTER,
+   title VARCHAR(50) NOT NULL,
+   description VARCHAR(50),
+   event_date DATETIME NOT NULL,
+   location VARCHAR(50) NOT NULL,
+   capacity INT,
+   status VARCHAR(50) NOT NULL,
+   admin_id INT NOT NULL,
+   PRIMARY KEY(id_event),
+   FOREIGN KEY(admin_id) REFERENCES admin(admin_id)
+);
