@@ -1,32 +1,13 @@
--- Suppression des tables si elles existent déjà
-DROP TABLE IF EXISTS vue_user.company;
-DROP TABLE IF EXISTS vue_user.preference;
-DROP TABLE IF EXISTS vue_user.log;
-DROP TABLE IF EXISTS vue_user.listing;
-DROP TABLE IF EXISTS vue_user.listing_image;
-DROP TABLE IF EXISTS vue_user.container;
-DROP TABLE IF EXISTS vue_user.event;
-DROP TABLE IF EXISTS vue_user.elearning;
-DROP TABLE IF EXISTS vue_user.object_type;
-DROP TABLE IF EXISTS vue_user.emplacement;
-DROP TABLE IF EXISTS vue_user.inscription;
-DROP TABLE IF EXISTS vue_user.condition_type;
+DROP DATABASE IF EXISTS vue_user;
 
-DROP TABLE IF EXISTS vue_admin.admin;
-DROP TABLE IF EXISTS vue_admin.elearning_list;
-DROP TABLE IF EXISTS vue_admin.article;
+-- Création des bases de données
+CREATE DATABASE vue_user;
 
--- Suppression des schémas pour réinitialiser l'environnement
-DROP SCHEMA IF EXISTS vue_user;
-DROP SCHEMA IF EXISTS vue_admin;
+-- Utilisation de la base de données vue_user
+USE vue_user;
 
--- Création des schémas
-CREATE SCHEMA vue_user;
-CREATE SCHEMA vue_admin;
-
-
--- SCHEMA USER
-CREATE TABLE vue_user.company(
+-- Création des tables pour le schéma vue_user
+CREATE TABLE company (
    siren INT,
    nom VARCHAR(50) NOT NULL,
    email VARCHAR(75) NOT NULL,
@@ -38,8 +19,8 @@ CREATE TABLE vue_user.company(
    PRIMARY KEY(siren)
 );
 
-CREATE TABLE vue_user.preference(
-   Id_preference COUNTER,
+CREATE TABLE preference (
+   Id_preference INT AUTO_INCREMENT,
    preference JSON NOT NULL,
    siren INT NOT NULL,
    PRIMARY KEY(Id_preference),
@@ -47,8 +28,8 @@ CREATE TABLE vue_user.preference(
    FOREIGN KEY(siren) REFERENCES company(siren)
 );
 
-CREATE TABLE vue_user.log(
-   id_log COUNTER,
+CREATE TABLE log (
+   id_log INT AUTO_INCREMENT,
    action VARCHAR(50) NOT NULL,
    log_timestamp DATETIME NOT NULL,
    siren INT NOT NULL,
@@ -56,8 +37,8 @@ CREATE TABLE vue_user.log(
    FOREIGN KEY(siren) REFERENCES company(siren)
 );
 
-CREATE TABLE vue_user.elearning(
-   Id_elearning COUNTER,
+CREATE TABLE elearning (
+   Id_elearning INT AUTO_INCREMENT,
    title VARCHAR(50) NOT NULL,
    description TEXT NOT NULL,
    price INT NOT NULL,
@@ -70,7 +51,7 @@ CREATE TABLE vue_user.elearning(
    FOREIGN KEY(siren) REFERENCES company(siren)
 );
 
-CREATE TABLE vue_user.event(
+CREATE TABLE event (
    event_id INT,
    title VARCHAR(50) NOT NULL,
    description TEXT NOT NULL,
@@ -81,28 +62,28 @@ CREATE TABLE vue_user.event(
    PRIMARY KEY(event_id)
 );
 
-CREATE TABLE vue_user.condition_type(
-   Id_condition_type COUNTER,
+CREATE TABLE condition_type (
+   Id_condition_type INT AUTO_INCREMENT,
    label VARCHAR(50) NOT NULL,
    PRIMARY KEY(Id_condition_type)
 );
 
-CREATE TABLE vue_user.object_type(
-   Id_object_type COUNTER,
+CREATE TABLE object_type (
+   Id_object_type INT AUTO_INCREMENT,
    label VARCHAR(50) NOT NULL,
    PRIMARY KEY(Id_object_type)
 );
 
-CREATE TABLE vue_user.container(
-   Id_Container COUNTER,
+CREATE TABLE container (
+   Id_Container INT AUTO_INCREMENT,
    adress VARCHAR(50) NOT NULL,
    city VARCHAR(50) NOT NULL,
    zipcode VARCHAR(5) NOT NULL,
    PRIMARY KEY(Id_Container)
 );
 
-CREATE TABLE vue_user.inscription(
-   Id_inscription COUNTER,
+CREATE TABLE inscription (
+   Id_inscription INT AUTO_INCREMENT,
    event_id INT NOT NULL,
    siren INT NOT NULL,
    PRIMARY KEY(Id_inscription),
@@ -110,17 +91,17 @@ CREATE TABLE vue_user.inscription(
    FOREIGN KEY(siren) REFERENCES company(siren)
 );
 
-CREATE TABLE vue_user.emplacement(
-   Id_emplacement COUNTER,
-   available LOGICAL,
+CREATE TABLE emplacement (
+   Id_emplacement INT AUTO_INCREMENT,
+   available BOOLEAN,
    dimension VARCHAR(11),
    Id_Container INT NOT NULL,
    PRIMARY KEY(Id_emplacement),
-   FOREIGN KEY(Id_Container) REFERENCES Container(Id_Container)
+   FOREIGN KEY(Id_Container) REFERENCES container(Id_Container)
 );
 
-CREATE TABLE vue_user.listing(
-   Id_item COUNTER,
+CREATE TABLE listing (
+   Id_item INT AUTO_INCREMENT,
    title VARCHAR(50) NOT NULL,
    description TEXT NOT NULL,
    dimension VARCHAR(11),
@@ -138,24 +119,29 @@ CREATE TABLE vue_user.listing(
    FOREIGN KEY(Id_condition_type) REFERENCES condition_type(Id_condition_type)
 );
 
-CREATE TABLE vue_user.listing_image(
-   Id_listing_image COUNTER,
+CREATE TABLE listing_image (
+   Id_listing_image INT AUTO_INCREMENT,
    image VARBINARY(255),
    Id_item INT NOT NULL,
    PRIMARY KEY(Id_listing_image),
    FOREIGN KEY(Id_item) REFERENCES listing(Id_item)
 );
 
--- SCHEMA ADMIN
-CREATE TABLE vue_admin.admin(
+DROP DATABASE IF EXISTS vue_admin;
+CREATE DATABASE vue_admin;
+-- Utilisation de la base de données vue_admin
+USE vue_admin;
+
+-- Création des tables pour le schéma vue_admin
+CREATE TABLE admin (
    admin_id INT,
    password VARCHAR(50) NOT NULL,
    rights JSON NOT NULL,
    PRIMARY KEY(admin_id)
 );
 
-CREATE TABLE vue_admin.article(
-   Id_veille COUNTER,
+CREATE TABLE article (
+   Id_veille INT AUTO_INCREMENT,
    title VARCHAR(50) NOT NULL,
    article_date DATETIME,
    author VARCHAR(50) NOT NULL,
@@ -166,7 +152,7 @@ CREATE TABLE vue_admin.article(
    FOREIGN KEY(admin_id) REFERENCES admin(admin_id)
 );
 
-CREATE TABLE vue_admin.elearning_list(
+CREATE TABLE elearning_list (
    course_id VARCHAR(50),
    title VARCHAR(50),
    description TEXT NOT NULL,
@@ -176,8 +162,8 @@ CREATE TABLE vue_admin.elearning_list(
    FOREIGN KEY(admin_id) REFERENCES admin(admin_id)
 );
 
-CREATE TABLE vue_admin.event(
-   id_event COUNTER,
+CREATE TABLE event (
+   id_event INT AUTO_INCREMENT,
    title VARCHAR(50) NOT NULL,
    description VARCHAR(50),
    event_date DATETIME NOT NULL,
