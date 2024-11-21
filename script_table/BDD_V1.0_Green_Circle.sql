@@ -8,7 +8,7 @@ USE vue_user;
 
 -- Création des tables pour le schéma vue_user
 CREATE TABLE company (
-   siren INT,
+   siren CHAR(14),
    nom VARCHAR(50) NOT NULL,
    email VARCHAR(75) NOT NULL,
    password VARCHAR(75) NOT NULL,
@@ -22,7 +22,7 @@ CREATE TABLE company (
 CREATE TABLE preference (
    Id_preference INT AUTO_INCREMENT,
    preference JSON NOT NULL,
-   siren INT NOT NULL,
+   siren CHAR(14) NOT NULL,
    PRIMARY KEY(Id_preference),
    UNIQUE(siren),
    FOREIGN KEY(siren) REFERENCES company(siren)
@@ -32,7 +32,7 @@ CREATE TABLE log (
    id_log INT AUTO_INCREMENT,
    action VARCHAR(50) NOT NULL,
    log_timestamp DATETIME NOT NULL,
-   siren INT NOT NULL,
+   siren CHAR(14) NOT NULL,
    PRIMARY KEY(id_log),
    FOREIGN KEY(siren) REFERENCES company(siren)
 );
@@ -46,7 +46,7 @@ CREATE TABLE elearning (
    token VARCHAR(50),
    password VARCHAR(50),
    course_id INT,
-   siren INT NOT NULL,
+   siren CHAR(14) NOT NULL,
    PRIMARY KEY(Id_elearning),
    FOREIGN KEY(siren) REFERENCES company(siren)
 );
@@ -79,13 +79,14 @@ CREATE TABLE container (
    adress VARCHAR(50) NOT NULL,
    city VARCHAR(50) NOT NULL,
    zipcode VARCHAR(5) NOT NULL,
+   capacity INT NOT NULL,
    PRIMARY KEY(Id_Container)
 );
 
 CREATE TABLE inscription (
    Id_inscription INT AUTO_INCREMENT,
    event_id INT NOT NULL,
-   siren INT NOT NULL,
+   siren CHAR(14) NOT NULL,
    PRIMARY KEY(Id_inscription),
    FOREIGN KEY(event_id) REFERENCES event(event_id),
    FOREIGN KEY(siren) REFERENCES company(siren)
@@ -108,7 +109,7 @@ CREATE TABLE listing (
    date_posted DATE,
    status VARCHAR(50),
    Id_emplacement INT NOT NULL,
-   siren INT NOT NULL,
+   siren CHAR(14) NOT NULL,
    Id_object_type INT NOT NULL,
    Id_condition_type INT NOT NULL,
    PRIMARY KEY(Id_item),
