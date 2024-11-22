@@ -1,3 +1,4 @@
 ./idea
 
 server/db_utils/db_connection.js
+server/node_modules
