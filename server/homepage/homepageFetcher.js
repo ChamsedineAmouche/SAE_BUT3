@@ -3,21 +3,18 @@ const execute_query = require('../db_utils/db_functions');
 
 const mysql = require('mysql2');
 
-async function fetchData() {
+async function getNumberOfCompany() {
     try {
         const connection = getDbConnection('vue_user');
-        const query = 'SELECT * FROM company';
+        const query = 'SELECT COUNT(*) AS count FROM company';
         const result = await execute_query(connection, query);
-
+        const count = result[0]?.count;
         console.log('Résultats de la requête :', result);
-        return result;
+        return count;
     } catch (error) {
         console.error('Erreur lors de la récupération des données :', error);
     }
 }
 
-function fetchData2() {
-    return {test1: ["je suis", "juste un", "chill guy"]}
-}
 
-module.exports = {fetchData, fetchData2};
+module.exports = { getNumberOfCompany };

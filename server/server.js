@@ -1,29 +1,57 @@
 const express = require('express')
+const session = require('express-session');
 const mysql = require('mysql2');
+const crypto = require('crypto');
+
 const app = express()
-const { fetchData, fetchData2 } = require('./read/homepageFetcher');
 
-app.get('/', (req, res) => {
-    console.log("Endpoint '/' was called");
+const { getNumberOfCompany } = require('./homepage/homepageFetcher');
 
+app.use(session({
+    secret: crypto.randomBytes(64).toString('hex'),  // Clé secrète pour signer l'ID de session, 
+    resave: false,                // Ne pas sauvegarder la session si elle n'a pas été modifiée
+    saveUninitialized: true,      // Sauvegarder une session si elle est nouvelle mais n'a pas été modifiée
+    cookie: { secure: true }
+}));
 
+app.get('/set-session', (req, res) => {
+    req.session.user = { siren: '1' };  // FIXME : A modifier avec siren au moment de la connexion
+    res.send('Session créée avec succès!');
 });
 
-app.get("/api", async (req, res) => {
-    console.log("Endpoint '/api' was called");
+
+app.get('/get-session', (req, res) => {
+    if (req.session.user) {
+        res.json(req.session.user);
+    } else {
+        res.send('Aucune session active');
+    }
+});
+
+app.get('/destroy-session', (req, res) => {
+    req.session.destroy((err) => {
+        if (err) {
+            return res.send('Erreur lors de la destruction de la session');
+        }
+        res.send('Session détruite avec succès');
+    });
+});
+
+//ROUTE HOMEPAGE
+app.get("/", async (req, res) => {
+    console.log("Endpoint '/' was called");
     try {
-        const data = await fetchData(); // Attendez que la promesse soit résolue
-        res.json(data); // Envoyez les résultats en JSON
+        const companyNb = await getNumberOfCompany(); 
+
+        homepagedata = {
+            "numberOfCompany" : companyNb
+        }
+        res.json(homepagedata); 
     } catch (error) {
         console.error('Erreur lors de la récupération des données pour /api :', error);
         res.status(500).json({ error: 'Erreur serveur lors de la récupération des données.' });
     }
 })
 
-app.get("/api1", (req, res) => {
-    console.log("Endpoint '/api1' was called");
-    const data1 = fetchData2()
-    res.json(data1)
-})
 
 app.listen(5000, () =>{console.log("Server started on port 5000")})
