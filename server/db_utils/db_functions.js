@@ -1,6 +1,7 @@
 const mysql = require('mysql2');
+const getDbConnection = require("./db_connection");
 
-function execute_query(connection, query) {
+function executeQuery(connection, query) {
     return new Promise((resolve, reject) => {
         connection.query(query, (err, results) => {
             connection.end();
@@ -13,5 +14,10 @@ function execute_query(connection, query) {
     });
 }
 
-module.exports = execute_query;
+function getResultOfQuery(vue, query) {
+    const connection = getDbConnection(vue);
+    return executeQuery(connection, query);
+}
+
+module.exports = { getResultOfQuery };
 
