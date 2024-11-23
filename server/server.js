@@ -6,7 +6,7 @@ const crypto = require('crypto');
 const app = express()
 
 const { getNumberOfCompany } = require('./homepage/homepageFetcher');
-const { getCategoriesForObjects } = require('./addannouncepage/addAnnouncePageCmd');
+const { getCategoriesForObjects, getLocalisationOfStockage } = require('./addannouncepage/addAnnouncePageCmd');
 
 app.use(session({
     secret: crypto.randomBytes(64).toString('hex'),  // Clé secrète pour signer l'ID de session, 
@@ -59,9 +59,10 @@ app.get("/addAnnounce", async (req, res) => {
     console.log("Endpoint '/addAnnounce' was called");
     try {
         const categoriesForObjects = await getCategoriesForObjects();
-
+        const containerAvailable = await getLocalisationOfStockage();
         addannouncedata = {
-            "categoriesForObjects" : categoriesForObjects
+            "categoriesForObjects" : categoriesForObjects,
+            "containerAvailable" : containerAvailable
         }
         res.json(addannouncedata);
     } catch (error) {
