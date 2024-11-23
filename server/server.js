@@ -6,7 +6,7 @@ const crypto = require('crypto');
 const app = express()
 
 const { getNumberOfCompany } = require('./homepage/homepageFetcher');
-const { getCategoriesForObjects, getLocalisationOfStockage } = require('./addannouncepage/addAnnouncePageCmd');
+const { getCategoriesForObjects, getLocalisationOfStockage } = require('./announcepage/announcePageFetcher');
 
 app.use(session({
     secret: crypto.randomBytes(64).toString('hex'),  // Clé secrète pour signer l'ID de session, 
