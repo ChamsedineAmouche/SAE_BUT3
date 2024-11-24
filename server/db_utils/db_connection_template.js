@@ -1,6 +1,6 @@
 const mysql = require('mysql2');
 
-// Fonction pour créer et connecter une base de données
+// Fonction pour se connecter une base de données
 function getDbConnection(database) {
     const connection = mysql.createConnection({
         host: 'localhost',
