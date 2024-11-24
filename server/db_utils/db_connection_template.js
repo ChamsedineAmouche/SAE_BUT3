@@ -22,3 +22,4 @@ function getDbConnection(database) {
 }
 
 module.exports = getDbConnection;
+ 
