@@ -1,6 +1,6 @@
 const {getResultOfQuery} = require('../db_utils/db_functions');
 
-
+ 
 async function getNumberOfCompany() {
     try {
         const result =
