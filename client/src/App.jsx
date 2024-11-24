@@ -1,30 +1,20 @@
-import React, { useEffect, useState } from 'react'
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Layout from "./components/Layout/Layout.jsx";
+import Home from "./pages/Home";
 
-function App() {
-
-  const [backData, setBackendData] = useState({}) 
-
-  useEffect(() => {
-    fetch("/api").then(
-      response => response.json()
-    ).then(
-      data => {
-        setBackendData(data)
-      }
-    )
-  }, [])
-
+const App = () => {
   return (
-    <div>
-      {(typeof backData.test === 'undefined') ? (
-        <p> Loading ...</p>
-      ) : (
-        backData.test.map((test, i) => (
-          <p key={i}> {test} </p>
-        ))
-      )}
-    </div>
-  )
-}
+    <Router>
+      <Routes>
+        {/* Route avec le Layout global */}
+        <Route path="/" element={<Layout />}>
+          <Route index element={<Home />} />
+          <Route path="*" element={<h1>404 - Page non trouvée</h1>} />
+        </Route>
+      </Routes>
+    </Router>
+  );
+};
 
-export default App
+export default App;
