@@ -1,6 +1,5 @@
 const {getResultOfQuery} = require('../db_utils/db_functions');
 
-const mysql = require('mysql2');  
 
 async function getNumberOfCompany() {
     try {
