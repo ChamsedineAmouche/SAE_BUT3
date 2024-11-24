@@ -16,7 +16,7 @@ function getDbConnection(database) {
             throw err;
         }  
         console.log(`Connecté à la base ${database}`);
-    });
+    });    
 
     return connection;
 }
