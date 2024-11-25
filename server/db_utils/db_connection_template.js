@@ -8,7 +8,7 @@ function getDbConnection(database) {
         password: 'password',
         database: database
     });
-     
+      
     // Connexion à MySQL
     connection.connect((err) => {
         if (err) {
