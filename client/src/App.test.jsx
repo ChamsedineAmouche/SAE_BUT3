@@ -1,8 +1,9 @@
 import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom'; // Pour des matchers Jest supplémentaires
 import App from './App';
 
-test('renders learn react link', () => {
+test('renders the welcome message', () => {
   render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
+  const heading = screen.getByText(/Welcome to My App/i);
+  expect(heading).toBeInTheDocument();
 });
