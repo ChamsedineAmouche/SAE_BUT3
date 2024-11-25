@@ -2,11 +2,14 @@ const express = require('express')
 const session = require('express-session');
 const mysql = require('mysql2');
 const crypto = require('crypto');
+const fs = require('fs');
+const path = require('path');
 
 const app = express()
 
 const { getNumberOfCompany } = require('./homepage/homepageFetcher');
 const { getCategoriesForObjects, getLocalisationOfStockage } = require('./announcepage/announcePageFetcher');
+const { insertIntoDatabase } = require('db_utils/db_functions');
 
 app.use(session({
     secret: crypto.randomBytes(64).toString('hex'),  // Clé secrète pour signer l'ID de session, 
@@ -68,6 +71,45 @@ app.get("/addAnnounce", async (req, res) => {
     } catch (error) {
         console.error('Erreur lors de la récupération des données pour /api :', error);
         res.status(500).json({ error: 'Erreur serveur lors de la récupération des données.' });
+    }
+});
+
+app.get("/insertObject", async (req, res) => {
+    try {
+        //const formData = req.body; Quand le front sera fait normalement on recup le json comme ca
+        let formData = "";
+        try {
+            const filePath = "/server/fichiertest/test.json";
+            const fileContent = fs.readFileSync(filePath, 'utf8');
+            formData = JSON.parse(fileContent);
+            console.log('Données chargées :', formData);
+        } catch (error) {
+            console.error('Erreur lors de la lecture du fichier JSON :', error);
+        }
+
+        console.log('Formulaire reçu:', formData);
+
+        if (!formData.title
+            || !formData.hauteur
+            || !formData.largeur
+            || !formData.longueur
+            || !formData.description
+            || !formData.category
+            || !formData.localisation) {
+            return res.status(400).json({ error: 'Tout les champs sont requis.' });
+        }
+
+        const query = `
+            INSERT INTO announces (title, hauteur, largeur, longueur, description, category, localisation)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
+        `;
+
+        const valuesForObjectTable = processFormForInsertion(formData);
+
+        insertIntoDatabase('vue_user', query, values);
+    } catch (error) {
+        console.error('Erreur serveur:', error);
+        res.status(500).json({ error: 'Erreur serveur.' });
     }
 });
 
