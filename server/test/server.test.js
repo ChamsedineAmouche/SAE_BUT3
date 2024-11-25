@@ -1,8 +1,14 @@
 const request = require('supertest');
-const app = require('../server'); // Assurez-vous que vous importez l'application correctement
+const { app, server } = require('../server');  // Importez le serveur
 
 describe('GET /', () => {
+    afterAll(() => {
+        server.close();  // Fermez le serveur après les tests
+    });
+
     it('should always return true', () => {
-        expect(true).toBe(true); // Ce test sera toujours vrai
+        expect(true).toBe(true);
+        console.log("True");
+        server.close();  // Fermez le serveur après les tests
     });
 });

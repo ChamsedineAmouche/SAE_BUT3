@@ -72,4 +72,8 @@ app.get("/addAnnounce", async (req, res) => {
 });
 
 
-app.listen(5001, () =>{console.log("Server started on port 5001")})
+const server = app.listen(5001, () => {
+    console.log("Server started on port 5001");
+});
+
+module.exports = { app, server };
