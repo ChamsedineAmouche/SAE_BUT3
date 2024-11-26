@@ -1,0 +1,128 @@
+pipeline {
+    agent any
+
+    environment {
+        NODE_VERSION = 'nodejs-23'  // Version de Node.js utilisée
+        REPO_URL = 'https://github.com/ChamsedineAmouche/SAE_BUT3.git'
+        BRANCH_NAME = "${env.BRANCH_NAME}"  // Le nom de la branche courante (directement passé par Jenkins)
+    }
+
+    tools {
+        nodejs 'nodejs-23'  // Utilise l'installation de NodeJS 23 configurée dans Jenkins
+    }
+
+    stages {
+
+        stage('Clean Previous Clone') {
+            steps {
+                echo 'Cleaning up any previous clone...'
+                sh 'rm -rf repo'  // Supprime le répertoire 'repo' s'il existe
+            }
+        }
+
+        stage('Clone Repository') {
+            steps {
+                script {
+                    echo 'Cloning repository...'
+                    sh "git clone ${env.REPO_URL} repo"  // Clone le dépôt dans un dossier appelé 'repo'
+                    dir('repo') {
+                        def branchName = sh(script: "git rev-parse --abbrev-ref HEAD", returnStdout: true).trim()
+                        echo "The current branch is: ${branchName}"
+                        env.BRANCH_NAME = branchName  // Sauvegarde la branche actuelle dans une variable
+                    }
+                }
+            }
+        }
+        
+        stage('Install Front-End Dependencies') {
+            steps {
+                dir('repo/client') { // Se place dans le dossier client
+                    echo 'Installing front-end dependencies...'
+                    sh 'npm install'
+                }
+            }
+        }
+
+        stage('Install Back-End Dependencies') {
+            steps {
+                dir('repo/server') { // Se place dans le dossier server
+                    echo 'Installing back-end dependencies...'
+                    sh 'npm install'
+                }
+            }
+        }
+
+        stage('Prepare DB Connection File') {
+            steps {
+                script {
+                    echo 'Creating fake db_connection.js with touch...'
+                    // Vérifier et créer le répertoire avant d'ajouter le fichier
+                    sh '''
+                    mkdir -p repo/db_utils  # Crée le répertoire s'il n'existe pas
+                    touch repo/db_utils/db_connection.js
+                    echo "module.exports = {" > repo/db_utils/db_connection.js
+                    echo "    connect: () => {}," >> repo/db_utils/db_connection.js
+                    echo "    query: () => {}" >> repo/db_utils/db_connection.js
+                    echo "};" >> repo/db_utils/db_connection.js
+                    '''
+                }
+            }
+        }
+
+        stage('Test Front-End') {
+            steps {
+                dir('repo/client') {
+                    echo 'Running front-end tests...'
+                    sh 'npm test'  // Exécuter les tests front-end
+                }
+            }
+        }
+
+        stage('Test Back-End') {
+            steps {
+                dir('repo/server') {
+                    echo 'Running back-end tests...'
+                    sh 'npm test'  // Exécuter les tests back-end
+                }
+            }
+        }
+
+        stage('Push to Current Branch') {
+            steps {
+                dir('repo') { // Assurez-vous que toutes les commandes Git s'exécutent dans le répertoire cloné
+                    script {
+                        echo 'Tests passed. Pushing changes to the current branch...'
+
+                        // Configure Git
+                        sh 'git config user.name "abdelrkb"'
+                        sh 'git config user.email "abdelnour.rekkab@gmail.com"'
+
+                        //
+                        sh '''
+                        git fetch origin testCI || true
+                        git checkout testCI || git checkout -b testCI
+                        '''
+                        
+                        // Ajouter les modifications et pousser les changements
+                        sh 'git add .'
+                        sh 'git commit -m "Automated commit after successful tests" || exit 0'
+                        sh 'git push origin testCI' // Pousse les changements sur la branche de test CI/CD
+                    }
+                }
+            }
+        }
+    }
+
+
+    post {
+        always {
+            echo 'Pipeline finished.'
+        }
+        success {
+            echo 'Pipeline succeeded!'
+        }
+        failure {
+            echo 'Pipeline failed.'
+        }
+    }
+}
