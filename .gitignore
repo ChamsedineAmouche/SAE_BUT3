@@ -2,3 +2,4 @@
 .idea/
 
 server/node_modules
+server/db_utils/db_connection.js
