@@ -99,14 +99,14 @@ pipeline {
 
                         //
                         sh '''
-                        git fetch origin testCI || true
-                        git checkout testCI || git checkout -b testCI
+                        git fetch origin prod-test || true
+                        git checkout prod-test || git checkout -b prod-test
                         '''
                         
                         // Ajouter les modifications et pousser les changements
                         sh 'git add .'
                         sh 'git commit -m "Automated commit after successful tests" || exit 0'
-                        sh 'git push origin testCI' // Pousse les changements sur la branche de test CI/CD
+                        sh 'git push origin prod-test' // Pousse les changements sur la branche de test CI/CD
                     }
                 }
             }
