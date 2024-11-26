@@ -1,3 +1,57 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Flèches personnalisées */
+.slick-prev, .slick-next {
+    width: 40px !important; /* Taille des flèches */
+    height: 40px !important;
+    background-color: #C2C89C !important; /* Couleur vert clair */
+    border-radius: 50% !important; /* Forme circulaire */
+    z-index: 10;
+    display: flex !important; /* Centrer l'icône à l'intérieur */
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3); /* Ombre légère */
+}
+
+/* Modifier la couleur des icônes */
+.slick-prev::before, .slick-next::before {
+    content: '' !important; /* Supprime les flèches par défaut */
+}
+
+/* Ajout des icônes personnalisées */
+.slick-prev {
+    background-image: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" fill="%23333333" viewBox="0 0 24 24"%3E%3Cpath d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/%3E%3C/svg%3E') !important;
+    background-size: 50%;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.slick-next {
+    background-image: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" fill="%23333333" viewBox="0 0 24 24"%3E%3Cpath d="M8.59 16.59L10 18l6-6-6-6-1.41 1.41L13.17 12z"/%3E%3C/svg%3E') !important;
+    background-size: 50%;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+/* Espacement entre les éléments */
+/* .slick-slide {
+    margin: 0 10px !important;
+} */
+
+/* Alignement des cartes */
+.slick-list {
+    margin: 0 -10px !important; /* Ajuste pour compenser les marges des cartes */
+}
+
+/* Style des cartes */
+.slick-slide > div {
+    height: 200px; /* Hauteur fixe des cartes */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #e0e0e0;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}

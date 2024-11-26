@@ -6,7 +6,7 @@ const Layout = () => {
   return (
     <>
       <Navbar />
-      <main className="container mx-auto py-4">
+      <main className="">
         <Outlet />
       </main>
     </>
