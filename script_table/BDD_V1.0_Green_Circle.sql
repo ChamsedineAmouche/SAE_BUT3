@@ -20,10 +20,10 @@ CREATE TABLE company (
 );
 
 CREATE TABLE preference (
-   Id_preference INT AUTO_INCREMENT,
+   id_preference INT AUTO_INCREMENT,
    preference JSON NOT NULL,
    siren CHAR(14) NOT NULL,
-   PRIMARY KEY(Id_preference),
+   PRIMARY KEY(id_preference),
    UNIQUE(siren),
    FOREIGN KEY(siren) REFERENCES company(siren)
 );
@@ -38,7 +38,7 @@ CREATE TABLE log (
 );
 
 CREATE TABLE elearning (
-   Id_elearning INT AUTO_INCREMENT,
+   id_elearning INT AUTO_INCREMENT,
    title VARCHAR(50) NOT NULL,
    description TEXT NOT NULL,
    price INT NOT NULL,
@@ -47,7 +47,7 @@ CREATE TABLE elearning (
    password VARCHAR(50),
    course_id INT,
    siren CHAR(14) NOT NULL,
-   PRIMARY KEY(Id_elearning),
+   PRIMARY KEY(id_elearning),
    FOREIGN KEY(siren) REFERENCES company(siren)
 );
 
@@ -63,69 +63,80 @@ CREATE TABLE event (
 );
 
 CREATE TABLE condition_type (
-   Id_condition_type INT AUTO_INCREMENT,
+   id_condition_type INT AUTO_INCREMENT,
    label VARCHAR(50) NOT NULL,
-   PRIMARY KEY(Id_condition_type)
+   PRIMARY KEY(id_condition_type)
 );
 
 CREATE TABLE object_type (
-   Id_object_type INT AUTO_INCREMENT,
+   id_object_type INT AUTO_INCREMENT,
    label VARCHAR(50) NOT NULL,
-   PRIMARY KEY(Id_object_type)
+   PRIMARY KEY(id_object_type)
 );
 
 CREATE TABLE container (
-   Id_Container INT AUTO_INCREMENT,
+   id_Container INT AUTO_INCREMENT,
    adress VARCHAR(50) NOT NULL,
    city VARCHAR(50) NOT NULL,
    zipcode VARCHAR(5) NOT NULL,
    capacity INT NOT NULL,
-   PRIMARY KEY(Id_Container)
+   PRIMARY KEY(id_Container)
 );
 
 CREATE TABLE inscription (
-   Id_inscription INT AUTO_INCREMENT,
+   id_inscription INT AUTO_INCREMENT,
    event_id INT NOT NULL,
    siren CHAR(14) NOT NULL,
-   PRIMARY KEY(Id_inscription),
+   PRIMARY KEY(id_inscription),
    FOREIGN KEY(event_id) REFERENCES event(event_id),
    FOREIGN KEY(siren) REFERENCES company(siren)
 );
 
 CREATE TABLE emplacement (
-   Id_emplacement INT AUTO_INCREMENT,
+   id_emplacement INT AUTO_INCREMENT,
    available BOOLEAN,
    dimension VARCHAR(11),
-   Id_Container INT NOT NULL,
-   PRIMARY KEY(Id_emplacement),
-   FOREIGN KEY(Id_Container) REFERENCES container(Id_Container)
+   id_Container INT NOT NULL,
+   PRIMARY KEY(id_emplacement),
+   FOREIGN KEY(id_Container) REFERENCES container(id_Container)
 );
 
 CREATE TABLE listing (
-   Id_item INT AUTO_INCREMENT,
+   id_item INT AUTO_INCREMENT,
    title VARCHAR(50) NOT NULL,
    description TEXT NOT NULL,
    dimension VARCHAR(11),
    date_posted DATE,
    status VARCHAR(50),
-   Id_emplacement INT NOT NULL,
+   id_emplacement INT NOT NULL,
    siren CHAR(14) NOT NULL,
-   Id_object_type INT NOT NULL,
-   Id_condition_type INT NOT NULL,
-   PRIMARY KEY(Id_item),
-   UNIQUE(Id_emplacement),
-   FOREIGN KEY(Id_emplacement) REFERENCES emplacement(Id_emplacement),
+   id_object_type INT NOT NULL,
+   id_condition_type INT NOT NULL,
+   PRIMARY KEY(id_item),
+   UNIQUE(id_emplacement),
+   FOREIGN KEY(id_emplacement) REFERENCES emplacement(id_emplacement),
    FOREIGN KEY(siren) REFERENCES company(siren),
-   FOREIGN KEY(Id_object_type) REFERENCES object_type(Id_object_type),
-   FOREIGN KEY(Id_condition_type) REFERENCES condition_type(Id_condition_type)
+   FOREIGN KEY(id_object_type) REFERENCES object_type(id_object_type),
+   FOREIGN KEY(id_condition_type) REFERENCES condition_type(id_condition_type)
 );
 
 CREATE TABLE listing_image (
-   Id_listing_image INT AUTO_INCREMENT,
+   id_listing_image INT AUTO_INCREMENT,
    image VARBINARY(255),
-   Id_item INT NOT NULL,
-   PRIMARY KEY(Id_listing_image),
-   FOREIGN KEY(Id_item) REFERENCES listing(Id_item)
+   id_item INT NOT NULL,
+   PRIMARY KEY(id_listing_image),
+   FOREIGN KEY(id_item) REFERENCES listing(id_item)
+);
+
+CREATE TABLE transaction(
+   id_transaction COUNTER,
+   Statut VARCHAR(50),
+   date_transaction DATETIME NOT NULL,
+   id_item INT,
+   SIREN INT NOT NULL,
+   PRIMARY KEY(id_transaction),
+   FOREIGN KEY(id_item) REFERENCES listing(id_item),
+   FOREIGN KEY(SIREN) REFERENCES company(SIREN)
 );
 
 DROP DATABASE IF EXISTS vue_admin;
@@ -142,14 +153,14 @@ CREATE TABLE admin (
 );
 
 CREATE TABLE article (
-   Id_veille INT AUTO_INCREMENT,
+   id_veille INT AUTO_INCREMENT,
    title VARCHAR(50) NOT NULL,
    article_date DATETIME,
    author VARCHAR(50) NOT NULL,
    content TEXT NOT NULL,
    image VARBINARY(50),
    admin_id INT NOT NULL,
-   PRIMARY KEY(Id_veille),
+   PRIMARY KEY(id_veille),
    FOREIGN KEY(admin_id) REFERENCES admin(admin_id)
 );
 
