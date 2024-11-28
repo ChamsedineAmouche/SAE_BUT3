@@ -1,11 +1,23 @@
-import React, { useEffect, useState } from 'react'
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Layout from "./components/Layout/Layout.jsx";
+import Home from "./pages/Home";
+import Deposit from "./pages/Deposit";
 
-function App() {
+const App = () => {
   return (
-    <div>
-      <h1>Welcome to My App</h1>
-    </div>
+    <Router>
+      <Routes>
+        {/* Route avec le Layout global */}
+        <Route path="/" element={<Layout />}>
+          <Route index element={<Home />} />
+          <Route path="*" element={<h1>404 - Page non trouvée</h1>} />
+          <Route path="/depot" element={<Deposit />} />
+        </Route>
+      </Routes>
+    </Router>
   );
-}
+};
 
+export default App;
 export default App;
