@@ -4,21 +4,21 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 // Composant Carousel
-const Carousel = ({ items }) => {
+const Carousel = ({ items, title }) => {
   const settings = {
     dots: true,
     infinite: true,
     speed: 500,
-    slidesToShow: 3,
-    slidesToScroll: 3
+    slidesToShow: 4,
+    slidesToScroll: 4
   };
 
   return (
     <div className="w-full mx-auto p-4 relative">
       {/* Titre */}
-      <h2 className="text-2xl font-bold text-darkGreen mb-6 flex items-center">
-        Derniers dépôts
-        <span className="ml-2 w-full border-b-2 border-darkGreen"></span>
+      <h2 className="text-2xl font-bold text-darkGreen mb-6 flex items-center whitespace-nowrap">
+        {title}
+        <span className="ml-4 w-full border-b-2 border-darkGreen"></span>
       </h2>
 
       {/* Carousel avec React Slick */}

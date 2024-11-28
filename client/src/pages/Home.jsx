@@ -6,7 +6,7 @@ import Carousel from "../components/Carousel/Carousel";
 const Home = () => {
   
   const navigate = useNavigate()
-  const items = ["exemple 1", "exemple 2", "exemple 3", "exemple 4"];
+  const items = ["exemple 1", "exemple 2", "exemple 3", "exemple 4", "exemple 5", "exemple 6", "exemple 7", "exemple 8", "exemple 9"];
 
   return (
     <div className="home-page">
@@ -105,7 +105,22 @@ const Home = () => {
 
       {/* Section derniers dépots */}
       <div className="p-8">
-        <Carousel items={items} />
+        <Carousel items={items} title={"Derniers dépôts"} />
+      </div>
+
+      {/* Section derniers e-learnings */}
+      <div className="p-8">
+        <Carousel items={items} title={"e-learnings"} />
+      </div>
+
+      {/* Section derniers articles */}
+      <div className="p-8">
+        <Carousel items={items} title={"Derniers articles"} />
+      </div>
+
+      {/* Section derniers événements */}
+      <div className="p-8">
+        <Carousel items={items} title={"Derniers événements"} />
       </div>
     </div>
   );

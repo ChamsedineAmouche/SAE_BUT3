@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+
 /* Flèches personnalisées */
 .slick-prev, .slick-next {
     width: 40px !important; /* Taille des flèches */
@@ -36,9 +37,12 @@
 }
 
 /* Espacement entre les éléments */
-/* .slick-slide {
-    margin: 0 10px !important;
-} */
+.slick-slide {
+    margin-left: 1.5rem !important;
+    margin-right: 1.5rem !important;
+    width: 20rem !important;
+    height: 20rem !important;
+}
 
 /* Alignement des cartes */
 .slick-list {
@@ -47,7 +51,8 @@
 
 /* Style des cartes */
 .slick-slide > div {
-    height: 200px; /* Hauteur fixe des cartes */
+    height: 20rem; /* Hauteur fixe des cartes */
+    width: 20rem;
     display: flex;
     align-items: center;
     justify-content: center;

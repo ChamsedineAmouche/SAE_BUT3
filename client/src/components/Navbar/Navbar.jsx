@@ -4,17 +4,20 @@ import { faBell, faSearch, faSquarePlus, faEllipsis } from "@fortawesome/free-so
 
 const Navbar = () => {
   return (
-    <nav className="bg-oliveGreen text-white fixed top-0 left-0 w-full z-10 shadow-xl">
+    <nav className="bg-oliveGreen text-white fixed top-0 left-0 w-full z-20 shadow-xl">
       <div className="flex items-center justify-between py-4 px-4 ">
         {/* Left Section - Logo */}
         <div className="flex items-center space-x-4 flex-shrink-0">
-          <img src="" alt="Logo" className="h-10 w-10" />
+          <a href="/">
+            <img src="" alt="Logo" className="h-10 w-10" />
+          </a>
+          
           <h1 className="text-xl font-bold">Green Circle</h1>
         </div>
 
         {/* Center Section - Menu Links */}
         <div className="hidden md:flex flex-1 justify-center space-x-6">
-          <a href="/" className="hover:text-darkGreen text-xl">
+          <a href="/depot" className="hover:text-darkGreen text-xl">
             Dépôt
           </a>
           <a href="/" className="hover:text-darkGreen text-xl">
@@ -24,7 +27,7 @@ const Navbar = () => {
             Veille
           </a>
           <a href="/" className="hover:text-darkGreen text-xl">
-            Évènement
+            Événement
           </a>
           <a href="/" className="hover:text-darkGreen text-xl">
             Forum
