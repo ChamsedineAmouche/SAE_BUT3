@@ -41,7 +41,7 @@ INSERT INTO vue_user.condition_type (label) VALUES
 INSERT INTO vue_user.container (adress,city,zipcode,capacity) VALUES
 	 ('1 BOULEVARD MICHAEL FARADAY','Serris','77700',5);
 
-INSERT INTO vue_user.emplacement (available,dimension,Id_Container) VALUES
+INSERT INTO vue_user.emplacement (available,dimension,id_Container) VALUES
 	 (1,NULL,1),
 	 (1,NULL,1),
 	 (1,NULL,1),
