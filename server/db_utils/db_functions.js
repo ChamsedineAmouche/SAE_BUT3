@@ -19,5 +19,15 @@ function getResultOfQuery(vue, query) {
     return executeQuery(connection, query);
 }
 
-module.exports = { getResultOfQuery };
+function insertIntoDatabase(vue, query, values) {
+    const connection = getDbConnection(vue)
+    connection.execute(query, values, (err, results) => {
+        if (err) {
+            console.error('Erreur lors de l\'insertion des données :', err);
+        }
+        console.log('Données insérées avec succès:', results);
+    });
+}
+
+module.exports = { getResultOfQuery, insertIntoDatabase };
 
