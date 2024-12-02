@@ -5,20 +5,20 @@
 
 /* Flèches personnalisées */
 .slick-prev, .slick-next {
-    width: 40px !important; /* Taille des flèches */
+    width: 40px !important;
     height: 40px !important;
-    background-color: #C2C89C !important; /* Couleur vert clair */
-    border-radius: 50% !important; /* Forme circulaire */
+    background-color: #C2C89C !important;
+    border-radius: 50% !important;
     z-index: 10;
-    display: flex !important; /* Centrer l'icône à l'intérieur */
+    display: flex !important;
     justify-content: center;
     align-items: center;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3); /* Ombre légère */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
 }
 
 /* Modifier la couleur des icônes */
 .slick-prev::before, .slick-next::before {
-    content: '' !important; /* Supprime les flèches par défaut */
+    content: '' !important;
 }
 
 /* Ajout des icônes personnalisées */
@@ -46,17 +46,17 @@
 
 /* Alignement des cartes */
 .slick-list {
-    margin: 0 -10px !important; /* Ajuste pour compenser les marges des cartes */
+    margin: 0 -10px !important;
 }
 
 /* Style des cartes */
 .slick-slide > div {
-    height: 20rem; /* Hauteur fixe des cartes */
+    height: 20rem;
     width: 20rem;
     display: flex;
     align-items: center;
     justify-content: center;
     background-color: #e0e0e0;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
 }

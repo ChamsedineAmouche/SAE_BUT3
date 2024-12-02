@@ -2,6 +2,8 @@ import React from "react";
 import homeImage from "../assets/images/home_image.png";
 import { useNavigate } from "react-router-dom";
 import Carousel from "../components/Carousel/Carousel";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBoxArchive, faCalendarDay, faEye, faGraduationCap } from "@fortawesome/free-solid-svg-icons";
 
 const Home = () => {
   
@@ -103,6 +105,59 @@ const Home = () => {
         </div>
       </div>
 
+      {/* Section Derniers tous */}
+      <div className=" max-w-full py-6">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
+          <div className="flex flex-col items-center">
+            <div className="flex flex-row items-center text-left w-3/4">
+              <FontAwesomeIcon icon={faBoxArchive} className="mr-2 text-xl mb-6" />
+              <h2 className="text-2xl font-bold text-darkGreen mb-6 flex items-center whitespace-nowrap">
+                Dépôt
+              </h2>
+            </div>
+            <div className="w-80 h-80 flex items-center justify-center bg-[#e0e0e0] rounded-xl shadow-md">
+              <p className="text-black font-semibold">Exemple</p>
+            </div>
+          </div>
+
+          <div className="flex flex-col items-center">
+            <div className="flex flex-row items-center text-left w-3/4">
+              <FontAwesomeIcon icon={faGraduationCap} className="mr-2 text-xl mb-6" />
+              <h2 className="text-2xl font-bold text-darkGreen mb-6 flex items-center whitespace-nowrap">
+                E-learning
+              </h2>
+            </div>
+            <div className="w-80 h-80 flex items-center justify-center bg-[#e0e0e0] rounded-xl shadow-md">
+              <p className="text-black font-semibold">Exemple</p>
+            </div>
+          </div>
+
+          <div className="flex flex-col items-center">
+            <div className="flex flex-row items-center text-left w-3/4">
+              <FontAwesomeIcon icon={faEye} className="mr-2 text-xl mb-6" />
+              <h2 className="text-2xl font-bold text-darkGreen mb-6 flex items-center whitespace-nowrap">
+                Veille
+              </h2>
+            </div>
+            <div className="w-80 h-80 flex items-center justify-center bg-[#e0e0e0] rounded-xl shadow-md">
+              <p className="text-black font-semibold">Exemple</p>
+            </div>
+          </div>
+
+          <div className="flex flex-col items-center">
+            <div className="flex flex-row items-center text-left w-3/4">
+              <FontAwesomeIcon icon={faCalendarDay} className="mr-2 text-xl mb-6" />
+              <h2 className="text-2xl font-bold text-darkGreen mb-6 flex items-center whitespace-nowrap">
+                Événement
+              </h2>
+            </div>
+            <div className="w-80 h-80 flex items-center justify-center bg-[#e0e0e0] rounded-xl shadow-md">
+              <p className="text-black font-semibold">Exemple</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Section derniers dépots */}
       <div className="p-8">
         <Carousel items={items} title={"Derniers dépôts"} />
@@ -110,7 +165,7 @@ const Home = () => {
 
       {/* Section derniers e-learnings */}
       <div className="p-8">
-        <Carousel items={items} title={"e-learnings"} />
+        <Carousel items={items} title={"E-learnings"} />
       </div>
 
       {/* Section derniers articles */}
