@@ -5,7 +5,6 @@ import { faBell, faSearch, faSquarePlus, faEllipsis } from "@fortawesome/free-so
 const Navbar = () => {
   const [userSession, setUserSession] = useState(null); // State to manage user session info
 
-  // Function to fetch session data when "Deco" button is clicked
   const handleLogout = async () => {
     try {
         const response = await fetch("/destroy-session", {
@@ -36,7 +35,7 @@ const Navbar = () => {
           <a href="/">
             <img src="" alt="Logo" className="h-10 w-10" />
           </a>
-          
+
           <h1 className="text-xl font-bold">Green Circle</h1>
         </div>
 
@@ -90,11 +89,11 @@ const Navbar = () => {
           {/* User profile picture */}
           <div className="h-10 w-10 rounded-full overflow-hidden border border-white ml-12">
             <a href="/">
-              <img
+                <img
                 src="/default_user.png"
                 alt="Profil"
                 className="h-full w-full object-cover"
-              />
+                />
             </a>
           </div>
         </div>
