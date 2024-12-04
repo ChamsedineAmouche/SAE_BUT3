@@ -2,18 +2,40 @@ const express = require('express')
 const session = require('express-session');
 const mysql = require('mysql2');
 const crypto = require('crypto');
+const { registerCompany } = require("./account/accountInsert");
 
 const app = express()
 
 const { getNumberOfCompany } = require('./homepage/homepageFetcher');
 const { getCategoriesForObjects, getLocalisationOfStockage } = require('./announcepage/announcePageFetcher');
 
+//---------------------------------------------------------------------------------------------------------
+//Partie session création de compte
+//---------------------------------------------------------------------------------------------------------
 app.use(session({
     secret: crypto.randomBytes(64).toString('hex'),  // Clé secrète pour signer l'ID de session, 
     resave: false,                // Ne pas sauvegarder la session si elle n'a pas été modifiée
     saveUninitialized: true,      // Sauvegarder une session si elle est nouvelle mais n'a pas été modifiée
     cookie: { secure: true }
 }));
+
+app.post("/register", async (req, res) => {
+    //const { siren, nom , email, password, adress, zipcode, city } = req.body;
+    const siren = '18770918300235'
+    const nom = 'test'
+    const email= 'test'
+    const password = '1234'
+    const adress = '3 rue du test'
+    const zipcode = 'test'
+    const city = 'test'
+    const phone = 'test'
+    const result = await registerCompany(siren, nom , email, password, adress, zipcode, city, phone);
+    if (result.success) {
+        res.status(201).json(result);
+    } else {
+        res.status(500).json(result);
+    }
+});
 
 app.get('/set-session', (req, res) => {
     req.session.user = { siren: '1' };  // FIXME : A modifier avec siren au moment de la connexion

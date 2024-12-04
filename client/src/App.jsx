@@ -3,7 +3,8 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Layout from "./components/Layout/Layout.jsx";
 import Home from "./pages/Home";
 import Deposit from "./pages/Deposit";
-
+import Register from "./pages/Register.jsx";
+import Login from "./pages/Login.jsx"
 const App = () => {
   return (
     <Router>
@@ -13,6 +14,8 @@ const App = () => {
           <Route index element={<Home />} />
           <Route path="*" element={<h1>404 - Page non trouvée</h1>} />
           <Route path="/depot" element={<Deposit />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
         </Route>
       </Routes>
     </Router>

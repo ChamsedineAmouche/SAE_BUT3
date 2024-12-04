@@ -19,5 +19,7 @@ function getResultOfQuery(vue, query) {
     return executeQuery(connection, query);
 }
 
+
+
 module.exports = { getResultOfQuery };
 
