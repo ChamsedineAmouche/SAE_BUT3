@@ -51,12 +51,6 @@ app.post("/login", async (req, res) => {
     }
 });
 
-app.get('/set-session', (req, res) => {
-    req.session.user = { siren: '1' };  // FIXME : A modifier avec siren au moment de la connexion
-    res.send('Session créée avec succès!');
-});
-
-
 app.get('/get-session', (req, res) => {
     if (req.session.user) {
         console.log("Session active:", req.session.user);
@@ -68,12 +62,20 @@ app.get('/get-session', (req, res) => {
 });
 
 app.get('/destroy-session', (req, res) => {
+    if (req.session.user) {
+        console.log("Session active:", req.session.user);
+        
     req.session.destroy((err) => {
         if (err) {
+            console.log('Erreur destruction de session');
             return res.send('Erreur lors de la destruction de la session');
         }
+        console.log('Session détruite avec succès');
         res.send('Session détruite avec succès');
-    });
+    });}
+    else{
+        console.log("Aucune session active")
+    }
 });
 
 //ROUTE HOMEPAGE

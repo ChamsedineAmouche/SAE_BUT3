@@ -8,26 +8,25 @@ const Navbar = () => {
   // Function to fetch session data when "Deco" button is clicked
   const handleLogout = async () => {
     try {
-      const response = await fetch("/get-session", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+        const response = await fetch("/destroy-session", {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            credentials: 'include',
+        });
 
-      const result = await response.json();
-      if (response.ok) {
-        // Handle successful session retrieval (e.g., update UI based on session data)
-        setUserSession(result);
-        console.log("Session:", result);  // Log session details if needed
-      } else {
-        // Handle errors (e.g., session not found)
-        console.error("Failed to get session:", result);
-      }
+        const result = await response.json();
+        if (response.ok) {
+            setUserSession(result);
+            console.log("Session:", result);
+        } else {
+            console.error("Failed to get session:", result);
+        }
     } catch (error) {
-      console.error("Error fetching session:", error);
+        console.error("Error fetching session:", error);
     }
-  };
+};
 
   return (
     <nav className="bg-oliveGreen text-white fixed top-0 left-0 w-full z-20 shadow-xl">
