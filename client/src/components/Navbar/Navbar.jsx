@@ -35,7 +35,7 @@ const Navbar = () => {
           <a href="/">
             <img src="" alt="Logo" className="h-10 w-10" />
           </a>
-          
+
           <h1 className="text-xl font-bold">Green Circle</h1>
         </div>
 
@@ -98,7 +98,7 @@ const Navbar = () => {
           </div>
         </div>
 
-        {/* "Deco" button to call /getsession */}
+        {/* "Logout" button destroy session */}
         <button onClick={handleLogout} className="ml-4 text-white hover:text-darkGreen">
           Logout
         </button>
