@@ -35,7 +35,7 @@ const Navbar = () => {
           <a href="/">
             <img src="" alt="Logo" className="h-10 w-10" />
           </a>
-
+        
           <h1 className="text-xl font-bold">Green Circle</h1>
         </div>
 
