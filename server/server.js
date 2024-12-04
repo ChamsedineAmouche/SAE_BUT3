@@ -2,13 +2,21 @@ const express = require('express')
 const session = require('express-session');
 const mysql = require('mysql2');
 const crypto = require('crypto');
+const cors = require('cors');
 const { registerCompany } = require("./account/accountInsert");
-
+const { verifyCredentials } = require("./account/accountLogin")
 const app = express()
+
 
 const { getNumberOfCompany } = require('./homepage/homepageFetcher');
 const { getCategoriesForObjects, getLocalisationOfStockage } = require('./announcepage/announcePageFetcher');
 
+app.use(express.json());
+
+app.use(cors({
+    origin: 'http://localhost:3000', 
+    credentials: true                 
+}));
 //---------------------------------------------------------------------------------------------------------
 //Partie session création de compte
 //---------------------------------------------------------------------------------------------------------
@@ -16,24 +24,30 @@ app.use(session({
     secret: crypto.randomBytes(64).toString('hex'),  // Clé secrète pour signer l'ID de session, 
     resave: false,                // Ne pas sauvegarder la session si elle n'a pas été modifiée
     saveUninitialized: true,      // Sauvegarder une session si elle est nouvelle mais n'a pas été modifiée
-    cookie: { secure: true }
+    cookie: { secure: false }
 }));
 
 app.post("/register", async (req, res) => {
-    //const { siren, nom , email, password, adress, zipcode, city } = req.body;
-    const siren = '18770918300235'
-    const nom = 'test'
-    const email= 'test'
-    const password = '1234'
-    const adress = '3 rue du test'
-    const zipcode = 'test'
-    const city = 'test'
-    const phone = 'test'
+    const { siren, nom , email, password, adress, zipcode, city, phone } = req.body;
     const result = await registerCompany(siren, nom , email, password, adress, zipcode, city, phone);
     if (result.success) {
         res.status(201).json(result);
     } else {
         res.status(500).json(result);
+    }
+});
+
+app.post("/login", async (req, res) => {
+    const { email, password } = req.body;
+
+    const result = await verifyCredentials(email, password);
+
+    if (result.success) {
+        req.session.user = { siren: result.siren };
+        console.log("Session after login:", req.session.user);
+        res.status(201).json(result); 
+    } else {
+        res.status(500).json(result); 
     }
 });
 
@@ -45,8 +59,10 @@ app.get('/set-session', (req, res) => {
 
 app.get('/get-session', (req, res) => {
     if (req.session.user) {
+        console.log("Session active:", req.session.user);
         res.json(req.session.user);
     } else {
+        console.log("Aucune session active");
         res.send('Aucune session active');
     }
 });

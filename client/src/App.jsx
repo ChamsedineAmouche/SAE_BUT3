@@ -5,6 +5,7 @@ import Home from "./pages/Home";
 import Deposit from "./pages/Deposit";
 import Register from "./pages/Register.jsx";
 import Login from "./pages/Login.jsx"
+
 const App = () => {
   return (
     <Router>

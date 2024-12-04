@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom"; // Pour la navigation après enregistrement
+import { useNavigate } from "react-router-dom"; 
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -13,7 +13,7 @@ const Register = () => {
     phone: "",
   });
   const [errorMessage, setErrorMessage] = useState("");
-  const navigate = useNavigate(); // Pour rediriger après enregistrement réussi
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -22,23 +22,23 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
+    console.log("Sending form data:", formData);  
+  
     try {
       const response = await fetch("/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(formData), 
       });
-
+  
       const result = await response.json();
-
+  
       if (result.success) {
-        // Inscription réussie, redirection vers la page de connexion ou une autre page
-        navigate("/login");
+        setErrorMessage(result.message);
       } else {
-        // Affichage du message d'erreur reçu du backend
         setErrorMessage(result.message);
       }
     } catch (error) {

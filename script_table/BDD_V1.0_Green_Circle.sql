@@ -8,7 +8,7 @@ USE vue_user;
 
 -- Création des tables pour le schéma vue_user
 CREATE TABLE company (
-   siren CHAR(14),
+   siren CHAR(14) PRIMARY KEY,
    nom VARCHAR(50) NOT NULL,
    email VARCHAR(75) NOT NULL,
    password VARCHAR(75) NOT NULL,
@@ -16,7 +16,8 @@ CREATE TABLE company (
    zipcode VARCHAR(5) NOT NULL,
    city VARCHAR(50) NOT NULL,
    phone VARCHAR(10) NOT NULL,
-   PRIMARY KEY(siren)
+   token VARCHAR(255) NOT NULL,
+   active BOOL DEFAULT 0
 );
 
 CREATE TABLE preference (
