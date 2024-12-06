@@ -16,6 +16,8 @@ CREATE TABLE company (
    zipcode VARCHAR(5) NOT NULL,
    city VARCHAR(50) NOT NULL,
    phone VARCHAR(10) NOT NULL,
+   token VARCHAR(255) NOT NULL,
+   active BOOL DEFAULT 0,
    PRIMARY KEY(siren)
 );
 
