@@ -5,7 +5,7 @@ const crypto = require('crypto');
 
 const app = express()
 
-const { getNumberOfCompany } = require('./homepage/homepageFetcher');
+const { getDataForHomePage } = require('./homepage/homepageFetcher');
 const { getCategoriesForObjects, getLocalisationOfStockage } = require('./announcepage/announcePageFetcher');
 
 app.use(session({
@@ -42,11 +42,8 @@ app.get('/destroy-session', (req, res) => {
 app.get("/", async (req, res) => {
     console.log("Endpoint '/' was called");
     try {
-        const companyNb = await getNumberOfCompany(); 
-
-        homepagedata = {
-            "numberOfCompany" : companyNb
-        }
+        const homepagedata = await getDataForHomePage();
+        console.log(homepagedata);
         res.json(homepagedata); 
     } catch (error) {
         console.error('Erreur lors de la récupération des données pour /api :', error);
