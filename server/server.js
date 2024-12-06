@@ -7,8 +7,8 @@ const { registerCompany } = require("./account/accountInsert");
 const { verifyCredentials } = require("./account/accountLogin")
 const app = express()
 
+const { getDataForHomePage } = require('./homepage/homepageFetcher');
 
-const { getNumberOfCompany } = require('./homepage/homepageFetcher');
 const { getCategoriesForObjects, getLocalisationOfStockage } = require('./announcepage/announcePageFetcher');
 
 app.use(express.json());
@@ -82,11 +82,8 @@ app.get('/destroy-session', (req, res) => {
 app.get("/", async (req, res) => {
     console.log("Endpoint '/' was called");
     try {
-        const companyNb = await getNumberOfCompany(); 
-
-        homepagedata = {
-            "numberOfCompany" : companyNb
-        }
+        const homepagedata = await getDataForHomePage();
+        console.log(homepagedata);
         res.json(homepagedata); 
     } catch (error) {
         console.error('Erreur lors de la récupération des données pour /api :', error);

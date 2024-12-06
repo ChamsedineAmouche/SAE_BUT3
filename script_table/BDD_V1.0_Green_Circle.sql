@@ -131,14 +131,14 @@ CREATE TABLE listing_image (
 );
 
 CREATE TABLE transaction(
-   id_transaction COUNTER,
+   id_transaction INT AUTO_INCREMENT,
    Statut VARCHAR(50),
    date_transaction DATETIME NOT NULL,
    id_item INT,
-   SIREN INT NOT NULL,
+   SIREN CHAR(14) NOT NULL,
    PRIMARY KEY(id_transaction),
    FOREIGN KEY(id_item) REFERENCES listing(id_item),
-   FOREIGN KEY(SIREN) REFERENCES company(SIREN)
+   FOREIGN KEY(SIREN) REFERENCES company(siren)
 );
 
 DROP DATABASE IF EXISTS vue_admin;
