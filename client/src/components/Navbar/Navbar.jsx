@@ -1,8 +1,32 @@
-import React from "react";
+import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBell, faSearch, faSquarePlus, faEllipsis } from "@fortawesome/free-solid-svg-icons";
 
 const Navbar = () => {
+  const [userSession, setUserSession] = useState(null); // State to manage user session info
+
+  const handleLogout = async () => {
+    try {
+        const response = await fetch("/destroy-session", {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            credentials: 'include',
+        });
+
+        const result = await response.json();
+        if (response.ok) {
+            setUserSession(result);
+            console.log("Session:", result);
+        } else {
+            console.error("Failed to get session:", result);
+        }
+    } catch (error) {
+        console.error("Error fetching session:", error);
+    }
+};
+
   return (
     <nav className="bg-oliveGreen text-white fixed top-0 left-0 w-full z-20 shadow-xl">
       <div className="flex items-center justify-between py-4 px-4 ">
@@ -11,7 +35,7 @@ const Navbar = () => {
           <a href="/">
             <img src="" alt="Logo" className="h-10 w-10" />
           </a>
-          
+
           <h1 className="text-xl font-bold">Green Circle</h1>
         </div>
 
@@ -73,6 +97,11 @@ const Navbar = () => {
             </a>
           </div>
         </div>
+
+        {/* "Logout" button destroy session */}
+        <button onClick={handleLogout} className="ml-4 text-white hover:text-darkGreen">
+          Logout
+        </button>
       </div>
     </nav>
   );
