@@ -79,7 +79,7 @@ app.get('/destroy-session', (req, res) => {
 });
 
 //ROUTE HOMEPAGE
-app.get("/", async (req, res) => {
+app.get("/homepage", async (req, res) => {
     console.log("Endpoint '/' was called");
     try {
         const homepagedata = await getDataForHomePage();
