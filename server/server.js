@@ -8,13 +8,13 @@ const { verifyCredentials } = require("./account/accountLogin")
 const app = express()
 
 const { getDataForHomePage } = require('./homepage/homepageFetcher');
-
+const { getDataForCatalogPage } = require('./catalog/catalogFetcher')
 const { getCategoriesForObjects, getLocalisationOfStockage } = require('./announcepage/announcePageFetcher');
 
 app.use(express.json());
 
 app.use(cors({
-    origin: 'http://localhost:3000', 
+    origin: 'http://localhost:3000',
     credentials: true                 
 }));
 //---------------------------------------------------------------------------------------------------------
@@ -102,6 +102,18 @@ app.get("/addAnnounce", async (req, res) => {
             "containerAvailable" : containerAvailable
         }
         res.json(addannouncedata);
+    } catch (error) {
+        console.error('Erreur lors de la récupération des données pour /api :', error);
+        res.status(500).json({ error: 'Erreur serveur lors de la récupération des données.' });
+    }
+});
+
+//ENDPOINT PAGE LISTE OBJET
+app.get("/catalog", async (req, res) => {
+    console.log("Endpoint '/catalog' was called");
+    try {
+        const catalogData = await getDataForCatalogPage();
+        res.json(catalogData);
     } catch (error) {
         console.error('Erreur lors de la récupération des données pour /api :', error);
         res.status(500).json({ error: 'Erreur serveur lors de la récupération des données.' });
