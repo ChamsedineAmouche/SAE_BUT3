@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import homeImage from "../assets/images/home_image.png";
 import { useNavigate } from "react-router-dom";
 import Carousel from "../components/Carousel/Carousel";
@@ -7,6 +7,34 @@ const Home = () => {
   
   const navigate = useNavigate()
   const items = ["exemple 1", "exemple 2", "exemple 3", "exemple 4", "exemple 5", "exemple 6", "exemple 7", "exemple 8", "exemple 9"];
+  const [data, setData] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    fetch('/homepage')
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then(data => {
+        setData(data);
+        setIsLoading(false);
+      })
+      .catch(error => {
+        console.error('Error fetching data:', error);
+        setIsLoading(false);
+      });
+  }, []);
+
+  if (isLoading) {
+    return <p>Chargement en cours...</p>;
+  }
+
+  if (!data) {
+    return <p>Erreur lors du chargement des données.</p>;
+  }
 
   return (
     <div className="home-page">
@@ -60,7 +88,7 @@ const Home = () => {
                 fontSize: "clamp(1rem, 4vw, 2.5rem)",
               }}
             >
-              6
+              {data.numberOfCompany}
             </div>
 
             {/* Texte aligné verticalement */}
