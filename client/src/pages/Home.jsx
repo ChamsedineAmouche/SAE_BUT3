@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import homeImage from "../assets/images/home_image.png";
 import { useNavigate } from "react-router-dom";
 import Carousel from "../components/Carousel/Carousel";
@@ -9,6 +9,19 @@ const Home = () => {
   
   const navigate = useNavigate()
   const items = ["exemple 1", "exemple 2", "exemple 3", "exemple 4", "exemple 5", "exemple 6", "exemple 7", "exemple 8", "exemple 9"];
+  const [data, setData] = useState(null);
+
+  useEffect(() => {
+    fetch('/')
+      .then(response => {
+        setData(response.data)
+        console.log(data)
+      })
+      .catch(error => {
+        console.error('Error fetching data: ', error)
+      })
+  }, [])
+
 
   return (
     <div className="home-page">
