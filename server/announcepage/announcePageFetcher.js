@@ -26,5 +26,16 @@ async function getLocalisationOfStockage() {
     }
 }
 
+async function getStatesForObjects() {
+    try {
+        const result =
+            await getResultOfQuery('vue_user', 'SELECT label FROM condition_type');
+        console.log('Résultats de la requête :', result);
+        return result;
+    } catch (error) {
+        console.error('Erreur lors de la récupération des données :', error);
+    }
+}
 
-module.exports = {getCategoriesForObjects, getLocalisationOfStockage};
+
+module.exports = {getCategoriesForObjects, getLocalisationOfStockage, getStatesForObjects};

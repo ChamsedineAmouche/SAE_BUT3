@@ -1,12 +1,42 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import homeImage from "../assets/images/home_image.png";
 import { useNavigate } from "react-router-dom";
 import Carousel from "../components/Carousel/Carousel";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBoxArchive, faCalendarDay, faEye, faGraduationCap } from "@fortawesome/free-solid-svg-icons";
 
 const Home = () => {
   
   const navigate = useNavigate()
   const items = ["exemple 1", "exemple 2", "exemple 3", "exemple 4", "exemple 5", "exemple 6", "exemple 7", "exemple 8", "exemple 9"];
+  const [data, setData] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    fetch('/homepage')
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then(data => {
+        setData(data);
+        setIsLoading(false);
+      })
+      .catch(error => {
+        console.error('Error fetching data:', error);
+        setIsLoading(false);
+      });
+  }, []);
+
+  if (isLoading) {
+    return <p>Chargement en cours...</p>;
+  }
+
+  if (!data) {
+    return <p>Erreur lors du chargement des données.</p>;
+  }
 
   return (
     <div className="home-page">
@@ -60,7 +90,7 @@ const Home = () => {
                 fontSize: "clamp(1rem, 4vw, 2.5rem)",
               }}
             >
-              6
+              {data.numberOfCompany}
             </div>
 
             {/* Texte aligné verticalement */}
@@ -99,6 +129,59 @@ const Home = () => {
             <p className="text-darkGreen font-medium text-4xl flex items-center">
               Objets récupérés
             </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Section Derniers tous */}
+      <div className=" max-w-full py-6">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
+          <div className="flex flex-col items-center">
+            <div className="flex flex-row items-center text-left w-3/4">
+              <FontAwesomeIcon icon={faBoxArchive} className="mr-2 text-xl mb-6" />
+              <h2 className="text-2xl font-bold text-darkGreen mb-6 flex items-center whitespace-nowrap">
+                Dépôt
+              </h2>
+            </div>
+            <div className="w-80 h-80 flex items-center justify-center bg-[#e0e0e0] rounded-xl shadow-md">
+              <p className="text-black font-semibold">Exemple</p>
+            </div>
+          </div>
+
+          <div className="flex flex-col items-center">
+            <div className="flex flex-row items-center text-left w-3/4">
+              <FontAwesomeIcon icon={faGraduationCap} className="mr-2 text-xl mb-6" />
+              <h2 className="text-2xl font-bold text-darkGreen mb-6 flex items-center whitespace-nowrap">
+                E-learning
+              </h2>
+            </div>
+            <div className="w-80 h-80 flex items-center justify-center bg-[#e0e0e0] rounded-xl shadow-md">
+              <p className="text-black font-semibold">Exemple</p>
+            </div>
+          </div>
+
+          <div className="flex flex-col items-center">
+            <div className="flex flex-row items-center text-left w-3/4">
+              <FontAwesomeIcon icon={faEye} className="mr-2 text-xl mb-6" />
+              <h2 className="text-2xl font-bold text-darkGreen mb-6 flex items-center whitespace-nowrap">
+                Veille
+              </h2>
+            </div>
+            <div className="w-80 h-80 flex items-center justify-center bg-[#e0e0e0] rounded-xl shadow-md">
+              <p className="text-black font-semibold">Exemple</p>
+            </div>
+          </div>
+
+          <div className="flex flex-col items-center">
+            <div className="flex flex-row items-center text-left w-3/4">
+              <FontAwesomeIcon icon={faCalendarDay} className="mr-2 text-xl mb-6" />
+              <h2 className="text-2xl font-bold text-darkGreen mb-6 flex items-center whitespace-nowrap">
+                Événement
+              </h2>
+            </div>
+            <div className="w-80 h-80 flex items-center justify-center bg-[#e0e0e0] rounded-xl shadow-md">
+              <p className="text-black font-semibold">Exemple</p>
+            </div>
           </div>
         </div>
       </div>
