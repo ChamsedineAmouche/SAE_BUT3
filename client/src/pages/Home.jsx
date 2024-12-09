@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import homeImage from "../assets/images/home_image.png";
 import { useNavigate } from "react-router-dom";
 import Carousel from "../components/Carousel/Carousel";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBoxArchive, faCalendarDay, faEye, faGraduationCap } from "@fortawesome/free-solid-svg-icons";
 
 const Home = () => {
   

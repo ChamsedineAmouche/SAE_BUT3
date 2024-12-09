@@ -5,6 +5,7 @@ import Home from "./pages/Home";
 import Deposit from "./pages/Deposit";
 import Register from "./pages/Register.jsx";
 import Login from "./pages/Login.jsx"
+import NewDeposit from "./pages/NewDeposit.jsx";
 
 const App = () => {
   return (
@@ -15,6 +16,7 @@ const App = () => {
           <Route index element={<Home />} />
           <Route path="*" element={<h1>404 - Page non trouvée</h1>} />
           <Route path="/depot" element={<Deposit />} />
+          <Route path="/nouveau_depot" element={<NewDeposit />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
         </Route>

@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBell, faSearch, faSquarePlus, faEllipsis } from "@fortawesome/free-solid-svg-icons";
+import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
+  const navigate = useNavigate()
   const [userSession, setUserSession] = useState(null); // State to manage user session info
 
   const handleLogout = async () => {
@@ -77,7 +79,7 @@ const Navbar = () => {
         {/* Right Section - Search bar and Icons */}
         <div className="flex items-center flex-shrink-0 space-x-4">
           {/* Add button */}
-          <button className="relative">
+          <button className="relative" onClick={() => navigate('/nouveau_depot')}>
             <FontAwesomeIcon icon={faSquarePlus} className="text-2xl hover:text-darkGreen" />
           </button>
 
