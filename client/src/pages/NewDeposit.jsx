@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
@@ -10,25 +10,46 @@ const NewDeposit = () => {
   const [state, setState] = useState('');
   const [location, setLocation] = useState('');
   const [selectedFiles, setSelectedFiles] = useState([]);
+  const [data, setData] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [submissions, setSubmissions] = useState([]);
 
   const handleFileChange = (event) => {
     const files = Array.from(event.target.files);
     setSelectedFiles(files);
   };
 
+  const handleSubmit = (event) => {
+    event.preventDefault(); // Empêche le rechargement de la page
+    const newSubmission = {
+      title,
+      dimensions,
+      description,
+      category,
+      state,
+      location,
+      files: selectedFiles.map(file => file.name), // Stocke les noms des fichiers
+    };
+
+    setSubmissions([...submissions, newSubmission]); // Ajoute les nouvelles données au tableau
+    console.log('Form Data Saved:', newSubmission);
+
+    // Réinitialise le formulaire
+    setTitle('');
+    setDimensions({ length: '', width: '', height: '' });
+    setDescription('');
+    setCategory('');
+    setState('');
+    setLocation('');
+    setSelectedFiles([]);
+  };
+
   const handleSaveDraft = () => {
     console.log('Draft saved');
   };
 
-  const handlePublish = () => {
-    console.log('Object published');
-  };
-
-  const [data, setData] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
-
   useEffect(() => {
-    fetch('/add_')
+    fetch('/addAnnounce')
       .then(response => {
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -57,7 +78,7 @@ const NewDeposit = () => {
   return (
     <div className="max-w-5xl mx-auto px-12 py-24">
       <h1 className="text-4xl font-bold text-start mb-6 text-darkGreen">Dépose ton objet !</h1>
-      <form className="space-y-6">
+      <form className="space-y-6" onSubmit={handleSubmit}>
         {/* Photo Upload */}
         <div className="border p-4 border-2 rounded-lg border-yellowGreen1 bg-yellowGreen1 bg-opacity-20">
           <label className="block text-m font-medium pb-2 text-darkGreen">Ajoute jusqu'à 5 photos :</label>
@@ -148,9 +169,11 @@ const NewDeposit = () => {
               className="mt-2 block w-full px-3 py-2 border rounded-md shadow-sm bg-white focus:outline-none focus:ring-oliveGreen focus:border-oliveGreen"
             >
               <option value="">Choisir une catégorie</option>
-              <option value="meubles">Meubles</option>
-              <option value="électroménager">Électroménager</option>
-              <option value="décoration">Décoration</option>
+              {data.categoriesForObjects.map((category, index) => (
+                <option key={index} value={category.label}>
+                  {category.label}
+                </option>
+              ))}
             </select>
           </div>
 
@@ -165,9 +188,11 @@ const NewDeposit = () => {
               className="mt-2 block w-full px-3 py-2 border rounded-md shadow-sm bg-white focus:outline-none focus:ring-oliveGreen focus:border-oliveGreen"
             >
               <option value="">Choisir un état</option>
-              <option value="neuf">Neuf</option>
-              <option value="bon état">Bon état</option>
-              <option value="usé">Usé</option>
+              {data.statesForObjects.map((state, index) => (
+                <option key={index} value={state.label}>
+                  {state.label}
+                </option>
+              ))}
             </select>
           </div>
         </div>
@@ -203,9 +228,8 @@ const NewDeposit = () => {
             Sauvegarder le brouillon
           </button>
           <button
-            type="button"
+            type="submit"
             className="px-4 py-2 bg-oliveGreen text-white rounded-md shadow hover:bg-yellowGreen1 mx-2"
-            onClick={handlePublish}
           >
             Publier
           </button>

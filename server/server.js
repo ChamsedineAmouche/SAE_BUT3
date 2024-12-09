@@ -9,7 +9,7 @@ const app = express()
 
 const { getDataForHomePage } = require('./homepage/homepageFetcher');
 const { getDataForCatalogPage } = require('./catalog/catalogFetcher')
-const { getCategoriesForObjects, getLocalisationOfStockage } = require('./announcepage/announcePageFetcher');
+const { getCategoriesForObjects, getLocalisationOfStockage, getStatesForObjects } = require('./announcepage/announcePageFetcher');
 
 app.use(express.json());
 
@@ -97,9 +97,11 @@ app.get("/addAnnounce", async (req, res) => {
     try {
         const categoriesForObjects = await getCategoriesForObjects();
         const containerAvailable = await getLocalisationOfStockage();
+        const statesForObjects = await getStatesForObjects();
         addannouncedata = {
             "categoriesForObjects" : categoriesForObjects,
-            "containerAvailable" : containerAvailable
+            "containerAvailable" : containerAvailable,
+            "statesForObjects" : statesForObjects
         }
         res.json(addannouncedata);
     } catch (error) {
