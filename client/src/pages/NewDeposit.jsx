@@ -14,6 +14,7 @@ const NewDeposit = () => {
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [submissions, setSubmissions] = useState([]);
+  const [errors, setErrors] = useState({});
 
   const handleFileChange = (event) => {
     const files = Array.from(event.target.files);
@@ -47,6 +48,20 @@ const NewDeposit = () => {
 
   const handleSaveDraft = () => {
     console.log('Draft saved');
+  };
+
+  const isFormValid = () => {
+    return (
+      title.trim() !== '' &&
+      dimensions.longueur.trim() !== '' &&
+      dimensions.largeur.trim() !== '' &&
+      dimensions.hauteur.trim() !== '' &&
+      description.trim() !== '' &&
+      category.trim() !== '' &&
+      state.trim() !== '' &&
+      location.trim() !== '' &&
+      selectedFiles.length > 0
+    );
   };
 
   useEffect(() => {
@@ -233,7 +248,9 @@ const NewDeposit = () => {
           </button>
           <button
             type="submit"
-            className="px-4 py-2 bg-oliveGreen text-white rounded-md shadow hover:bg-yellowGreen1 mx-2"
+            className={`px-4 py-2 bg-oliveGreen text-white rounded-md shadow hover:bg-yellowGreen1 mx-2 
+              ${isFormValid() ? 'hover:bg-yellowGreen1' : 'opacity-50 cursor-not-allowed'}`}
+            disabled={!isFormValid()}
           >
             Publier
           </button>
