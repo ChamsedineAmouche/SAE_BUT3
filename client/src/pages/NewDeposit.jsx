@@ -17,6 +17,7 @@ const NewDeposit = () => {
   const [errors, setErrors] = useState({});
 
   const handleFileChange = (event) => {
+<<<<<<< HEAD
     const filesRecup = Array.from(event.target.files);
     console.log('Fichiers sélectionnés :', filesRecup); // Vérifie ici
     setSelectedFiles(filesRecup);
@@ -48,6 +49,42 @@ const NewDeposit = () => {
     );
 
     console.log('binaryFiles :', base64Files);
+=======
+    const files = Array.from(event.target.files);
+    console.log('Fichiers sélectionnés :', files); // Vérifie ici
+    setSelectedFiles(files);
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    const readFileAsBinary = (file) => {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        if (!file) {
+          reject(new Error('Le fichier est invalide ou non sélectionné.'));
+        }
+
+        reader.onload = () => {
+          console.log(`Fichier ${file.name} lu avec succès, taille : ${file.size}`);
+          resolve(reader.result); // Renvoie l'ArrayBuffer
+        };
+
+        reader.onerror = (error) => {
+          console.error(`Erreur lors de la lecture du fichier ${file.name} :`, error);
+          reject(error);
+        };
+
+        reader.readAsArrayBuffer(file);
+      });
+    };
+
+    const binaryFiles = await Promise.all(
+        selectedFiles.map(file => readFileAsBinary(file))
+    );
+
+    console.log('binaryFiles :', binaryFiles);
+>>>>>>> b9eea10 (insertion correcte)
 
     const newSubmission = {
       title,
@@ -56,7 +93,11 @@ const NewDeposit = () => {
       category,
       state,
       location,
+<<<<<<< HEAD
       files : base64Files,
+=======
+      files: binaryFiles,
+>>>>>>> b9eea10 (insertion correcte)
     };
 
     try {
@@ -74,7 +115,11 @@ const NewDeposit = () => {
       }
 
       const result = await response.json(); // Résultat renvoyé par le serveur
+<<<<<<< HEAD
       console.log('Données envoyées avec succès :', newSubmission);
+=======
+      console.log('Données envoyées avec succès :', result);
+>>>>>>> b9eea10 (insertion correcte)
 
       // Mettre à jour le tableau local des soumissions
       setSubmissions([...submissions, newSubmission]);

@@ -10,7 +10,10 @@ const app = express()
 const { getDataForHomePage } = require('./homepage/homepageFetcher');
 const { getDataForCatalogPage } = require('./catalog/catalogFetcher')
 const { getCategoriesForObjects, getLocalisationOfStockage, getStatesForObjects, insertNewObject } = require('./announcepage/announcePageFetcher');
+<<<<<<< HEAD
 const { getImage } = require('./image/imageFetcher')
+=======
+>>>>>>> b9eea10 (insertion correcte)
 
 app.use(express.json({ limit: '50mb' }));
 
@@ -55,11 +58,20 @@ app.post("/login", async (req, res) => {
 app.post("/insert", async (req, res) => {
     try {
         const newSubmission = req.body;
+<<<<<<< HEAD
         console.log('Nouvelle soumission reçue :');
         console.log('regarde :', newSubmission);
 
         await insertNewObject(newSubmission);
 
+=======
+
+        await insertNewObject(newSubmission);
+
+        console.log('Nouvelle soumission reçue :');
+        console.log('regarde :', newSubmission);
+
+>>>>>>> b9eea10 (insertion correcte)
         // Si besoin, sauvegarde des fichiers et des données dans une base ou un fichier
         res.status(200).json({ message: 'Soumission reçue avec succès : ' + newSubmission});
     } catch (error) {
