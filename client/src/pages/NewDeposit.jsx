@@ -4,7 +4,7 @@ import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
 const NewDeposit = () => {
   const [title, setTitle] = useState('');
-  const [dimensions, setDimensions] = useState({ length: '', width: '', height: '' });
+  const [dimensions, setDimensions] = useState({ longueur: '', largeur: '', hauteur: '' });
   const [description, setDescription] = useState('');
   const [category, setCategory] = useState('');
   const [state, setState] = useState('');
@@ -16,11 +16,40 @@ const NewDeposit = () => {
 
   const handleFileChange = (event) => {
     const files = Array.from(event.target.files);
+    console.log('Fichiers sélectionnés :', files); // Vérifie ici
     setSelectedFiles(files);
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault(); // Empêche le rechargement de la page
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    const readFileAsBinary = (file) => {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        if (!file) {
+          reject(new Error('Le fichier est invalide ou non sélectionné.'));
+        }
+
+        reader.onload = () => {
+          console.log(`Fichier ${file.name} lu avec succès, taille : ${file.size}`);
+          resolve(reader.result); // Renvoie l'ArrayBuffer
+        };
+
+        reader.onerror = (error) => {
+          console.error(`Erreur lors de la lecture du fichier ${file.name} :`, error);
+          reject(error);
+        };
+
+        reader.readAsArrayBuffer(file);
+      });
+    };
+
+    const binaryFiles = await Promise.all(
+        selectedFiles.map(file => readFileAsBinary(file))
+    );
+
+    console.log('binaryFiles :', binaryFiles);
+
     const newSubmission = {
       title,
       dimensions,
@@ -28,15 +57,35 @@ const NewDeposit = () => {
       category,
       state,
       location,
-      files: selectedFiles.map(file => file.name), // Stocke les noms des fichiers
+      files: binaryFiles,
     };
 
-    setSubmissions([...submissions, newSubmission]); // Ajoute les nouvelles données au tableau
-    console.log('Form Data Saved:', newSubmission);
+    try {
+      // Envoi des données au backend
+      const response = await fetch('http://localhost:5001/insert', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newSubmission), // Conversion en JSON pour le backend
+      });
+
+      if (!response.ok) {
+        throw new Error(`Erreur HTTP: ${response.status}`);
+      }
+
+      const result = await response.json(); // Résultat renvoyé par le serveur
+      console.log('Données envoyées avec succès :', result);
+
+      // Mettre à jour le tableau local des soumissions
+      setSubmissions([...submissions, newSubmission]);
+    } catch (error) {
+      console.error('Erreur lors de l\'envoi des données :', error);
+    }
 
     // Réinitialise le formulaire
     setTitle('');
-    setDimensions({ length: '', width: '', height: '' });
+    setDimensions({longueur: '', largeur: '', hauteur: ''});
     setDescription('');
     setCategory('');
     setState('');

@@ -9,7 +9,7 @@ const app = express()
 
 const { getDataForHomePage } = require('./homepage/homepageFetcher');
 const { getDataForCatalogPage } = require('./catalog/catalogFetcher')
-const { getCategoriesForObjects, getLocalisationOfStockage, getStatesForObjects } = require('./announcepage/announcePageFetcher');
+const { getCategoriesForObjects, getLocalisationOfStockage, getStatesForObjects, insertNewObject } = require('./announcepage/announcePageFetcher');
 
 app.use(express.json());
 
@@ -48,6 +48,23 @@ app.post("/login", async (req, res) => {
         res.status(201).json(result); 
     } else {
         res.status(500).json(result); 
+    }
+});
+
+app.post("/insert", async (req, res) => {
+    try {
+        const newSubmission = req.body;
+
+        await insertNewObject(newSubmission);
+
+        console.log('Nouvelle soumission reçue :');
+        console.log('regarde :', newSubmission);
+
+        // Si besoin, sauvegarde des fichiers et des données dans une base ou un fichier
+        res.status(200).json({ message: 'Soumission reçue avec succès : ' + newSubmission});
+    } catch (error) {
+        console.error('Erreur lors du traitement de la soumission :', error);
+        res.status(500).json({ error: 'Erreur interne du serveur' });
     }
 });
 

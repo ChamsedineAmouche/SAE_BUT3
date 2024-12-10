@@ -1,4 +1,4 @@
-const {getResultOfQuery} = require('../db_utils/db_functions');
+const {getResultOfQuery, insertListingWithImages} = require('../db_utils/db_functions');
 
 const mysql = require('mysql2');
 
@@ -37,5 +37,13 @@ async function getStatesForObjects() {
     }
 }
 
+async function insertNewObject(newSubmission) {
+    try {
+        await insertListingWithImages(newSubmission);
+    } catch (error) {
+        console.error('Erreur lors de la récupération des données :', error);
+    }
+}
 
-module.exports = {getCategoriesForObjects, getLocalisationOfStockage, getStatesForObjects};
+
+module.exports = {getCategoriesForObjects, getLocalisationOfStockage, getStatesForObjects, insertNewObject};
