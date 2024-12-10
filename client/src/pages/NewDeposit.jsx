@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import LocalisationSwal from '../components/LocalisationSwal/LocalisationSwal';
 
 const NewDeposit = () => {
   const [title, setTitle] = useState('');
@@ -123,7 +124,7 @@ const NewDeposit = () => {
 
   return (
     <div className="max-w-5xl mx-auto px-12 py-24">
-      <h1 className="text-4xl font-bold text-start mb-6 text-darkGreen">Dépose ton objet !</h1>
+      <h1 className="text-4xl font-bold text-start mb-6 text-darkGreen">Déposez votre objet !</h1>
       <form className="space-y-6" onSubmit={handleSubmit}>
         {/* Photo Upload */}
         <div className="border p-4 border-2 rounded-lg border-yellowGreen1 bg-yellowGreen1 bg-opacity-20">
@@ -174,7 +175,7 @@ const NewDeposit = () => {
 
           {/* Dimensions */}
           <div>
-            <label className="block text-m font-medium pb-2 text-darkGreen">Dimensions</label>
+            <label className="block text-m font-medium pb-2 text-darkGreen">Dimensions (en cm)</label>
             <div className="mt-2 grid grid-cols-3 gap-4">
               {['Longueur', 'Largeur', 'Hauteur'].map((placeholder, index) => (
                 <input
@@ -247,13 +248,16 @@ const NewDeposit = () => {
           {/* Location */}
           <div className='flex items-center'>
             <label className="block text-m font-medium text-darkGreen pr-32 ">Localisation</label>
-            <button
-              type="button"
-              className="mt-2 w-full px-4 py-2 bg-oliveGreen text-white rounded-md shadow hover:bg-yellowGreen1"
-              onClick={() => console.log('Choose location')}
-            >
-              Choisir un emplacement
-            </button>
+            <input
+              type="text"
+              placeholder="Aucun emplacement choisi"
+              id='location'
+              value={location}
+              onChange={(e) => setLocation(e.target.value)}
+              className="mt-2 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-oliveGreen focus:border-oliveGreen mx-2"
+              readOnly
+            />
+            <LocalisationSwal locations={data.containerAvailable} onLocationSelect={(selectedLocation) => setLocation(selectedLocation)} />
           </div>
         </div>
 
@@ -261,14 +265,14 @@ const NewDeposit = () => {
         <div className="flex items-center justify-center">
           <button
             type="button"
-            className="px-4 py-2 border border-red text-red text-white rounded-md shadow hover:bg-rose-100 mx-2"
+            className="px-4 py-2 border border-red text-red rounded-md shadow hover:bg-rose-100 mx-2"
             onClick={() => console.log('Cancelled')}
           >
             Annuler
           </button>
           <button
             type="button"
-            className="px-4 py-2 text-oliveGreen border border-oliveGreen text-white rounded-md shadow hover:bg-gray-100 mx-2"
+            className="px-4 py-2 text-oliveGreen border border-oliveGreen rounded-md shadow hover:bg-gray-100 mx-2"
             onClick={handleSaveDraft}
           >
             Sauvegarder le brouillon
