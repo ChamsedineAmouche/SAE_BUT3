@@ -26,7 +26,7 @@ const insertListingWithImages = async (newSubmission) => {
         await promiseConnection.beginTransaction();
 
         const { title, description, dimensions, category, state, files } = newSubmission;
-
+        console.log('Fichiers reçus (Base64) :', files);
         const stateIdRequest = await getResultOfQuery('vue_user',
             'SELECT id_condition_type FROM condition_type WHERE condition_type.label = ' + "'" + state + "'");
         const categoryIdRequest = await getResultOfQuery('vue_user',
@@ -54,13 +54,16 @@ const insertListingWithImages = async (newSubmission) => {
         console.log(`Données insérées dans la table listing avec id_item: ${id_item}`);
 
         // Insérer chaque image dans la table `listing_image`
-        console.log('Type de fileBuffer:', typeof files);
-        for (const fileBuffer of files) {
-            console.log('Type de fileBuffer:', typeof fileBuffer);
-            console.log('Contenu de fileBuffer:', fileBuffer);
+        console.log('Type de files:', typeof files);
+        console.log('Contenu de files:', files);
+        for (const base64File of files) {
+            const bufferToInsert = Buffer.from(base64File, 'base64');
+            const fileType = await FileType.fromBuffer(bufferToInsert);
+            console.log('Taille du buffer inséré :', bufferToInsert.length);
+
             await promiseConnection.execute(
-                `INSERT INTO listing_image (image, id_item) VALUES (?, ?)`,
-                [Buffer.from(new Uint8Array(fileBuffer)), id_item]
+                `INSERT INTO listing_image (image, id_item, mime_type) VALUES (?, ?, ?)`,
+                [bufferToInsert, id_item, fileType.mime]
             );
         }
 

@@ -15,40 +15,37 @@ const NewDeposit = () => {
   const [submissions, setSubmissions] = useState([]);
 
   const handleFileChange = (event) => {
-    const files = Array.from(event.target.files);
-    console.log('Fichiers sélectionnés :', files); // Vérifie ici
-    setSelectedFiles(files);
+    const filesRecup = Array.from(event.target.files);
+    console.log('Fichiers sélectionnés :', filesRecup); // Vérifie ici
+    setSelectedFiles(filesRecup);
+  };
+
+  const readFileAsBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+
+      reader.onload = () => {
+        const base64Data = reader.result.split(',')[1]; // Supprimer le préfixe "data:"
+        resolve(base64Data);
+      };
+
+      reader.onerror = (error) => {
+        console.error(`Erreur lors de la lecture du fichier ${file.name} :`, error);
+        reject(error);
+      };
+
+      reader.readAsDataURL(file); // Lire le fichier en Base64
+    });
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const readFileAsBinary = (file) => {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        if (!file) {
-          reject(new Error('Le fichier est invalide ou non sélectionné.'));
-        }
-
-        reader.onload = () => {
-          console.log(`Fichier ${file.name} lu avec succès, taille : ${file.size}`);
-          resolve(reader.result); // Renvoie l'ArrayBuffer
-        };
-
-        reader.onerror = (error) => {
-          console.error(`Erreur lors de la lecture du fichier ${file.name} :`, error);
-          reject(error);
-        };
-
-        reader.readAsArrayBuffer(file);
-      });
-    };
-
-    const binaryFiles = await Promise.all(
-        selectedFiles.map(file => readFileAsBinary(file))
+    const base64Files = await Promise.all(
+        selectedFiles.map((file) => readFileAsBase64(file))
     );
 
-    console.log('binaryFiles :', binaryFiles);
+    console.log('binaryFiles :', base64Files);
 
     const newSubmission = {
       title,
@@ -57,7 +54,7 @@ const NewDeposit = () => {
       category,
       state,
       location,
-      files: binaryFiles,
+      files : base64Files,
     };
 
     try {
@@ -75,7 +72,7 @@ const NewDeposit = () => {
       }
 
       const result = await response.json(); // Résultat renvoyé par le serveur
-      console.log('Données envoyées avec succès :', result);
+      console.log('Données envoyées avec succès :', newSubmission);
 
       // Mettre à jour le tableau local des soumissions
       setSubmissions([...submissions, newSubmission]);

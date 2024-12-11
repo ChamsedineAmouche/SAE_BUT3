@@ -12,7 +12,7 @@ const { getDataForCatalogPage } = require('./catalog/catalogFetcher')
 const { getCategoriesForObjects, getLocalisationOfStockage, getStatesForObjects, insertNewObject } = require('./announcepage/announcePageFetcher');
 const { getImage } = require('./image/imageFetcher')
 
-app.use(express.json());
+app.use(express.json({ limit: '50mb' }));
 
 app.use(cors({
     origin: 'http://localhost:3000',
@@ -55,11 +55,10 @@ app.post("/login", async (req, res) => {
 app.post("/insert", async (req, res) => {
     try {
         const newSubmission = req.body;
-
-        await insertNewObject(newSubmission);
-
         console.log('Nouvelle soumission reçue :');
         console.log('regarde :', newSubmission);
+
+        await insertNewObject(newSubmission);
 
         // Si besoin, sauvegarde des fichiers et des données dans une base ou un fichier
         res.status(200).json({ message: 'Soumission reçue avec succès : ' + newSubmission});
@@ -145,8 +144,14 @@ app.get("/catalog", async (req, res) => {
 app.get("/image", async (req, res) => {
     console.log("Endpoint '/image' was called");
     try {
-        const imageData = await getImage();
-        res.json(imageData)
+        const rows = await getImage();
+        console.log(rows);
+        const images = rows.map(row => ({
+            data: Array.from(new Uint8Array(row.image)), // Conversion en tableau de bytes
+            mimeType: row.mime_type, // Remplace par le vrai type MIME si nécessaire
+        }));
+        console.log(images);
+        res.json(images);
     } catch (error) {
         console.error('Erreur lors de la récupération des données pour /api :', error);
         res.status(500).json({ error: 'Erreur serveur lors de la récupération des données.' });
