@@ -4,7 +4,7 @@ const mysql = require('mysql2');
 const crypto = require('crypto');
 const cors = require('cors');
 const { registerCompany } = require("./account/accountInsert");
-const { verifyCredentials } = require("./account/accountLogin")
+const { verifyCredentials, verifyCredentialsAdmin } = require("./account/accountLogin")
 const app = express()
 
 const { getDataForHomePage } = require('./homepage/homepageFetcher');
@@ -51,11 +51,29 @@ app.post("/login", async (req, res) => {
     }
 });
 
+app.post("/loginAdmin", async (req, res) => {
+    const { id, password } = req.body;
+    const result = await verifyCredentialsAdmin(id, password);
+
+    if (result.success) {
+        req.session.admin = { id: result.admin_id };
+        console.log("Session after login:", req.session.admin);
+        res.status(201).json(result); 
+    } else {
+        res.status(500).json(result); 
+    }
+});
+
 app.get('/get-session', (req, res) => {
     if (req.session.user) {
         console.log("Session active:", req.session.user);
         res.json(req.session.user);
-    } else {
+    } 
+    else if (req.session.admin) {
+        console.log("Session active:", req.session.admin);
+        res.json(req.session.admin);
+    }
+    else {
         console.log("Aucune session active");
         res.send('Aucune session active');
     }
@@ -73,6 +91,18 @@ app.get('/destroy-session', (req, res) => {
         console.log('Session détruite avec succès');
         res.send('Session détruite avec succès');
     });}
+    else if (req.session.admin){
+        console.log("Session active:", req.session.admin);
+        
+        req.session.destroy((err) => {
+            if (err) {
+                console.log('Erreur destruction de session');
+                return res.send('Erreur lors de la destruction de la session');
+            }
+            console.log('Session détruite avec succès');
+            res.send('Session détruite avec succès');
+        });
+    }
     else{
         console.log("Aucune session active")
     }

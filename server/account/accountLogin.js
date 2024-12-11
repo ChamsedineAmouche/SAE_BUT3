@@ -48,4 +48,28 @@ async function verifyCredentials(email, password) {
   }
 }
 
-module.exports = { verifyCredentials };
+async function verifyCredentialsAdmin(id, password) {
+  try {
+    const query = `SELECT * FROM admin WHERE admin_id = '${id}'`;
+    const result = await getResultOfQuery("vue_admin", query);
+
+    if (result.length === 0) {
+      console.log("Admin non trouvé");
+      return { success: false, message: "Utilisateur non trouvé" };
+    }
+    const admin = result[0]; 
+    const match = await bcrypt.compare(password, user.password);
+
+    if (!match) {
+      console.log("Mot de passe incorrect");
+      return { success: false, message: "Mot de passe incorrect" };
+    }
+
+    console.log("Connexion réussie");
+    return { success: true, message: "Connexion réussie", admin : result[0].admin_id};
+  } catch (error) {
+    return { success: false, message: "Erreur interne de vérification" };
+  }
+}
+
+module.exports = { verifyCredentials, verifyCredentialsAdmin };

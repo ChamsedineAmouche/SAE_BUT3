@@ -1,13 +1,13 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom"; // Pour la navigation après connexion
+import { useNavigate } from "react-router-dom";
 
-const Login = () => {
+const LoginAdmin = () => {
   const [formData, setFormData] = useState({
-    email: "",
+    id: "",
     password: "",
   });
   const [errorMessage, setErrorMessage] = useState("");
-  const navigate = useNavigate(); // Pour rediriger après connexion réussie
+  const navigate = useNavigate(); 
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -20,7 +20,7 @@ const Login = () => {
     console.log("Sending login data:", formData);  
 
     try {
-      const response = await fetch("/login", {
+      const response = await fetch("/loginAdmin", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -48,21 +48,21 @@ const Login = () => {
       <div className="flex justify-center items-center h-screen bg-gray-100">
         <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-lg">
           <h2 className="text-3xl font-semibold text-darkGreen text-center mb-8">
-            Connexion
+            Connexion Admin
           </h2>
 
           {/* Formulaire de connexion */}
           <form onSubmit={handleSubmit} className="space-y-4">
-            {/* Email */}
+            {/* id */}
             <div className="form-group">
-              <label htmlFor="email" className="block text-lg text-darkGreen">
-                Email
+              <label htmlFor="id" className="block text-lg text-darkGreen">
+                Id
               </label>
               <input
-                type="email"
-                id="email"
-                name="email"
-                value={formData.email}
+                type="text"
+                id="id"
+                name="id"
+                value={formData.id}
                 onChange={handleChange}
                 className="w-full p-3 border border-gray-300 rounded-md"
                 required
@@ -104,4 +104,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default LoginAdmin;

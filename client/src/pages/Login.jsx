@@ -89,13 +89,24 @@ const Login = () => {
             {errorMessage && <div className="text-red-500 text-center mt-2">{errorMessage}</div>}
 
             {/* Bouton de soumission */}
-            <div className="flex justify-center mt-6">
+            <div className="flex flex-col items-center gap-4">
               <button
                 type="submit"
                 className="bg-darkGreen text-white px-6 py-3 text-lg font-semibold rounded-md hover:bg-opacity-80 transition duration-200"
               >
                 Se connecter
               </button>
+              <p className="text-center text-sm text-gray-600">
+                Pas de compte ?
+              </p>
+              <a href="/register" className="w-full">
+                <button
+                  type="button"
+                  className="bg-darkGreen text-white px-6 py-3 text-lg font-semibold rounded-md hover:bg-opacity-80 transition duration-200 w-full"
+                >
+                  S'enregistrer
+                </button>
+              </a>
             </div>
           </form>
         </div>
