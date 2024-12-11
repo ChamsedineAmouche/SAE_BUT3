@@ -33,6 +33,7 @@ const Login = () => {
       if (result.success) {
         setErrorMessage(result.message);
         navigate("/");
+        window.location.reload();
       } else {
         setErrorMessage(result.message);
       }

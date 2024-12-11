@@ -64,6 +64,8 @@ const Footer = () => {
       {/* Bas du footer */}
       <div className="bg-green text-center py-4">
         <p className="text-sm">&copy; 2024 Green Circle - Tous droits réservés.</p>
+        <p className="text-sm"><a href="/loginadmin">.</a></p>
+
       </div>
     </footer>
   );

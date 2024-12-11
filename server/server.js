@@ -66,16 +66,16 @@ app.post("/loginAdmin", async (req, res) => {
 
 app.get('/get-session', (req, res) => {
     if (req.session.user) {
-        console.log("Session active:", req.session.user);
-        res.json(req.session.user);
+        console.log("Session utilisateur active:", req.session.user);
+        res.json({ role: "user", session: req.session.user });
     } 
     else if (req.session.admin) {
-        console.log("Session active:", req.session.admin);
-        res.json(req.session.admin);
+        console.log("Session administrateur active:", req.session.admin);
+        res.json({ role: "admin", session: req.session.admin });
     }
     else {
         console.log("Aucune session active");
-        res.send('Aucune session active');
+        res.status(401).send('Aucune session active');
     }
 });
 
@@ -113,7 +113,7 @@ app.get("/homepage", async (req, res) => {
     console.log("Endpoint '/' was called");
     try {
         const homepagedata = await getDataForHomePage();
-        console.log(homepagedata);
+        //console.log(homepagedata);
         res.json(homepagedata); 
     } catch (error) {
         console.error('Erreur lors de la récupération des données pour /api :', error);
