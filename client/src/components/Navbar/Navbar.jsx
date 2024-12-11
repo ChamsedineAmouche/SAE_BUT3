@@ -1,11 +1,37 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBell, faSearch, faSquarePlus, faEllipsis } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
   const navigate = useNavigate()
-  const [userSession, setUserSession] = useState(null); // State to manage user session info
+  const [userSession, setUserSession] = useState(null); 
+
+  useEffect(() => {
+    const checkSession = async () => {
+      try {
+        const response = await fetch("/get-session", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+        });
+
+        if (response.ok) {
+          const sessionData = await response.json();
+          setUserSession(sessionData);
+        } else {
+          setUserSession(null);
+        }
+      } catch (error) {
+        console.error("Erreur lors de la vérification de la session :", error);
+        setUserSession(null);
+      }
+    };
+
+    checkSession();
+  }, []);
 
   const handleLogout = async () => {
     try {
@@ -100,10 +126,16 @@ const Navbar = () => {
           </div>
         </div>
 
-        {/* "Logout" button destroy session */}
-        <button onClick={handleLogout} className="ml-4 text-white hover:text-darkGreen">
-          Logout
-        </button>
+          {/* "Logout" or "Se connecter" button */}
+               {userSession ? (
+          <button onClick={handleLogout} className="ml-4 text-white hover:text-darkGreen">
+            Logout
+          </button>
+        ) : (
+          <button onClick={() => navigate("/login")} className="ml-4 text-white hover:text-darkGreen">
+            Se connecter
+          </button>
+        )}
       </div>
     </nav>
   );
