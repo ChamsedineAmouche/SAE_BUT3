@@ -17,10 +17,6 @@ const NewDeposit = () => {
   const [errors, setErrors] = useState({});
 
   const handleFileChange = (event) => {
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 289868b (image qui saffiche)
     const filesRecup = Array.from(event.target.files);
     console.log('Fichiers sélectionnés :', filesRecup); // Vérifie ici
     setSelectedFiles(filesRecup);
@@ -42,7 +38,6 @@ const NewDeposit = () => {
 
       reader.readAsDataURL(file); // Lire le fichier en Base64
     });
-<<<<<<< HEAD
   };
 
   const handleSubmit = async (event) => {
@@ -53,27 +48,6 @@ const NewDeposit = () => {
     );
 
     console.log('binaryFiles :', base64Files);
-=======
-    const files = Array.from(event.target.files);
-    console.log('Fichiers sélectionnés :', files); // Vérifie ici
-    setSelectedFiles(files);
-=======
->>>>>>> 289868b (image qui saffiche)
-  };
-
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-
-    const base64Files = await Promise.all(
-        selectedFiles.map((file) => readFileAsBase64(file))
-    );
-
-<<<<<<< HEAD
-    console.log('binaryFiles :', binaryFiles);
->>>>>>> b9eea10 (insertion correcte)
-=======
-    console.log('binaryFiles :', base64Files);
->>>>>>> 289868b (image qui saffiche)
 
     const newSubmission = {
       title,
@@ -82,15 +56,7 @@ const NewDeposit = () => {
       category,
       state,
       location,
-<<<<<<< HEAD
-<<<<<<< HEAD
-      files : base64Files,
-=======
-      files: binaryFiles,
->>>>>>> b9eea10 (insertion correcte)
-=======
-      files : base64Files,
->>>>>>> 289868b (image qui saffiche)
+      files : base64Files
     };
 
     try {
@@ -108,15 +74,7 @@ const NewDeposit = () => {
       }
 
       const result = await response.json(); // Résultat renvoyé par le serveur
-<<<<<<< HEAD
-<<<<<<< HEAD
       console.log('Données envoyées avec succès :', newSubmission);
-=======
-      console.log('Données envoyées avec succès :', result);
->>>>>>> b9eea10 (insertion correcte)
-=======
-      console.log('Données envoyées avec succès :', newSubmission);
->>>>>>> 289868b (image qui saffiche)
 
       // Mettre à jour le tableau local des soumissions
       setSubmissions([...submissions, newSubmission]);
