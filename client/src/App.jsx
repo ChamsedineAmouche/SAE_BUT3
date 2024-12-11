@@ -6,6 +6,7 @@ import Deposit from "./pages/Deposit";
 import Register from "./pages/Register.jsx";
 import Login from "./pages/Login.jsx"
 import NewDeposit from "./pages/NewDeposit.jsx";
+import Test from "./pages/Test.jsx";
 
 const App = () => {
   return (
@@ -19,6 +20,7 @@ const App = () => {
           <Route path="/nouveau_depot" element={<NewDeposit />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/test" element={<Test />} />
         </Route>
       </Routes>
     </Router>

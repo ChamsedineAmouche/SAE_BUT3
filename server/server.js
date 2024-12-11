@@ -10,6 +10,7 @@ const app = express()
 const { getDataForHomePage } = require('./homepage/homepageFetcher');
 const { getDataForCatalogPage } = require('./catalog/catalogFetcher')
 const { getCategoriesForObjects, getLocalisationOfStockage, getStatesForObjects, insertNewObject } = require('./announcepage/announcePageFetcher');
+const { getImage } = require('./image/imageFetcher')
 
 app.use(express.json());
 
@@ -139,6 +140,18 @@ app.get("/catalog", async (req, res) => {
     }
 });
 
+
+//ENDPOINT IMAGES
+app.get("/image", async (req, res) => {
+    console.log("Endpoint '/image' was called");
+    try {
+        const imageData = await getImage();
+        res.json(imageData)
+    } catch (error) {
+        console.error('Erreur lors de la récupération des données pour /api :', error);
+        res.status(500).json({ error: 'Erreur serveur lors de la récupération des données.' });
+    }
+})
 
 const server = app.listen(5001, () => {
     console.log("Server started on port 5001");
