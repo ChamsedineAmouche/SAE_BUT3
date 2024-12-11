@@ -1,4 +1,5 @@
 const mysql = require('mysql2');
+const FileType = require('file-type');
 const getDbConnection = require("./db_connection");
 
 function executeQuery(connection, query) {
@@ -25,7 +26,7 @@ const insertListingWithImages = async (newSubmission) => {
     try {
         await promiseConnection.beginTransaction();
 
-        const { title, description, dimensions, category, state, files } = newSubmission;
+        const { title, description, dimensions, category, state, location, files } = newSubmission;
 
         console.log('Fichiers reçus (Base64) :', files);
         const stateIdRequest = await getResultOfQuery('vue_user',
