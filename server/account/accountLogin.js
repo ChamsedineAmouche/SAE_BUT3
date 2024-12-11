@@ -58,7 +58,7 @@ async function verifyCredentialsAdmin(id, password) {
       return { success: false, message: "Utilisateur non trouvé" };
     }
     const admin = result[0]; 
-    const match = await bcrypt.compare(password, user.password);
+    const match = await bcrypt.compare(password, admin.password);
 
     if (!match) {
       console.log("Mot de passe incorrect");

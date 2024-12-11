@@ -56,7 +56,7 @@ app.post("/loginAdmin", async (req, res) => {
     const result = await verifyCredentialsAdmin(id, password);
 
     if (result.success) {
-        req.session.admin = { id: result.admin_id };
+        req.session.admin = { id: result.admin };
         console.log("Session after login:", req.session.admin);
         res.status(201).json(result); 
     } else {
