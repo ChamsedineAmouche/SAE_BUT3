@@ -59,6 +59,7 @@ app.post("/insert", async (req, res) => {
     try {
         const newSubmission = req.body;
 <<<<<<< HEAD
+<<<<<<< HEAD
         console.log('Nouvelle soumission reçue :');
         console.log('regarde :', newSubmission);
 
@@ -72,6 +73,13 @@ app.post("/insert", async (req, res) => {
         console.log('regarde :', newSubmission);
 
 >>>>>>> b9eea10 (insertion correcte)
+=======
+        console.log('Nouvelle soumission reçue :');
+        console.log('regarde :', newSubmission);
+
+        await insertNewObject(newSubmission);
+
+>>>>>>> 289868b (image qui saffiche)
         // Si besoin, sauvegarde des fichiers et des données dans une base ou un fichier
         res.status(200).json({ message: 'Soumission reçue avec succès : ' + newSubmission});
     } catch (error) {

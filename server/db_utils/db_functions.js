@@ -27,6 +27,7 @@ const insertListingWithImages = async (newSubmission) => {
 
         const { title, description, dimensions, category, state, files } = newSubmission;
 <<<<<<< HEAD
+<<<<<<< HEAD
         console.log('Fichiers reçus (Base64) :', files);
         const stateIdRequest = await getResultOfQuery('vue_user',
             'SELECT id_condition_type FROM condition_type WHERE condition_type.label = ' + "'" + state + "'");
@@ -35,6 +36,9 @@ const insertListingWithImages = async (newSubmission) => {
 
 =======
 
+=======
+        console.log('Fichiers reçus (Base64) :', files);
+>>>>>>> 289868b (image qui saffiche)
         const stateIdRequest = await getResultOfQuery('vue_user',
             'SELECT id_condition_type FROM condition_type WHERE condition_type.label = ' + "'" + state + "'");
         const categoryIdRequest = await getResultOfQuery('vue_user',
@@ -64,6 +68,9 @@ const insertListingWithImages = async (newSubmission) => {
 
         // Insérer chaque image dans la table `listing_image`
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 289868b (image qui saffiche)
         console.log('Type de files:', typeof files);
         console.log('Contenu de files:', files);
         for (const base64File of files) {
@@ -71,6 +78,7 @@ const insertListingWithImages = async (newSubmission) => {
             const fileType = await FileType.fromBuffer(bufferToInsert);
             console.log('Taille du buffer inséré :', bufferToInsert.length);
 
+<<<<<<< HEAD
             await promiseConnection.execute(
                 `INSERT INTO listing_image (image, id_item, mime_type) VALUES (?, ?, ?)`,
                 [bufferToInsert, id_item, fileType.mime]
@@ -83,6 +91,11 @@ const insertListingWithImages = async (newSubmission) => {
                 `INSERT INTO listing_image (image, id_item) VALUES (?, ?)`,
                 [Buffer.from(new Uint8Array(fileBuffer)), id_item]
 >>>>>>> b9eea10 (insertion correcte)
+=======
+            await promiseConnection.execute(
+                `INSERT INTO listing_image (image, id_item, mime_type) VALUES (?, ?, ?)`,
+                [bufferToInsert, id_item, fileType.mime]
+>>>>>>> 289868b (image qui saffiche)
             );
         }
 
