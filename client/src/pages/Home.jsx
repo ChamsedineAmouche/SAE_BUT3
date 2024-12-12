@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import Carousel from "../components/Carousel/Carousel";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBoxArchive, faCalendarDay, faEye, faGraduationCap } from "@fortawesome/free-solid-svg-icons";
+import DepositThumbnail from "../components/DepositThumbNail/DepositThumbNail";
 
 const Home = () => {
   
@@ -11,6 +12,7 @@ const Home = () => {
   const items = ["exemple 1", "exemple 2", "exemple 3", "exemple 4", "exemple 5", "exemple 6", "exemple 7", "exemple 8", "exemple 9"];
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [lastObject, setLastObject] = useState(null)
 
   useEffect(() => {
     fetch('/homepage')
@@ -22,6 +24,17 @@ const Home = () => {
       })
       .then(data => {
         setData(data);
+
+        if (data.object && data.object.length > 0) {
+          const mostRecentObject = data.object.reduce((latest, current) => {
+            const latestDate = new Date(latest.date_posted);
+            const currentDate = new Date(current.date_posted);
+            return currentDate > latestDate ? current : latest;
+          });
+
+          setLastObject(mostRecentObject);
+        }
+
         setIsLoading(false);
       })
       .catch(error => {
@@ -37,6 +50,11 @@ const Home = () => {
   if (!data) {
     return <p>Erreur lors du chargement des données.</p>;
   }
+
+  const depositThumbnails = data.object.map((object) => (
+    <DepositThumbnail key={`thumbnail-${object.id_item}`} object={object} />
+  ));
+  
 
   return (
     <div className="home-page">
@@ -144,7 +162,7 @@ const Home = () => {
               </h2>
             </div>
             <div className="w-80 h-80 flex items-center justify-center bg-[#e0e0e0] rounded-xl shadow-md">
-              <p className="text-black font-semibold">Exemple</p>
+              <DepositThumbnail object={ lastObject } />
             </div>
           </div>
 
@@ -188,7 +206,7 @@ const Home = () => {
 
       {/* Section derniers dépots */}
       <div className="p-8">
-        <Carousel items={items} title={"Derniers dépôts"} />
+        <Carousel items={depositThumbnails} title={"Derniers dépôts"} />
       </div>
 
       {/* Section derniers e-learnings */}

@@ -19,7 +19,23 @@ async function getDataForHomePage(){
         const numberOfCompany = await getNumberOfCompany();
 
         const object = await getResultOfQuery('vue_user',
-            'SELECT * FROM listing ORDER BY date_posted DESC');
+            `SELECT 
+                l.id_item ,
+                l.title,
+                l.date_posted,
+                ct.label AS state,
+                ot.label AS category
+            FROM 
+                listing l
+            JOIN 
+                condition_type ct ON l.id_condition_type = ct.id_condition_type 
+            JOIN 
+                object_type ot ON l.id_object_type = ot.id_object_type 
+            WHERE
+                l.status = "active"
+            ORDER BY 
+                l.date_posted DESC;
+            `);
         const event = await getResultOfQuery('vue_admin',
             'SELECT * FROM event');
         const elearning = await getResultOfQuery('vue_admin',

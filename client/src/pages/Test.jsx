@@ -4,7 +4,7 @@ const Test = () => {
     const [images, setImages] = useState([]);
 
     useEffect(() => {
-        fetch('http://localhost:5001/image') // Remplace par ton URL backend si nécessaire
+        fetch('/image') // Remplace par ton URL backend si nécessaire
             .then(response => {
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);

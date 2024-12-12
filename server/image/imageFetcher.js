@@ -1,13 +1,14 @@
 const mysql = require('mysql2');
 const {getResultOfQuery} = require("../db_utils/db_functions");
 
-async function getImage() {
+async function getImageById(id) {
     try {
-        const images = getResultOfQuery('vue_user', 'SELECT image FROM listing_image');
-        return images;
+        const query = `SELECT image, mime_type FROM listing_image WHERE id_item = ` + id;
+        return await getResultOfQuery("vue_user", query);
     } catch (error) {
-        console.error('Erreur lors de la récupération des données :', error);
+        console.error("Erreur lors de la récupération des données :", error);
+        throw error;
     }
 }
 
-module.exports = { getImage };
+module.exports = { getImageById };

@@ -10,7 +10,7 @@ const app = express()
 const { getDataForHomePage } = require('./homepage/homepageFetcher');
 const { getDataForCatalogPage } = require('./catalog/catalogFetcher')
 const { getCategoriesForObjects, getLocalisationOfStockage, getStatesForObjects, insertNewObject } = require('./announcepage/announcePageFetcher');
-const { getImage } = require('./image/imageFetcher')
+const { getImageById } = require('./image/imageFetcher')
 
 app.use(express.json({ limit: '50mb' }));
 
@@ -142,21 +142,28 @@ app.get("/catalog", async (req, res) => {
 
 //ENDPOINT IMAGES
 app.get("/image", async (req, res) => {
-    console.log("Endpoint '/image' was called");
+    const { id } = req.query; // Récupère l'ID depuis les paramètres de requête
     try {
-        const rows = await getImage();
-        console.log(rows);
-        const images = rows.map(row => ({
-            data: Array.from(new Uint8Array(row.image)), // Conversion en tableau de bytes
-            mimeType: row.mime_type, // Remplace par le vrai type MIME si nécessaire
+        if (!id) {
+            return res.status(400).json({ error: "ID non fourni" });
+        }
+
+        const rows = await getImageById(id); // Récupère l'image selon l'ID
+        if (!rows || rows.length === 0) {
+            return res.status(404).json({ error: "Image non trouvée" });
+        }
+
+        const images = rows.map((row) => ({
+            data: Array.from(new Uint8Array(row.image)),
+            mimeType: row.mime_type,
         }));
-        console.log(images);
+
         res.json(images);
     } catch (error) {
-        console.error('Erreur lors de la récupération des données pour /api :', error);
-        res.status(500).json({ error: 'Erreur serveur lors de la récupération des données.' });
+        console.error("Erreur lors de la récupération des données pour /image :", error);
+        res.status(500).json({ error: "Erreur serveur lors de la récupération des données." });
     }
-})
+});
 
 const server = app.listen(5001, () => {
     console.log("Server started on port 5001");

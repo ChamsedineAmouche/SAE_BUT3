@@ -10,7 +10,8 @@ const Carousel = ({ items, title }) => {
     infinite: true,
     speed: 500,
     slidesToShow: 4,
-    slidesToScroll: 4
+    slidesToScroll: 4,
+    adaptiveHeight: true, 
   };
 
   return (
@@ -25,7 +26,7 @@ const Carousel = ({ items, title }) => {
       <Slider {...settings}>
         {items.map((item, index) => (
           <div key={index} className="slick-slide-content">
-            <p className="text-black font-semibold">{item}</p>
+            {item}
           </div>
         ))}
       </Slider>
