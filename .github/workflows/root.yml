@@ -1,0 +1,24 @@
+name: Root Check
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  check-node-modules:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Ensure no node_modules in root
+      run: |
+        if [ -d "./node_modules" ]; then
+          echo "❌ Error: 'node_modules' directory found at the root level. Remove it before pushing.";
+          exit 1;
+        else
+          echo "✅ No 'node_modules' directory found at the root level.";
+        fi
