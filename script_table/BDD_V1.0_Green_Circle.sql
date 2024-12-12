@@ -16,7 +16,7 @@ CREATE TABLE company (
    zipcode VARCHAR(5) NOT NULL,
    city VARCHAR(50) NOT NULL,
    phone VARCHAR(10) NOT NULL,
-   token VARCHAR(255) NOT NULL,
+   token VARCHAR(255) DEFAULT 0,
    active BOOL DEFAULT 0,
    PRIMARY KEY(siren)
 );
@@ -150,7 +150,7 @@ USE vue_admin;
 -- Création des tables pour le schéma vue_admin
 CREATE TABLE admin (
    admin_id INT,
-   password VARCHAR(50) NOT NULL,
+   password VARCHAR(75) NOT NULL,
    rights JSON NOT NULL,
    PRIMARY KEY(admin_id)
 );
