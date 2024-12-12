@@ -124,8 +124,9 @@ CREATE TABLE listing (
 
 CREATE TABLE listing_image (
    id_listing_image INT AUTO_INCREMENT,
-   image VARBINARY(255),
+   image BLOB,
    id_item INT NOT NULL,
+   mime_type VARCHAR(15),
    PRIMARY KEY(id_listing_image),
    FOREIGN KEY(id_item) REFERENCES listing(id_item)
 );

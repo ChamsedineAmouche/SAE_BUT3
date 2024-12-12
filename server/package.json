@@ -18,6 +18,8 @@
     "express-session": "^1.18.1",
     "mysql2": "^3.11.4",
     "nodemailer": "^6.9.16"
+    "file-type": "^16.5.4",
+    "mysql2": "^3.11.4"
   },
   "devDependencies": {
     "chai": "^5.1.2",
