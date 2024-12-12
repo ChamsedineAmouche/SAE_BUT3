@@ -26,9 +26,9 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
+    "start": "CI=false react-scripts start",
+    "build": "CI=false react-scripts build",
+    "test": "CI=false react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
