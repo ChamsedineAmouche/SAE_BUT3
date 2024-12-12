@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "server.js",
   "scripts": {
-    "test": "jest --testPathIgnorePatterns=db_utils/db_connection",
+    "test": "jest",
     "start": "node server",
     "dev": "nodemon server"
   },
