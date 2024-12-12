@@ -7,6 +7,7 @@ import Register from "./pages/Register.jsx";
 import Login from "./pages/Login.jsx"
 import NewDeposit from "./pages/NewDeposit.jsx";
 import LoginAdmin from "./pages/LoginAdmin";
+import InscriptionValidation from "./pages/InscriptionValidation"
 
 const App = () => {
   return (
@@ -21,6 +22,7 @@ const App = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/loginadmin" element={<LoginAdmin />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/inscription_validation" element={<InscriptionValidation />} />
         </Route>
       </Routes>
     </Router>

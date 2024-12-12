@@ -64,7 +64,9 @@ const Navbar = () => {
             <img src="" alt="Logo" className="h-10 w-10" />
           </a>
 
-          <h1 className="text-xl font-bold">Green Circle</h1>
+          <h1 className="text-xl font-bold">
+          <a href="/">Green Circle </a></h1>
+
         </div>
 
         {/* Center Section - Menu Links */}

@@ -3,13 +3,17 @@ const session = require('express-session');
 const mysql = require('mysql2');
 const crypto = require('crypto');
 const cors = require('cors');
-const { registerCompany } = require("./account/accountInsert");
+const { registerCompany, validateCompany } = require("./account/accountInsert");
 const { verifyCredentials, verifyCredentialsAdmin } = require("./account/accountLogin")
+const { getAccountInscriptions, getAccountInfo } = require("./account/accountFetcher")
+const { deleteInscription } = require("./account/accountDelete")
 const app = express()
 
 const { getDataForHomePage } = require('./homepage/homepageFetcher');
 const { getDataForCatalogPage } = require('./catalog/catalogFetcher')
 const { getCategoriesForObjects, getLocalisationOfStockage, getStatesForObjects } = require('./announcepage/announcePageFetcher');
+
+const { sendConfirmationEmail } = require('./nodemailer/mailer');
 
 app.use(express.json());
 
@@ -108,7 +112,9 @@ app.get('/destroy-session', (req, res) => {
     }
 });
 
+//---------------------------------------------------------------------------------------------------------
 //ROUTE HOMEPAGE
+//---------------------------------------------------------------------------------------------------------
 app.get("/homepage", async (req, res) => {
     console.log("Endpoint '/' was called");
     try {
@@ -121,7 +127,9 @@ app.get("/homepage", async (req, res) => {
     }
 });
 
-//ENDPOINT PAGE AJOUTER UNE ANNONCES
+//---------------------------------------------------------------------------------------------------------
+//Endpoint ajouter annonce
+//---------------------------------------------------------------------------------------------------------
 app.get("/addAnnounce", async (req, res) => {
     console.log("Endpoint '/addAnnounce' was called");
     try {
@@ -140,7 +148,9 @@ app.get("/addAnnounce", async (req, res) => {
     }
 });
 
-//ENDPOINT PAGE LISTE OBJET
+//---------------------------------------------------------------------------------------------------------
+//ENDPOINT LISTE OBJET
+//---------------------------------------------------------------------------------------------------------
 app.get("/catalog", async (req, res) => {
     console.log("Endpoint '/catalog' was called");
     try {
@@ -152,6 +162,54 @@ app.get("/catalog", async (req, res) => {
     }
 });
 
+//---------------------------------------------------------------------------------------------------------
+//ROUTE VALIDATION COMPTE ADMIN
+//---------------------------------------------------------------------------------------------------------
+app.get("/validationAccount", async (req, res) => {
+    console.log("Endpoint '/validationAccount' was called");
+    try {
+        const accountData = await getAccountInscriptions();
+        res.json(accountData);
+    } catch (error) {
+        console.error('Erreur lors de la récupération des données pour /validationAccount :', error);
+        res.status(500).json({ error: 'Erreur serveur lors de la récupération des données.' });
+    }
+});
+app.post("/deleteInscription", async (req, res) => {
+    console.log("Endpoint '/deleteInscription' was called");
+    const { siren } = req.body;
+    try {
+        const result = await deleteInscription(siren);
+        if (result.success) {
+            res.json({ success: true });
+          } else {
+            res.status(400).json({ success: false, message: result.message });
+          }
+    } catch (error) {
+        console.error('Erreur lors de la récupération des données pour /validationAccount :', error);
+        res.status(500).json({ error: 'Erreur serveur lors de la récupération des données.' });
+    }
+});
+
+app.post("/validateInscription", async (req, res) => {
+    console.log("Endpoint '/validateInscription' was called");
+    const { siren } = req.body;
+    try {
+        const result = await validateCompany(siren);
+        if (result.success) {
+            const companyData = await getAccountInfo(siren)
+            console.log(companyData)
+            const { email, nom } = companyData.account[0]; 
+            await sendConfirmationEmail(email, siren, nom);
+            res.json({ success: true });
+          } else {
+            res.status(400).json({ success: false, message: result.message });
+          }
+    } catch (error) {
+        console.error('Erreur lors de la récupération des données pour /validationAccount :', error);
+        res.status(500).json({ error: 'Erreur serveur lors de la récupération des données.' });
+    }
+});
 
 const server = app.listen(5001, () => {
     console.log("Server started on port 5001");
