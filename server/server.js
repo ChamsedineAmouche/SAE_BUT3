@@ -65,6 +65,7 @@ app.post("/loginAdmin", async (req, res) => {
         res.status(201).json(result); 
     } else {
         res.status(500).json(result); 
+}});
 
 app.post("/insert", async (req, res) => {
     try {
