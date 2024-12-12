@@ -1,4 +1,4 @@
-name: Node.js CI
+name: Node.js CI with node_modules check
 
 on:
   push:
@@ -17,14 +17,27 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+
+    - name: Check no node_modules in root
+      run: |
+        if [ -d "./node_modules" ]; then
+          echo "❌ Error: 'node_modules' directory found at the root level. Remove it before pushing.";
+          exit 1;
+        else
+          echo "✅ No 'node_modules' directory found at the root level.";
+        fi
+
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v4
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
+
     - run: npm ci
       working-directory: server
+
     - run: npm run build --if-present
       working-directory: server
+
     - run: npm test
       working-directory: server
