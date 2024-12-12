@@ -1,4 +1,4 @@
-name: Node.js CI with node_modules check
+name: Workflow NodeJS
 
 on:
   push:

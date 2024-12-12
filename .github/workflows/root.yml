@@ -1,4 +1,4 @@
-name: Root Check
+name: Workflow Root
 
 on:
   push:
