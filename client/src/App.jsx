@@ -6,6 +6,9 @@ import Deposit from "./pages/Deposit";
 import Register from "./pages/Register.jsx";
 import Login from "./pages/Login.jsx"
 import NewDeposit from "./pages/NewDeposit.jsx";
+import Evenenement from "./pages/Evenement.jsx";
+import Veille from "./pages/Veille.jsx";
+import Elearning from "./pages/Elearning.jsx";
 
 const App = () => {
   return (
@@ -19,6 +22,9 @@ const App = () => {
           <Route path="/nouveau_depot" element={<NewDeposit />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/evenement" element={<Evenenement />} />
+          <Route path="/veille" element={<Veille />} />
+          <Route path="/elearning" element={<Elearning />} />
         </Route>
       </Routes>
     </Router>
