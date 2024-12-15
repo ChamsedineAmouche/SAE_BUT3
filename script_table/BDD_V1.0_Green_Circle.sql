@@ -16,7 +16,7 @@ CREATE TABLE company (
    zipcode VARCHAR(5) NOT NULL,
    city VARCHAR(50) NOT NULL,
    phone VARCHAR(10) NOT NULL,
-   token VARCHAR(255) DEFAULT 0,
+   token VARCHAR(255) DEFAULT NULL,
    active BOOL DEFAULT 0,
    PRIMARY KEY(siren)
 );
@@ -41,12 +41,12 @@ CREATE TABLE log (
 
 CREATE TABLE elearning (
    id_elearning INT AUTO_INCREMENT,
-   title VARCHAR(50) NOT NULL,
+   title VARCHAR(75) NOT NULL,
    description TEXT NOT NULL,
    price INT NOT NULL,
    subscription_date DATE NOT NULL,
-   token VARCHAR(50),
-   password VARCHAR(50),
+   token VARCHAR(75),
+   password VARCHAR(75),
    course_id INT,
    siren CHAR(14) NOT NULL,
    PRIMARY KEY(id_elearning),
@@ -157,19 +157,19 @@ CREATE TABLE admin (
 
 CREATE TABLE article (
    id_veille INT AUTO_INCREMENT,
-   title VARCHAR(50) NOT NULL,
+   title VARCHAR(75) NOT NULL,
    article_date DATETIME,
-   author VARCHAR(50) NOT NULL,
+   author VARCHAR(75) NOT NULL,
    content TEXT NOT NULL,
-   image VARBINARY(50),
+   image BLOB DEFAULT NULL,
    admin_id INT NOT NULL,
    PRIMARY KEY(id_veille),
    FOREIGN KEY(admin_id) REFERENCES admin(admin_id)
 );
 
 CREATE TABLE elearning_list (
-   course_id VARCHAR(50),
-   title VARCHAR(50),
+   course_id INT,
+   title VARCHAR(75),
    description TEXT NOT NULL,
    price VARCHAR(50),
    admin_id INT NOT NULL,
@@ -180,7 +180,7 @@ CREATE TABLE elearning_list (
 CREATE TABLE event (
    id_event INT AUTO_INCREMENT,
    title VARCHAR(50) NOT NULL,
-   description VARCHAR(50),
+   description TEXT NOT NULL,
    event_date DATETIME NOT NULL,
    location VARCHAR(50) NOT NULL,
    capacity INT,
