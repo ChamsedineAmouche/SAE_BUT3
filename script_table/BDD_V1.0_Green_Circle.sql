@@ -115,7 +115,6 @@ CREATE TABLE listing (
    id_object_type INT NOT NULL,
    id_condition_type INT NOT NULL,
    PRIMARY KEY(id_item),
-   UNIQUE(id_emplacement),
    FOREIGN KEY(id_emplacement) REFERENCES emplacement(id_emplacement),
    FOREIGN KEY(siren) REFERENCES company(siren),
    FOREIGN KEY(id_object_type) REFERENCES object_type(id_object_type),
@@ -133,13 +132,13 @@ CREATE TABLE listing_image (
 
 CREATE TABLE transaction(
    id_transaction INT AUTO_INCREMENT,
-   Statut VARCHAR(50),
+   status VARCHAR(50),
    date_transaction DATETIME NOT NULL,
    id_item INT,
-   SIREN CHAR(14) NOT NULL,
+   siren CHAR(14) NOT NULL,
    PRIMARY KEY(id_transaction),
    FOREIGN KEY(id_item) REFERENCES listing(id_item),
-   FOREIGN KEY(SIREN) REFERENCES company(siren)
+   FOREIGN KEY(siren) REFERENCES company(siren)
 );
 
 DROP DATABASE IF EXISTS vue_admin;

@@ -179,12 +179,12 @@ INSERT INTO vue_user.container (adress, city, zipcode, capacity) VALUES
 	('2 avenue Christian Doppler', 'Serris', '77700', 5);
 
 INSERT INTO vue_user.emplacement (available,dimension,id_Container) VALUES
-	 (1,NULL,1),
-	 (1,NULL,1),
-	 (1,NULL,1),
-	 (1,NULL,1),
-	 (1,NULL,1),
-	 (1,NULL,2),
+	 (0,NULL,1),
+	 (0,NULL,1),
+	 (0,NULL,1),
+	 (0,NULL,1),
+	 (0,NULL,1),
+	 (0,NULL,2),
 	 (1,NULL,2),
 	 (1,NULL,2),
 	 (1,NULL,2),
@@ -236,12 +236,73 @@ INSERT INTO vue_user.object_type (label) VALUES
     ('Outils'),
     ('Autres');
 
-INSERT INTO vue_user.listing (id_item, title, description, dimension, date_posted, status, id_emplacement, siren, id_object_type, id_condition_type) VALUES
-	(22, 'Table', 'Table en bois', '100x50x70', '2024-12-11', 'active', 1, '18770918300235', 3, 3),
-	(23, 'Chaise', 'Chaise en bois confortable ', '50x40x80', '2024-12-11', 'active', 2, '18770918300235', 3, 2),
-	(24, 'Clavier', 'Clavier mecanique logitech tres reactif ', '30x15x6', '2024-12-11', 'active', 3, '18770918300235', 1, 4),
-	(25, 'Imprimante ', 'Super imprimante avec beaucoup de style', '40x40x60', '2024-12-11', 'active', 4, '18770918300235', 2, 1),
-	(26, 'Aspirateur', 'Aspirateur qui aspire ', '20x20x40', '2024-12-11', 'active', 5, '18770918300235', 6, 3);
+INSERT INTO vue_user.listing 
+(id_item, title, description, dimension, date_posted, status, id_emplacement, siren, id_object_type, id_condition_type) 
+VALUES
+    (22, 'Table', 'Table en bois', '100x50x70', '2024-12-11', 'active', 1, '33865714102081', 3, 3),
+    (23, 'Chaise', 'Chaise en bois confortable ', '50x40x80', '2024-12-11', 'active', 2, '39966767400051', 3, 2),
+    (24, 'Clavier', 'Clavier mecanique logitech tres reactif ', '30x15x6', '2024-12-11', 'active', 3, '48830276100090', 1, 4),
+    (25, 'Imprimante ', 'Super imprimante avec beaucoup de style', '40x40x60', '2024-12-11', 'active', 4, '78496197100305', 2, 1),
+    (26, 'Aspirateur', 'Aspirateur qui aspire ', '20x20x40', '2024-12-11', 'active', 5, '80503352900027', 6, 3),
+    (27, 'Canapé', 'Canapé moderne', '200x100x90', '2024-12-14', 'picked', 1, '85003138000500', 4, 2),
+    (28, 'Lampe', 'Lampe de bureau', '15x15x40', '2024-12-14', 'picked', 2, '33865714102081', 5, 3),
+    (29, 'Bureau', 'Bureau en métal', '120x60x75', '2024-12-14', 'picked', 3, '39966767400051', 3, 4),
+    (30, 'Armoire', 'Armoire en bois massif', '180x60x200', '2024-12-14', 'picked', 5, '48830276100090', 4, 3),
+    (31, 'Étagère', 'Étagère de rangement', '80x30x180', '2024-12-14', 'picked', 6, '78496197100305', 3, 2),
+    (32, 'Tapis', 'Tapis design', '200x300x1', '2024-12-14', 'picked', 7, '80503352900027', 6, 2),
+    (33, 'Télévision', 'Télévision 4K', '120x30x70', '2024-12-14', 'picked', 8, '85003138000500', 1, 4),
+    (34, 'Chaise de bureau', 'Chaise ergonomique', '60x60x120', '2024-12-14', 'picked', 9, '33865714102081', 3, 3),
+    (35, 'Table basse', 'Table basse en verre', '100x50x40', '2024-12-14', 'picked', 10, '39966767400051', 4, 2),
+    (36, 'Meuble TV', 'Meuble pour télévision', '120x40x50', '2024-12-14', 'picked', 11, '48830276100090', 4, 2),
+    (37, 'Lustre', 'Lustre vintage', '60x60x60', '2024-12-14', 'picked', 12, '78496197100305', 5, 3),
+    (38, 'Four', 'Four électrique', '60x60x60', '2024-12-14', 'picked', 13, '80503352900027', 2, 1),
+    (39, 'Frigo', 'Réfrigérateur avec congélateur', '60x60x180', '2024-12-14', 'picked', 14, '85003138000500', 2, 3),
+    (40, 'Micro-ondes', 'Micro-ondes compact', '40x30x25', '2024-12-14', 'picked', 15, '33865714102081', 2, 4),
+    (41, 'Machine à laver', 'Machine à laver moderne', '60x60x90', '2024-12-14', 'picked', 16, '39966767400051', 2, 3),
+    (42, 'Sèche-linge', 'Sèche-linge performant', '60x60x90', '2024-12-14', 'picked', 17, '48830276100090', 2, 2),
+    (43, 'Vélo', 'Vélo de montagne', '180x30x100', '2024-12-14', 'picked', 18, '78496197100305', 6, 4),
+    (44, 'Trottinette', 'Trottinette électrique', '100x20x40', '2024-12-14', 'picked', 19, '80503352900027', 6, 3);
+
+INSERT INTO vue_user.transaction (id_item, status, siren, date_transaction)
+VALUES
+    (27, 'reserved', '39966767400051', '2024-12-14'),
+    (27, 'picked', '39966767400051', '2024-12-14'),
+    (28, 'reserved', '48830276100090', '2024-12-14'),
+    (28, 'picked', '48830276100090', '2024-12-14'),
+    (29, 'reserved', '80503352900027', '2024-12-14'),
+    (29, 'picked', '80503352900027', '2024-12-14'),
+    (30, 'reserved', '33865714102081', '2024-12-14'),
+    (30, 'picked', '33865714102081', '2024-12-14'),
+    (31, 'reserved', '78496197100305', '2024-12-14'),
+    (31, 'picked', '78496197100305', '2024-12-14'),
+    (32, 'reserved', '85003138000500', '2024-12-14'),
+    (32, 'picked', '85003138000500', '2024-12-14'),
+    (33, 'reserved', '39966767400051', '2024-12-14'),
+    (33, 'picked', '39966767400051', '2024-12-14'),
+    (34, 'reserved', '78496197100305', '2024-12-14'),
+    (34, 'picked', '78496197100305', '2024-12-14'),
+    (35, 'reserved', '85003138000500', '2024-12-14'),
+    (35, 'picked', '85003138000500', '2024-12-14'),
+    (36, 'reserved', '39966767400051', '2024-12-14'),
+    (36, 'picked', '39966767400051', '2024-12-14'),
+    (37, 'reserved', '78496197100305', '2024-12-14'),
+    (37, 'picked', '78496197100305', '2024-12-14'),
+    (38, 'reserved', '85003138000500', '2024-12-14'),
+    (38, 'picked', '85003138000500', '2024-12-14'),
+    (39, 'reserved', '39966767400051', '2024-12-14'),
+    (39, 'picked', '39966767400051', '2024-12-14'),
+    (40, 'reserved', '78496197100305', '2024-12-14'),
+    (40, 'picked', '78496197100305', '2024-12-14'),
+    (41, 'reserved', '85003138000500', '2024-12-14'),
+    (41, 'picked', '85003138000500', '2024-12-14'),
+    (42, 'reserved', '39966767400051', '2024-12-14'),
+    (42, 'picked', '39966767400051', '2024-12-14'),
+    (43, 'reserved', '78496197100305', '2024-12-14'),
+    (43, 'picked', '78496197100305', '2024-12-14'),
+    (44, 'reserved', '85003138000500', '2024-12-14'),
+    (44, 'picked', '85003138000500', '2024-12-14');
+
+
 
 INSERT INTO vue_user.listing_image
 (id_listing_image, image, id_item, mime_type)
