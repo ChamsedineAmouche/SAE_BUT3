@@ -4,10 +4,12 @@ on:
   push:
     branches:
       - main
+      - prod
+
   pull_request:
     branches:
       - main
-
+      - prod
 jobs:
   lint:
     runs-on: ubuntu-latest
