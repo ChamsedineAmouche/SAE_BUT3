@@ -2,9 +2,13 @@ name: "Analyse de sécurité"
 
 on:
   push:
-    branches: [ "main", "prod" ]
+    branches: 
+      - "main"
+      - "prod"
   pull_request:
-    branches: [ "main", "prod" ]
+    branches: 
+      - "main"
+      - "prod"
 
 jobs:
   analyze:
@@ -32,7 +36,7 @@ jobs:
       with:
         languages: ${{ matrix.language }}
         build-mode: ${{ matrix.build-mode }}
-        paths: 
+        paths:
           - client/
           - server/
         severity: warning
@@ -40,4 +44,4 @@ jobs:
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v3
       with:
-        category: "/language:${{matrix.language}}"
+        category: "/language:${{ matrix.language }}"
