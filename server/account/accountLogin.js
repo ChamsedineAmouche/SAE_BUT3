@@ -2,20 +2,20 @@ const bcrypt = require("bcryptjs");
 const { getResultOfQuery } = require("../db_utils/db_functions");
 
 async function validateActive(email) {
-    const query = `SELECT active FROM company WHERE email = '${email}'`;
+  const query = `SELECT active FROM company WHERE email = '${email}'`;
     
-    try {
-        const result = await getResultOfQuery("vue_user", query);
+  try {
+    const result = await getResultOfQuery("vue_user", query);
 
-        if (result[0].active == 0) {
-            return { valid: false, message: "Votre compte n'est pas actif" };
-        }
-
-        return { valid: true };
-    } catch (error) {
-        console.error("Erreur lors de la validation du Mail :", error);
-        return { valid: false, message: "Erreur lors de la validation du Mail." };
+    if (result[0].active == 0) {
+      return { valid: false, message: "Votre compte n'est pas actif" };
     }
+
+    return { valid: true };
+  } catch (error) {
+    console.error("Erreur lors de la validation du Mail :", error);
+    return { valid: false, message: "Erreur lors de la validation du Mail." };
+  }
 }
 
 async function verifyCredentials(email, password) {
@@ -30,7 +30,7 @@ async function verifyCredentials(email, password) {
 
     const activeAccount = await validateActive(email)
     if (!activeAccount.valid){
-        return { success: false, message: "Ce compte n'est pas actif" };
+      return { success: false, message: "Ce compte n'est pas actif" };
     }
 
     const user = result[0]; 

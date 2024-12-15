@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "proxy": "http://localhost:5001",
   "private": true,
+  "type": "module",
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.7.1",
     "@fortawesome/free-brands-svg-icons": "^6.7.1",
@@ -29,7 +30,8 @@
     "start": "CI=false react-scripts start",
     "build": "CI=false react-scripts build",
     "test": "CI=false react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "lint": "eslint ."
   },
   "eslintConfig": {
     "extends": [
@@ -50,7 +52,11 @@
     ]
   },
   "devDependencies": {
+    "@babel/eslint-parser": "^7.25.9",
+    "@eslint/js": "^9.17.0",
     "autoprefixer": "^10.4.20",
+    "eslint": "^8.57.1",
+    "eslint-plugin-react": "^7.37.2",
     "postcss": "^8.4.49",
     "tailwindcss": "^3.4.15"
   }
