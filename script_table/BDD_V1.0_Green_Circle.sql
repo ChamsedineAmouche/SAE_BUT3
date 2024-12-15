@@ -19,6 +19,7 @@ CREATE TABLE company (
    token VARCHAR(255) DEFAULT NULL,
    active BOOL DEFAULT 0,
    joined  DATE DEFAULT NULL,
+   profile_picture LONGBLOB DEFAULT NULL,
    PRIMARY KEY(siren)
 );
 
