@@ -123,7 +123,7 @@ CREATE TABLE listing (
 
 CREATE TABLE listing_image (
    id_listing_image INT AUTO_INCREMENT,
-   image BLOB,
+   image LONGBLOB,
    id_item INT NOT NULL,
    mime_type VARCHAR(15),
    PRIMARY KEY(id_listing_image),
@@ -160,7 +160,7 @@ CREATE TABLE article (
    article_date DATETIME,
    author VARCHAR(75) NOT NULL,
    content TEXT NOT NULL,
-   image BLOB DEFAULT NULL,
+   image LONGBLOB DEFAULT NULL,
    admin_id INT NOT NULL,
    PRIMARY KEY(id_veille),
    FOREIGN KEY(admin_id) REFERENCES admin(admin_id)
