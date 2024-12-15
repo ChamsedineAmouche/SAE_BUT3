@@ -85,8 +85,7 @@ async function getAnnuaireInfo() {
     try {
         const sirenResult = await getAllSiren();
         if (!sirenResult.success || sirenResult.siren.length === 0) {
-            return { success: false, message: "Aucun siren trouvé", data: {} };
-        }
+            return { success: false, message: "Aucun siren trouvé", data: {} };}
         const annuaireData = await Promise.all(sirenResult.siren.map(async (company) => {
             const siren = company.siren;
             const numberGiven = await getNumberOfGivenObjects(siren)
@@ -95,8 +94,7 @@ async function getAnnuaireInfo() {
             console.log(accountInfo);
             if (accountInfo.success && accountInfo.account.length > 0) {
                 const account = accountInfo.account[0];
-                return { 
-                    [siren]: { 
+                return { [siren]: { 
                         name: account.nom,
                         mail: account.email, 
                         adhésion : new Date(account.joined).toISOString().split('T')[0],
@@ -104,10 +102,7 @@ async function getAnnuaireInfo() {
                         numberTaken : numberTaken
                     }
                 };
-            } else {
-                return {};
-            }
-        }));
+            } else {return {};}}));
         const result = Object.assign({}, ...annuaireData);
         return { success: true, message: "", annuaire: result };
     } catch (error) {
