@@ -95,12 +95,12 @@ async function getAnnuaireInfo() {
             if (accountInfo.success && accountInfo.account.length > 0) {
                 const account = accountInfo.account[0];
                 return { [siren]: { 
-                        name: account.nom,
-                        mail: account.email, 
-                        adhésion : new Date(account.joined).toISOString().split('T')[0],
-                        numberGiven : numberGiven,
-                        numberTaken : numberTaken
-                    }
+                    name: account.nom,
+                    mail: account.email, 
+                    adhésion : new Date(account.joined).toISOString().split('T')[0],
+                    numberGiven : numberGiven,
+                    numberTaken : numberTaken
+                }
                 };
             } else {return {};}}));
         const result = Object.assign({}, ...annuaireData);
