@@ -5,7 +5,7 @@ const crypto = require('crypto');
 const cors = require('cors');
 const { registerCompany, validateCompany } = require("./account/accountInsert");
 const { verifyCredentials, verifyCredentialsAdmin } = require("./account/accountLogin")
-const { getAccountInscriptions, getAccountInfo } = require("./account/accountFetcher")
+const { getAccountInscriptions, getAccountInfo, getAnnuaireInfo } = require("./account/accountFetcher")
 const { deleteInscription } = require("./account/accountDelete")
 const app = express()
 
@@ -226,7 +226,9 @@ app.post("/validateInscription", async (req, res) => {
     }
 });
 
-//ENDPOINT IMAGES
+//---------------------------------------------------------------------------------------------------------
+//ROUTE IMAGE
+//---------------------------------------------------------------------------------------------------------
 app.get("/image", async (req, res) => {
     console.log("Endpoint '/image' was called");
     try {
@@ -244,6 +246,14 @@ app.get("/image", async (req, res) => {
     }
 })
 
+//---------------------------------------------------------------------------------------------------------
+//ROUTE ANNUAIRE
+//---------------------------------------------------------------------------------------------------------
+app.get("/annuaire", async (req, res) => {
+    console.log("Endpoint '/annuaire' was called");
+    const result = await getAnnuaireInfo();
+    res.json({result})
+})
 const server = app.listen(5001, () => {
     console.log("Server started on port 5001");
 });

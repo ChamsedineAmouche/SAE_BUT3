@@ -18,6 +18,7 @@ CREATE TABLE company (
    phone VARCHAR(10) NOT NULL,
    token VARCHAR(255) DEFAULT NULL,
    active BOOL DEFAULT 0,
+   joined  DATE DEFAULT NULL,
    PRIMARY KEY(siren)
 );
 
