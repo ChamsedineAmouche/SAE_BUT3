@@ -1,3 +1,4 @@
+/* eslint-disable max-lines-per-function */
 const mysql = require('mysql2');
 const FileType = require('file-type');
 const getDbConnection = require("./db_connection");
@@ -38,7 +39,7 @@ const insertListingWithImages = async (newSubmission) => {
         const stateId = stateIdRequest[0].id_condition_type;
         const categoryId = categoryIdRequest[0].id_object_type;
         const status = "active";
-        const id_emplacement = 1;
+        const idEmplacement = 1;
         const siren = "18770918300235";
 
         // Générer la date actuelle (au format YYYY-MM-DD HH:mm:ss pour MySQL)
@@ -48,12 +49,12 @@ const insertListingWithImages = async (newSubmission) => {
             `INSERT INTO listing 
        (title, description, dimension, date_posted, status, id_emplacement, siren, id_object_type, id_condition_type) 
        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-            [title, description, dimensionString, datePosted, status, id_emplacement, siren, categoryId, stateId]
+            [title, description, dimensionString, datePosted, status, idEmplacement, siren, categoryId, stateId]
         );
 
         // Récupérer l'ID auto-incrémenté
-        const id_item = listingResult.insertId;
-        console.log(`Données insérées dans la table listing avec id_item: ${id_item}`);
+        const idItem = listingResult.insertId;
+        console.log(`Données insérées dans la table listing avec idItem: ${idItem}`);
 
         // Insérer chaque image dans la table `listing_image`
         console.log('Type de files:', typeof files);
@@ -65,20 +66,20 @@ const insertListingWithImages = async (newSubmission) => {
 
             await promiseConnection.execute(
                 `INSERT INTO listing_image (image, id_item, mime_type) VALUES (?, ?, ?)`,
-                [bufferToInsert, id_item, fileType.mime]);
+                [bufferToInsert, idItem, fileType.mime]);
         }
 
-        console.log(`Images associées à l'id_item: ${id_item}`);
+        console.log(`Images associées à l'idItem: ${idItem}`);
 
         // Valider la transaction
         await promiseConnection.commit();
         console.log('Transaction réussie, données insérées avec succès.');
     } catch (error) {
-        // Annuler la transaction en cas d'erreur
+    // Annuler la transaction en cas d'erreur
         await promiseConnection.rollback();
         console.error('Erreur lors de l\'insertion, transaction annulée :', error);
     } finally {
-        // Fermer la connexion
+    // Fermer la connexion
         await promiseConnection.end();
     }
 };

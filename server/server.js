@@ -65,7 +65,7 @@ app.post("/loginAdmin", async (req, res) => {
         res.status(201).json(result); 
     } else {
         res.status(500).json(result); 
-}});
+    }});
 
 app.post("/insert", async (req, res) => {
     try {
@@ -102,14 +102,14 @@ app.get('/destroy-session', (req, res) => {
     if (req.session.user) {
         console.log("Session active:", req.session.user);
         
-    req.session.destroy((err) => {
-        if (err) {
-            console.log('Erreur destruction de session');
-            return res.send('Erreur lors de la destruction de la session');
-        }
-        console.log('Session détruite avec succès');
-        res.send('Session détruite avec succès');
-    });}
+        req.session.destroy((err) => {
+            if (err) {
+                console.log('Erreur destruction de session');
+                return res.send('Erreur lors de la destruction de la session');
+            }
+            console.log('Session détruite avec succès');
+            res.send('Session détruite avec succès');
+        });}
     else if (req.session.admin){
         console.log("Session active:", req.session.admin);
         
@@ -197,9 +197,9 @@ app.post("/deleteInscription", async (req, res) => {
         const result = await deleteInscription(siren);
         if (result.success) {
             res.json({ success: true });
-          } else {
+        } else {
             res.status(400).json({ success: false, message: result.message });
-          }
+        }
     } catch (error) {
         console.error('Erreur lors de la récupération des données pour /validationAccount :', error);
         res.status(500).json({ error: 'Erreur serveur lors de la récupération des données.' });
@@ -217,9 +217,9 @@ app.post("/validateInscription", async (req, res) => {
             const { email, nom } = companyData.account[0]; 
             await sendConfirmationEmail(email, siren, nom);
             res.json({ success: true });
-          } else {
+        } else {
             res.status(400).json({ success: false, message: result.message });
-          }
+        }
     } catch (error) {
         console.error('Erreur lors de la récupération des données pour /validationAccount :', error);
         res.status(500).json({ error: 'Erreur serveur lors de la récupération des données.' });

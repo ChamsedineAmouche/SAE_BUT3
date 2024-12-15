@@ -1,0 +1,36 @@
+name: Lint Check
+
+on:
+  push:
+    branches:
+      - main
+      - prod
+
+  pull_request:
+    branches:
+      - main
+      - prod
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '23'
+
+    - name: Install dependencies and run lint for client
+      working-directory: ./client
+      run: |
+        npm install
+        npm run lint
+
+    - name: Install dependencies and run lint for server
+      working-directory: ./server
+      run: |
+        npm install
+        npx eslint .

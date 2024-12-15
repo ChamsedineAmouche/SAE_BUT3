@@ -82,17 +82,17 @@ async function registerCompany(siren, nom, email, password, adress, zipcode, cit
 
 async function validateCompany(siren) {
     try {
-      const query = `UPDATE company SET active = '1'  WHERE siren = '${siren}'`;
-      console.log(query);
-      const result = await getResultOfQuery("vue_user", query);
-      if (result.length === 0) {
-        console.log("Company validé !");
-        return { success: True, message: "Pas d'inscriptions en cours", account : {} };
-      }
+        const query = `UPDATE company SET active = '1'  WHERE siren = '${siren}'`;
+        console.log(query);
+        const result = await getResultOfQuery("vue_user", query);
+        if (result.length === 0) {
+            console.log("Company validé !");
+            return { success: True, message: "Pas d'inscriptions en cours", account : {} };
+        }
         return { success: true, message: "Company validé", account : result};
     } catch (error) {
-      return { success: false, message: "Erreur interne de vérification" };
+        return { success: false, message: "Erreur interne de vérification" };
     }
-  }
+}
 
 module.exports = { registerCompany,validateCompany };
