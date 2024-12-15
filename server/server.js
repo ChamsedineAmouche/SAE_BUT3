@@ -3,11 +3,12 @@ const session = require('express-session');
 const mysql = require('mysql2');
 const crypto = require('crypto');
 const cors = require('cors');
+const app = express()
+
 const { registerCompany, validateCompany } = require("./account/accountInsert");
 const { verifyCredentials, verifyCredentialsAdmin } = require("./account/accountLogin")
 const { getAccountInscriptions, getAccountInfo, getAnnuaireInfo } = require("./account/accountFetcher")
 const { deleteInscription } = require("./account/accountDelete")
-const app = express()
 
 const { getDataForHomePage } = require('./homepage/homepageFetcher');
 const { getDataForCatalogPage } = require('./catalog/catalogFetcher')
