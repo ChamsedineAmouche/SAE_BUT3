@@ -5,6 +5,7 @@ USE vue_admin;
 DELETE FROM vue_admin.admin;
 DELETE FROM vue_admin.event;
 DELETE FROM vue_admin.elearning_list;
+DELETE FROM vue_admin.article;
 
 INSERT INTO vue_admin.admin (admin_id,password,rights) VALUES
 	 (77939440,'$2a$10$2Gh9IqDjzKro/K.2PAAYwea59c1xnsNTgRRRL/q4y/V99kg4/7BoO','{"all": "True"}');
@@ -32,11 +33,18 @@ USE vue_user;
 DELETE FROM vue_user.company;
 DELETE FROM vue_user.condition_type;
 DELETE FROM vue_user.container;
+DELETE FROM vue_user.elearning;
 DELETE FROM vue_user.emplacement;
+DELETE FROM vue_user.inscription;
 DELETE FROM vue_user.container;
 DELETE FROM vue_user.event;
 DELETE FROM vue_user.object_type;
 DELETE FROM vue_user.listing;
+DELETE FROM vue_user.listing_image;
+DELETE FROM vue_user.log;
+DELETE FROM vue_user.object_type;
+DELETE FROM vue_user.preference;
+DELETE FROM vue_user.transaction;
 
 INSERT INTO vue_user.company (siren,nom,email,password,adress,zipcode,city,phone) VALUES
 	 ('18770918300235','CCI 77 ','cci77@gmail.com','$2a$10$2Gh9IqDjzKro/K.2PAAYwea59c1xnsNTgRRRL/q4y/V99kg4/7BoO
@@ -71,9 +79,9 @@ INSERT INTO vue_user.emplacement (available,dimension,id_Container) VALUES
 	 (1,NULL,1);
 
 INSERT INTO vue_user.event (event_id,title,description,event_date,location,capacity,status) VALUES
-(1,'Event 1','Lorem Ipsum','2024-02-01 15:15:01','Online',10,'Cancelled'),
-(2,'Event 2','Lorem Ipsum','2024-02-03 10:15:01','Online',15,'Incoming'),
-(3,'Event 3','Lorem Ipsum','2024-02-02 23:30:01','Online',10,'Full');
+(1,'Réunion avec les acteurs Green Circle','Réunion avec les acteurs de Green Circle pour comprendre l''organisation et les tenants et aboutissant de l''application ','2025-02-01 15:15:01','Online',10,'Incoming'),
+(2,'Réunion de lancement de Green Circle','Réunion de lancement de l''application en compagnie de tout les acteurs','2025-02-03 10:15:01','IRL',15,'Incoming'),
+(3,'Explication de l''application aux usagers','Réunion d''explication du fonctionnement de l''application aux usagers','2025-02-02 23:30:01','Online',3,'Full');
 
 INSERT INTO vue_user.object_type (label) VALUES
     ('Informatique'),
