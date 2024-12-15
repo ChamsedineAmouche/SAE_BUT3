@@ -15,8 +15,14 @@ Héberger un serveur MySQL en local.
 Créer un ficichier db_connection.js dans server/db_utils a partir du template disponible dans server/db_utils
 Renseigner les informations pour se connecter à ta base mysql dans le fichier.
 
-Dans la base mysql éxecuter le script de création des BDD présent dans le repo ainsi que le JDD
+cd script_table
+# Pour Linux/MacOS
+Créer un fichier 'runScriptPerso.sh' a partir de la template runScriptTemplate.sh
+sh runScriptPerso.sh
 
+# Pour Windows
+Créer un fichier 'runScriptPerso.bat' a partir de la template runScriptTemplate.bat
+double clique sur le fichier runScriptPerso.bat ou ecrire en ligne de commande 'runScriptPerso.bat'
 # 2) Démarrer l'application en local
 
 ## Backend
