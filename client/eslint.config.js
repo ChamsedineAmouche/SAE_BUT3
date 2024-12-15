@@ -21,7 +21,7 @@ export default [
     rules: {
       indent: [
         "warn",
-        2,
+        4,
         {
           ignoredNodes: ["TemplateLiteral"],
         },
