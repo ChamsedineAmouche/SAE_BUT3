@@ -36,9 +36,9 @@ jobs:
       with:
         languages: ${{ matrix.language }}
         build-mode: ${{ matrix.build-mode }}
-        paths:
-          - client/
-          - server/
+        paths: |
+          client/
+          server/
         severity: warning
 
     - name: Perform CodeQL Analysis
