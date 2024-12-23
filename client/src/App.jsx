@@ -9,6 +9,9 @@ import NewDeposit from "./pages/NewDeposit.jsx";
 import Evenenement from "./pages/Evenement.jsx";
 import Veille from "./pages/Veille.jsx";
 import Elearning from "./pages/Elearning.jsx";
+import LoginAdmin from "./pages/LoginAdmin";
+import InscriptionValidation from "./pages/InscriptionValidation"
+import Test from "./pages/Test.jsx";
 
 const App = () => {
   return (
@@ -21,10 +24,13 @@ const App = () => {
           <Route path="/depot" element={<Deposit />} />
           <Route path="/nouveau_depot" element={<NewDeposit />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/loginadmin" element={<LoginAdmin />} />
           <Route path="/register" element={<Register />} />
           <Route path="/evenement" element={<Evenenement />} />
           <Route path="/veille" element={<Veille />} />
           <Route path="/elearning" element={<Elearning />} />
+          <Route path="/inscription_validation" element={<InscriptionValidation />} />
+          <Route path="/test" element={<Test />} />
         </Route>
       </Routes>
     </Router>

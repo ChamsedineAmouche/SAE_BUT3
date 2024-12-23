@@ -16,8 +16,10 @@ CREATE TABLE company (
    zipcode VARCHAR(5) NOT NULL,
    city VARCHAR(50) NOT NULL,
    phone VARCHAR(10) NOT NULL,
-   token VARCHAR(255) NOT NULL,
+   token VARCHAR(255) DEFAULT NULL,
    active BOOL DEFAULT 0,
+   joined  DATE DEFAULT NULL,
+   profile_picture LONGBLOB DEFAULT NULL,
    PRIMARY KEY(siren)
 );
 
@@ -41,12 +43,12 @@ CREATE TABLE log (
 
 CREATE TABLE elearning (
    id_elearning INT AUTO_INCREMENT,
-   title VARCHAR(50) NOT NULL,
+   title VARCHAR(75) NOT NULL,
    description TEXT NOT NULL,
    price INT NOT NULL,
    subscription_date DATE NOT NULL,
-   token VARCHAR(50),
-   password VARCHAR(50),
+   token VARCHAR(75),
+   password VARCHAR(75),
    course_id INT,
    siren CHAR(14) NOT NULL,
    PRIMARY KEY(id_elearning),
@@ -115,7 +117,6 @@ CREATE TABLE listing (
    id_object_type INT NOT NULL,
    id_condition_type INT NOT NULL,
    PRIMARY KEY(id_item),
-   UNIQUE(id_emplacement),
    FOREIGN KEY(id_emplacement) REFERENCES emplacement(id_emplacement),
    FOREIGN KEY(siren) REFERENCES company(siren),
    FOREIGN KEY(id_object_type) REFERENCES object_type(id_object_type),
@@ -124,21 +125,22 @@ CREATE TABLE listing (
 
 CREATE TABLE listing_image (
    id_listing_image INT AUTO_INCREMENT,
-   image VARBINARY(255),
+   image LONGBLOB,
    id_item INT NOT NULL,
+   mime_type VARCHAR(15),
    PRIMARY KEY(id_listing_image),
    FOREIGN KEY(id_item) REFERENCES listing(id_item)
 );
 
 CREATE TABLE transaction(
    id_transaction INT AUTO_INCREMENT,
-   Statut VARCHAR(50),
+   status VARCHAR(50),
    date_transaction DATETIME NOT NULL,
    id_item INT,
-   SIREN CHAR(14) NOT NULL,
+   siren CHAR(14) NOT NULL,
    PRIMARY KEY(id_transaction),
    FOREIGN KEY(id_item) REFERENCES listing(id_item),
-   FOREIGN KEY(SIREN) REFERENCES company(siren)
+   FOREIGN KEY(siren) REFERENCES company(siren)
 );
 
 DROP DATABASE IF EXISTS vue_admin;
@@ -149,26 +151,26 @@ USE vue_admin;
 -- Création des tables pour le schéma vue_admin
 CREATE TABLE admin (
    admin_id INT,
-   password VARCHAR(50) NOT NULL,
+   password VARCHAR(75) NOT NULL,
    rights JSON NOT NULL,
    PRIMARY KEY(admin_id)
 );
 
 CREATE TABLE article (
    id_veille INT AUTO_INCREMENT,
-   title VARCHAR(50) NOT NULL,
+   title VARCHAR(75) NOT NULL,
    article_date DATETIME,
-   author VARCHAR(50) NOT NULL,
+   author VARCHAR(75) NOT NULL,
    content TEXT NOT NULL,
-   image VARBINARY(50),
+   image LONGBLOB DEFAULT NULL,
    admin_id INT NOT NULL,
    PRIMARY KEY(id_veille),
    FOREIGN KEY(admin_id) REFERENCES admin(admin_id)
 );
 
 CREATE TABLE elearning_list (
-   course_id VARCHAR(50),
-   title VARCHAR(50),
+   course_id INT,
+   title VARCHAR(75),
    description TEXT NOT NULL,
    price VARCHAR(50),
    admin_id INT NOT NULL,
@@ -179,7 +181,7 @@ CREATE TABLE elearning_list (
 CREATE TABLE event (
    id_event INT AUTO_INCREMENT,
    title VARCHAR(50) NOT NULL,
-   description VARCHAR(50),
+   description TEXT NOT NULL,
    event_date DATETIME NOT NULL,
    location VARCHAR(50) NOT NULL,
    capacity INT,
