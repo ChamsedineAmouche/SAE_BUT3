@@ -211,7 +211,7 @@ const Home = () => {
 
       {/* Section derniers e-learnings */}
       <div className="p-8">
-        <Carousel items={items} title={"e-learnings"} />
+        <Carousel items={items} title={"Derniers e-learnings"} />
       </div>
 
       {/* Section derniers articles */}

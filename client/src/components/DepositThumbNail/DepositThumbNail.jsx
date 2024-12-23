@@ -35,7 +35,7 @@ const DepositThumbnail = ({ object }) => {
   return (
     <div className="rounded-lg shadow-lg overflow-hidden relative w-full h-full bg-white">
       {/* Image */}
-      <div className="relative bg-yellowGreen1 bg-opacity-50 h-1/2">
+      <div className="relative bg-yellowGreen1 bg-opacity-50 h-2/3">
         {image ? (
           <img src={image} alt={title} className="w-full h-full object-cover rounded-b-lg" />
         ) : (
@@ -46,7 +46,7 @@ const DepositThumbnail = ({ object }) => {
       </div>
 
       {/* Contenu */}
-      <div className="p-4 h-full bg-yellowGreen1 bg-opacity-50">
+      <div className="p-3 h-full bg-yellowGreen1 bg-opacity-50">
         {/* Titre */}
         <h3 className="text-2xl font-bold text-darkGreen mb-2">{title}</h3>
         {/* Catégorie */}
