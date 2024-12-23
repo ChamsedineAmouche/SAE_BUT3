@@ -1,57 +1,231 @@
 -- vue_admin
 USE vue_admin;
 
+-- Delete all records from the tables in vue_admin
+DELETE FROM vue_admin.admin;
+DELETE FROM vue_admin.event;
+DELETE FROM vue_admin.elearning_list;
+DELETE FROM vue_admin.article;
+
 INSERT INTO vue_admin.admin (admin_id,password,rights) VALUES
-	 (77939440,'sympamec','{"all": "True"}');
+	 (77939440,'$2a$10$2Gh9IqDjzKro/K.2PAAYwea59c1xnsNTgRRRL/q4y/V99kg4/7BoO','{"all": "True"}');
+
+INSERT INTO vue_admin.article
+(title, article_date, author, content, image, admin_id)
+VALUES(' L''Économie Circulaire : Une Révolution Durable', '2024-12-10 00:00:00', 'Claire Martin', 'L''économie circulaire est un modèle économique qui s''oppose au modèle linéaire traditionnel, où les ressources sont extraites, transformées en produits, utilisées puis jetées. L''objectif est de prolonger la durée de vie des produits, de réutiliser les matériaux et de recycler les ressources afin de réduire la consommation de matières premières et les déchets. Ce modèle propose une gestion des ressources plus responsable et plus durable, contribuant ainsi à la protection de l''environnement.\n
+
+Une caractéristique essentielle de l''économie circulaire est sa capacité à transformer les déchets en ressources. Cela signifie qu''au lieu de jeter des produits usagés, ils sont remis dans le circuit de production sous forme de matières premières ou de composants réutilisables. Cela réduit non seulement la quantité de déchets envoyés en décharge, mais aussi la pression sur les ressources naturelles, souvent extraites de manière destructrice.\n
+
+Le passage à l''économie circulaire implique un changement de mentalité chez les producteurs et les consommateurs. Les entreprises doivent repenser leurs processus de conception en privilégiant des produits durables, réparables et facilement recyclables. Les consommateurs, quant à eux, doivent adopter des comportements responsables, comme la réparation, le recyclage et l''achat de produits écoresponsables.\n
+
+Ce modèle présente également des avantages économiques. En réduisant la demande de nouvelles matières premières, l''économie circulaire permet de réaliser des économies substantielles et de stimuler de nouveaux marchés pour les produits recyclés. De plus, elle crée des emplois dans des secteurs comme le recyclage, la réparation et la gestion des déchets, contribuant ainsi à la croissance économique.\n', NULL, 77939440);
+INSERT INTO vue_admin.article
+(title, article_date, author, content, image, admin_id)
+VALUES('L''Écologie : Une Science au Service de la Planète', '2024-12-12 00:00:00', 'Marc Lefèvre', 'L''écologie est la science qui étudie les interactions entre les organismes vivants et leur environnement. Cette discipline a pris une importance croissante au fil des décennies, car elle nous aide à mieux comprendre les conséquences de nos actions sur la nature et à trouver des solutions pour minimiser notre impact environnemental. En étudiant les écosystèmes et les cycles naturels, l''écologie permet d’identifier les causes et les effets des changements environnementaux, qu''ils soient naturels ou dus aux activités humaines.\n
+Les connaissances écologiques sont essentielles pour la gestion des ressources naturelles et la protection de la biodiversité. Par exemple, l''écologie aide à comprendre comment les espèces interagissent dans un écosystème et pourquoi la disparition d''une espèce peut entraîner un déséquilibre. Cela permet de définir des stratégies pour préserver les habitats naturels et restaurer les écosystèmes dégradés. L''écologie est également au cœur des politiques de conservation de la nature, en guidant les actions de préservation des espèces menacées et des espaces naturels sensibles.\n
+
+L''écologie permet également de comprendre les effets du changement climatique. En étudiant les émissions de gaz à effet de serre et leur impact sur les climats locaux et mondiaux, les écologistes jouent un rôle clé dans l''élaboration de solutions pour limiter les dérèglements climatiques. Par exemple, les recherches écologiques sur les forêts, les océans et les sols aident à concevoir des stratégies de séquestration du carbone pour lutter contre le réchauffement climatique.\n
+
+Les applications pratiques de l''écologie sont multiples. Elles vont de la gestion de l''eau à la lutte contre la pollution de l''air et de l''eau, en passant par la promotion de l''agriculture durable. L''écologie nous enseigne que pour garantir un avenir durable, il est impératif de respecter les limites de la planète et de rétablir l''équilibre entre les humains et la nature.\n
+
+', NULL, 77939440);
+INSERT INTO vue_admin.article
+(title, article_date, author, content, image, admin_id)
+VALUES('Les Avancées de l''Écologie : Vers une Transition Verte', '2024-12-13 00:00:00', 'Sophie Delcourt', 'Les avancées en écologie sont de plus en plus visibles dans de nombreux domaines, notamment dans la transition énergétique. L’un des changements les plus marquants est la croissance des énergies renouvelables comme l’énergie solaire, éolienne et hydraulique. Ces technologies deviennent non seulement plus efficaces mais aussi moins coûteuses, ce qui permet une adoption plus large à l’échelle mondiale. Les gouvernements et les entreprises investissent massivement dans ces secteurs pour réduire la dépendance aux énergies fossiles et limiter les émissions de gaz à effet de serre.\n
+
+La transition vers une économie verte ne se limite pas seulement à l’énergie. Elle inclut également des initiatives pour rendre les transports plus durables. Les véhicules électriques, les transports publics écologiques et les infrastructures cyclables sont en plein développement, visant à réduire les émissions polluantes liées aux déplacements. Les villes adoptent de plus en plus des politiques de mobilité durable, encourageant les citoyens à choisir des alternatives moins polluantes pour leurs trajets quotidiens.\n
+
+En outre, les avancées de l''écologie s''étendent également à la gestion des ressources naturelles. De nouvelles technologies de recyclage permettent de traiter une plus grande variété de matériaux, réduisant ainsi la quantité de déchets envoyés en décharge. L’économie circulaire, qui repose sur la réutilisation des matériaux, devient ainsi un pilier central de la transition écologique, contribuant à la réduction des impacts environnementaux tout en favorisant l’innovation et la création d’emplois.\n
+
+Enfin, l’agriculture durable est un domaine où les progrès sont significatifs. L’adoption de pratiques agricoles plus respectueuses de l’environnement, telles que la permaculture et l’agriculture biologique, permet de produire des aliments tout en préservant les sols et la biodiversité. Ces pratiques aident à lutter contre la dégradation des terres agricoles et à réduire l’empreinte carbone de l’agriculture, tout en répondant aux besoins alimentaires croissants de la population mondiale.\n', NULL, 77939440);
+INSERT INTO vue_admin.article
+(title, article_date, author, content, image, admin_id)
+VALUES('Recyclage et Économie Circulaire : Un Duo Gagnant', '2024-12-14 00:00:00', 'Antoine Girard', 'Le recyclage joue un rôle essentiel dans le modèle de l’économie circulaire. En permettant de transformer les matériaux usagés en nouvelles ressources, il contribue à réduire la pression sur les ressources naturelles, qui sont souvent extraites de manière nuisible pour l''environnement. Le recyclage permet de conserver les matières premières et d''éviter leur gaspillage, tout en limitant la pollution et la production de déchets. Ce processus est d''autant plus crucial à une époque où la gestion des déchets devient un défi majeur pour les sociétés modernes.\n
+
+Cependant, pour que le recyclage soit efficace, il ne suffit pas de collecter les déchets. Il est également nécessaire de mettre en place des systèmes de tri, de traitement et de valorisation adaptés. Cela implique des investissements dans des technologies de recyclage avancées et dans des infrastructures de collecte sélective. Le recyclage doit aussi être intégré dans un système plus large, où chaque acteur - des producteurs aux consommateurs - participe activement à la réduction des déchets et à la valorisation des matériaux.\n
+
+L’économie circulaire propose une approche encore plus ambitieuse que le recyclage seul. Elle encourage à repenser la conception des produits afin qu’ils soient plus faciles à réparer, réutiliser et recycler. L’objectif n''est pas simplement de recycler après consommation, mais de prolonger la durée de vie des produits en les réparant ou en réutilisant leurs composants. Cela exige une collaboration entre les entreprises, les autorités publiques et les consommateurs pour promouvoir des habitudes de consommation plus responsables.\n
+
+L’adoption généralisée du recyclage et de l’économie circulaire pourrait avoir un impact significatif sur la réduction des déchets et la préservation de l’environnement. Non seulement cela permettrait de limiter la consommation de ressources naturelles, mais cela pourrait également entraîner des économies substantielles pour les entreprises et les gouvernements. En créant des chaînes de valeur circulaires, l’industrie pourrait se développer tout en respectant les principes de durabilité.\n
+
+5. L''Impact de l''Écologie sur la Mobilité Durable
+Auteur : Lucie Bertrand
+Date : 2024-12-14
+
+La mobilité durable est désormais au cœur des préoccupations écologiques. Alors que les villes se développent et que le nombre de véhicules augmente, les émissions de gaz à effet de serre provenant des transports sont devenues une des principales causes du changement climatique. Les solutions de mobilité durable, telles que les véhicules électriques, les transports en commun écologiques et la promotion des modes de transport non polluants comme le vélo, sont essentielles pour réduire l''empreinte carbone des déplacements.\n
+
+Les véhicules électriques sont sans doute l''innovation la plus marquante dans ce domaine. Ils permettent de réduire les émissions de CO2 générées par les voitures à moteur thermique. En outre, la réduction du bruit et l’amélioration de la qualité de l’air dans les zones urbaines font partie des bénéfices indéniables de l’électrification des transports. Néanmoins, la transition vers la mobilité électrique ne se fait pas sans défis, notamment en ce qui concerne l’approvisionnement en électricité verte et le recyclage des batteries.\n
+
+Les transports en commun jouent également un rôle majeur dans la réduction des émissions de gaz à effet de serre. Les villes investissent dans des réseaux de tramways, de bus électriques ou hybrides et dans la modernisation des infrastructures pour encourager les citoyens à utiliser ces alternatives aux véhicules personnels. L’augmentation de la part des transports publics dans les déplacements urbains peut réduire significativement les émissions globales de CO2, tout en diminuant les embouteillages et la pollution sonore.\n
+
+Enfin, la promotion de la marche et du vélo dans les zones urbaines est essentielle pour réduire encore les émissions de carbone. Les villes modernes redessinent leurs espaces urbains pour les rendre plus accessibles aux piétons et cyclistes, avec des pistes cyclables et des zones piétonnes qui favorisent la mobilité douce. Ces initiatives contribuent non seulement à la réduction des émissions polluantes, mais améliorent également la qualité de vie en ville.\n', NULL, 77939440);
+INSERT INTO vue_admin.article
+(title, article_date, author, content, image, admin_id)
+VALUES('L''Impact de l''Écologie sur la Mobilité Durable', '2024-12-14 00:00:00', 'Lucie Bertrand', 'La mobilité durable est désormais au cœur des préoccupations écologiques. Alors que les villes se développent et que le nombre de véhicules augmente, les émissions de gaz à effet de serre provenant des transports sont devenues une des principales causes du changement climatique. Les solutions de mobilité durable, telles que les véhicules électriques, les transports en commun écologiques et la promotion des modes de transport non polluants comme le vélo, sont essentielles pour réduire l''empreinte carbone des déplacements.\n
+
+Les véhicules électriques sont sans doute l''innovation la plus marquante dans ce domaine. Ils permettent de réduire les émissions de CO2 générées par les voitures à moteur thermique. En outre, la réduction du bruit et l’amélioration de la qualité de l’air dans les zones urbaines font partie des bénéfices indéniables de l’électrification des transports. Néanmoins, la transition vers la mobilité électrique ne se fait pas sans défis, notamment en ce qui concerne l’approvisionnement en électricité verte et le recyclage des batteries.\n
+
+Les transports en commun jouent également un rôle majeur dans la réduction des émissions de gaz à effet de serre. Les villes investissent dans des réseaux de tramways, de bus électriques ou hybrides et dans la modernisation des infrastructures pour encourager les citoyens à utiliser ces alternatives aux véhicules personnels. L’augmentation de la part des transports publics dans les déplacements urbains peut réduire significativement les émissions globales de CO2, tout en diminuant les embouteillages et la pollution sonore.\n
+
+Enfin, la promotion de la marche et du vélo dans les zones urbaines est essentielle pour réduire encore les émissions de carbone. Les villes modernes redessinent leurs espaces urbains pour les rendre plus accessibles aux piétons et cyclistes, avec des pistes cyclables et des zones piétonnes qui favorisent la mobilité douce. Ces initiatives contribuent non seulement à la réduction des émissions polluantes, mais améliorent également la qualité de vie en ville.\n', NULL, 77939440);
+INSERT INTO vue_admin.article
+(title, article_date, author, content, image, admin_id)
+VALUES('Les Nouvelles Technologies au Service de l’Écologie', '2024-12-15 00:00:00', 'Jérôme Dupuis', 'Les nouvelles technologies jouent un rôle crucial dans la lutte contre les défis environnementaux. Grâce à des innovations telles que les capteurs intelligents, l’intelligence artificielle et les technologies de surveillance en temps réel, il est désormais possible d''optimiser la gestion des ressources naturelles et de surveiller en permanence les impacts environnementaux.\n
+
+Les capteurs environnementaux permettent de mesurer avec précision la qualité de l’air, de l’eau et du sol, offrant ainsi des données en temps réel sur la pollution et les variations climatiques. Ces informations sont utilisées pour prendre des décisions éclairées en matière de gestion des ressources et de lutte contre les pollutions. Par exemple, des villes utilisent ces technologies pour ajuster le trafic en fonction des niveaux de pollution et pour organiser des actions de nettoyage ciblées.\n
+
+L’intelligence artificielle (IA) est également utilisée pour optimiser la gestion des énergies renouvelables. Les systèmes d’IA peuvent prévoir la production d''énergie solaire et éolienne en fonction des conditions météorologiques, ce qui permet de mieux gérer les réseaux électriques et d''optimiser l’utilisation des énergies renouvelables. Ces technologies permettent de maximiser l''efficacité des systèmes énergétiques tout en réduisant l’utilisation des ressources fossiles.\n
+
+Enfin, les technologies de blockchain sont explorées pour améliorer la traçabilité des produits recyclés. Elles permettent de garantir la transparence des chaînes d''approvisionnement et de s''assurer que les matériaux recyclés sont effectivement utilisés de manière responsable. Ces innovations offrent une nouvelle approche pour connecter les producteurs, les consommateurs et les gestionnaires de déchets dans un système économique plus durable.\n', NULL, 77939440);
+INSERT INTO vue_admin.article
+(title, article_date, author, content, image, admin_id)
+VALUES('L''Économie Circulaire et les Défis de la Transition
+', '2024-12-16 00:00:00', 'Emma Lefrançois', 'L''économie circulaire représente un modèle économique novateur visant à réduire la consommation de ressources naturelles et à limiter la production de déchets. Contrairement à l''approche linéaire traditionnelle, où les ressources sont extraites, transformées, utilisées puis jetées, l''économie circulaire met l''accent sur la réutilisation, la réparation et le recyclage. Ce modèle cherche à allonger la durée de vie des produits et à en maximiser la valeur au-delà de leur usage initial.\n
+
+Cependant, la transition vers une économie circulaire n''est pas sans défis. L’un des obstacles majeurs réside dans la nécessité de repenser les processus de production et de consommation. Les entreprises doivent investir dans des technologies de recyclage et de réutilisation, ce qui peut s''avérer coûteux. De plus, la conception des produits doit être revue pour faciliter leur démontage et leur recyclabilité, ce qui nécessite une collaboration étroite entre designers, ingénieurs et producteurs.\n
+
+Un autre défi est l''intégration du recyclage à grande échelle dans la chaîne de valeur. De nombreux matériaux, comme les plastiques complexes, sont difficiles à recycler, ce qui limite leur réintroduction dans le cycle de production. Les technologies de recyclage doivent donc être améliorées pour permettre une transformation plus efficace des matériaux et éviter le gaspillage.\n
+
+Malgré ces obstacles, les avantages d''une économie circulaire sont immenses, tant sur le plan environnemental qu''économique. La réduction des déchets, la préservation des ressources naturelles et la création de nouveaux emplois dans les secteurs du recyclage et de la réparation sont autant de bénéfices qui justifient l’accélération de cette transition.\n', NULL, 77939440);
+INSERT INTO vue_admin.article
+(title, article_date, author, content, image, admin_id)
+VALUES('La Réduction des Déchets : Un Enjeu Crucial pour l''Avenir', '2024-12-17 00:00:00', 'Lucas Bernard', 'La gestion des déchets est un enjeu central de l''écologie moderne. Avec l''augmentation constante de la population mondiale et la croissance des secteurs industriels, la production de déchets n’a cessé d''augmenter. Pourtant, une grande partie de ces déchets pourrait être évitée, recyclée ou réutilisée. La réduction des déchets est donc un objectif clé des politiques écologiques actuelles, visant à limiter leur impact sur l’environnement.\n
+
+Les déchets plastiques, par exemple, représentent une menace majeure pour les océans et les écosystèmes marins. Chaque année, des millions de tonnes de plastique finissent dans les mers, où elles perturbent la faune et la flore. La lutte contre la pollution plastique passe par une meilleure gestion des déchets, mais aussi par des initiatives pour réduire l’utilisation du plastique à usage unique. De nombreuses entreprises et gouvernements ont déjà commencé à interdire ou à limiter les plastiques à usage unique, tout en encourageant les alternatives écologiques.\n
+
+L''une des clés de la réduction des déchets réside également dans la réduction de la production elle-même. Cela implique d''adopter des pratiques de consommation plus responsables et de privilégier les produits durables, réparables et recyclables. L''adoption du zéro déchet, qui encourage la réparation et la réutilisation des objets plutôt que leur jetabilité, est un mouvement qui gagne en popularité parmi les consommateurs soucieux de leur impact environnemental.\n
+
+Pour aller plus loin, les gouvernements et les entreprises doivent investir dans des infrastructures de recyclage et de compostage plus efficaces, afin de réduire la quantité de déchets envoyés en décharge ou incinérés. La mise en place de politiques de gestion durable des déchets est essentielle pour limiter les impacts environnementaux et pour favoriser une économie plus circulaire.\n', NULL, 77939440);
+INSERT INTO vue_admin.article
+(title, article_date, author, content, image, admin_id)
+VALUES('Les Solutions Innovantes pour la Transition Écologique', '2024-12-19 00:00:00', 'Léa Dufresne', 'La transition écologique nécessite des solutions innovantes pour relever les défis environnementaux. Parmi les technologies les plus prometteuses, l''intelligence artificielle (IA) et l''Internet des objets (IoT) jouent un rôle de plus en plus important. Ces technologies permettent de mieux comprendre et gérer les ressources naturelles, d’optimiser les processus industriels et de réduire les émissions de gaz à effet de serre.\n
+
+L''IA, par exemple, est utilisée pour prédire les besoins énergétiques, optimiser la consommation d''eau et gérer les déchets de manière plus intelligente. Les systèmes intelligents peuvent ajuster en temps réel la production d''énergie à partir de sources renouvelables en fonction des conditions climatiques, ou encore améliorer l''efficacité énergétique des bâtiments en régulant la température et la lumière. Grâce à ces technologies, il devient possible de réduire les ressources utilisées et de minimiser l''empreinte carbone des activités humaines.\n
+
+L''IoT, quant à lui, permet de connecter des objets et des infrastructures pour surveiller en temps réel l’état de l’environnement. Par exemple, des capteurs placés sur les bâtiments peuvent mesurer la consommation d''énergie ou détecter des fuites d''eau, permettant ainsi une gestion plus efficace de ces ressources. De même, les capteurs de qualité de l''air et de l''eau permettent de surveiller les niveaux de pollution et de prendre des mesures correctives avant que les problèmes ne deviennent graves.\n
+
+Ces solutions technologiques, combinées à des politiques publiques ambitieuses, pourraient accélérer la transition vers une économie plus verte et plus durable. Elles offrent des moyens efficaces pour réduire notre impact environnemental tout en améliorant la qualité de vie des citoyens et en favorisant un développement économique respectueux de la planète.\n', NULL, 77939440);
 
 INSERT INTO vue_admin.event (title,description,event_date,location,capacity,status,admin_id) VALUES
-	 ('Event 1','Lorem Ipsum','2024-02-01 15:15:01','Online',10,'Cancelled',77939440),
-	 ('Event 2','Lorem Ipsum','2024-02-03 10:15:01','Online',15,'Incoming',77939440),
-	 ('Event 3','Lorem Ipsum','2024-02-02 23:30:01','Online',10,'Full',77939440);
+	('Réunion avec les acteurs Green Circle','Réunion avec les acteurs de Green Circle pour comprendre l''organisation et les tenants et aboutissant de l''application ','2025-02-01 15:15:01','Online',10,'Incoming', 77939440),
+	('Réunion de lancement de Green Circle','Réunion de lancement de l''application en compagnie de tout les acteurs','2025-02-03 10:15:01','IRL',15,'Incoming', 77939440),
+	('Explication de l''application aux usagers','Réunion d''explication du fonctionnement de l''application aux usagers','2025-02-02 23:30:01','Online',3,'Full', 77939440);
 
-INSERT INTO vue_admin.elearning_list (course_id,title,description,price,admin_id) VALUES
-	 ('1','''Exemple 1''','Lorem Ipsum Vitae','10',77939440),
-	 ('2','''Exemple 2''','Lorem Ipsum Vitae','10',77939440),
-	 ('3','''Exemple 3''','Lorem Ipsum Vitae','10',77939440),
-	 ('4','''Exemple 4''','Lorem Ipsum Vitae','0',77939440),
-	 ('5','''Exemple 5''','Lorem Ipsum Vitae','0',77939440),
-	 ('6','''Exemple 6''','Lorem Ipsum Vitae','0',77939440),
-	 ('7','''Exemple 7''','Lorem Ipsum Vitae','0',77939440),
-	 ('8','''Exemple 8''','Lorem Ipsum Vitae','3',77939440);
-
+INSERT INTO vue_admin.elearning_list (course_id, title, description, price, admin_id) VALUES
+	('1', 'La Face Cachée de l''économie Circulaire', 'Ce cours explore les aspects méconnus et les défis de l''économie circulaire, souvent perçue comme une solution idéale pour la durabilité. Il met en lumière les paradoxes de ce modèle, comme la surconsommation liée à la prolongation de la vie des produits et les effets pervers sur certaines chaînes de valeur. Le cours examine aussi les inégalités sociales et économiques, notamment l''accès aux ressources et aux emplois dans ce secteur. Les limites technologiques et logistiques du recyclage sont analysées, tout comme les difficultés de gouvernance liées à l''absence de normes mondiales. Enfin, il propose des pistes pour rendre l''économie circulaire plus inclusive, équitable et efficace.', '35', 77939440),
+	('2', 'Introduction à l''Économie Circulaire', 'Ce cours offre une introduction complète à l''économie circulaire, un modèle économique visant à réduire la consommation de ressources naturelles et la production de déchets en favorisant la réutilisation, la réparation, et le recyclage. Les étudiants exploreront les principes fondamentaux de l''économie circulaire, les différentes stratégies mises en place par les entreprises et les gouvernements pour la promouvoir, ainsi que ses avantages écologiques et économiques. Le cours met également en lumière les défis pratiques de la transition vers un modèle circulaire, notamment les barrières technologiques, sociales et réglementaires. Les étudiants auront ainsi une vision globale des opportunités et des limites de ce modèle pour le développement durable.', '20', 77939440),
+	('3', 'L''Importance du Recyclage pour un Avenir Durable', 'Ce cours aborde l''importance cruciale du recyclage dans la gestion des ressources naturelles et la réduction de l''impact environnemental des déchets. Les étudiants découvriront les principes fondamentaux du recyclage, ses différents types (recyclage des matériaux, des produits électroniques, etc.) et son rôle dans l''économie circulaire. Le cours mettra en évidence les bienfaits écologiques du recyclage, tels que la réduction de l''extraction des ressources, la diminution des émissions de gaz à effet de serre et la préservation de la biodiversité. En outre, il traitera des défis logistiques, économiques et sociaux du recyclage à grande échelle, tout en explorant les innovations technologiques qui rendent le recyclage plus efficace. L''objectif est de sensibiliser les étudiants à l''importance de cette pratique pour la transition vers une société plus durable et responsable.', '20', 77939440),
+	('4', 'Comment Green Circle Adopte une Démarche d''Économie Circulaire', 'Ce cours explore la manière dont Green Circle, une initiative engagée dans la durabilité, intègre les principes de l''économie circulaire dans ses pratiques. L''économie circulaire vise à maximiser la durée de vie des produits, à réduire les déchets et à recycler les matériaux afin de conserver les ressources naturelles. Green Circle adopte cette démarche en mettant en œuvre des stratégies concrètes de réduction des déchets, de réutilisation des matériaux et de recyclage, tout en sensibilisant les entreprises et les consommateurs à des pratiques plus responsables.', '20', 77939440);
 
 -- vue_user
 USE vue_user;
 
-INSERT INTO vue_user.company (siren,nom,email,password,adress,zipcode,city,phone) VALUES
-	 ('18770918300235','CCI 77 ','cci77@gmail.com','3,@|zEM5&F92','1 AVENUE JOHANNES GUTENBERG','77700','Serris','0939232929'),
-	 ('33865714102081','Ada Location','ada.location@gmail.com','uO830|Tkqd6{','1 BOULEVARD MICHAEL FARADAY','77700','Serris','0699099143'),
-	 ('39966767400051','Andreu','andreu@gmail.com','3,@|zEM5&F92','1 BD RUE IRENE JOLIOT CURIE','77700','Bailly-Romainvilliers','0728283283'),
-	 ('48830276100090','Ludendo','lundendo@gmail.com','Z?_%Sa4541F5','2 Avenue Clement Ader','77700','Serris','0743378238'),
-	 ('78496197100305','SIMT - Médecine du travail','SIMT@gmail.com','A534<.w9LeQB','4 avenue Christian Doppler','77700','SerrIs','0677908733'),
-	 ('80503352900027','La Grande Papet','LGP@gmail.com','TU|q}013m=~{','2 avenue Christian Doppler','77700','Serris','0928832838'),
-	 ('85003138000500','SESSAD Passerose','sessad@gmail.com','3,@|zEM5&F92','2 avenue Christian Doppler','77700','Serris','0164171400');
+-- Delete all records from the tables in vue_admin
+DELETE FROM vue_user.company;
+DELETE FROM vue_user.condition_type;
+DELETE FROM vue_user.container;
+DELETE FROM vue_user.elearning;
+DELETE FROM vue_user.emplacement;
+DELETE FROM vue_user.inscription;
+DELETE FROM vue_user.container;
+DELETE FROM vue_user.event;
+DELETE FROM vue_user.object_type;
+DELETE FROM vue_user.listing;
+DELETE FROM vue_user.listing_image;
+DELETE FROM vue_user.log;
+DELETE FROM vue_user.object_type;
+DELETE FROM vue_user.preference;
+DELETE FROM vue_user.transaction;
+
+INSERT INTO vue_user.company (siren,nom,email,password,adress,zipcode,city,phone, active, joined) VALUES
+	 ('18770918300235','CCI 77 ','cci77@gmail.com','$2a$10$2Gh9IqDjzKro/K.2PAAYwea59c1xnsNTgRRRL/q4y/V99kg4/7BoO
+	','1 AVENUE JOHANNES GUTENBERG','77700','Serris','0939232929', '1', '2024-12-01'),
+	 ('33865714102081','Ada Location','ada.location@gmail.com','$2a$10$2Gh9IqDjzKro/K.2PAAYwea59c1xnsNTgRRRL/q4y/V99kg4/7BoO
+	','1 BOULEVARD MICHAEL FARADAY','77700','Serris','0699099143', '1', '2024-12-01'),
+	 ('39966767400051','Andreu','andreu@gmail.com','$2a$10$2Gh9IqDjzKro/K.2PAAYwea59c1xnsNTgRRRL/q4y/V99kg4/7BoO
+		','1 BD RUE IRENE JOLIOT CURIE','77700','Bailly-Romainvilliers','0728283283' , '1', '2024-12-01'),
+	 ('48830276100090','Ludendo','lundendo@gmail.com','$2a$10$2Gh9IqDjzKro/K.2PAAYwea59c1xnsNTgRRRL/q4y/V99kg4/7BoO
+		','2 Avenue Clement Ader','77700','Serris','0743378238', '1', '2024-12-01'),
+	 ('78496197100305','SIMT - Médecine du travail','SIMT@gmail.com','$2a$10$2Gh9IqDjzKro/K.2PAAYwea59c1xnsNTgRRRL/q4y/V99kg4/7BoO
+		','4 avenue Christian Doppler','77700','SerrIs','0677908733', '1', '2024-12-01'),
+	 ('80503352900027','La Grande Papet','LGP@gmail.com','$2a$10$2Gh9IqDjzKro/K.2PAAYwea59c1xnsNTgRRRL/q4y/V99kg4/7BoO
+		','2 avenue Christian Doppler','77700','Serris','0928832838', '1', '2024-12-01'),
+	 ('85003138000500','SESSAD Passerose','sessad@gmail.com','$2a$10$2Gh9IqDjzKro/K.2PAAYwea59c1xnsNTgRRRL/q4y/V99kg4/7BoO
+		','2 avenue Christian Doppler','77700','Serris','0164171400', '1', '2024-12-01');
+
+INSERT INTO vue_user.preference (preference, siren) VALUES
+	('{"1": true, "2": false, "3": true, "4": false, "5": true, "6": false, "7": true}', '18770918300235'),
+	('{"1": true, "2": true, "3": false, "4": false, "5": false, "6": false, "7": true}', '33865714102081'),
+	('{"1": true, "2": true, "3": true, "4": false, "5": false, "6": false, "7": false}', '39966767400051'),
+	('{"1": true, "2": true, "3": true, "4": false, "5": false, "6": false, "7": false}', '48830276100090'),
+	('{"1": true, "2": true, "3": true, "4": false, "5": false, "6": true, "7": true}', '78496197100305'),
+	('{"1": true, "2": true, "3": true, "4": false, "5": false, "6": true, "7": true}', '80503352900027'),
+	('{"1": true, "2": true, "3": true, "4": false, "5": false, "6": true, "7": false}', '85003138000500');
 
 INSERT INTO vue_user.condition_type (label) VALUES
+	 ('Endommagé'),
 	 ('Satisfaisant'),
 	 ('Bon état'),
 	 ('Très bon état'),
 	 ('Neuf');
 
-INSERT INTO vue_user.container (adress,city,zipcode,capacity) VALUES
-	 ('1 BOULEVARD MICHAEL FARADAY','Serris','77700',5);
+INSERT INTO vue_user.container (adress, city, zipcode, capacity) VALUES
+	('1 BOULEVARD MICHAEL FARADAY', 'Serris', '77700', 5),
+	('2 Avenue Clement Ader', 'Serris', '77700', 5),
+	('1 BD RUE IRENE JOLIOT CURIE', 'Bailly-Romainvilliers', '77700', 5),
+	('1 AVENUE JOHANNES GUTENBERG', 'Serris', '77700', 5),
+	('2 Avenue Clement Ader', 'Serris', '77700', 5),
+	('4 avenue Christian Doppler', 'Serris', '77700', 5),
+	('2 avenue Christian Doppler', 'Serris', '77700', 5);
 
 INSERT INTO vue_user.emplacement (available,dimension,id_Container) VALUES
-	 (1,NULL,1),
-	 (1,NULL,1),
-	 (1,NULL,1),
-	 (1,NULL,1),
-	 (1,NULL,1);
+	 (0,NULL,1),
+	 (0,NULL,1),
+	 (0,NULL,1),
+	 (0,NULL,1),
+	 (0,NULL,1),
+	 (0,NULL,2),
+	 (1,NULL,2),
+	 (1,NULL,2),
+	 (1,NULL,2),
+	 (1,NULL,2),
+	 (1,NULL,3),
+	 (1,NULL,3),
+	 (1,NULL,3),
+	 (1,NULL,3),
+	 (1,NULL,3),
+	 (1,NULL,4),
+	 (1,NULL,4),
+	 (1,NULL,4),
+	 (1,NULL,4),
+	 (1,NULL,4),
+	 (1,NULL,5),
+	 (1,NULL,5),
+	 (1,NULL,5),
+	 (1,NULL,5),
+	 (1,NULL,5);
 
 INSERT INTO vue_user.event (event_id,title,description,event_date,location,capacity,status) VALUES
-(1,'Event 1','Lorem Ipsum','2024-02-01 15:15:01','Online',10,'Cancelled'),
-(2,'Event 2','Lorem Ipsum','2024-02-03 10:15:01','Online',15,'Incoming'),
-(3,'Event 3','Lorem Ipsum','2024-02-02 23:30:01','Online',10,'Full');
+	(1,'Réunion avec les acteurs Green Circle','Réunion avec les acteurs de Green Circle pour comprendre l''organisation et les tenants et aboutissant de l''application ','2025-02-01 15:15:01','Online',10,'Incoming'),
+	(2,'Réunion de lancement de Green Circle','Réunion de lancement de l''application en compagnie de tout les acteurs','2025-02-03 10:15:01','IRL',15,'Incoming'),
+	(3,'Explication de l''application aux usagers','Réunion d''explication du fonctionnement de l''application aux usagers','2025-02-02 23:30:01','Online',3,'Full');
+
+INSERT INTO vue_user.elearning (title, description, price, subscription_date, token, password, course_id, siren) VALUES
+('La Face Cachée de l''économie Circulaire', 'Ce cours explore les aspects méconnus et les défis de l''économie circulaire, souvent perçue comme une solution idéale pour la durabilité. Il met en lumière les paradoxes de ce modèle, comme la surconsommation liée à la prolongation de la vie des produits et les effets pervers sur certaines chaînes de valeur. Le cours examine aussi les inégalités sociales et économiques, notamment l''accès aux ressources et aux emplois dans ce secteur. Les limites technologiques et logistiques du recyclage sont analysées, tout comme les difficultés de gouvernance liées à l''absence de normes mondiales. Enfin, il propose des pistes pour rendre l''économie circulaire plus inclusive, équitable et efficace.', 35, '2024-12-01', 'kGUlD2e6jWFkDMCLgj9gzDDqlVHxVgVeRg3S7aXJSCMWLiCVEhfImVwj8p6XLMj8Ke1IDKy0a4F', '$2a$10$2Gh9IqDjzKro/K.2PAAYwea59c1xnsNTgRRRL/q4y/V99kg4/7BoO', 1, '18770918300235'),
+('La Face Cachée de l''économie Circulaire', 'Ce cours explore les aspects méconnus et les défis de l''économie circulaire, souvent perçue comme une solution idéale pour la durabilité. Il met en lumière les paradoxes de ce modèle, comme la surconsommation liée à la prolongation de la vie des produits et les effets pervers sur certaines chaînes de valeur. Le cours examine aussi les inégalités sociales et économiques, notamment l''accès aux ressources et aux emplois dans ce secteur. Les limites technologiques et logistiques du recyclage sont analysées, tout comme les difficultés de gouvernance liées à l''absence de normes mondiales. Enfin, il propose des pistes pour rendre l''économie circulaire plus inclusive, équitable et efficace.', 35, '2024-12-01', 'kGUlD2e6jWFkDMCLgj9gzDDqlVHxVgVeRg3S7aXJSCMWLiCVEhfImVwj8p6XLMj8Ke1IDKy0a4F', '$2a$10$2Gh9IqDjzKro/K.2PAAYwea59c1xnsNTgRRRL/q4y/V99kg4/7BoO', 1, '33865714102081'),
+('Introduction à l''Économie Circulaire', 'Ce cours offre une introduction complète à l''économie circulaire, un modèle économique visant à réduire la consommation de ressources naturelles et la production de déchets en favorisant la réutilisation, la réparation, et le recyclage. Les étudiants exploreront les principes fondamentaux de l''économie circulaire, les différentes stratégies mises en place par les entreprises et les gouvernements pour la promouvoir, ainsi que ses avantages écologiques et économiques. Le cours met également en lumière les défis pratiques de la transition vers un modèle circulaire, notamment les barrières technologiques, sociales et réglementaires. Les étudiants auront ainsi une vision globale des opportunités et des limites de ce modèle pour le développement durable.', 20, '2024-12-01', 'kGUlD2e6jWFkDMCLgj9gzDDqlVHxVgVeRg3S7aXJSCMWLiCVEhfImVwj8p6XLMj8Ke1IDKy0a4F', '$2a$10$2Gh9IqDjzKro/K.2PAAYwea59c1xnsNTgRRRL/q4y/V99kg4/7BoO', 2, '18770918300235'),
+('Introduction à l''Économie Circulaire', 'Ce cours offre une introduction complète à l''économie circulaire, un modèle économique visant à réduire la consommation de ressources naturelles et la production de déchets en favorisant la réutilisation, la réparation, et le recyclage. Les étudiants exploreront les principes fondamentaux de l''économie circulaire, les différentes stratégies mises en place par les entreprises et les gouvernements pour la promouvoir, ainsi que ses avantages écologiques et économiques. Le cours met également en lumière les défis pratiques de la transition vers un modèle circulaire, notamment les barrières technologiques, sociales et réglementaires. Les étudiants auront ainsi une vision globale des opportunités et des limites de ce modèle pour le développement durable.', 20, '2024-12-01', 'kGUlD2e6jWFkDMCLgj9gzDDqlVHxVgVeRg3S7aXJSCMWLiCVEhfImVwj8p6XLMj8Ke1IDKy0a4F', '$2a$10$2Gh9IqDjzKro/K.2PAAYwea59c1xnsNTgRRRL/q4y/V99kg4/7BoO', 2, '33865714102081'),
+('L''Importance du Recyclage pour un Avenir Durable', 'Ce cours aborde l''importance cruciale du recyclage dans la gestion des ressources naturelles et la réduction de l''impact environnemental des déchets. Les étudiants découvriront les principes fondamentaux du recyclage, ses différents types (recyclage des matériaux, des produits électroniques, etc.) et son rôle dans l''économie circulaire. Le cours mettra en évidence les bienfaits écologiques du recyclage, tels que la réduction de l''extraction des ressources, la diminution des émissions de gaz à effet de serre et la préservation de la biodiversité. En outre, il traitera des défis logistiques, économiques et sociaux du recyclage à grande échelle, tout en explorant les innovations technologiques qui rendent le recyclage plus efficace. L''objectif est de sensibiliser les étudiants à l''importance de cette pratique pour la transition vers une société plus durable et responsable.', 20, '2024-12-01', 'kGUlD2e6jWFkDMCLgj9gzDDqlVHxVgVeRg3S7aXJSCMWLiCVEhfImVwj8p6XLMj8Ke1IDKy0a4F', '$2a$10$2Gh9IqDjzKro/K.2PAAYwea59c1xnsNTgRRRL/q4y/V99kg4/7BoO', 3, '39966767400051'),
+('L''Importance du Recyclage pour un Avenir Durable', 'Ce cours aborde l''importance cruciale du recyclage dans la gestion des ressources naturelles et la réduction de l''impact environnemental des déchets. Les étudiants découvriront les principes fondamentaux du recyclage, ses différents types (recyclage des matériaux, des produits électroniques, etc.) et son rôle dans l''économie circulaire. Le cours mettra en évidence les bienfaits écologiques du recyclage, tels que la réduction de l''extraction des ressources, la diminution des émissions de gaz à effet de serre et la préservation de la biodiversité. En outre, il traitera des défis logistiques, économiques et sociaux du recyclage à grande échelle, tout en explorant les innovations technologiques qui rendent le recyclage plus efficace. L''objectif est de sensibiliser les étudiants à l''importance de cette pratique pour la transition vers une société plus durable et responsable.', 20, '2024-12-01', 'kGUlD2e6jWFkDMCLgj9gzDDqlVHxVgVeRg3S7aXJSCMWLiCVEhfImVwj8p6XLMj8Ke1IDKy0a4F', '$2a$10$2Gh9IqDjzKro/K.2PAAYwea59c1xnsNTgRRRL/q4y/V99kg4/7BoO', 3, '85003138000500'),
+('Comment Green Circle Adopte une Démarche d''Économie Circulaire', 'Ce cours explore la manière dont Green Circle, une initiative engagée dans la durabilité, intègre les principes de l''économie circulaire dans ses pratiques. L''économie circulaire vise à maximiser la durée de vie des produits, à réduire les déchets et à recycler les matériaux afin de conserver les ressources naturelles. Green Circle adopte cette démarche en mettant en œuvre des stratégies concrètes de réduction des déchets, de réutilisation des matériaux et de recyclage, tout en sensibilisant les entreprises et les consommateurs à des pratiques plus responsables.', 20, '2024-12-01', 'kGUlD2e6jWFkDMCLgj9gzDDqlVHxVgVeRg3S7aXJSCMWLiCVEhfImVwj8p6XLMj8Ke1IDKy0a4F', '$2a$10$2Gh9IqDjzKro/K.2PAAYwea59c1xnsNTgRRRL/q4y/V99kg4/7BoO', 4, '39966767400051'),
+('Comment Green Circle Adopte une Démarche d''Économie Circulaire', 'Ce cours explore la manière dont Green Circle, une initiative engagée dans la durabilité, intègre les principes de l''économie circulaire dans ses pratiques. L''économie circulaire vise à maximiser la durée de vie des produits, à réduire les déchets et à recycler les matériaux afin de conserver les ressources naturelles. Green Circle adopte cette démarche en mettant en œuvre des stratégies concrètes de réduction des déchets, de réutilisation des matériaux et de recyclage, tout en sensibilisant les entreprises et les consommateurs à des pratiques plus responsables.', 20, '2024-12-01', 'kGUlD2e6jWFkDMCLgj9gzDDqlVHxVgVeRg3S7aXJSCMWLiCVEhfImVwj8p6XLMj8Ke1IDKy0a4F', '$2a$10$2Gh9IqDjzKro/K.2PAAYwea59c1xnsNTgRRRL/q4y/V99kg4/7BoO', 4, '85003138000500'),
+('La Face Cachée de l''économie Circulaire', 'Ce cours explore les aspects méconnus et les défis de l''économie circulaire, souvent perçue comme une solution idéale pour la durabilité. Il met en lumière les paradoxes de ce modèle, comme la surconsommation liée à la prolongation de la vie des produits et les effets pervers sur certaines chaînes de valeur. Le cours examine aussi les inégalités sociales et économiques, notamment l''accès aux ressources et aux emplois dans ce secteur. Les limites technologiques et logistiques du recyclage sont analysées, tout comme les difficultés de gouvernance liées à l''absence de normes mondiales. Enfin, il propose des pistes pour rendre l''économie circulaire plus inclusive, équitable et efficace.', 35, '2024-12-01', 'kGUlD2e6jWFkDMCLgj9gzDDqlVHxVgVeRg3S7aXJSCMWLiCVEhfImVwj8p6XLMj8Ke1IDKy0a4F', '$2a$10$2Gh9IqDjzKro/K.2PAAYwea59c1xnsNTgRRRL/q4y/V99kg4/7BoO', 1, '80503352900027'),
+('Introduction à l''Économie Circulaire', 'Ce cours offre une introduction complète à l''économie circulaire, un modèle économique visant à réduire la consommation de ressources naturelles et la production de déchets en favorisant la réutilisation, la réparation, et le recyclage. Les étudiants exploreront les principes fondamentaux de l''économie circulaire, les différentes stratégies mises en place par les entreprises et les gouvernements pour la promouvoir, ainsi que ses avantages écologiques et économiques. Le cours met également en lumière les défis pratiques de la transition vers un modèle circulaire, notamment les barrières technologiques, sociales et réglementaires. Les étudiants auront ainsi une vision globale des opportunités et des limites de ce modèle pour le développement durable.', 20, '2024-12-01', 'kGUlD2e6jWFkDMCLgj9gzDDqlVHxVgVeRg3S7aXJSCMWLiCVEhfImVwj8p6XLMj8Ke1IDKy0a4F', '$2a$10$2Gh9IqDjzKro/K.2PAAYwea59c1xnsNTgRRRL/q4y/V99kg4/7BoO', 2, '80503352900027');
+
+INSERT INTO vue_user.inscription (event_id, siren) VALUES
+	(3, '18770918300235'),
+	(3, '33865714102081'),
+	(3, '39966767400051');
 
 INSERT INTO vue_user.object_type (label) VALUES
     ('Informatique'),
@@ -62,21 +236,73 @@ INSERT INTO vue_user.object_type (label) VALUES
     ('Outils'),
     ('Autres');
 
-INSERT INTO vue_user.listing
-(id_item, title, description, dimension, date_posted, status, id_emplacement, siren, id_object_type, id_condition_type)
-VALUES(22, 'Table', 'Table en bois', '100x50x70', '2024-12-11', 'active', 1, '18770918300235', 3, 3);
-INSERT INTO vue_user.listing
-(id_item, title, description, dimension, date_posted, status, id_emplacement, siren, id_object_type, id_condition_type)
-VALUES(23, 'Chaise', 'Chaise en bois confortable ', '50x40x80', '2024-12-11', 'active', 2, '18770918300235', 3, 2);
-INSERT INTO vue_user.listing
-(id_item, title, description, dimension, date_posted, status, id_emplacement, siren, id_object_type, id_condition_type)
-VALUES(24, 'Clavier', 'Clavier mecanique logitech tres reactif ', '30x15x6', '2024-12-11', 'active', 3, '18770918300235', 1, 4);
-INSERT INTO vue_user.listing
-(id_item, title, description, dimension, date_posted, status, id_emplacement, siren, id_object_type, id_condition_type)
-VALUES(25, 'Imprimante ', 'Super imprimante avec beaucoup de style', '40x40x60', '2024-12-11', 'active', 4, '18770918300235', 2, 1);
-INSERT INTO vue_user.listing
-(id_item, title, description, dimension, date_posted, status, id_emplacement, siren, id_object_type, id_condition_type)
-VALUES(26, 'Aspirateur', 'Aspirateur qui aspire ', '20x20x40', '2024-12-11', 'active', 5, '18770918300235', 6, 3);
+INSERT INTO vue_user.listing 
+(id_item, title, description, dimension, date_posted, status, id_emplacement, siren, id_object_type, id_condition_type) 
+VALUES
+    (22, 'Table', 'Table en bois', '100x50x70', '2024-12-11', 'active', 1, '33865714102081', 3, 3),
+    (23, 'Chaise', 'Chaise en bois confortable ', '50x40x80', '2024-12-11', 'active', 2, '39966767400051', 3, 2),
+    (24, 'Clavier', 'Clavier mecanique logitech tres reactif ', '30x15x6', '2024-12-11', 'active', 3, '48830276100090', 1, 4),
+    (25, 'Imprimante ', 'Super imprimante avec beaucoup de style', '40x40x60', '2024-12-11', 'active', 4, '78496197100305', 2, 1),
+    (26, 'Aspirateur', 'Aspirateur qui aspire ', '20x20x40', '2024-12-11', 'active', 5, '80503352900027', 6, 3),
+    (27, 'Canapé', 'Canapé moderne', '200x100x90', '2024-12-14', 'picked', 1, '85003138000500', 4, 2),
+    (28, 'Lampe', 'Lampe de bureau', '15x15x40', '2024-12-14', 'picked', 2, '33865714102081', 5, 3),
+    (29, 'Bureau', 'Bureau en métal', '120x60x75', '2024-12-14', 'picked', 3, '39966767400051', 3, 4),
+    (30, 'Armoire', 'Armoire en bois massif', '180x60x200', '2024-12-14', 'picked', 5, '48830276100090', 4, 3),
+    (31, 'Étagère', 'Étagère de rangement', '80x30x180', '2024-12-14', 'picked', 6, '78496197100305', 3, 2),
+    (32, 'Tapis', 'Tapis design', '200x300x1', '2024-12-14', 'picked', 7, '80503352900027', 6, 2),
+    (33, 'Télévision', 'Télévision 4K', '120x30x70', '2024-12-14', 'picked', 8, '85003138000500', 1, 4),
+    (34, 'Chaise de bureau', 'Chaise ergonomique', '60x60x120', '2024-12-14', 'picked', 9, '33865714102081', 3, 3),
+    (35, 'Table basse', 'Table basse en verre', '100x50x40', '2024-12-14', 'picked', 10, '39966767400051', 4, 2),
+    (36, 'Meuble TV', 'Meuble pour télévision', '120x40x50', '2024-12-14', 'picked', 11, '48830276100090', 4, 2),
+    (37, 'Lustre', 'Lustre vintage', '60x60x60', '2024-12-14', 'picked', 12, '78496197100305', 5, 3),
+    (38, 'Four', 'Four électrique', '60x60x60', '2024-12-14', 'picked', 13, '80503352900027', 2, 1),
+    (39, 'Frigo', 'Réfrigérateur avec congélateur', '60x60x180', '2024-12-14', 'picked', 14, '85003138000500', 2, 3),
+    (40, 'Micro-ondes', 'Micro-ondes compact', '40x30x25', '2024-12-14', 'picked', 15, '33865714102081', 2, 4),
+    (41, 'Machine à laver', 'Machine à laver moderne', '60x60x90', '2024-12-14', 'picked', 16, '39966767400051', 2, 3),
+    (42, 'Sèche-linge', 'Sèche-linge performant', '60x60x90', '2024-12-14', 'picked', 17, '48830276100090', 2, 2),
+    (43, 'Vélo', 'Vélo de montagne', '180x30x100', '2024-12-14', 'picked', 18, '78496197100305', 6, 4),
+    (44, 'Trottinette', 'Trottinette électrique', '100x20x40', '2024-12-14', 'picked', 19, '80503352900027', 6, 3);
+
+INSERT INTO vue_user.transaction (id_item, status, siren, date_transaction)
+VALUES
+    (27, 'reserved', '39966767400051', '2024-12-16'),
+    (27, 'picked', '39966767400051', '2024-12-16'),
+    (28, 'reserved', '48830276100090', '2024-12-16'),
+    (28, 'picked', '48830276100090', '2024-12-16'),
+    (29, 'reserved', '80503352900027', '2024-12-16'),
+    (29, 'picked', '80503352900027', '2024-12-16'),
+    (30, 'reserved', '33865714102081', '2024-12-16'),
+    (30, 'picked', '33865714102081', '2024-12-16'),
+    (31, 'reserved', '78496197100305', '2024-12-16'),
+    (31, 'picked', '78496197100305', '2024-12-16'),
+    (32, 'reserved', '85003138000500', '2024-12-16'),
+    (32, 'picked', '85003138000500', '2024-12-16'),
+    (33, 'reserved', '39966767400051', '2024-12-16'),
+    (33, 'picked', '39966767400051', '2024-12-16'),
+    (34, 'reserved', '78496197100305', '2024-12-16'),
+    (34, 'picked', '78496197100305', '2024-12-16'),
+    (35, 'reserved', '85003138000500', '2024-12-16'),
+    (35, 'picked', '85003138000500', '2024-12-16'),
+    (36, 'reserved', '39966767400051', '2024-12-16'),
+    (36, 'picked', '39966767400051', '2024-12-16'),
+    (37, 'reserved', '78496197100305', '2024-12-16'),
+    (37, 'picked', '78496197100305', '2024-12-16'),
+    (38, 'reserved', '85003138000500', '2024-12-16'),
+    (38, 'picked', '85003138000500', '2024-12-16'),
+    (39, 'reserved', '39966767400051', '2024-12-16'),
+    (39, 'picked', '39966767400051', '2024-12-16'),
+    (40, 'reserved', '78496197100305', '2024-12-16'),
+    (40, 'picked', '78496197100305', '2024-12-16'),
+    (41, 'reserved', '85003138000500', '2024-12-16'),
+    (41, 'picked', '85003138000500', '2024-12-16'),
+    (42, 'reserved', '39966767400051', '2024-12-16'),
+    (42, 'picked', '39966767400051', '2024-12-16'),
+    (43, 'reserved', '78496197100305', '2024-12-16'),
+    (43, 'picked', '78496197100305', '2024-12-16'),
+    (44, 'reserved', '85003138000500', '2024-12-16'),
+    (44, 'picked', '85003138000500', '2024-12-16');
+
+
 
 INSERT INTO vue_user.listing_image
 (id_listing_image, image, id_item, mime_type)
