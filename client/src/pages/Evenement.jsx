@@ -48,7 +48,6 @@ const Evenement = () => {
           </svg>
         </div>
       </div>
-      <SquareGrid items={items} />
       <div className="p-8">
         <Carousel items={items2} title={"Les prochains événements à ne pas manquer"} />
       </div>

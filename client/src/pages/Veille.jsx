@@ -48,7 +48,6 @@ const Veille = () => {
           </svg>
         </div>
       </div>
-      <SquareGrid items={items} />
       <div className="p-8">
         <Carousel items={items2} title={"Les dernieres actualités"} />
       </div>
