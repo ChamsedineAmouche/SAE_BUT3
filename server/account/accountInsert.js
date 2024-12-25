@@ -54,11 +54,15 @@ async function validatePassword(password) {
 
 
 
-async function registerCompany(siren, nom, email, password, adress, zipcode, city, phone) {
+async function registerCompany(siren, nom, email, password,confirmPassword, adress, zipcode, city, phone) {
     try {
         const sirenValidation = await validateSiren(siren);
         if (!sirenValidation.valid) {
             return { success: false, message: sirenValidation.message };
+        }
+        
+        if (!(password == confirmPassword)){
+            return { success: false, message: "Les mots de passes ne correspondent pas" };
         }
 
         const passwordValidation = await validatePassword(password);
@@ -95,4 +99,4 @@ async function validateCompany(siren) {
     }
 }
 
-module.exports = { registerCompany,validateCompany };
+module.exports = { registerCompany,validateCompany, validatePassword };

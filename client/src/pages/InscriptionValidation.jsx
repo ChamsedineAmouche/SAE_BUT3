@@ -10,7 +10,7 @@ const ValidationAccount = () => {
   useEffect(() => {
     const checkSession = async () => {
         try {
-          const response = await fetch("/get-session");
+          const response = await fetch("/getSession");
           if (response.ok) {
             const sessionData = await response.json();
             if (sessionData.role !== "admin") {
