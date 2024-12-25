@@ -7,7 +7,7 @@ const {
     getSession,
     destroySession,
     forgotPassword,
-    verifyTokenHandler,
+    verifyToken,
     resetPassword,
     validationAccount,
     deleteInscription, 
@@ -21,7 +21,7 @@ router.post('/loginAdmin', loginAdmin);
 router.get('/getSession', getSession);
 router.get('/destroySession', destroySession);
 router.post('/forgotPassword', forgotPassword);
-router.get('/verifyToken', verifyTokenHandler);
+router.get('/verifyToken', verifyToken);
 router.post('/resetPassword', resetPassword);
 router.get('/validationAccount', validationAccount)
 router.post('/deleteInscription',deleteInscription)

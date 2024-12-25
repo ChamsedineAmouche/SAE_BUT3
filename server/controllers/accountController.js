@@ -1,6 +1,6 @@
 const { registerCompany, validateCompany } = require("../account/accountInsert");
 const { verifyCredentials, verifyCredentialsAdmin } = require("../account/accountLogin")
-const { getAccountInscriptions, getAccountInfo, getAnnuaireInfo, getAccountInfoByMail, verifyToken } = require("../account/accountFetcher")
+const { getAccountInscriptions, getAccountInfo, getAnnuaireInfo, getAccountInfoByMail, verifyTokenSiren } = require("../account/accountFetcher")
 const { deleteInscriptions } = require("../account/accountDelete")
 const { updatePassword } = require("../account/accountUpdate")
 const { sendConfirmationEmail, sendMailForgotPassword } = require('../nodemailer/mailer');
@@ -101,10 +101,10 @@ const forgotPassword = async (req, res) => {
 };
 
 // Fonction pour vérifier le token
-const verifyTokenHandler = async (req, res) => {
+const verifyToken = async (req, res) => {
     const { token, siren } = req.query;
     try {
-        const result = await verifyToken(token, siren);
+        const result = await verifyTokenSiren(token, siren);
         if (result.success) {
             return res.json({ success: true });
         } else {
@@ -197,7 +197,7 @@ module.exports = {
     getSession,
     destroySession,
     forgotPassword,
-    verifyTokenHandler,
+    verifyToken,
     resetPassword,
     validationAccount,
     deleteInscription, 
