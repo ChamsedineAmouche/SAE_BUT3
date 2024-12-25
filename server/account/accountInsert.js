@@ -99,4 +99,4 @@ async function validateCompany(siren) {
     }
 }
 
-module.exports = { registerCompany,validateCompany };
+module.exports = { registerCompany,validateCompany, validatePassword };

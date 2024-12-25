@@ -9,6 +9,7 @@ const { registerCompany, validateCompany } = require("./account/accountInsert");
 const { verifyCredentials, verifyCredentialsAdmin } = require("./account/accountLogin")
 const { getAccountInscriptions, getAccountInfo, getAnnuaireInfo, getAccountInfoByMail, verifyToken } = require("./account/accountFetcher")
 const { deleteInscription } = require("./account/accountDelete")
+const { updatePassword } = require("./account/accountUpdate")
 
 const { getDataForHomePage } = require('./homepage/homepageFetcher');
 const { getDataForCatalogPage } = require('./catalog/catalogFetcher')
@@ -152,7 +153,24 @@ app.get("/verifyToken", async (req, res) => {
     }
 });
 
-
+app.post("/resetPassword", async (req, res) => {
+    const {siren } = req.query; 
+    console.log(siren)
+    const { password, confirmPassword } = req.body;
+    console.log(password, confirmPassword)
+    try {
+        const result = await updatePassword(siren, password, confirmPassword); 
+        console.log(result)
+        if (result.success) {
+            return res.json({ success: true, message : result.message });
+        } else {
+            return res.status(400).json({ success: false, message: result.message });
+        }
+    } catch (error) {
+        console.error("Erreur :", error);
+        return res.status(500).json({ success: false, message: "Erreur interne du serveur." });
+    }
+});
 
 //---------------------------------------------------------------------------------------------------------
 //ROUTE HOMEPAGE

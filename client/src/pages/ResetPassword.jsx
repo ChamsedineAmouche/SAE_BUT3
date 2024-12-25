@@ -44,7 +44,9 @@ const ResetPassword = () => {
     console.log("Sending data:", formData);
 
     try {
-      const response = await fetch("/resetPassword", {
+      const params = new URLSearchParams(window.location.search); // Récupère les paramètres de l'URL
+      const siren = params.get("siren");
+      const response = await fetch(`/resetPassword?siren=${siren}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -56,7 +58,12 @@ const ResetPassword = () => {
 
       if (result.success) {
         setErrorMessage(result.message);
-      } else {
+
+        setTimeout(() => {
+          navigate("/login"); // Redirection vers la page de login après 3 secondes
+        }, 3000); // Délai de 3000 millisecondes (3 secondes)
+        
+      }  else {
         setErrorMessage(result.message);
       }
     } catch (error) {

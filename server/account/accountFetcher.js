@@ -129,18 +129,24 @@ async function verifyToken(token, siren) {
     try {
         const query = `SELECT token FROM company WHERE siren = '${siren}'`;
         const result = await getResultOfQuery("vue_user", query);
-        
+
         if (result.length === 0) {
-            console.log("Pas d'utilisateurs");
-            return { success: false, message: "Pas d'utilisateurs", account : {} };
+            console.log("Pas d'utilisateur trouvé avec ce SIREN.");
+            return { success: false, message: "Pas d'utilisateur trouvé avec ce SIREN." };
         }
-        if (result.token === token){
-            return { success: true, message: "", account : result};
+
+        const storedToken = result[0].token;
+        if (storedToken === token) {
+            return { success: true, message: "Token valide." };
+        } else {
+            return { success: false, message: "Token invalide." };
         }
     } catch (error) {
-        return { success: false, message: "Erreur interne de vérification" };
+        console.error("Erreur lors de la vérification du token :", error);
+        return { success: false, message: "Erreur interne de vérification." };
     }
 }
+
 
 module.exports = { getAccountInscriptions, getAccountInfo, getAnnuaireInfo, getAccountInfoByMail, verifyToken };
   
