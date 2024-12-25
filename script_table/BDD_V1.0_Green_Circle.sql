@@ -41,6 +41,12 @@ CREATE TABLE log (
    FOREIGN KEY(siren) REFERENCES company(siren)
 );
 
+CREATE TABLE category (
+	id INT auto_increment NOT NULL,
+	Libelle varchar(50) NOT NULL,
+	CONSTRAINT category_pk PRIMARY KEY (id)
+);
+
 CREATE TABLE elearning (
    id_elearning INT AUTO_INCREMENT,
    title VARCHAR(75) NOT NULL,
@@ -51,8 +57,10 @@ CREATE TABLE elearning (
    password VARCHAR(75),
    course_id INT,
    siren CHAR(14) NOT NULL,
+   category int NOT NULL DEFAULT '1',
    PRIMARY KEY(id_elearning),
-   FOREIGN KEY(siren) REFERENCES company(siren)
+   FOREIGN KEY(siren) REFERENCES company(siren),
+   FOREIGN KEY(category) REFERENCES category(id)
 );
 
 CREATE TABLE event (
@@ -163,6 +171,7 @@ CREATE TABLE article (
    author VARCHAR(75) NOT NULL,
    content TEXT NOT NULL,
    image LONGBLOB DEFAULT NULL,
+   category int NOT NULL,
    admin_id INT NOT NULL,
    PRIMARY KEY(id_veille),
    FOREIGN KEY(admin_id) REFERENCES admin(admin_id)
@@ -173,6 +182,7 @@ CREATE TABLE elearning_list (
    title VARCHAR(75),
    description TEXT NOT NULL,
    price VARCHAR(50),
+   category int NOT NULL,
    admin_id INT NOT NULL,
    PRIMARY KEY(course_id),
    FOREIGN KEY(admin_id) REFERENCES admin(admin_id)

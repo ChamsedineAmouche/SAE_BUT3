@@ -125,7 +125,7 @@ async function getAnnuaireInfo() {
     }
 }
 
-async function verifyToken(token, siren) {
+async function verifyTokenSiren(token, siren) {
     try {
         const query = `SELECT token FROM company WHERE siren = '${siren}'`;
         const result = await getResultOfQuery("vue_user", query);
@@ -148,5 +148,5 @@ async function verifyToken(token, siren) {
 }
 
 
-module.exports = { getAccountInscriptions, getAccountInfo, getAnnuaireInfo, getAccountInfoByMail, verifyToken };
+module.exports = { getAccountInscriptions, getAccountInfo, getAnnuaireInfo, getAccountInfoByMail, verifyTokenSiren };
   

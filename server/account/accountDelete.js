@@ -1,7 +1,7 @@
 const { getResultOfQuery } = require("../db_utils/db_functions");
 
 
-async function deleteInscription(siren) {
+async function deleteInscriptions(siren) {
     try {
         const query = `DELETE FROM company WHERE siren = '${siren}'`;
         console.log(query);
@@ -17,5 +17,5 @@ async function deleteInscription(siren) {
     }
 }
   
-module.exports = { deleteInscription };
+module.exports = { deleteInscriptions };
   

@@ -173,7 +173,7 @@ const Home = () => {
               fontSize: "clamp(1rem, 4vw, 2.5rem)",
             }}
           >
-            { data.object.length }
+            { data.numberActive }
           </div>
 
             <p className="text-darkGreen font-medium text-4xl flex items-center">
@@ -189,7 +189,7 @@ const Home = () => {
                 fontSize: "clamp(1rem, 4vw, 2.5rem)",
               }}
             >
-              7
+              { data.numberGiven}
             </div>
             <p className="text-darkGreen font-medium text-4xl flex items-center">
               Objets récupérés
