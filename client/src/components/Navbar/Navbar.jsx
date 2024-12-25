@@ -56,7 +56,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-oliveGreen text-white fixed top-0 left-0 w-full z-20 shadow-xl">
+    <nav className="bg-oliveGreen text-white fixed top-0 left-0 w-full h-20 z-20 shadow-xl">
       <div className="flex items-center justify-between py-4 px-4 ">
         {/* Left Section - Logo */}
         <div className="flex items-center space-x-4 flex-shrink-0">
@@ -102,7 +102,7 @@ const Navbar = () => {
 
 
           <div className="h-10 w-10 rounded-full overflow-hidden border border-white ml-12">
-            <a href="/">
+            <a href="/mon_compte">
               <img src="/default_user.png" alt="Profil" className="h-full w-full object-cover" />
             </a>
 
