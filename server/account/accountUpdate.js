@@ -10,9 +10,9 @@ async function updatePassword(siren, password,confirmPassword) {
     }
 
     const passwordValidation = await validatePassword(password);
-        if (!passwordValidation.valid) {
-            return { success: false, message: passwordValidation.message };
-        }   
+    if (!passwordValidation.valid) {
+        return { success: false, message: passwordValidation.message };
+    }   
 
     const hashedPassword = await bcrypt.hash(password, 10);
     const query = `UPDATE company SET password ='${hashedPassword}'  WHERE siren = '${siren}'`;
