@@ -137,21 +137,44 @@ DELETE FROM vue_user.object_type;
 DELETE FROM vue_user.preference;
 DELETE FROM vue_user.transaction;
 
-INSERT INTO vue_user.company (siren,nom,email,password,adress,zipcode,city,phone, active, joined) VALUES
-	 ('18770918300235','CCI 77 ','cci77@gmail.com','$2a$10$2Gh9IqDjzKro/K.2PAAYwea59c1xnsNTgRRRL/q4y/V99kg4/7BoO
-	','1 AVENUE JOHANNES GUTENBERG','77700','Serris','0939232929', '1', '2024-12-01'),
-	 ('33865714102081','Ada Location','ada.location@gmail.com','$2a$10$2Gh9IqDjzKro/K.2PAAYwea59c1xnsNTgRRRL/q4y/V99kg4/7BoO
-	','1 BOULEVARD MICHAEL FARADAY','77700','Serris','0699099143', '1', '2024-12-01'),
-	 ('39966767400051','Andreu','andreu@gmail.com','$2a$10$2Gh9IqDjzKro/K.2PAAYwea59c1xnsNTgRRRL/q4y/V99kg4/7BoO
-		','1 BD RUE IRENE JOLIOT CURIE','77700','Bailly-Romainvilliers','0728283283' , '1', '2024-12-01'),
-	 ('48830276100090','Ludendo','lundendo@gmail.com','$2a$10$2Gh9IqDjzKro/K.2PAAYwea59c1xnsNTgRRRL/q4y/V99kg4/7BoO
-		','2 Avenue Clement Ader','77700','Serris','0743378238', '1', '2024-12-01'),
-	 ('78496197100305','SIMT - Médecine du travail','SIMT@gmail.com','$2a$10$2Gh9IqDjzKro/K.2PAAYwea59c1xnsNTgRRRL/q4y/V99kg4/7BoO
-		','4 avenue Christian Doppler','77700','SerrIs','0677908733', '1', '2024-12-01'),
-	 ('80503352900027','La Grande Papet','LGP@gmail.com','$2a$10$2Gh9IqDjzKro/K.2PAAYwea59c1xnsNTgRRRL/q4y/V99kg4/7BoO
-		','2 avenue Christian Doppler','77700','Serris','0928832838', '1', '2024-12-01'),
-	 ('85003138000500','SESSAD Passerose','sessad@gmail.com','$2a$10$2Gh9IqDjzKro/K.2PAAYwea59c1xnsNTgRRRL/q4y/V99kg4/7BoO
-		','2 avenue Christian Doppler','77700','Serris','0164171400', '1', '2024-12-01');
+INSERT INTO vue_user.company (siren,nom,email,password,adress,zipcode,city,phone, token,active, joined) VALUES
+	 ('18770918300235','CCI 77 ','cci77@gmail.com',
+	 '$2a$10$2Gh9IqDjzKro/K.2PAAYwea59c1xnsNTgRRRL/q4y/V99kg4/7BoO',
+	 '1 AVENUE JOHANNES GUTENBERG','77700','Serris','0939232929', 
+	 '$2y$10$owAzQM385PljVdgY0oxCFeZgREArOkO4FxZrvFBjmcNwYdjJn4FPC',
+	 '1', 
+	 '2024-12-01'),
+	 ('33865714102081','Ada Location','ada.location@gmail.com',
+	 '$2a$10$2Gh9IqDjzKro/K.2PAAYwea59c1xnsNTgRRRL/q4y/V99kg4/7BoO',
+	 '1 BOULEVARD MICHAEL FARADAY','77700','Serris','0699099143',
+	 '$2y$10$jlRWO7UYq3I7du0EIoGqR.xwbNcQnNJ41l1R34xMy58oFenypfjzS',
+	 '1', 
+	 '2024-12-01'),
+	 ('39966767400051','Andreu','andreu@gmail.com',
+	 '$2a$10$2Gh9IqDjzKro/K.2PAAYwea59c1xnsNTgRRRL/q4y/V99kg4/7BoO',
+	 '1 BD RUE IRENE JOLIOT CURIE','77700','Bailly-Romainvilliers','0728283283', 
+	 '$2y$10$b380zuqWCxW5SzQe08eBN.Fy9YzumZ2jQcs/6EXP8U0dYR88b.s66', 
+	 '1', '2024-12-01'),
+	 ('48830276100090','Ludendo','lundendo@gmail.com',
+	 '$2a$10$2Gh9IqDjzKro/K.2PAAYwea59c1xnsNTgRRRL/q4y/V99kg4/7BoO',
+	 '2 Avenue Clement Ader','77700','Serris','0743378238', 
+	 '$2y$10$LgJf9gd5Skt6ZV63zB4UUeg3u18vVB.u1rcedPEe0b5viwSudPyOK',
+	 '1', '2024-12-01'),
+	 ('78496197100305','SIMT - Médecine du travail','SIMT@gmail.com',
+	 '$2a$10$2Gh9IqDjzKro/K.2PAAYwea59c1xnsNTgRRRL/q4y/V99kg4/7BoO',
+	 '4 avenue Christian Doppler','77700','SerrIs','0677908733', 
+	 '$2y$10$EyrQ0tKu/RBbJ89JjaET/e3wKjisVQbLuexpESMwtWnLkyX1E1vfa',
+	 '1', '2024-12-01'),
+	 ('80503352900027','La Grande Papet','LGP@gmail.com',
+	 '$2a$10$2Gh9IqDjzKro/K.2PAAYwea59c1xnsNTgRRRL/q4y/V99kg4/7BoO',
+	 '2 avenue Christian Doppler','77700','Serris','0928832838', 
+	 '$2y$10$my8bICxVaYLMRmsHDZ9lyeYf0J/1Ji9122UPyRBR3lu/ajwOONjeC',
+	 '1', '2024-12-01'),
+	 ('85003138000500','SESSAD Passerose','sessad@gmail.com',
+	 '$2a$10$2Gh9IqDjzKro/K.2PAAYwea59c1xnsNTgRRRL/q4y/V99kg4/7BoO',
+	 '2 avenue Christian Doppler','77700','Serris','0164171400', 
+	 '$2y$10$Hutwq40ul97mawkCIXboRu7Q17F/ew.dpdXNmUqXV8TemOUWLSQjy',
+	 '1', '2024-12-01');
 
 INSERT INTO vue_user.preference (preference, siren) VALUES
 	('{"1": true, "2": false, "3": true, "4": false, "5": true, "6": false, "7": true}', '18770918300235'),

@@ -81,6 +81,21 @@ async function getAccountInfo(siren) {
     }
 }
 
+async function getAccountInfoByMail(email) {
+    try {
+        const query = `SELECT * FROM company WHERE email = '${email}'`;
+        const result = await getResultOfQuery("vue_user", query);
+  
+        if (result.length === 0) {
+            console.log("Pas d'utilisateurs");
+            return { success: True, message: "Pas d'utilisateurs", account : {} };
+        }
+        return { success: true, message: "", account : result};
+    } catch (error) {
+        return { success: false, message: "Erreur interne de vérification" };
+    }
+}
+
 async function getAnnuaireInfo() {
     try {
         const sirenResult = await getAllSiren();
@@ -110,5 +125,22 @@ async function getAnnuaireInfo() {
     }
 }
 
-module.exports = { getAccountInscriptions, getAccountInfo, getAnnuaireInfo };
+async function verifyToken(token, siren) {
+    try {
+        const query = `SELECT token FROM company WHERE siren = '${siren}'`;
+        const result = await getResultOfQuery("vue_user", query);
+        
+        if (result.length === 0) {
+            console.log("Pas d'utilisateurs");
+            return { success: false, message: "Pas d'utilisateurs", account : {} };
+        }
+        if (result.token === token){
+            return { success: true, message: "", account : result};
+        }
+    } catch (error) {
+        return { success: false, message: "Erreur interne de vérification" };
+    }
+}
+
+module.exports = { getAccountInscriptions, getAccountInfo, getAnnuaireInfo, getAccountInfoByMail, verifyToken };
   

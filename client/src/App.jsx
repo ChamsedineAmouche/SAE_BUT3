@@ -9,6 +9,8 @@ import NewDeposit from "./pages/NewDeposit.jsx";
 import LoginAdmin from "./pages/LoginAdmin";
 import InscriptionValidation from "./pages/InscriptionValidation"
 import Test from "./pages/Test.jsx";
+import ForgotPassword from "./pages/ForgotPassword"
+import ResetPassword from "./pages/ResetPassword.jsx"
 
 const App = () => {
   return (
@@ -24,6 +26,8 @@ const App = () => {
           <Route path="/loginadmin" element={<LoginAdmin />} />
           <Route path="/register" element={<Register />} />
           <Route path="/inscription_validation" element={<InscriptionValidation />} />
+          <Route path="/forgot_password" element={<ForgotPassword />} />
+          <Route path="/reset_password" element={<ResetPassword />} />
           <Route path="/test" element={<Test />} />
         </Route>
       </Routes>

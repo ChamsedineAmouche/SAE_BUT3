@@ -7,7 +7,7 @@ const app = express()
 
 const { registerCompany, validateCompany } = require("./account/accountInsert");
 const { verifyCredentials, verifyCredentialsAdmin } = require("./account/accountLogin")
-const { getAccountInscriptions, getAccountInfo, getAnnuaireInfo } = require("./account/accountFetcher")
+const { getAccountInscriptions, getAccountInfo, getAnnuaireInfo, getAccountInfoByMail, verifyToken } = require("./account/accountFetcher")
 const { deleteInscription } = require("./account/accountDelete")
 
 const { getDataForHomePage } = require('./homepage/homepageFetcher');
@@ -15,7 +15,7 @@ const { getDataForCatalogPage } = require('./catalog/catalogFetcher')
 const { getCategoriesForObjects, getLocalisationOfStockage, getStatesForObjects, insertNewObject } = require('./announcepage/announcePageFetcher');
 const { getImage } = require('./image/imageFetcher')
 
-const { sendConfirmationEmail } = require('./nodemailer/mailer');
+const { sendConfirmationEmail, sendMailForgotPassword } = require('./nodemailer/mailer');
 app.use(express.json({ limit: '50mb' }));
 
 app.use(cors({
@@ -33,8 +33,8 @@ app.use(session({
 }));
 
 app.post("/register", async (req, res) => {
-    const { siren, nom , email, password, adress, zipcode, city, phone } = req.body;
-    const result = await registerCompany(siren, nom , email, password, adress, zipcode, city, phone);
+    const { siren, nom , email, password, confirmPassword, adress, zipcode, city, phone } = req.body;
+    const result = await registerCompany(siren, nom , email, password, confirmPassword, adress, zipcode, city, phone);
     if (result.success) {
         res.status(201).json(result);
     } else {
@@ -68,23 +68,7 @@ app.post("/loginAdmin", async (req, res) => {
         res.status(500).json(result); 
     }});
 
-app.post("/insert", async (req, res) => {
-    try {
-        const newSubmission = req.body;
-        console.log('Nouvelle soumission reçue :');
-        console.log('regarde :', newSubmission);
-
-        await insertNewObject(newSubmission);
-
-        // Si besoin, sauvegarde des fichiers et des données dans une base ou un fichier
-        res.status(200).json({ message: 'Soumission reçue avec succès : ' + newSubmission});
-    } catch (error) {
-        console.error('Erreur lors du traitement de la soumission :', error);
-        res.status(500).json({ error: 'Erreur interne du serveur' });
-    }
-});
-
-app.get('/get-session', (req, res) => {
+app.get('/getSession', (req, res) => {
     if (req.session.user) {
         console.log("Session utilisateur active:", req.session.user);
         res.json({ role: "user", session: req.session.user });
@@ -99,7 +83,7 @@ app.get('/get-session', (req, res) => {
     }
 });
 
-app.get('/destroy-session', (req, res) => {
+app.get('/destroySession', (req, res) => {
     if (req.session.user) {
         console.log("Session active:", req.session.user);
         
@@ -127,6 +111,48 @@ app.get('/destroy-session', (req, res) => {
         console.log("Aucune session active")
     }
 });
+
+app.post("/forgotPassword", async (req, res) => {
+    const { email } = req.body;
+    try {
+        const result = await getAccountInfoByMail(email);
+        if (result.success) {
+            console.log(result);
+            const { active, siren, email, token, nom } = result.account[0];
+            console.log(siren, email, token, nom);
+            if (active) {
+                await sendMailForgotPassword(siren, email, token, nom);
+                return res.json({ success: true, message: "Un email de réinitialisation de mot de passe a été envoyé." });
+            } else {
+                return res.status(400).json({ success: false, message: "Le compte associé n'est pas actif." });
+            }
+        } else {
+            return res.status(404).json({ success: false, message: "Aucun compte trouvé avec cet email." });
+        }
+    } catch (error) {
+        console.error("Erreur :", error);
+        return res.status(500).json({ success: false, message: "Une erreur est survenue. Veuillez réessayer plus tard." });
+    }
+});
+
+app.get("/verifyToken", async (req, res) => {
+    const { token, siren } = req.query; 
+    console.log(token, siren)
+    try {
+        const result = await verifyToken(token, siren); 
+        console.log(result)
+        if (result.success) {
+            return res.json({ success: true });
+        } else {
+            return res.status(400).json({ success: false, message: "Token ou SIREN invalide." });
+        }
+    } catch (error) {
+        console.error("Erreur :", error);
+        return res.status(500).json({ success: false, message: "Erreur interne du serveur." });
+    }
+});
+
+
 
 //---------------------------------------------------------------------------------------------------------
 //ROUTE HOMEPAGE
@@ -257,6 +283,25 @@ app.get("/annuaire", async (req, res) => {
 })
 const server = app.listen(5001, () => {
     console.log("Server started on port 5001");
+});
+
+//---------------------------------------------------------------------------------------------------------
+//ROUTE INSERT
+//---------------------------------------------------------------------------------------------------------
+app.post("/insert", async (req, res) => {
+    try {
+        const newSubmission = req.body;
+        console.log('Nouvelle soumission reçue :');
+        console.log('regarde :', newSubmission);
+
+        await insertNewObject(newSubmission);
+
+        // Si besoin, sauvegarde des fichiers et des données dans une base ou un fichier
+        res.status(200).json({ message: 'Soumission reçue avec succès : ' + newSubmission});
+    } catch (error) {
+        console.error('Erreur lors du traitement de la soumission :', error);
+        res.status(500).json({ error: 'Erreur interne du serveur' });
+    }
 });
 
 module.exports = { app, server };

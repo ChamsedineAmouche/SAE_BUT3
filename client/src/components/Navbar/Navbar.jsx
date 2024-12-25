@@ -11,7 +11,7 @@ const Navbar = () => {
   useEffect(() => {
     const checkSession = async () => {
       try {
-        const response = await fetch("/get-session", {
+        const response = await fetch("/getSession", {
           method: "GET",
           headers: { "Content-Type": "application/json" },
           credentials: "include",
@@ -35,7 +35,7 @@ const Navbar = () => {
 
   const handleLogout = async () => {
     try {
-      const response = await fetch("/destroy-session", {
+      const response = await fetch("/destroySession", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",

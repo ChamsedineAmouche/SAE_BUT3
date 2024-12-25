@@ -7,6 +7,7 @@ const Register = () => {
     nom: "",
     email: "",
     password: "",
+    confirmPassword: "",
     adress: "",
     zipcode: "",
     city: "",
@@ -116,6 +117,22 @@ const Register = () => {
                 id="password"
                 name="password"
                 value={formData.password}
+                onChange={handleChange}
+                className="w-full p-3 border border-gray-300 rounded-md"
+                required
+              />
+            </div>
+
+              {/* Confirmer Mot de passe */}
+              <div className="form-group">
+              <label htmlFor="confirmPassword" className="block text-lg text-darkGreen">
+                Mot de passe
+              </label>
+              <input
+                type="password"
+                id="confirmPassword"
+                name="confirmPassword"
+                value={formData.confirmPassword}
                 onChange={handleChange}
                 className="w-full p-3 border border-gray-300 rounded-md"
                 required
