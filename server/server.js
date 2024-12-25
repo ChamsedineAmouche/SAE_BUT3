@@ -6,7 +6,7 @@ const cors = require('cors');
 const app = express()
 const RateLimit = require('express-rate-limit');
 
-const homepageRoutes = require('./routes/homePageRoutes'); 
+const homePageRoutes = require('./routes/homePageRoutes'); 
 const accountRoutes = require('./routes/accountRoutes');
 const insertAnnounceRoutes = require('./routes/insertAnnounceRoutes')
 const imageRoutes  = require('./routes/imageRoutes')
@@ -28,7 +28,7 @@ app.use(session({
 }));
 
 app.use(accountRoutes);
-app.use(homepageRoutes);
+app.use(homePageRoutes);
 app.use(insertAnnounceRoutes);
 app.use(imageRoutes);
 app.use(catalogRoutes)
