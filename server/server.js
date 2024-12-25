@@ -16,6 +16,7 @@ const { getDataForHomePage } = require('./homepage/homepageFetcher');
 const { getDataForCatalogPage } = require('./catalog/catalogFetcher')
 const { getCategoriesForObjects, getLocalisationOfStockage, getStatesForObjects, insertNewObject } = require('./announcepage/announcePageFetcher');
 const { getImageById } = require('./image/imageFetcher')
+const { getDataForProductPageById } = require('./pageproduct/pageProductFetcher')
 
 const { sendConfirmationEmail, sendMailForgotPassword } = require('./nodemailer/mailer');
 const limiter = RateLimit({
@@ -326,6 +327,26 @@ app.post("/insert", async (req, res) => {
 
         // Si besoin, sauvegarde des fichiers et des données dans une base ou un fichier
         res.status(200).json({ message: 'Soumission reçue avec succès : ' + newSubmission});
+    } catch (error) {
+        console.error('Erreur lors du traitement de la soumission :', error);
+        res.status(500).json({ error: 'Erreur interne du serveur' });
+    }
+});
+
+//---------------------------------------------------------------------------------------------------------
+//ROUTE PAGE PRODUIT
+//---------------------------------------------------------------------------------------------------------
+app.get("/product", async (req, res) => {
+    try {
+        const { id } = req.query;
+        let pageProductData;
+        if (req.session.user) {
+            pageProductData = await getDataForProductPageById(id, req.session.user);
+        }
+        else {
+            pageProductData = await getDataForProductPageById(id, "");
+        }
+        res.json(pageProductData);
     } catch (error) {
         console.error('Erreur lors du traitement de la soumission :', error);
         res.status(500).json({ error: 'Erreur interne du serveur' });
