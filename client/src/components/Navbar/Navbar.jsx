@@ -16,10 +16,16 @@ const Navbar = () => {
           headers: { "Content-Type": "application/json" },
           credentials: "include",
         });
-  
         if (response.ok) {
           const sessionData = await response.json();
-          setUserSession(sessionData); 
+          if (sessionData.session){
+            if (sessionData.session.siren){
+              setUserSession(sessionData.session.siren); 
+            }
+            if (sessionData.session.id){
+              setUserSession(sessionData.session.id);
+            }
+          }
         } else {
           setUserSession(null);
         }

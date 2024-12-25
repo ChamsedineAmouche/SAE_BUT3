@@ -47,13 +47,13 @@ const loginAdmin = async (req, res) => {
 // Fonction pour récupérer l'état de la session
 const getSession = (req, res) => {
     if (req.session.user) {
-        console.log("Session utilisateur active:", req.session.user);
+        //console.log("Session utilisateur active:", req.session.user);
         res.json({ role: "user", session: req.session.user });
     } else if (req.session.admin) {
-        console.log("Session administrateur active:", req.session.admin);
+        //console.log("Session administrateur active:", req.session.admin);
         res.json({ role: "admin", session: req.session.admin });
     } else {
-        console.log("Aucune session active");
+        //console.log("Aucune session active");
         res.status(401).send('Aucune session active');
     }
 };
