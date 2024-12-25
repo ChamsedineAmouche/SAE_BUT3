@@ -58,12 +58,9 @@ async function getDataForHomePage(){
             WHERE l.status = "active"
             ORDER BY l.date_posted DESC;
             `);
-        const event = await getResultOfQuery('vue_admin',
-            'SELECT * FROM event');
-        const elearning = await getResultOfQuery('vue_admin',
-            'SELECT * FROM elearning_list');
-        const article = await getResultOfQuery('vue_admin',
-            'SELECT * FROM article ORDER BY article_date DESC');
+        const event = await getResultOfQuery('vue_admin','SELECT * FROM event');
+        const elearning = await getResultOfQuery('vue_admin','SELECT * FROM elearning_list');
+        const article = await getResultOfQuery('vue_admin','SELECT * FROM article ORDER BY article_date DESC');
         return {
             "numberOfCompany" : numberOfCompany,
             "numberGiven" : numberGiven,
@@ -71,8 +68,7 @@ async function getDataForHomePage(){
             "object" : keepOnlyThe10LastPosted(object),
             "event" : keepOnlyThe10LastPosted(event),
             "elearning" : keepOnlyThe10LastPosted(elearning),
-            "article" : keepOnlyThe10LastPosted(article)
-        };
+            "article" : keepOnlyThe10LastPosted(article)};
     } catch (error) {
         console.error('Erreur lors de la récupération des données :', error);
     }
