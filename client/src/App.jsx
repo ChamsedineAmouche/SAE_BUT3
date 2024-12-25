@@ -14,6 +14,7 @@ import InscriptionValidation from "./pages/InscriptionValidation"
 import Test from "./pages/Test.jsx";
 import ForgotPassword from "./pages/ForgotPassword"
 import ResetPassword from "./pages/ResetPassword.jsx"
+import Account from "./pages/Account.jsx";
 
 const App = () => {
   return (
@@ -35,6 +36,7 @@ const App = () => {
           <Route path="/forgot_password" element={<ForgotPassword />} />
           <Route path="/reset_password" element={<ResetPassword />} />
           <Route path="/test" element={<Test />} />
+          <Route path="/mon_compte" element={<Account />} />
         </Route>
       </Routes>
     </Router>
