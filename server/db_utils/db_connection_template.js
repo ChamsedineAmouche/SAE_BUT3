@@ -15,7 +15,6 @@ function getDbConnection(database) {
             console.error(`Erreur de connexion à la base ${database}:`, err);
             throw err;
         }
-        console.log(`Connecté à la base ${database}`);
     });
 
     return connection;
