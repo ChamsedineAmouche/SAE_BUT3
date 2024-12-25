@@ -4,6 +4,9 @@ import { useNavigate } from "react-router-dom";
 import Carousel from "../components/Carousel/Carousel";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBoxArchive, faCalendarDay, faEye, faGraduationCap } from "@fortawesome/free-solid-svg-icons";
+import DepositThumbnail from "../components/DepositThumbnail/DepositThumbnail";
+import ElearningThumbnail from "../components/ElearningThumbnail/ElearningThumbnail";
+import OtherThumbnail from "../components/OtherThumbnail/OtherThumbnail";
 
 const Home = () => {
   
@@ -11,6 +14,10 @@ const Home = () => {
   const items = ["exemple 1", "exemple 2", "exemple 3", "exemple 4", "exemple 5", "exemple 6", "exemple 7", "exemple 8", "exemple 9"];
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [lastObject, setLastObject] = useState(null);
+  const [lastElearning, setLastElearning] = useState(null);
+  const [lastArticle, setLastArticle] = useState(null);
+  const [lastEvent, setLastEvent] = useState(null);
 
   useEffect(() => {
     fetch('/homepage')
@@ -22,6 +29,47 @@ const Home = () => {
       })
       .then(data => {
         setData(data);
+
+        if (data.object && data.object.length > 0) {
+          const mostRecentObject = data.object.reduce((latest, current) => {
+            const latestDate = new Date(latest.date_posted);
+            const currentDate = new Date(current.date_posted);
+            return currentDate > latestDate ? current : latest;
+          });
+
+          setLastObject(mostRecentObject);
+        }
+
+        if (data.elearning && data.elearning.length > 0) {
+          const mostRecentElearning = data.elearning.reduce((latest, current) => {
+            const latestDate = new Date(latest.date_posted);
+            const currentDate = new Date(current.date_posted);
+            return currentDate > latestDate ? current : latest;
+          });
+
+          setLastElearning(mostRecentElearning);
+        }
+
+        if (data.article && data.article.length > 0) {
+          const mostRecentArticle = data.article.reduce((latest, current) => {
+            const latestDate = new Date(latest.date_posted);
+            const currentDate = new Date(current.date_posted);
+            return currentDate > latestDate ? current : latest;
+          });
+
+          setLastArticle(mostRecentArticle);
+        }
+
+        if (data.event && data.event.length > 0) {
+          const mostRecentEvent = data.event.reduce((latest, current) => {
+            const latestDate = new Date(latest.date_posted);
+            const currentDate = new Date(current.date_posted);
+            return currentDate > latestDate ? current : latest;
+          });
+
+          setLastEvent(mostRecentEvent);
+        }
+
         setIsLoading(false);
       })
       .catch(error => {
@@ -37,6 +85,23 @@ const Home = () => {
   if (!data) {
     return <p>Erreur lors du chargement des données.</p>;
   }
+
+  const depositThumbnails = data.object.map((object) => (
+    <DepositThumbnail key={`thumbnail-${object.id_item}`} object={object} />
+  ));
+
+  const elearningThumbnail = data.elearning.map((elearning) => (
+    <ElearningThumbnail key={`thumbnail-${elearning.id_item}`} elearning={elearning} />
+  ));
+
+  const articleThumbnail = data.article.map((article) => (
+    <OtherThumbnail key={`thumbnail-${article.id_item}`} other={article} type={"veille"} />
+  ));
+
+  const eventThumbnail = data.event.map((event) => (
+    <OtherThumbnail key={`thumbnail-${event.id_item}`} other={event} type={"event"} />
+  ));
+  
 
   return (
     <div className="home-page">
@@ -108,7 +173,7 @@ const Home = () => {
               fontSize: "clamp(1rem, 4vw, 2.5rem)",
             }}
           >
-            999
+            { data.object.length }
           </div>
 
             <p className="text-darkGreen font-medium text-4xl flex items-center">
@@ -144,7 +209,7 @@ const Home = () => {
               </h2>
             </div>
             <div className="w-80 h-80 flex items-center justify-center bg-[#e0e0e0] rounded-xl shadow-md">
-              <p className="text-black font-semibold">Exemple</p>
+              <DepositThumbnail object={ lastObject } />
             </div>
           </div>
 
@@ -156,7 +221,7 @@ const Home = () => {
               </h2>
             </div>
             <div className="w-80 h-80 flex items-center justify-center bg-[#e0e0e0] rounded-xl shadow-md">
-              <p className="text-black font-semibold">Exemple</p>
+              <ElearningThumbnail elearning={ lastElearning } />
             </div>
           </div>
 
@@ -168,7 +233,7 @@ const Home = () => {
               </h2>
             </div>
             <div className="w-80 h-80 flex items-center justify-center bg-[#e0e0e0] rounded-xl shadow-md">
-              <p className="text-black font-semibold">Exemple</p>
+              <OtherThumbnail other={lastArticle} type={'veille'}/>
             </div>
           </div>
 
@@ -180,7 +245,7 @@ const Home = () => {
               </h2>
             </div>
             <div className="w-80 h-80 flex items-center justify-center bg-[#e0e0e0] rounded-xl shadow-md">
-              <p className="text-black font-semibold">Exemple</p>
+              <OtherThumbnail other={lastEvent} type={'event'}/>
             </div>
           </div>
         </div>
@@ -188,22 +253,22 @@ const Home = () => {
 
       {/* Section derniers dépots */}
       <div className="p-8">
-        <Carousel items={items} title={"Derniers dépôts"} />
+        <Carousel items={depositThumbnails} title={"Derniers dépôts"} />
       </div>
 
       {/* Section derniers e-learnings */}
       <div className="p-8">
-        <Carousel items={items} title={"e-learnings"} />
+        <Carousel items={elearningThumbnail} title={"Derniers e-learnings"} />
       </div>
 
       {/* Section derniers articles */}
       <div className="p-8">
-        <Carousel items={items} title={"Derniers articles"} />
+        <Carousel items={articleThumbnail} title={"Derniers articles"} />
       </div>
 
       {/* Section derniers événements */}
       <div className="p-8">
-        <Carousel items={items} title={"Derniers événements"} />
+        <Carousel items={eventThumbnail} title={"Derniers événements"} />
       </div>
     </div>
   );

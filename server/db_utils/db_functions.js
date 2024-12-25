@@ -39,7 +39,7 @@ const insertListingWithImages = async (newSubmission) => {
         const stateId = stateIdRequest[0].id_condition_type;
         const categoryId = categoryIdRequest[0].id_object_type;
         const status = "active";
-        const idEmplacement = 1;
+        const idEmplacement = 7;
         const siren = "18770918300235";
 
         // Générer la date actuelle (au format YYYY-MM-DD HH:mm:ss pour MySQL)
