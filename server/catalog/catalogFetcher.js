@@ -9,7 +9,6 @@ async function getDataForCatalogPage() {
             await getResultOfQuery('vue_user', 'SELECT * FROM condition_type');
         const allOfObjectTypeForFilters=
             await getResultOfQuery('vue_user', 'SELECT * FROM object_type')
-
         return {
             "objects" : allOfObjects,
             "objectStates" : allOfObjectStateForFilters,

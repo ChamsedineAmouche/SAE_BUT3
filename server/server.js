@@ -9,6 +9,7 @@ const RateLimit = require('express-rate-limit');
 const { getDataForCatalogPage } = require('./catalog/catalogFetcher')
 const { getCategoriesForObjects, getLocalisationOfStockage, getStatesForObjects, insertNewObject } = require('./announcepage/announcePageFetcher');
 const { getImageById } = require('./image/imageFetcher')
+const { getDataForProductPageById } = require('./pageproduct/pageProductFetcher')
 
 const homepageRoutes = require('./routes/homepageRoutes'); 
 const accountRoutes = require('./routes/accountRoutes');
@@ -119,8 +120,29 @@ app.post("/insert", async (req, res) => {
     }
 });
 
+
+
+//---------------------------------------------------------------------------------------------------------
+//ROUTE PAGE PRODUIT
+//---------------------------------------------------------------------------------------------------------
+app.get("/product", async (req, res) => {
+    try {
+        const { id } = req.query;
+        let pageProductData;
+        if (req.session.user) {
+            pageProductData = await getDataForProductPageById(id, req.session.user);
+        }
+        else {
+            pageProductData = await getDataForProductPageById(id, "");
+        }
+        res.json(pageProductData);
+    } catch (error) {
+        console.error('Erreur lors du traitement de la soumission :', error);
+        res.status(500).json({ error: 'Erreur interne du serveur' });
+    }
+});
+
 const server = app.listen(5001, () => {
     console.log("Server started on port 5001");
-});
 
 module.exports = { app, server };
