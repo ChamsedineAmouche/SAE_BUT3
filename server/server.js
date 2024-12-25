@@ -4,6 +4,7 @@ const mysql = require('mysql2');
 const crypto = require('crypto');
 const cors = require('cors');
 const app = express()
+const RateLimit = require('express-rate-limit');
 
 const { registerCompany, validateCompany } = require("./account/accountInsert");
 const { verifyCredentials, verifyCredentialsAdmin } = require("./account/accountLogin")
@@ -17,6 +18,11 @@ const { getCategoriesForObjects, getLocalisationOfStockage, getStatesForObjects,
 const { getImage } = require('./image/imageFetcher')
 
 const { sendConfirmationEmail, sendMailForgotPassword } = require('./nodemailer/mailer');
+const limiter = RateLimit({
+    windowMs: 15 * 60 * 1000, 
+    max: 100,
+});
+app.use('/verifyToken', limiter);
 app.use(express.json({ limit: '50mb' }));
 
 app.use(cors({
@@ -155,12 +161,9 @@ app.get("/verifyToken", async (req, res) => {
 
 app.post("/resetPassword", async (req, res) => {
     const {siren } = req.query; 
-    console.log(siren)
     const { password, confirmPassword } = req.body;
-    console.log(password, confirmPassword)
     try {
         const result = await updatePassword(siren, password, confirmPassword); 
-        console.log(result)
         if (result.success) {
             return res.json({ success: true, message : result.message });
         } else {
