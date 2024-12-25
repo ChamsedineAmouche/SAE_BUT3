@@ -6,7 +6,7 @@ const cors = require('cors');
 const app = express()
 const RateLimit = require('express-rate-limit');
 
-const homepageRoutes = require('./routes/homepageRoutes'); 
+const homepageRoutes = require('./routes/homePageRoutes'); 
 const accountRoutes = require('./routes/accountRoutes');
 const insertAnnounceRoutes = require('./routes/insertAnnounceRoutes')
 const imageRoutes  = require('./routes/imageRoutes')
