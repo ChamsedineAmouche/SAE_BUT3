@@ -12,6 +12,7 @@ const insertAnnounceRoutes = require('./routes/insertAnnounceRoutes')
 const imageRoutes  = require('./routes/imageRoutes')
 const catalogRoutes = require('./routes/catalogRoutes')
 const productRoutes = require('./routes/productRoutes')
+const profileRoutes = require('./routes/profileRoutes')
 
 const limiter = RateLimit({windowMs: 15 * 60 * 1000,  max: 100,});
 app.use('/verifyToken', limiter);
@@ -33,6 +34,7 @@ app.use(insertAnnounceRoutes);
 app.use(imageRoutes);
 app.use(catalogRoutes)
 app.use(productRoutes)
+app.use(profileRoutes)
 
 
 const server = app.listen(5001, () => {
