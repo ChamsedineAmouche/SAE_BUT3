@@ -1,5 +1,5 @@
 const { getAccountInfo, getAccountFavorites } = require("../account/accountFetcher")
-const { getListingBySirenAndStatus } = require("../pageProduct/pageProductFetcher")
+const { getListingBySirenAndStatus } = require("../pageproduct/pageProductFetcher")
 
 
 const profile = async (req, res) => {

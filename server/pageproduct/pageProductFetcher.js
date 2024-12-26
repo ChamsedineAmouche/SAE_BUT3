@@ -87,26 +87,34 @@ async function getConditionByID(idCondition) {
     }
 }
 
-async function getProductData(id){
-    try{
-        const productData = await getProductDataById(id)
-        const {id_object_type, id_condition_type, title, description, dimension, date_posted, status, id_emplacement, siren} = productData[0]
-        console.log("____________",id_object_type, id_condition_type, title, description, dimension, date_posted, status, id_emplacement, siren)
-        const condition = await getConditionByID(id_condition_type)
-        const category = await getCategoryByID(id_object_type)
+async function getProductData(id) {
+    try {
+        const productData = await getProductDataById(id);
+        const {
+            id_object_type: idObjectType,
+            id_condition_type: idConditionType,
+            title,
+            description,
+            dimension,
+            date_posted: datePosted,
+            status,
+            id_emplacement: idEmplacement,
+            siren
+        } = productData[0];
+        const condition = await getConditionByID(idConditionType);
+        const category = await getCategoryByID(idObjectType);
         return {
-            "name" : title,
-            "description" : description,
-            "dimension" : dimension,
-            "date" : date_posted,
-            "status" : status,
-            "siren" : siren,
-            "condition" : condition,
-            "category" : category
-        }
-    }
-    catch (error){
-        console.error(error)
+            name: title,
+            description,
+            dimension,
+            date: datePosted,
+            status,
+            siren,
+            condition,
+            category
+        };
+    } catch (error) {
+        console.error(error);
     }
 }
 
