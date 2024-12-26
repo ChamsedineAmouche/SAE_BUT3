@@ -1,4 +1,5 @@
 const { getResultOfQuery } = require("../db_utils/db_functions");
+const { getProductData} = require('../pageproduct/pageProductFetcher')
 
 
 async function getAccountInscriptions() {
@@ -148,5 +149,27 @@ async function verifyTokenSiren(token, siren) {
 }
 
 
-module.exports = { getAccountInscriptions, getAccountInfo, getAnnuaireInfo, getAccountInfoByMail, verifyTokenSiren };
+async function getAccountFavorites(siren) {
+    try {
+        const queryElearning = `SELECT * FROM elearning WHERE favorite = '1' and siren = '${siren}'`;
+        const elearningFav = await getResultOfQuery("vue_user", queryElearning);
+
+        const queryDepot = `SELECT id_item FROM listing_favorites WHERE siren = '${siren}'`;
+        const depotFav = await getResultOfQuery("vue_user", queryDepot);
+
+        const depots = await Promise.all(
+            depotFav.map(async (depot) => {
+                const productData = await getProductData(depot.id_item);
+                return { ...depot, productData };
+            })
+        );
+
+        return { success: true, elearning: elearningFav, depots };
+    } catch (error) {
+        console.error('Error fetching account favorites:', error);
+        return { success: false, message: "Erreur interne de vérification" };
+    }
+}
+
+module.exports = { getAccountInscriptions, getAccountInfo, getAnnuaireInfo, getAccountInfoByMail, verifyTokenSiren,getAccountFavorites };
   

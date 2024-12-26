@@ -58,6 +58,7 @@ CREATE TABLE elearning (
    course_id INT,
    siren CHAR(14) NOT NULL,
    category int NOT NULL DEFAULT '1',
+   favorite BOOLEAN DEFAULT 0, 
    PRIMARY KEY(id_elearning),
    FOREIGN KEY(siren) REFERENCES company(siren),
    FOREIGN KEY(category) REFERENCES category(id)
@@ -120,7 +121,7 @@ CREATE TABLE listing (
    dimension VARCHAR(11),
    date_posted DATE,
    status VARCHAR(50),
-   id_emplacement INT NOT NULL,
+   id_emplacement INT,
    siren CHAR(14) NOT NULL,
    id_object_type INT NOT NULL,
    id_condition_type INT NOT NULL,
@@ -129,6 +130,17 @@ CREATE TABLE listing (
    FOREIGN KEY(siren) REFERENCES company(siren),
    FOREIGN KEY(id_object_type) REFERENCES object_type(id_object_type),
    FOREIGN KEY(id_condition_type) REFERENCES condition_type(id_condition_type)
+);
+
+CREATE TABLE listing_favorites (
+  id_fav int NOT NULL AUTO_INCREMENT,
+  id_item int NOT NULL,
+  siren char(14) NOT NULL,
+  PRIMARY KEY (`id_fav`),
+  KEY listing_favorites_listing_FK (id_item),
+  KEY listing_favorites_company_FK (siren),
+  CONSTRAINT listing_favorites_company_FK FOREIGN KEY (siren) REFERENCES company(siren) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT listing_favorites_listing_FK FOREIGN KEY (id_item) REFERENCES listing (id_item) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE listing_image (
