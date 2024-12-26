@@ -6,7 +6,7 @@ const SquareGrid = ({ items }) => {
       {items.map((item, index) => (
         <div 
           key={index} 
-          className="w-40 h-40 bg-gray-300 text-black flex justify-center items-center rounded-lg shadow-md"
+          className="w-80 h-80 bg-gray-300 text-black flex justify-center items-center rounded-lg shadow-md"
         >
           {item}
         </div>

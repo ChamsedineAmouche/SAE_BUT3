@@ -12,12 +12,13 @@ import {
 
 import EditProfile from "../components/EditProfile/EditProfile";
 import MyFavorite from "../components/MyFavorite/MyFavorite";
+import MyDeposit from "../components/MyDeposit/MyDeposit";
 
 const Account = () => {
   const menuItems = [
     { id: 1, label: "Editer mon profil", icon: faPen, component: <EditProfile /> },
     { id: 2, label: "Mes favoris", icon: faHeart, component: <MyFavorite/> },
-    { id: 3, label: "Mes dépôts", icon: faBox, component: <div>Contenu pour Mes Achats</div> },
+    { id: 3, label: "Mes dépôts", icon: faBox, component: <MyDeposit /> },
     { id: 4, label: "Mes achats", icon: faShoppingCart, component: <div>Contenu pour Mes Achats</div> },
     { id: 5, label: "Mes réservations", icon: faCalendarCheck, component: <div>Contenu pour Mes Réservations</div> },
     { id: 6, label: "Paramètres", icon: faCog, component: <div>Contenu pour Paramètres</div> },
@@ -59,7 +60,7 @@ const Account = () => {
         <div className="mt-24 flex justify-center">
             <button className="bg-oliveGreen text-white px-6 py-3 text-lg font-semibold rounded-md hover:bg-opacity-90 transition duration-200">
                 Voir les dépôts
-          </button>
+            </button>
         </div>
       </div>
 
