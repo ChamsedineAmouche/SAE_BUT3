@@ -99,8 +99,7 @@ async function getProductData(id) {
             date_posted: datePosted,
             status,
             id_emplacement: idEmplacement,
-            siren
-        } = productData[0];
+            siren } = productData[0];
         const condition = await getConditionByID(idConditionType);
         const category = await getCategoryByID(idObjectType);
         return {
