@@ -3,9 +3,11 @@ import Switch from "../Switch/Switch";
 import SquareGrid from "../SquareGrid/SquareGrid";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlusSquare } from "@fortawesome/free-solid-svg-icons";
+import { useNavigate } from "react-router-dom";
 
 const MyDeposit = () => {
-  const [selectedOption, setSelectedOption] = useState("Dépots");
+  const navigate = useNavigate();
+  const [selectedOption, setSelectedOption] = useState("Publié");
 
   const handleSwitchChange = (option) => {
     setSelectedOption(option);
@@ -13,7 +15,10 @@ const MyDeposit = () => {
 
   return (
     <div className="bg-white w-full">
-      <button className="bg-oliveGreen text-white px-6 py-3 text-lg font-semibold rounded-md hover:bg-opacity-90 transition duration-200 absolute top-24 right-3">
+      <button 
+        className="bg-oliveGreen text-white px-6 py-3 text-lg font-semibold rounded-md hover:bg-opacity-90 transition duration-200 absolute top-28 right-12"
+        onClick={() => navigate("/nouveau_depot")}
+      >
         <FontAwesomeIcon icon={faPlusSquare} className="pr-2"/>
         Dépôts
       </button>
