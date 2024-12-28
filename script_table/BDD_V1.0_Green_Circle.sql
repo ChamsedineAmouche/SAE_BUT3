@@ -26,6 +26,8 @@ CREATE TABLE company (
 CREATE TABLE preference (
    id_preference INT AUTO_INCREMENT,
    preference JSON NOT NULL,
+   notif JSON NOT NULL,
+   info JSON NOT NULL,
    siren CHAR(14) NOT NULL,
    PRIMARY KEY(id_preference),
    UNIQUE(siren),

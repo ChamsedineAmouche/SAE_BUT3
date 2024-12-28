@@ -177,14 +177,35 @@ INSERT INTO vue_user.company (siren,nom,email,password,adress,zipcode,city,phone
 	 '$2y$10$Hutwq40ul97mawkCIXboRu7Q17F/ew.dpdXNmUqXV8TemOUWLSQjy',
 	 '1', '2024-12-01');
 
-INSERT INTO vue_user.preference (preference, siren) VALUES
-	('{"1": true, "2": false, "3": true, "4": false, "5": true, "6": false, "7": true}', '18770918300235'),
-	('{"1": true, "2": true, "3": false, "4": false, "5": false, "6": false, "7": true}', '33865714102081'),
-	('{"1": true, "2": true, "3": true, "4": false, "5": false, "6": false, "7": false}', '39966767400051'),
-	('{"1": true, "2": true, "3": true, "4": false, "5": false, "6": false, "7": false}', '48830276100090'),
-	('{"1": true, "2": true, "3": true, "4": false, "5": false, "6": true, "7": true}', '78496197100305'),
-	('{"1": true, "2": true, "3": true, "4": false, "5": false, "6": true, "7": true}', '80503352900027'),
-	('{"1": true, "2": true, "3": true, "4": false, "5": false, "6": true, "7": false}', '85003138000500');
+INSERT INTO vue_user.preference (preference, notif, info, siren) VALUES
+	('{"1": true, "2": false, "3": true, "4": false, "5": true, "6": false, "7": true}',
+	'{"meuble": true, "elearning": true, "article": true, "event": true, "message": true, "forum": true}', 
+	'{"info_mail": true, "info_zipcode": true, "info_city": true, "info_adress": true, "info_phone": true, "info_pp": true}', 
+	'18770918300235'),
+	('{"1": true, "2": true, "3": false, "4": false, "5": false, "6": false, "7": true}',
+	'{"meuble": true, "elearning": true, "article": true, "event": true, "message": true, "forum": true}', 
+	'{"info_mail": true, "info_zipcode": true, "info_city": true, "info_adress": true, "info_phone": true, "info_pp": true}',
+	'33865714102081'),
+	('{"1": true, "2": true, "3": true, "4": false, "5": false, "6": false, "7": false}',
+	'{"meuble": true, "elearning": true, "article": true, "event": true, "message": true, "forum": true}',
+	'{"info_mail": true, "info_zipcode": true, "info_city": true, "info_adress": true, "info_phone": true, "info_pp": true}', 
+	'39966767400051'),
+	('{"1": true, "2": true, "3": true, "4": false, "5": false, "6": false, "7": false}',
+	'{"meuble": true, "elearning": true, "article": true, "event": true, "message": true, "forum": true}', 
+	'{"info_mail": true, "info_zipcode": true, "info_city": true, "info_adress": true, "info_phone": true, "info_pp": true}',
+	'48830276100090'),
+	('{"1": true, "2": true, "3": true, "4": false, "5": false, "6": true, "7": true}',
+	'{"meuble": true, "elearning": true, "article": true, "event": true, "message": true, "forum": true}', 
+	'{"info_mail": true, "info_zipcode": true, "info_city": true, "info_adress": true, "info_phone": true, "info_pp": true}',
+	'78496197100305'),
+	('{"1": true, "2": true, "3": true, "4": false, "5": false, "6": true, "7": true}',
+	'{"meuble": true, "elearning": true, "article": true, "event": true, "message": true, "forum": true}', 
+	'{"info_mail": true, "info_zipcode": true, "info_city": true, "info_adress": true, "info_phone": true, "info_pp": true}',
+	'80503352900027'),
+	('{"1": true, "2": true, "3": true, "4": false, "5": false, "6": true, "7": false}',
+	'{"meuble": true, "elearning": true, "article": true, "event": true, "message": true, "forum": true}', 
+	'{"info_mail": true, "info_zipcode": true, "info_city": true, "info_adress": true, "info_phone": true, "info_pp": true}',
+	'85003138000500');
 
 INSERT INTO vue_user.condition_type (label) VALUES
 	 ('Endommagé'),
