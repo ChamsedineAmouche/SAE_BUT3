@@ -171,5 +171,15 @@ async function getAccountFavorites(siren) {
     }
 }
 
-module.exports = { getAccountInscriptions, getAccountInfo, getAnnuaireInfo, getAccountInfoByMail, verifyTokenSiren,getAccountFavorites };
+
+async function getAccountPreferences(siren) {
+    try {
+        const query = `SELECT * FROM preference WHERE siren = '${siren}'`;
+        return await getResultOfQuery("vue_user", query);
+  
+    } catch (error) {
+        return { success: false, message: "Erreur interne de vérification" };
+    }
+}
+module.exports = { getAccountInscriptions, getAccountInfo, getAnnuaireInfo, getAccountInfoByMail, verifyTokenSiren,getAccountFavorites, getAccountPreferences };
   

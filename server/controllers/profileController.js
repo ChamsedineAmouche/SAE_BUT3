@@ -1,10 +1,10 @@
-const { getAccountInfo, getAccountFavorites } = require("../account/accountFetcher")
+const { getAccountInfo, getAccountFavorites, getAccountPreferences } = require("../account/accountFetcher")
 const { getListingBySirenAndStatus } = require("../pageproduct/pageProductFetcher")
 const {getElearningBySiren} = require("../elearning/elearningFetcher")
 const {getTransactiongBySiren} = require("../transactions/transactionFetcher")
 const {getAdressContainerByEmplacement} = require("../stockage/stockageFetcher")
 const { getProductData} = require('../pageproduct/pageProductFetcher')
-
+const {getObjectTypeLabels, replacePreferenceIdsWithLabels} = require('../object/objectFetcher')
 
 const getSirenFromRequest = (req) => {
     const { siren } = req.query;
@@ -17,13 +17,29 @@ const profile = async (req, res) => {
     try {
         const { siren, source } = getSirenFromRequest(req);
         const profileData = await getAccountInfo(siren);
-        const { nom, email, adress, password, zipcode, phone } = profileData.account[0];
-        res.json({ siren, nom, email, adress, password, zipcode, phone });
+        const { nom, email, adress, zipcode, phone, password, city } = profileData.account[0];
+        const profile_picture = profileData.account[0].profile_picture || null; 
+        let filteredData = { siren, nom, email, city, adress, zipcode, phone, password, pp: profile_picture };
+        if (source !== "session") {
+            const preferencesData = await getAccountPreferences(siren);
+            const { info } = preferencesData[0];
+            filteredData = Object.keys(filteredData).reduce((acc, key) => {
+                const prefKey = `info_${key}`;
+                if (info[prefKey]) {
+                    acc[key] = filteredData[key];
+                }
+                return acc;
+            }, {});
+        }
+
+        res.json(filteredData);
     } catch (error) {
-        console.error('Erreur lors du traitement de la soumission :', error);
-        res.status(500).json({ error: error.message || 'Erreur interne du serveur' });
+        console.error("Erreur lors du traitement de la soumission :", error);
+        res.status(500).json({ error: error.message || "Erreur interne du serveur" });
     }
 };
+
+
 
 const profileFavorite = async (req, res) => {
     try {
@@ -92,11 +108,19 @@ const profileTransactions = async (req, res) => {
 const profileParameters = async (req, res) => {
     try {
         const { siren, source } = getSirenFromRequest(req);
-
-        res.json({ siren, message: "Profil des paramètres" });
+        if (source === "session") {
+            const preferencesData = await getAccountPreferences(siren);
+            const objectTypeLabels = await getObjectTypeLabels();
+            preferencesData.forEach((data) => {
+                data.preference = replacePreferenceIdsWithLabels(data.preference, objectTypeLabels);
+            });
+            res.json({ preferencesData });
+        } else {
+            res.status(403).json({ error: "Pas de session active." });
+        }
     } catch (error) {
-        console.error('Erreur lors du traitement des paramètres :', error);
-        res.status(500).json({ error: error.message || 'Erreur interne du serveur' });
+        console.error("Erreur lors du traitement des paramètres :", error);
+        res.status(500).json({ error: error.message || "Erreur interne du serveur" });
     }
 };
 
