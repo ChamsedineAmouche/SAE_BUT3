@@ -111,7 +111,8 @@ async function getProductData(id) {
             status,
             siren,
             condition,
-            category
+            category,
+            idEmplacement
         };
     } catch (error) {
         console.error(error);
