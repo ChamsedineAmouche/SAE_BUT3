@@ -18,8 +18,8 @@ const profile = async (req, res) => {
         const { siren, source } = getSirenFromRequest(req);
         const profileData = await getAccountInfo(siren);
         const { nom, email, adress, zipcode, phone, password, city } = profileData.account[0];
-        const profile_picture = profileData.account[0].profile_picture || null; 
-        let filteredData = { siren, nom, email, city, adress, zipcode, phone, password, pp: profile_picture };
+        const profilePicture = profileData.account[0].profile_picture || null; 
+        let filteredData = { siren, nom, email, city, adress, zipcode, phone, password, pp: profilePicture };
         if (source !== "session") {
             const preferencesData = await getAccountPreferences(siren);
             const { info } = preferencesData[0];
