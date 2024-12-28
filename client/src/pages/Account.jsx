@@ -13,13 +13,14 @@ import {
 import EditProfile from "../components/EditProfile/EditProfile";
 import MyFavorite from "../components/MyFavorite/MyFavorite";
 import MyDeposit from "../components/MyDeposit/MyDeposit";
+import MyPurchase from "../components/MyPurchase/MyPurchase"
 
 const Account = () => {
   const menuItems = [
     { id: 1, label: "Editer mon profil", icon: faPen, component: <EditProfile /> },
     { id: 2, label: "Mes favoris", icon: faHeart, component: <MyFavorite/> },
     { id: 3, label: "Mes dépôts", icon: faBox, component: <MyDeposit /> },
-    { id: 4, label: "Mes achats", icon: faShoppingCart, component: <div>Contenu pour Mes Achats</div> },
+    { id: 4, label: "Mes achats", icon: faShoppingCart, component: <MyPurchase /> },
     { id: 5, label: "Mes réservations", icon: faCalendarCheck, component: <div>Contenu pour Mes Réservations</div> },
     { id: 6, label: "Paramètres", icon: faCog, component: <div>Contenu pour Paramètres</div> },
     { id: 7, label: "Aide", icon: faQuestionCircle, component: <div>Contenu pour Aide</div> },
