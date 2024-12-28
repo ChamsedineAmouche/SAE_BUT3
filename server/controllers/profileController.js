@@ -39,8 +39,6 @@ const profile = async (req, res) => {
     }
 };
 
-
-
 const profileFavorite = async (req, res) => {
     try {
         const { siren, source } = getSirenFromRequest(req);
