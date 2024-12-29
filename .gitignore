@@ -1,1 +1,7 @@
 ./idea
+.idea/
+
+server/node_modules
+server/db_utils/db_connection.js
+
+script_table/runScriptPerso.sh
