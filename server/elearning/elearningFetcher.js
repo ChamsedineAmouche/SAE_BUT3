@@ -23,9 +23,7 @@ async function getElearningCategory(){
 async function getElearningByCategory() {
     try {
         const query = `
-            SELECT 
-                c.id AS id_category,
-                c.Libelle AS label_category,
+            SELECT c.id AS id_category, c.Libelle AS label_category,
                 COALESCE(
                     JSON_ARRAYAGG(
                         CASE 
@@ -38,10 +36,7 @@ async function getElearningByCategory() {
                                     'admin_id', e.admin_id
                                 )
                             ELSE NULL
-                        END
-                    ),
-                    JSON_ARRAY() -- Retourner un tableau vide si aucune donnée
-                ) AS elearning_info
+                        END), JSON_ARRAY() -- Retourner un tableau vide si aucune donnée) AS elearning_info
             FROM vue_user.category c
             LEFT JOIN vue_admin.elearning_list e
             ON c.id = e.category
