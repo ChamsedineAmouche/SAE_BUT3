@@ -177,14 +177,35 @@ INSERT INTO vue_user.company (siren,nom,email,password,adress,zipcode,city,phone
 	 '$2y$10$Hutwq40ul97mawkCIXboRu7Q17F/ew.dpdXNmUqXV8TemOUWLSQjy',
 	 '1', '2024-12-01');
 
-INSERT INTO vue_user.preference (preference, siren) VALUES
-	('{"1": true, "2": false, "3": true, "4": false, "5": true, "6": false, "7": true}', '18770918300235'),
-	('{"1": true, "2": true, "3": false, "4": false, "5": false, "6": false, "7": true}', '33865714102081'),
-	('{"1": true, "2": true, "3": true, "4": false, "5": false, "6": false, "7": false}', '39966767400051'),
-	('{"1": true, "2": true, "3": true, "4": false, "5": false, "6": false, "7": false}', '48830276100090'),
-	('{"1": true, "2": true, "3": true, "4": false, "5": false, "6": true, "7": true}', '78496197100305'),
-	('{"1": true, "2": true, "3": true, "4": false, "5": false, "6": true, "7": true}', '80503352900027'),
-	('{"1": true, "2": true, "3": true, "4": false, "5": false, "6": true, "7": false}', '85003138000500');
+INSERT INTO vue_user.preference (preference, notif, info, siren) VALUES
+	('{"1": true, "2": false, "3": true, "4": false, "5": true, "6": false, "7": true}',
+	'{"meuble": true, "elearning": true, "article": true, "event": true, "message": true, "forum": true}', 
+	'{"info_email": true, "info_zipcode": true, "info_city": true, "info_adress": true, "info_phone": true, "info_pp": true}', 
+	'18770918300235'),
+	('{"1": true, "2": true, "3": false, "4": false, "5": false, "6": false, "7": true}',
+	'{"meuble": true, "elearning": true, "article": true, "event": true, "message": true, "forum": true}', 
+	'{"info_email": true, "info_zipcode": true, "info_city": true, "info_adress": true, "info_phone": true, "info_pp": true}',
+	'33865714102081'),
+	('{"1": true, "2": true, "3": true, "4": false, "5": false, "6": false, "7": false}',
+	'{"meuble": true, "elearning": true, "article": true, "event": true, "message": true, "forum": true}',
+	'{"info_email": true, "info_zipcode": true, "info_city": true, "info_adress": true, "info_phone": true, "info_pp": true}', 
+	'39966767400051'),
+	('{"1": true, "2": true, "3": true, "4": false, "5": false, "6": false, "7": false}',
+	'{"meuble": true, "elearning": true, "article": true, "event": true, "message": true, "forum": true}', 
+	'{"info_email": true, "info_zipcode": true, "info_city": true, "info_adress": true, "info_phone": true, "info_pp": true}',
+	'48830276100090'),
+	('{"1": true, "2": true, "3": true, "4": false, "5": false, "6": true, "7": true}',
+	'{"meuble": true, "elearning": true, "article": true, "event": true, "message": true, "forum": true}', 
+	'{"info_email": true, "info_zipcode": true, "info_city": true, "info_adress": true, "info_phone": true, "info_pp": true}',
+	'78496197100305'),
+	('{"1": true, "2": true, "3": true, "4": false, "5": false, "6": true, "7": true}',
+	'{"meuble": true, "elearning": true, "article": true, "event": true, "message": true, "forum": true}', 
+	'{"info_email": true, "info_zipcode": true, "info_city": true, "info_adress": true, "info_phone": true, "info_pp": true}',
+	'80503352900027'),
+	('{"1": true, "2": true, "3": true, "4": false, "5": false, "6": true, "7": false}',
+	'{"meuble": true, "elearning": true, "article": true, "event": true, "message": true, "forum": true}', 
+	'{"info_email": true, "info_zipcode": true, "info_city": true, "info_adress": true, "info_phone": true, "info_pp": true}',
+	'85003138000500');
 
 INSERT INTO vue_user.condition_type (label) VALUES
 	 ('Endommagé'),
@@ -209,8 +230,8 @@ INSERT INTO vue_user.emplacement (available,dimension,id_Container) VALUES
 	 (0,NULL,1),
 	 (0,NULL,1),
 	 (0,NULL,2),
-	 (1,NULL,2),
-	 (1,NULL,2),
+	 (0,NULL,2),
+	 (0,NULL,2),
 	 (1,NULL,2),
 	 (1,NULL,2),
 	 (1,NULL,3),
@@ -236,17 +257,17 @@ INSERT INTO vue_user.event (event_id,title,description,event_date,location,capac
 
 INSERT INTO vue_user.category (Libelle) VALUES('Economie Circulaire'),('Développement durable et entreprises '),('Formation aux normes'),('Gouvernances d''entreprises');
 
-INSERT INTO vue_user.elearning (title, description, price, subscription_date, token, password, course_id, siren, category) VALUES
-('La Face Cachée de l''économie Circulaire', 'Ce cours explore les aspects méconnus et les défis de l''économie circulaire, souvent perçue comme une solution idéale pour la durabilité. Il met en lumière les paradoxes de ce modèle, comme la surconsommation liée à la prolongation de la vie des produits et les effets pervers sur certaines chaînes de valeur. Le cours examine aussi les inégalités sociales et économiques, notamment l''accès aux ressources et aux emplois dans ce secteur. Les limites technologiques et logistiques du recyclage sont analysées, tout comme les difficultés de gouvernance liées à l''absence de normes mondiales. Enfin, il propose des pistes pour rendre l''économie circulaire plus inclusive, équitable et efficace.', 35, '2024-12-01', 'kGUlD2e6jWFkDMCLgj9gzDDqlVHxVgVeRg3S7aXJSCMWLiCVEhfImVwj8p6XLMj8Ke1IDKy0a4F', '$2a$10$2Gh9IqDjzKro/K.2PAAYwea59c1xnsNTgRRRL/q4y/V99kg4/7BoO', 1, '18770918300235', 1),
-('La Face Cachée de l''économie Circulaire', 'Ce cours explore les aspects méconnus et les défis de l''économie circulaire, souvent perçue comme une solution idéale pour la durabilité. Il met en lumière les paradoxes de ce modèle, comme la surconsommation liée à la prolongation de la vie des produits et les effets pervers sur certaines chaînes de valeur. Le cours examine aussi les inégalités sociales et économiques, notamment l''accès aux ressources et aux emplois dans ce secteur. Les limites technologiques et logistiques du recyclage sont analysées, tout comme les difficultés de gouvernance liées à l''absence de normes mondiales. Enfin, il propose des pistes pour rendre l''économie circulaire plus inclusive, équitable et efficace.', 35, '2024-12-01', 'kGUlD2e6jWFkDMCLgj9gzDDqlVHxVgVeRg3S7aXJSCMWLiCVEhfImVwj8p6XLMj8Ke1IDKy0a4F', '$2a$10$2Gh9IqDjzKro/K.2PAAYwea59c1xnsNTgRRRL/q4y/V99kg4/7BoO', 1, '33865714102081', 1),
-('Introduction à l''Économie Circulaire', 'Ce cours offre une introduction complète à l''économie circulaire, un modèle économique visant à réduire la consommation de ressources naturelles et la production de déchets en favorisant la réutilisation, la réparation, et le recyclage. Les étudiants exploreront les principes fondamentaux de l''économie circulaire, les différentes stratégies mises en place par les entreprises et les gouvernements pour la promouvoir, ainsi que ses avantages écologiques et économiques. Le cours met également en lumière les défis pratiques de la transition vers un modèle circulaire, notamment les barrières technologiques, sociales et réglementaires. Les étudiants auront ainsi une vision globale des opportunités et des limites de ce modèle pour le développement durable.', 20, '2024-12-01', 'kGUlD2e6jWFkDMCLgj9gzDDqlVHxVgVeRg3S7aXJSCMWLiCVEhfImVwj8p6XLMj8Ke1IDKy0a4F', '$2a$10$2Gh9IqDjzKro/K.2PAAYwea59c1xnsNTgRRRL/q4y/V99kg4/7BoO', 2, '18770918300235', 1),
-('Introduction à l''Économie Circulaire', 'Ce cours offre une introduction complète à l''économie circulaire, un modèle économique visant à réduire la consommation de ressources naturelles et la production de déchets en favorisant la réutilisation, la réparation, et le recyclage. Les étudiants exploreront les principes fondamentaux de l''économie circulaire, les différentes stratégies mises en place par les entreprises et les gouvernements pour la promouvoir, ainsi que ses avantages écologiques et économiques. Le cours met également en lumière les défis pratiques de la transition vers un modèle circulaire, notamment les barrières technologiques, sociales et réglementaires. Les étudiants auront ainsi une vision globale des opportunités et des limites de ce modèle pour le développement durable.', 20, '2024-12-01', 'kGUlD2e6jWFkDMCLgj9gzDDqlVHxVgVeRg3S7aXJSCMWLiCVEhfImVwj8p6XLMj8Ke1IDKy0a4F', '$2a$10$2Gh9IqDjzKro/K.2PAAYwea59c1xnsNTgRRRL/q4y/V99kg4/7BoO', 2, '33865714102081',1),
-('L''Importance du Recyclage pour un Avenir Durable', 'Ce cours aborde l''importance cruciale du recyclage dans la gestion des ressources naturelles et la réduction de l''impact environnemental des déchets. Les étudiants découvriront les principes fondamentaux du recyclage, ses différents types (recyclage des matériaux, des produits électroniques, etc.) et son rôle dans l''économie circulaire. Le cours mettra en évidence les bienfaits écologiques du recyclage, tels que la réduction de l''extraction des ressources, la diminution des émissions de gaz à effet de serre et la préservation de la biodiversité. En outre, il traitera des défis logistiques, économiques et sociaux du recyclage à grande échelle, tout en explorant les innovations technologiques qui rendent le recyclage plus efficace. L''objectif est de sensibiliser les étudiants à l''importance de cette pratique pour la transition vers une société plus durable et responsable.', 20, '2024-12-01', 'kGUlD2e6jWFkDMCLgj9gzDDqlVHxVgVeRg3S7aXJSCMWLiCVEhfImVwj8p6XLMj8Ke1IDKy0a4F', '$2a$10$2Gh9IqDjzKro/K.2PAAYwea59c1xnsNTgRRRL/q4y/V99kg4/7BoO', 3, '39966767400051', 1),
-('L''Importance du Recyclage pour un Avenir Durable', 'Ce cours aborde l''importance cruciale du recyclage dans la gestion des ressources naturelles et la réduction de l''impact environnemental des déchets. Les étudiants découvriront les principes fondamentaux du recyclage, ses différents types (recyclage des matériaux, des produits électroniques, etc.) et son rôle dans l''économie circulaire. Le cours mettra en évidence les bienfaits écologiques du recyclage, tels que la réduction de l''extraction des ressources, la diminution des émissions de gaz à effet de serre et la préservation de la biodiversité. En outre, il traitera des défis logistiques, économiques et sociaux du recyclage à grande échelle, tout en explorant les innovations technologiques qui rendent le recyclage plus efficace. L''objectif est de sensibiliser les étudiants à l''importance de cette pratique pour la transition vers une société plus durable et responsable.', 20, '2024-12-01', 'kGUlD2e6jWFkDMCLgj9gzDDqlVHxVgVeRg3S7aXJSCMWLiCVEhfImVwj8p6XLMj8Ke1IDKy0a4F', '$2a$10$2Gh9IqDjzKro/K.2PAAYwea59c1xnsNTgRRRL/q4y/V99kg4/7BoO', 3, '85003138000500', 1),
-('Comment Green Circle Adopte une Démarche d''Économie Circulaire', 'Ce cours explore la manière dont Green Circle, une initiative engagée dans la durabilité, intègre les principes de l''économie circulaire dans ses pratiques. L''économie circulaire vise à maximiser la durée de vie des produits, à réduire les déchets et à recycler les matériaux afin de conserver les ressources naturelles. Green Circle adopte cette démarche en mettant en œuvre des stratégies concrètes de réduction des déchets, de réutilisation des matériaux et de recyclage, tout en sensibilisant les entreprises et les consommateurs à des pratiques plus responsables.', 20, '2024-12-01', 'kGUlD2e6jWFkDMCLgj9gzDDqlVHxVgVeRg3S7aXJSCMWLiCVEhfImVwj8p6XLMj8Ke1IDKy0a4F', '$2a$10$2Gh9IqDjzKro/K.2PAAYwea59c1xnsNTgRRRL/q4y/V99kg4/7BoO', 4, '39966767400051', 1),
-('Comment Green Circle Adopte une Démarche d''Économie Circulaire', 'Ce cours explore la manière dont Green Circle, une initiative engagée dans la durabilité, intègre les principes de l''économie circulaire dans ses pratiques. L''économie circulaire vise à maximiser la durée de vie des produits, à réduire les déchets et à recycler les matériaux afin de conserver les ressources naturelles. Green Circle adopte cette démarche en mettant en œuvre des stratégies concrètes de réduction des déchets, de réutilisation des matériaux et de recyclage, tout en sensibilisant les entreprises et les consommateurs à des pratiques plus responsables.', 20, '2024-12-01', 'kGUlD2e6jWFkDMCLgj9gzDDqlVHxVgVeRg3S7aXJSCMWLiCVEhfImVwj8p6XLMj8Ke1IDKy0a4F', '$2a$10$2Gh9IqDjzKro/K.2PAAYwea59c1xnsNTgRRRL/q4y/V99kg4/7BoO', 4, '85003138000500', 1),
-('La Face Cachée de l''économie Circulaire', 'Ce cours explore les aspects méconnus et les défis de l''économie circulaire, souvent perçue comme une solution idéale pour la durabilité. Il met en lumière les paradoxes de ce modèle, comme la surconsommation liée à la prolongation de la vie des produits et les effets pervers sur certaines chaînes de valeur. Le cours examine aussi les inégalités sociales et économiques, notamment l''accès aux ressources et aux emplois dans ce secteur. Les limites technologiques et logistiques du recyclage sont analysées, tout comme les difficultés de gouvernance liées à l''absence de normes mondiales. Enfin, il propose des pistes pour rendre l''économie circulaire plus inclusive, équitable et efficace.', 35, '2024-12-01', 'kGUlD2e6jWFkDMCLgj9gzDDqlVHxVgVeRg3S7aXJSCMWLiCVEhfImVwj8p6XLMj8Ke1IDKy0a4F', '$2a$10$2Gh9IqDjzKro/K.2PAAYwea59c1xnsNTgRRRL/q4y/V99kg4/7BoO', 1, '80503352900027', 1),
-('Introduction à l''Économie Circulaire', 'Ce cours offre une introduction complète à l''économie circulaire, un modèle économique visant à réduire la consommation de ressources naturelles et la production de déchets en favorisant la réutilisation, la réparation, et le recyclage. Les étudiants exploreront les principes fondamentaux de l''économie circulaire, les différentes stratégies mises en place par les entreprises et les gouvernements pour la promouvoir, ainsi que ses avantages écologiques et économiques. Le cours met également en lumière les défis pratiques de la transition vers un modèle circulaire, notamment les barrières technologiques, sociales et réglementaires. Les étudiants auront ainsi une vision globale des opportunités et des limites de ce modèle pour le développement durable.', 20, '2024-12-01', 'kGUlD2e6jWFkDMCLgj9gzDDqlVHxVgVeRg3S7aXJSCMWLiCVEhfImVwj8p6XLMj8Ke1IDKy0a4F', '$2a$10$2Gh9IqDjzKro/K.2PAAYwea59c1xnsNTgRRRL/q4y/V99kg4/7BoO', 2, '80503352900027', 1);
+INSERT INTO vue_user.elearning (title, description, price, subscription_date, token, password, course_id, siren, category, favorite) VALUES
+('La Face Cachée de l''économie Circulaire', 'Ce cours explore les aspects méconnus et les défis de l''économie circulaire, souvent perçue comme une solution idéale pour la durabilité. Il met en lumière les paradoxes de ce modèle, comme la surconsommation liée à la prolongation de la vie des produits et les effets pervers sur certaines chaînes de valeur. Le cours examine aussi les inégalités sociales et économiques, notamment l''accès aux ressources et aux emplois dans ce secteur. Les limites technologiques et logistiques du recyclage sont analysées, tout comme les difficultés de gouvernance liées à l''absence de normes mondiales. Enfin, il propose des pistes pour rendre l''économie circulaire plus inclusive, équitable et efficace.', 35, '2024-12-01', 'kGUlD2e6jWFkDMCLgj9gzDDqlVHxVgVeRg3S7aXJSCMWLiCVEhfImVwj8p6XLMj8Ke1IDKy0a4F', '$2a$10$2Gh9IqDjzKro/K.2PAAYwea59c1xnsNTgRRRL/q4y/V99kg4/7BoO', 1, '18770918300235', 1, 1),
+('La Face Cachée de l''économie Circulaire', 'Ce cours explore les aspects méconnus et les défis de l''économie circulaire, souvent perçue comme une solution idéale pour la durabilité. Il met en lumière les paradoxes de ce modèle, comme la surconsommation liée à la prolongation de la vie des produits et les effets pervers sur certaines chaînes de valeur. Le cours examine aussi les inégalités sociales et économiques, notamment l''accès aux ressources et aux emplois dans ce secteur. Les limites technologiques et logistiques du recyclage sont analysées, tout comme les difficultés de gouvernance liées à l''absence de normes mondiales. Enfin, il propose des pistes pour rendre l''économie circulaire plus inclusive, équitable et efficace.', 35, '2024-12-01', 'kGUlD2e6jWFkDMCLgj9gzDDqlVHxVgVeRg3S7aXJSCMWLiCVEhfImVwj8p6XLMj8Ke1IDKy0a4F', '$2a$10$2Gh9IqDjzKro/K.2PAAYwea59c1xnsNTgRRRL/q4y/V99kg4/7BoO', 1, '33865714102081', 1, 0),
+('Introduction à l''Économie Circulaire', 'Ce cours offre une introduction complète à l''économie circulaire, un modèle économique visant à réduire la consommation de ressources naturelles et la production de déchets en favorisant la réutilisation, la réparation, et le recyclage. Les étudiants exploreront les principes fondamentaux de l''économie circulaire, les différentes stratégies mises en place par les entreprises et les gouvernements pour la promouvoir, ainsi que ses avantages écologiques et économiques. Le cours met également en lumière les défis pratiques de la transition vers un modèle circulaire, notamment les barrières technologiques, sociales et réglementaires. Les étudiants auront ainsi une vision globale des opportunités et des limites de ce modèle pour le développement durable.', 20, '2024-12-01', 'kGUlD2e6jWFkDMCLgj9gzDDqlVHxVgVeRg3S7aXJSCMWLiCVEhfImVwj8p6XLMj8Ke1IDKy0a4F', '$2a$10$2Gh9IqDjzKro/K.2PAAYwea59c1xnsNTgRRRL/q4y/V99kg4/7BoO', 2, '18770918300235', 1, 1),
+('Introduction à l''Économie Circulaire', 'Ce cours offre une introduction complète à l''économie circulaire, un modèle économique visant à réduire la consommation de ressources naturelles et la production de déchets en favorisant la réutilisation, la réparation, et le recyclage. Les étudiants exploreront les principes fondamentaux de l''économie circulaire, les différentes stratégies mises en place par les entreprises et les gouvernements pour la promouvoir, ainsi que ses avantages écologiques et économiques. Le cours met également en lumière les défis pratiques de la transition vers un modèle circulaire, notamment les barrières technologiques, sociales et réglementaires. Les étudiants auront ainsi une vision globale des opportunités et des limites de ce modèle pour le développement durable.', 20, '2024-12-01', 'kGUlD2e6jWFkDMCLgj9gzDDqlVHxVgVeRg3S7aXJSCMWLiCVEhfImVwj8p6XLMj8Ke1IDKy0a4F', '$2a$10$2Gh9IqDjzKro/K.2PAAYwea59c1xnsNTgRRRL/q4y/V99kg4/7BoO', 2, '33865714102081',1, 0),
+('L''Importance du Recyclage pour un Avenir Durable', 'Ce cours aborde l''importance cruciale du recyclage dans la gestion des ressources naturelles et la réduction de l''impact environnemental des déchets. Les étudiants découvriront les principes fondamentaux du recyclage, ses différents types (recyclage des matériaux, des produits électroniques, etc.) et son rôle dans l''économie circulaire. Le cours mettra en évidence les bienfaits écologiques du recyclage, tels que la réduction de l''extraction des ressources, la diminution des émissions de gaz à effet de serre et la préservation de la biodiversité. En outre, il traitera des défis logistiques, économiques et sociaux du recyclage à grande échelle, tout en explorant les innovations technologiques qui rendent le recyclage plus efficace. L''objectif est de sensibiliser les étudiants à l''importance de cette pratique pour la transition vers une société plus durable et responsable.', 20, '2024-12-01', 'kGUlD2e6jWFkDMCLgj9gzDDqlVHxVgVeRg3S7aXJSCMWLiCVEhfImVwj8p6XLMj8Ke1IDKy0a4F', '$2a$10$2Gh9IqDjzKro/K.2PAAYwea59c1xnsNTgRRRL/q4y/V99kg4/7BoO', 3, '39966767400051', 1, 1),
+('L''Importance du Recyclage pour un Avenir Durable', 'Ce cours aborde l''importance cruciale du recyclage dans la gestion des ressources naturelles et la réduction de l''impact environnemental des déchets. Les étudiants découvriront les principes fondamentaux du recyclage, ses différents types (recyclage des matériaux, des produits électroniques, etc.) et son rôle dans l''économie circulaire. Le cours mettra en évidence les bienfaits écologiques du recyclage, tels que la réduction de l''extraction des ressources, la diminution des émissions de gaz à effet de serre et la préservation de la biodiversité. En outre, il traitera des défis logistiques, économiques et sociaux du recyclage à grande échelle, tout en explorant les innovations technologiques qui rendent le recyclage plus efficace. L''objectif est de sensibiliser les étudiants à l''importance de cette pratique pour la transition vers une société plus durable et responsable.', 20, '2024-12-01', 'kGUlD2e6jWFkDMCLgj9gzDDqlVHxVgVeRg3S7aXJSCMWLiCVEhfImVwj8p6XLMj8Ke1IDKy0a4F', '$2a$10$2Gh9IqDjzKro/K.2PAAYwea59c1xnsNTgRRRL/q4y/V99kg4/7BoO', 3, '85003138000500', 1, 1),
+('Comment Green Circle Adopte une Démarche d''Économie Circulaire', 'Ce cours explore la manière dont Green Circle, une initiative engagée dans la durabilité, intègre les principes de l''économie circulaire dans ses pratiques. L''économie circulaire vise à maximiser la durée de vie des produits, à réduire les déchets et à recycler les matériaux afin de conserver les ressources naturelles. Green Circle adopte cette démarche en mettant en œuvre des stratégies concrètes de réduction des déchets, de réutilisation des matériaux et de recyclage, tout en sensibilisant les entreprises et les consommateurs à des pratiques plus responsables.', 20, '2024-12-01', 'kGUlD2e6jWFkDMCLgj9gzDDqlVHxVgVeRg3S7aXJSCMWLiCVEhfImVwj8p6XLMj8Ke1IDKy0a4F', '$2a$10$2Gh9IqDjzKro/K.2PAAYwea59c1xnsNTgRRRL/q4y/V99kg4/7BoO', 4, '39966767400051', 1, 0),
+('Comment Green Circle Adopte une Démarche d''Économie Circulaire', 'Ce cours explore la manière dont Green Circle, une initiative engagée dans la durabilité, intègre les principes de l''économie circulaire dans ses pratiques. L''économie circulaire vise à maximiser la durée de vie des produits, à réduire les déchets et à recycler les matériaux afin de conserver les ressources naturelles. Green Circle adopte cette démarche en mettant en œuvre des stratégies concrètes de réduction des déchets, de réutilisation des matériaux et de recyclage, tout en sensibilisant les entreprises et les consommateurs à des pratiques plus responsables.', 20, '2024-12-01', 'kGUlD2e6jWFkDMCLgj9gzDDqlVHxVgVeRg3S7aXJSCMWLiCVEhfImVwj8p6XLMj8Ke1IDKy0a4F', '$2a$10$2Gh9IqDjzKro/K.2PAAYwea59c1xnsNTgRRRL/q4y/V99kg4/7BoO', 4, '85003138000500', 1, 0),
+('La Face Cachée de l''économie Circulaire', 'Ce cours explore les aspects méconnus et les défis de l''économie circulaire, souvent perçue comme une solution idéale pour la durabilité. Il met en lumière les paradoxes de ce modèle, comme la surconsommation liée à la prolongation de la vie des produits et les effets pervers sur certaines chaînes de valeur. Le cours examine aussi les inégalités sociales et économiques, notamment l''accès aux ressources et aux emplois dans ce secteur. Les limites technologiques et logistiques du recyclage sont analysées, tout comme les difficultés de gouvernance liées à l''absence de normes mondiales. Enfin, il propose des pistes pour rendre l''économie circulaire plus inclusive, équitable et efficace.', 35, '2024-12-01', 'kGUlD2e6jWFkDMCLgj9gzDDqlVHxVgVeRg3S7aXJSCMWLiCVEhfImVwj8p6XLMj8Ke1IDKy0a4F', '$2a$10$2Gh9IqDjzKro/K.2PAAYwea59c1xnsNTgRRRL/q4y/V99kg4/7BoO', 1, '80503352900027', 1, 0),
+('Introduction à l''Économie Circulaire', 'Ce cours offre une introduction complète à l''économie circulaire, un modèle économique visant à réduire la consommation de ressources naturelles et la production de déchets en favorisant la réutilisation, la réparation, et le recyclage. Les étudiants exploreront les principes fondamentaux de l''économie circulaire, les différentes stratégies mises en place par les entreprises et les gouvernements pour la promouvoir, ainsi que ses avantages écologiques et économiques. Le cours met également en lumière les défis pratiques de la transition vers un modèle circulaire, notamment les barrières technologiques, sociales et réglementaires. Les étudiants auront ainsi une vision globale des opportunités et des limites de ce modèle pour le développement durable.', 20, '2024-12-01', 'kGUlD2e6jWFkDMCLgj9gzDDqlVHxVgVeRg3S7aXJSCMWLiCVEhfImVwj8p6XLMj8Ke1IDKy0a4F', '$2a$10$2Gh9IqDjzKro/K.2PAAYwea59c1xnsNTgRRRL/q4y/V99kg4/7BoO', 2, '80503352900027', 1, 0);
 
 INSERT INTO vue_user.inscription (event_id, siren) VALUES
 	(3, '18770918300235'),
@@ -265,11 +286,13 @@ INSERT INTO vue_user.object_type (label) VALUES
 INSERT INTO vue_user.listing 
 (id_item, title, description, dimension, date_posted, status, id_emplacement, siren, id_object_type, id_condition_type) 
 VALUES
+    (20, 'Table', 'Bureau', '100x50x70', '2024-12-11', 'draft', NULL, '18770918300235', 3, 3),
+    (21, 'Table', 'Table en marbre', '100x50x70', '2024-12-11', 'active', 7, '18770918300235', 3, 3),
     (22, 'Table', 'Table en bois', '100x50x70', '2024-12-11', 'active', 1, '33865714102081', 3, 3),
     (23, 'Chaise', 'Chaise en bois confortable ', '50x40x80', '2024-12-11', 'active', 2, '39966767400051', 3, 2),
     (24, 'Clavier', 'Clavier mecanique logitech tres reactif ', '30x15x6', '2024-12-11', 'active', 3, '48830276100090', 1, 4),
     (25, 'Imprimante ', 'Super imprimante avec beaucoup de style', '40x40x60', '2024-12-11', 'active', 4, '78496197100305', 2, 1),
-    (26, 'Aspirateur', 'Aspirateur qui aspire ', '20x20x40', '2024-12-11', 'active', 5, '80503352900027', 6, 3),
+    (26, 'Aspirateur', 'Aspirateur qui aspire ', '20x20x40', '2024-12-11', 'reserved', 5, '80503352900027', 6, 3),
     (27, 'Canapé', 'Canapé moderne', '200x100x90', '2024-12-14', 'picked', 1, '85003138000500', 4, 2),
     (28, 'Lampe', 'Lampe de bureau', '15x15x40', '2024-12-14', 'picked', 2, '33865714102081', 5, 3),
     (29, 'Bureau', 'Bureau en métal', '120x60x75', '2024-12-14', 'picked', 3, '39966767400051', 3, 4),
@@ -287,10 +310,20 @@ VALUES
     (41, 'Machine à laver', 'Machine à laver moderne', '60x60x90', '2024-12-14', 'picked', 16, '39966767400051', 2, 3),
     (42, 'Sèche-linge', 'Sèche-linge performant', '60x60x90', '2024-12-14', 'picked', 17, '48830276100090', 2, 2),
     (43, 'Vélo', 'Vélo de montagne', '180x30x100', '2024-12-14', 'picked', 18, '78496197100305', 6, 4),
-    (44, 'Trottinette', 'Trottinette électrique', '100x20x40', '2024-12-14', 'picked', 19, '80503352900027', 6, 3);
+    (44, 'Trottinette', 'Trottinette électrique', '100x20x40', '2024-12-14', 'picked', 19, '80503352900027', 6, 3),
+	(45, 'Set de stylos', 'Set de stylos Quatre Couleur', '100x20x40', '2024-12-14', 'picked', 20, '18770918300235', 6, 3);
+
+INSERT INTO vue_user.listing_favorites (id_item, siren) VALUES
+	(22, '18770918300235'),
+	(23, '18770918300235'),
+	(24, '18770918300235'),
+	(23, '33865714102081'),
+	(24, '39966767400051'),
+	(25, '48830276100090');
 
 INSERT INTO vue_user.transaction (id_item, status, siren, date_transaction)
 VALUES
+    (26, 'reserved', '18770918300235', '2024-12-16'),
     (27, 'reserved', '39966767400051', '2024-12-16'),
     (27, 'picked', '39966767400051', '2024-12-16'),
     (28, 'reserved', '48830276100090', '2024-12-16'),
@@ -319,14 +352,14 @@ VALUES
     (39, 'picked', '39966767400051', '2024-12-16'),
     (40, 'reserved', '78496197100305', '2024-12-16'),
     (40, 'picked', '78496197100305', '2024-12-16'),
-    (41, 'reserved', '85003138000500', '2024-12-16'),
-    (41, 'picked', '85003138000500', '2024-12-16'),
-    (42, 'reserved', '39966767400051', '2024-12-16'),
-    (42, 'picked', '39966767400051', '2024-12-16'),
-    (43, 'reserved', '78496197100305', '2024-12-16'),
-    (43, 'picked', '78496197100305', '2024-12-16'),
-    (44, 'reserved', '85003138000500', '2024-12-16'),
-    (44, 'picked', '85003138000500', '2024-12-16');
+    (41, 'reserved', '18770918300235', '2024-12-16'),
+    (41, 'picked', '18770918300235', '2024-12-16'),
+    (42, 'reserved', '18770918300235', '2024-12-16'),
+    (42, 'picked', '18770918300235', '2024-12-16'),
+    (43, 'reserved', '18770918300235', '2024-12-16'),
+    (43, 'picked', '18770918300235', '2024-12-16'),
+    (44, 'reserved', '18770918300235', '2024-12-16'),
+    (44, 'picked', '18770918300235', '2024-12-16');
 
 
 
