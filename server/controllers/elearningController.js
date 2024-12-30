@@ -1,4 +1,12 @@
 const { getElearningCategory, getElearningByCategory, getElearningBySiren } = require('../elearning/elearningFetcher');
+const { addFavorite, deleteFavorite} = require('../elearning/elearningUpdate')
+
+const getSirenFromRequest = (req) => {
+    const { siren } = req.query;
+    if (siren) return { siren, source: "query" };
+    if (req.session && req.session.user) return { siren: req.session.user.siren, source: "session" };
+    throw new Error("No siren provided in query or session.");
+};
 
 const elearningList = async (req, res) => {
     try {
@@ -22,4 +30,36 @@ const elearningList = async (req, res) => {
     }
 };
 
-module.exports = { elearningList };
+const addElearningFavorite = async (req, res) => {
+    try {
+        const { siren, source } = getSirenFromRequest(req);
+        
+        if (source === "session") {
+            const { elearningid } = req.query;
+            await addFavorite(siren, elearningid) 
+        } else {
+            res.status(403).json({ error: "Pas de session active." });
+        }
+    } catch (error) {
+        console.error("Erreur lors du traitement des paramètres :", error);
+        res.status(500).json({ error: error.message || "Erreur interne du serveur" });
+    }
+};
+
+const deleteElearningFavorite = async (req, res) => {
+    try {
+        const { siren, source } = getSirenFromRequest(req);
+        
+        if (source === "session") {
+            const { elearningid } = req.query;
+            await deleteFavorite(siren, elearningid) 
+        } else {
+            res.status(403).json({ error: "Pas de session active." });
+        }
+    } catch (error) {
+        console.error("Erreur lors du traitement des paramètres :", error);
+        res.status(500).json({ error: error.message || "Erreur interne du serveur" });
+    }
+};
+
+module.exports = { elearningList, addElearningFavorite, deleteElearningFavorite };
