@@ -13,7 +13,8 @@ const MyReservation = () => {
         id: i + 1,
         object: `Objet ${i + 1}`,
         date: '18/02/2024',
-        address: `Siège entreprise exemple, 52 rue Albert Camus, 7770, Serris`
+        address: `Siège entreprise exemple, 52 rue Albert Camus, 7770, Serris`,
+        status: `à récup ${i+1}`,
       }));
       setReservations(data);
     };
@@ -34,7 +35,7 @@ const MyReservation = () => {
 
   return (
     <div className="container mx-auto mt-10 px-4">
-      <h3 className="text-center text-2xl font-semibold mb-4">Mes réservations</h3>
+      <h2 className="text-3xl font-bold text-darkGreen mb-8 text-center">Mes Reservations</h2>
 
       <div className="overflow-x-auto bg-white rounded-lg shadow-lg">
         <table className="min-w-full table-auto">
@@ -43,6 +44,7 @@ const MyReservation = () => {
               <th className="px-4 py-2 text-left">Nom objet</th>
               <th className="px-4 py-2 text-left">Date de récupération</th>
               <th className="px-4 py-2 text-left">Adresse de récupération</th>
+              <th className="px-4 py-2 text-left">Statut</th>
             </tr>
           </thead>
           <tbody>
@@ -51,6 +53,7 @@ const MyReservation = () => {
                 <td className="px-4 py-2">{reservation.object}</td>
                 <td className="px-4 py-2">{reservation.date}</td>
                 <td className="px-4 py-2">{reservation.address}</td>
+                <td className="px-4 py-2">{reservation.status}</td>
               </tr>
             ))}
           </tbody>
@@ -60,19 +63,19 @@ const MyReservation = () => {
        {/* Pagination */}
        <div className="flex justify-center mt-4">
         <nav aria-label="Page navigation">
-          <ul className="flex list-style-none rounded-lg oberflow-hidden">
+          <ul className="flex list-style-none ">
             {/* Previous Page */}
             <li>
               <button
                 onClick={() => handlePageChange(currentPage - 1)}
-                className={`px-4 py-2 border border-gray-300 ${
+                className={`px-4 py-2 border overflow-hidden text-darkGreen border-gray-300 rounded-l-lg ${
                   currentPage === 1 
-                    ? 'bg-gray-300 text-gray-500'
+                    ? 'bg-yellowGreen1 bg-opacity-20 text-darkGreen'
                     : 'hover:bg-yellowGreen1 hover:text-white'
                 }`}
                 disabled={currentPage === 1}
               >
-                «
+                Précedent
               </button>
             </li>
             
@@ -81,7 +84,7 @@ const MyReservation = () => {
               <li key={i + 1}>
                 <button
                   onClick={() => handlePageChange(i + 1)}
-                  className={`px-4 py-2 border border-gray-300 ${
+                  className={`px-4 py-2 border-y border-r text-darkGreen border-gray-300 ${
                     i + 1 === currentPage
                       ? 'bg-yellowGreen1 text-white'
                       : 'hover:bg-yellowGreen1 hover:text-white'
@@ -96,14 +99,14 @@ const MyReservation = () => {
             <li>
               <button
                 onClick={() => handlePageChange(currentPage + 1)}
-                className={`px-4 py-2 border border-gray-300 ${
+                className={`px-4 py-2 border-y border-r text-darkGreen border-gray-300 rounded-r-lg ${
                   currentPage === totalPages
-                    ? 'bg-gray-300 text-gray-500'
+                    ? 'bg-yellowGreen1 bg-opacity-20 text-darkGreen'
                     : 'hover:bg-yellowGreen1 hover:text-white'
                 }`}
                 disabled={currentPage === totalPages}
               >
-                »
+                Suivant
               </button>
             </li>
           </ul>
