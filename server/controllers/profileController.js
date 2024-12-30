@@ -5,6 +5,7 @@ const {getTransactiongBySiren} = require("../transactions/transactionFetcher")
 const {getAdressContainerByEmplacement} = require("../stockage/stockageFetcher")
 const { getProductData} = require('../pageproduct/pageProductFetcher')
 const {getObjectTypeLabels, replacePreferenceIdsWithLabels} = require('../object/objectFetcher')
+const {updateUsername, updateMail, updateAdress, updateCity, updatePhone, updateZipcode} = require ("../account/accountUpdate")
 
 const getSirenFromRequest = (req) => {
     const { siren } = req.query;
@@ -122,4 +123,32 @@ const profileParameters = async (req, res) => {
     }
 };
 
-module.exports = { profile, profileFavorite, profileListing, profileTransactions, profilePurchases, profileParameters };
+const updateProfile = async (req, res) => {
+    try {
+        const { siren, source } = getSirenFromRequest(req);
+        
+        if (source === "session") {
+            const { nom, email, adress, city, phone, zipcode } = req.query;
+            if (nom) {
+                await updateUsername(siren, nom);}
+            if (email) {
+                await updateMail(siren, email);}
+            if (adress) {
+                await updateAdress(siren, adress);}
+            if (city) {
+                await updateCity(siren, city);}
+            if (phone) {
+                await updatePhone(siren, phone);}
+            if (zipcode) {
+                await updateZipcode(siren, zipcode);}
+            res.status(200).json({ message: "Profil mis à jour avec succès." });
+        } else {
+            res.status(403).json({ error: "Pas de session active." });
+        }
+    } catch (error) {
+        console.error("Erreur lors du traitement des paramètres :", error);
+        res.status(500).json({ error: error.message || "Erreur interne du serveur" });
+    }
+};
+
+module.exports = { profile, profileFavorite, profileListing, profileTransactions, profilePurchases, profileParameters, updateProfile };
