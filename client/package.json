@@ -15,6 +15,7 @@
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.7.9",
     "bootstrap": "^5.3.3",
+    "node": "^23.5.0",
     "react": "^18.3.1",
     "react-bootstrap": "^2.10.7",
     "react-dom": "^18.3.1",
@@ -29,9 +30,9 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "CI=false react-scripts start",
-    "build": "CI=false react-scripts build",
-    "test": "CI=false react-scripts test --env=jsdom",
+    "start": "set CI=false && react-scripts start",
+    "build": "set CI=false && react-scripts build",
+    "test": "set CI=false && react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "lint": "eslint ."
   },
