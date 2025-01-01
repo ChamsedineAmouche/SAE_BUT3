@@ -62,7 +62,7 @@ const Account = () => {
         </ul>
         <div className="mt-24 flex justify-center">
             <button className="bg-oliveGreen text-white px-6 py-3 text-lg font-semibold rounded-md hover:bg-opacity-90 transition duration-200">
-                Voir les dépôts
+                Se déconncter
             </button>
         </div>
       </div>
