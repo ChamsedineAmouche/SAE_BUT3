@@ -32,18 +32,12 @@ function getObjectForFilter(allOfObjects) {
 
     allOfObjects.forEach(obj => {
         const { category, state, ...itemData } = obj;
-
-        // Si la catégorie n'existe pas encore dans le résultat
         if (!result[category]) {
             result[category] = {};
         }
-
-        // Si l'état n'existe pas encore dans la catégorie
         if (!result[category][state]) {
             result[category][state] = [];
         }
-
-        // Ajouter l'objet à la liste de l'état correspondant
         result[category][state].push(itemData);
     });
 
