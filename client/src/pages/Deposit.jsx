@@ -1,30 +1,69 @@
-import React, { useState } from "react";
-import circularEconomyImg from "../assets/images/circular_economy.png"; 
-import SquareGrid from "../components/SquareGrid/SquareGrid"; 
+import React, { useState, useEffect, useRef } from "react";
+import circularEconomyImg from "../assets/images/circular_economy.png";
+import SquareGrid from "../components/SquareGrid/SquareGrid";
 import Carousel from "../components/Carousel/Carousel";
+import DepositThumbnail from "../components/DepositThumbnail/DepositThumbnail"; // Importer le composant DepositThumbnail
 
-const Deposit = () => {
+const Catalogue = () => {
   const [searchText, setSearchText] = useState("");
+  const [categories, setCategories] = useState([]);
+  const [objectsByCategory, setObjectsByCategory] = useState({});
+
+  // Références des carousels pour le défilement
+  const carouselRefs = useRef([]);
+
+  useEffect(() => {
+    // Fetch des données de l'API
+    const fetchCatalogueData = async () => {
+      try {
+        const response = await fetch("/catalog");
+        const data = await response.json();
+
+        // Extraire les catégories et objets
+        const categories = data.objectTypes;
+        const objects = data.objects;
+
+        // Grouper les objets par catégorie
+        const groupedObjects = categories.reduce((acc, category) => {
+          acc[category.label] = objects.filter(
+            (obj) => obj.id_object_type === category.id_object_type
+          );
+          return acc;
+        }, {});
+
+        setCategories(categories);
+        setObjectsByCategory(groupedObjects);
+      } catch (error) {
+        console.error("Erreur lors du fetch des données :", error);
+      }
+    };
+
+    fetchCatalogueData();
+  }, []);
 
   const handleChange = (event) => {
     setSearchText(event.target.value);
   };
 
-  const items = ["Exemple 1", "Exemple 2", "Exemple 3", "Exemple 4", "Exemple 5"]; 
-
-  const items2 = ["exemple 1", "exemple 2", "exemple 3", "exemple 4", "exemple 5", "exemple 6", "exemple 7", "exemple 8", "exemple 9"];
+  const handleCategoryClick = (index) => {
+    // Défilement vers le carousel correspondant
+    carouselRefs.current[index].scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+  };
 
   return (
-    <div className="deposit relative">
+    <div className="catalogue relative">
       {/* Image en haut à droite */}
-      <img 
-        src={circularEconomyImg} 
-        alt="Circular Economy" 
+      <img
+        src={circularEconomyImg}
+        alt="Circular Economy"
         className="absolute top-1 right-1 w-1/5 h-auto"
       />
-      
+
       <h1 className="text-4xl font-poppins max-w-[51%] pt-[150px] pl-[60px]">
-        Bienvenue sur la page des dépôts, explorez le catalogue et faites votre choix !
+        Bienvenue dans le catalogue, explorez nos catégories et articles disponibles !
       </h1>
 
       {/* Barre de recherche */}
@@ -44,25 +83,41 @@ const Deposit = () => {
             viewBox="0 0 24 24"
             stroke="currentColor"
           >
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-4.35-4.35M8 11a4 4 0 118 0 4 4 0 01-8 0z" />
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M21 21l-4.35-4.35M8 11a4 4 0 118 0 4 4 0 01-8 0z"
+            />
           </svg>
         </div>
       </div>
-      <SquareGrid items={items} />
-      <div className="p-8">
-        <Carousel items={items2} title={"Derniers dépôts"} />
-      </div>
-      <div className="p-8">
-        <Carousel items={items2} title={"Exemple de catégorie"} />
-      </div>
-      <div className="p-8">
-        <Carousel items={items2} title={"Exemple de catégorie"} />
-      </div>
-      <div className="p-8">
-        <Carousel items={items2} title={"Exemple de catégorie"} />
-      </div>
+
+      {/* Grille des catégories */}
+      <SquareGrid
+        items={categories.map((category, index) => ({
+          label: category.label,
+          onClick: () => handleCategoryClick(index),
+        }))}
+      />
+
+      {/* Carousels par catégorie */}
+      {categories.map((category, index) => (
+        <div
+          className="p-8"
+          key={category.id_object_type}
+          ref={(el) => (carouselRefs.current[index] = el)} // Ajout de la référence pour le scroll
+        >
+          <Carousel
+            items={objectsByCategory[category.label].map((obj) => (
+              <DepositThumbnail object={obj} key={obj.id_item} />
+            ))}
+            title={`Objets dans la catégorie : ${category.label}`}
+          />
+        </div>
+      ))}
     </div>
   );
 };
 
-export default Deposit;
+export default Catalogue;
