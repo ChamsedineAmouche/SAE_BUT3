@@ -4,7 +4,7 @@ import SquareGrid from "../components/SquareGrid/SquareGrid";
 import Carousel from "../components/Carousel/Carousel";
 import DepositThumbnail from "../components/DepositThumbnail/DepositThumbnail"; // Importer le composant DepositThumbnail
 
-const Catalogue = () => {
+const Deposit = () => {
   const [searchText, setSearchText] = useState("");
   const [categories, setCategories] = useState([]);
   const [objectsByCategory, setObjectsByCategory] = useState({});
@@ -120,4 +120,4 @@ const Catalogue = () => {
   );
 };
 
-export default Catalogue;
+export default Deposit;
