@@ -94,7 +94,8 @@ async function getConditionByID(idCondition) {
 
 async function getProductData(id) {
     try {
-        const productData = await getProductDataById(id);
+        const query = `SELECT * FROM listing WHERE id_item = ${id}`
+        const productData = await getResultOfQuery('vue_user', query);
         const {
             id_object_type: idObjectType,
             id_condition_type: idConditionType,
