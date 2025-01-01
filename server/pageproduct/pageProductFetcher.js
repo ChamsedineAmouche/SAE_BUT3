@@ -22,7 +22,12 @@ async function getDataForProductPageById(id, currentSiren) {
 
 async function getProductDataById(id) {
     try {
-        const query = `SELECT * FROM listing WHERE id_item = ` + id;
+        const query = `
+            SELECT l.*, ct.label AS state, ot.label AS category
+            FROM listing l
+            JOIN condition_type ct ON l.id_condition_type = ct.id_condition_type
+            JOIN object_type ot ON l.id_object_type = ot.id_object_type
+            WHERE l.id_item = ` + id;
         return await getResultOfQuery("vue_user", query);
     } catch (error) {
         console.error("Erreur lors de la récupération des données du produit :", error);
