@@ -4,21 +4,24 @@ import Layout from "./components/Layout/Layout.jsx";
 import Home from "./pages/Home";
 import Deposit from "./pages/Deposit";
 import Register from "./pages/Register.jsx";
-import Login from "./pages/Login.jsx"
+import Login from "./pages/Login.jsx";
 import NewDeposit from "./pages/NewDeposit.jsx";
 import Evenenement from "./pages/Evenement.jsx";
 import Veille from "./pages/Veille.jsx";
 import Elearning from "./pages/Elearning.jsx";
 import LoginAdmin from "./pages/LoginAdmin";
-import InscriptionValidation from "./pages/InscriptionValidation"
+import InscriptionValidation from "./pages/InscriptionValidation";
 import Test from "./pages/Test.jsx";
-import ForgotPassword from "./pages/ForgotPassword"
-import ResetPassword from "./pages/ResetPassword.jsx"
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword.jsx";
 import Account from "./pages/Account.jsx";
+import { Toaster } from 'react-hot-toast';  // Importation de Toaster
 
 const App = () => {
   return (
     <Router>
+      {/* Le composant Toaster est ici pour afficher les toasts */}
+      <Toaster />
       <Routes>
         {/* Route avec le Layout global */}
         <Route path="/" element={<Layout />}>
