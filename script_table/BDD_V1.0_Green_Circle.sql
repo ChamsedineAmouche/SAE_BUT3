@@ -8,7 +8,7 @@ USE vue_user;
 
 -- Création des tables pour le schéma vue_user
 CREATE TABLE company (
-   siren CHAR(14),
+   siren CHAR(14) NOT NULL,
    nom VARCHAR(50) NOT NULL,
    email VARCHAR(75) NOT NULL,
    password VARCHAR(75) NOT NULL,
@@ -213,4 +213,27 @@ CREATE TABLE event (
    admin_id INT NOT NULL,
    PRIMARY KEY(id_event),
    FOREIGN KEY(admin_id) REFERENCES admin(admin_id)
+);
+
+DROP DATABASE IF EXISTS payment_data;
+
+-- Création des bases de données
+CREATE DATABASE payment_data;
+
+-- Utilisation de la base de données bank_data
+USE payment_data;
+
+-- Création des tables pour le schéma bank_data
+CREATE TABLE payment_cards (
+    id SERIAL PRIMARY KEY,
+    card_name VARCHAR(100) NOT NULL,       -- Nom donné à la carte (ex: "Carte Pro")
+    card_holder_first_name VARCHAR(50),   -- Prénom sur la carte
+    card_holder_last_name VARCHAR(50),    -- Nom sur la carte
+    encrypted_card_number VARBINARY(512), -- Numéro de carte (chiffré)
+    expiration_date DATE NOT NULL,        -- Date d'expiration (format: YYYY-MM-DD)
+    siren CHAR(14),                  -- SIREN auquel appartient la carte
+    is_default BOOLEAN DEFAULT FALSE,     -- Carte par défaut
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    iv VARBINARY(16) NOT NULL             -- Vecteur d'initialisation pour le chiffrement
 );
