@@ -15,7 +15,11 @@ import Test from "./pages/Test.jsx";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword.jsx";
 import Account from "./pages/Account.jsx";
-import { Toaster } from 'react-hot-toast';  // Importation de Toaster
+import { Toaster } from 'react-hot-toast';  
+import DetailsEvent from "./pages/DetailsEvents.jsx";
+import DetailsEventFuture from "./pages/DetailsEventsFuture.jsx";
+import DetailsVeille from "./pages/DetailsVeille.jsx";
+import DetailsElearning from "./pages/DetailsElearning.jsx";
 
 const App = () => {
   return (
@@ -40,6 +44,10 @@ const App = () => {
           <Route path="/reset_password" element={<ResetPassword />} />
           <Route path="/test" element={<Test />} />
           <Route path="/mon_compte" element={<Account />} />
+          <Route path="/details_event" element={<DetailsEvent />} />
+          <Route path="/details_event_future" element={<DetailsEventFuture />} />
+          <Route path="/details_veille" element={<DetailsVeille />} />
+          <Route path="/details_elearning" element={<DetailsElearning />} />
         </Route>
       </Routes>
     </Router>
