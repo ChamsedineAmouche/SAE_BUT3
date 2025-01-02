@@ -4,21 +4,28 @@ const MyReservation = () => {
   // Données de réservation simulées (à remplacer par une API)
   const [reservations, setReservations] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [isLoading, setIsLoading] = useState(true)
+  const [status, setStatus] = useState("")
   const reservationsPerPage = 10;
 
   useEffect(() => {
     // Simuler la récupération de données (à remplacer par un appel API réel)
-    const fetchReservations = () => {
-      const data = Array.from({ length: 60 }, (_, i) => ({
-        id: i + 1,
-        object: `Objet ${i + 1}`,
-        date: '18/02/2024',
-        address: `Siège entreprise exemple, 52 rue Albert Camus, 7770, Serris`,
-        status: `à récup ${i+1}`,
-      }));
-      setReservations(data);
-    };
-    fetchReservations();
+    fetch('/profileTransactions')
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then((data) => {
+      console.log(data)
+      setReservations(data.transactions);
+      setIsLoading(false);
+    })
+    .catch(error => {
+      console.error('Error fetching data:', error);
+      setIsLoading(false);
+    })
   }, []);
 
   // Logique pour gérer la pagination
@@ -32,7 +39,7 @@ const MyReservation = () => {
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
-
+  
   return (
     <div className="container mx-auto mt-10 px-4">
       <h2 className="text-3xl font-bold text-darkGreen mb-8 text-center">Mes Reservations</h2>
@@ -48,14 +55,30 @@ const MyReservation = () => {
             </tr>
           </thead>
           <tbody>
-            {currentReservations.map((reservation, index) => (
-              <tr key={reservation.id} className={index % 2 === 0 ? 'bg-yellowGreen1 bg-opacity-10' : 'bg-white'}>
-                <td className="px-4 py-2">{reservation.object}</td>
-                <td className="px-4 py-2">{reservation.date}</td>
-                <td className="px-4 py-2">{reservation.address}</td>
-                <td className="px-4 py-2">{reservation.status}</td>
-              </tr>
-            ))}
+            {currentReservations.map((reservation, index) => {
+              const date = new Date(reservation.dateTransaction);
+              const formattedDate = `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear()}`;
+                let statusText;
+                switch (reservation.status) {
+                case 'reserved':
+                  statusText = 'En attente';
+                  break;
+                case 'picked':
+                  statusText = 'Récupéré';
+                  break;
+                default:
+                  statusText = 'Inconnu';
+                }
+
+                return (
+                <tr key={reservation.id} className={index % 2 === 0 ? 'bg-yellowGreen1 bg-opacity-10' : 'bg-white'}>
+                  <td className="px-4 py-2">{reservation.title}</td>
+                  <td className="px-4 py-2">{formattedDate}</td>
+                  <td className="px-4 py-2">{reservation.address}</td>
+                  <td className="px-4 py-2">{statusText}</td>
+                </tr>
+                );
+            })}
           </tbody>
         </table>
       </div>

@@ -29,7 +29,7 @@ const DepositThumbnail = ({ object }) => {
     return <div>Pas d'objet disponible</div>;
   }
 
-  const { title, category, state, availabilityDate, isUrgent } = object;
+  const { title, category, condition, availabilityDate, isUrgent } = object;
 
   return (
     <div className="rounded-lg shadow-lg overflow-hidden relative w-full h-full bg-white">
@@ -51,7 +51,7 @@ const DepositThumbnail = ({ object }) => {
         {/* Catégorie */}
         <p className="text-m font-semibold text-darkGreen">{category}</p>
         {/* État */}
-        <p className="text-sm text-darkGreen">{state}</p>
+        <p className="text-sm text-darkGreen">{condition}</p>
         {/* Badge URGENT */}
         {isUrgent && (
           <div className="absolute top-4 left-4 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-md">

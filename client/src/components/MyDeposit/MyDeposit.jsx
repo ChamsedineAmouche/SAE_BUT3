@@ -1,17 +1,56 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Switch from "../Switch/Switch";
 import SquareGrid from "../SquareGrid/SquareGrid";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlusSquare } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
+import DepositThumbnail from "../DepositThumbnail/DepositThumbnail";
+import ElearningThumbnail from "../ElearningThumbnail/ElearningThumbnail";
 
 const MyDeposit = () => {
   const navigate = useNavigate();
   const [selectedOption, setSelectedOption] = useState("Publié");
+  const [data, setData] = useState(null)
+  const [isLoading, setIsLoading] = useState(true)
 
   const handleSwitchChange = (option) => {
     setSelectedOption(option);
   };
+
+  useEffect(() => {
+    fetch('/profileListing')
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then((data) => {
+      console.log(data)
+      setData(data);
+      setIsLoading(false);
+    })
+    .catch(error => {
+      console.error('Error fetching data:', error);
+      setIsLoading(false);
+    })
+  }, []);
+
+  if (isLoading) {
+    return <p>Chargement en cours...</p>;
+  }
+
+  if (!data) {
+    return <p>Erreur lors du chargement des données.</p>;
+  }
+
+  const activeDepositThumbnails = data.active.depots.map((depots) => (
+    <DepositThumbnail key={`thumbnail-${depots.id_item}`} object={depots} />
+  ));
+
+  const draftDepositThumbnails = data.draft.depots.map((depots) => (
+    <DepositThumbnail key={`thumbnail-${depots.id_item}`} object={depots} />
+  ));
 
   return (
     <div className="bg-white w-full">
@@ -33,12 +72,12 @@ const MyDeposit = () => {
 
       {selectedOption === "Publié" && (
         <div id="Publié" className="overflow-y-auto h-[70vh]">
-          <SquareGrid items={['exemple', 'exemple', 'exemple', 'exemple', 'exemple', 'exemple', 'exemple', 'exemple']}/>
+          <SquareGrid items={activeDepositThumbnails}/>
         </div>
       )}
       {selectedOption === "Brouillon" && (
         <div id="Brouillon" className="overflow-y-auto h-[70vh]">
-          <SquareGrid items={['exempddle', 'exemple', 'exemple', 'exemple', 'exemple', 'exemple', 'exemple', 'exemple']}/>
+          <SquareGrid items={draftDepositThumbnails}/>
         </div>
       )}
     </div>
