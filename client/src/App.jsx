@@ -16,10 +16,10 @@ import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword.jsx";
 import Account from "./pages/Account.jsx";
 import { Toaster } from 'react-hot-toast';  
-import DetailsEvent from "./pages/Details_events.jsx";
-import DetailsEventFuture from "./pages/Details_events_future.jsx";
-import DetailsVeille from "./pages/Details_veille.jsx";
-import DetailsElearning from "./pages/Details_elearning.jsx";
+import DetailsEvent from "./pages/DetailsEvents.jsx";
+import DetailsEventFuture from "./pages/DetailsEventsFuture.jsx";
+import DetailsVeille from "./pages/DetailsVeille.jsx";
+import DetailsElearning from "./pages/DetailsElearning.jsx";
 
 const App = () => {
   return (
