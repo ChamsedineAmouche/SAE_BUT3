@@ -22,7 +22,12 @@ async function getDataForProductPageById(id, currentSiren) {
 
 async function getProductDataById(id) {
     try {
-        const query = `SELECT * FROM listing WHERE id_item = ` + id;
+        const query = `
+            SELECT l.*, ct.label AS state, ot.label AS category
+            FROM listing l
+            JOIN condition_type ct ON l.id_condition_type = ct.id_condition_type
+            JOIN object_type ot ON l.id_object_type = ot.id_object_type
+            WHERE l.id_item = ` + id;
         return await getResultOfQuery("vue_user", query);
     } catch (error) {
         console.error("Erreur lors de la récupération des données du produit :", error);
@@ -89,8 +94,10 @@ async function getConditionByID(idCondition) {
 
 async function getProductData(id) {
     try {
-        const productData = await getProductDataById(id);
+        const query = `SELECT * FROM listing WHERE id_item = ${id}`
+        const productData = await getResultOfQuery('vue_user', query);
         const {
+            id_item,
             id_object_type: idObjectType,
             id_condition_type: idConditionType,
             title,
@@ -103,7 +110,8 @@ async function getProductData(id) {
         const condition = await getConditionByID(idConditionType);
         const category = await getCategoryByID(idObjectType);
         return {
-            name: title,
+            id_item,
+            title,
             description,
             dimension,
             date: datePosted,
@@ -128,7 +136,7 @@ async function getListingBySirenAndStatus(siren, status){
         const depots = await Promise.all(
             listingItems.map(async (depot) => {
                 const productData = await getProductData(depot.id_item);
-                return { ...depot, productData };
+                return { ...productData };
             })
         );
 
