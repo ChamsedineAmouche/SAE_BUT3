@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import RadioButton from '../RadioButton/RadioButton';
 
 const Parameters = () => {
-  // États pour gérer les RadioButtones
   const [notifications, setNotifications] = useState({
     meuble: false,
     elearning: false,
@@ -79,7 +78,7 @@ const Parameters = () => {
       </div>
 
       {/* Mon compte */}
-      <div className="flex flex-col bg-white shadow-md rounded-lg p-4 w-ful border border-yellowGreen1 border-opacity-40 mt-6">
+      <div className="flex flex-col bg-white shadow-md rounded-lg p-4 w-ful border border-yellowGreen1 border-opacity-40 mt-12">
           <h3 className="font-semibold text-lg text-green-600">Mon compte</h3>
           <div className="flex items-center justify-center space-x-4 h-full">
             <button className="bg-oliveGreen text-white px-6 py-3 text-lg font-semibold rounded-md hover:bg-opacity-90 transition duration-200">

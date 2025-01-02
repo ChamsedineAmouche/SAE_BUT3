@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Switch from "../Switch/Switch";
 import SquareGrid from "../SquareGrid/SquareGrid";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBuildingColumns, faEdit, faPlusSquare, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 import { faApple, faApplePay, faGooglePay, faPaypal } from "@fortawesome/free-brands-svg-icons";
+import ElearningThumbnail from "../ElearningThumbnail/ElearningThumbnail";
 
 const MyPurchase = () => {
 	const navigate = useNavigate();
@@ -19,6 +20,40 @@ const MyPurchase = () => {
 	  year: "",
 	  cvc: ""
 	});
+  const [data, setData] = useState(null)
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    fetch('/profilePurchases')
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then((data) => {
+      console.log(data)
+      setData(data);
+      setIsLoading(false);
+    })
+    .catch(error => {
+      console.error('Error fetching data:', error);
+      setIsLoading(false);
+    })
+  }, []);
+
+  if (isLoading) {
+    return <p>Chargement en cours...</p>;
+  }
+
+  if (!data) {
+    return <p>Erreur lors du chargement des données.</p>;
+  }
+
+  const elearningThumbnail = data.purchases.map((elearning) => (
+    <ElearningThumbnail key={`thumbnail-${elearning.id_item}`} elearning={elearning} />
+  ));
+
   
 	const handleSwitchChange = (option) => {
 	  setSelectedOption(option);
@@ -79,7 +114,7 @@ const MyPurchase = () => {
 
 	{selectedOption === "E-learning acheté" && (
         <div id="E-learning acheté" className="overflow-y-auto h-[70vh]">
-          <SquareGrid items={['exemple', 'exemple', 'exemple', 'exemple', 'exemple', 'exemple', 'exemple', 'exemple']}/>
+          <SquareGrid items={elearningThumbnail}/>
         </div>
       )}
 
