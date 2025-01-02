@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import eventImage from "../assets/images/circular_economy.png"; // Exemple d'image
 
-const DetailsEvent = () => {
+const DetailsEventFuture = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -12,7 +12,7 @@ const DetailsEvent = () => {
       {/* Texte en haut à gauche */}
       <div className="text-left">
         <p className="text-lg font-medium text-gray-700">
-          Évenements/à venir/ Seminaire
+          Découvrez les détails de cet événement spécial !
         </p>
       </div>
 
@@ -44,7 +44,7 @@ const DetailsEvent = () => {
       </div>
 
       {/* Rectangle vert avec cercle et texte */}
-      <div className="flex justify-center mt-12 mb-12">
+      <div className="flex justify-center mt-12 mb-8">
         <div
           className="flex items-center justify-center bg-[#587208] text-white rounded-lg w-3/4 md:w-1/2 lg:w-1/3 p-4 shadow-lg"
         >
@@ -56,8 +56,20 @@ const DetailsEvent = () => {
           <div className="text-lg font-semibold">participants</div>
         </div>
       </div>
+
+      {/* Bouton d'inscription */}
+      <div className="flex justify-center mb-8">
+        <button
+          className="bg-[#587208] text-white text-lg font-semibold rounded-full px-6 py-3 shadow-lg hover:bg-[#466205] transition duration-200"
+        >
+          Inscription
+        </button>
+      </div>
+
+      {/* Espace supplémentaire sous le bouton */}
+      <div className="mb-12"></div>
     </div>
   );
 };
 
-export default DetailsEvent;
+export default DetailsEventFuture;
