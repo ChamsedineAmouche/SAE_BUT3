@@ -5,7 +5,6 @@ const DepositThumbnail = ({ object }) => {
 
   useEffect(() => {
     if (!object || !object.id_item) return;
-
     fetch(`/image?id=${object.id_item}`)
       .then((response) => {
         if (!response.ok) {
