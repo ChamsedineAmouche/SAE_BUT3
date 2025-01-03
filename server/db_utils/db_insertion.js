@@ -1,6 +1,7 @@
 const getDbConnection = require("./db_connection");
 const {getResultOfQuery} = require('./db_functions')
 const FileType = require("file-type");
+const {getCapacityRemaining, getDataOfTheEvent, getNumberOfParticipants} = require("../event/utils_event");
 
 const insertListingWithImages = async (newSubmission) => {
     const connection = getDbConnection('vue_user');
@@ -71,12 +72,17 @@ const insertNewInscriptionForEvent = async (eventId, siren) => {
 
     try {
         await promiseConnection.beginTransaction();
-        await promiseConnection.execute(
-            `INSERT INTO inscription (event_id, siren) VALUES (?, ?)`,
-            [eventId, siren]
-        );
-        await promiseConnection.commit();
-        console.log('Transaction réussie, données insérées avec succès.');
+        const dataEvent = await getDataOfTheEvent(eventId);
+        const number = await getNumberOfParticipants(eventId);
+        const capacity = await getCapacityRemaining(dataEvent, number);
+        if (capacity > 0) {
+            await promiseConnection.execute(
+                `INSERT INTO inscription (event_id, siren) VALUES (?, ?)`,
+                [eventId, siren]
+            );
+            await promiseConnection.commit();
+            console.log('Transaction réussie, données insérées avec succès.');
+        }
     } catch (error) {
         await promiseConnection.rollback();
         console.error('Erreur lors de l\'insertion, transaction annulée :', error);
