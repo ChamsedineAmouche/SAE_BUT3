@@ -12,7 +12,7 @@ const ElearningThumbnail = ({ elearning }) => {
     return <div>Pas d'e-learning disponible</div>;
   }
 
-  const { id_item, title, price } = elearning; // Récupération des infos de l'e-learning
+  const { id_item, title, price} = elearning; // Récupération des infos de l'e-learning
 
   // Fonction pour naviguer lorsque l'élément est cliqué
   const handleClick = () => {
