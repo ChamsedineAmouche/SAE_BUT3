@@ -1,4 +1,5 @@
 const {getResultOfQuery} = require('../db_utils/db_functions');
+const {insertNewInscriptionForEvent} = require('../db_utils/db_insertion')
 
 const mysql = require('mysql2');
 
@@ -44,4 +45,12 @@ async function getCapacityRemaining(dataOfEvent) {
     return dataOfEvent[0].capacity - result[0].number;
 }
 
-module.exports = { getDataForEventPage };
+async function inscrireEvent(eventId, siren) {
+    try {
+        await insertNewInscriptionForEvent(eventId, siren);
+    } catch (error) {
+        console.error('Erreur lors de la récupération des données :', error);
+    }
+}
+
+module.exports = { getDataForEventPage, inscrireEvent };
