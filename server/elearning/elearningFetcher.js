@@ -3,6 +3,7 @@ const {getResultOfQuery} = require("../db_utils/db_functions");
 async function getElearningBySiren(siren) {
     try {
         const query = `SELECT * FROM elearning WHERE siren = ` + siren;
+        console.log(query)
         return await getResultOfQuery("vue_user", query);
     } catch (error) {
         console.error("Erreur lors de la récupération des données :", error);

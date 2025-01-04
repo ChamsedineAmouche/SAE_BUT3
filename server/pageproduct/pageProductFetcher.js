@@ -2,6 +2,7 @@ const mysql = require('mysql2');
 const {getResultOfQuery} = require("../db_utils/db_functions");
 
 async function getDataForProductPageById(id, currentSiren) {
+    console.log('ici' + currentSiren)
     const productData = await getProductDataById(id);
     const productWithSameCat = await getAllProductDataWithSameCategories(productData[0].id_object_type, id);
     const company = await getCompanyDataBySiren(productData[0].siren);
@@ -97,6 +98,7 @@ async function getProductData(id) {
         const query = `SELECT * FROM listing WHERE id_item = ${id}`
         const productData = await getResultOfQuery('vue_user', query);
         const {
+            id_item,
             id_object_type: idObjectType,
             id_condition_type: idConditionType,
             title,
@@ -109,7 +111,8 @@ async function getProductData(id) {
         const condition = await getConditionByID(idConditionType);
         const category = await getCategoryByID(idObjectType);
         return {
-            name: title,
+            id_item,
+            title,
             description,
             dimension,
             date: datePosted,
@@ -134,7 +137,7 @@ async function getListingBySirenAndStatus(siren, status){
         const depots = await Promise.all(
             listingItems.map(async (depot) => {
                 const productData = await getProductData(depot.id_item);
-                return { ...depot, productData };
+                return { ...productData };
             })
         );
 

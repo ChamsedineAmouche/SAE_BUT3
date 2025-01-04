@@ -1,6 +1,12 @@
 const {addObjectFavorite} = require('../object/objectInsert')
 const {deleteObjectFavorite} = require('../object/objectDelete')
 
+const getSirenFromRequest = (req) => {
+    const { siren } = req.query;
+    if (siren) return { siren, source: "query" };
+    if (req.session && req.session.user) return { siren: req.session.user.siren, source: "session" };
+    throw new Error("No siren provided in query or session.");
+};
 
 const addListingFavorite = async (req, res) => {
     try {
