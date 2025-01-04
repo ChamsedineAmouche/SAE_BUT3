@@ -70,7 +70,7 @@ const profileListing = async (req, res) => {
 
 const profilePurchases = async (req, res) => {
     try {
-        const siren = getSirenFromRequest(req);
+        const { siren, source } = getSirenFromRequest(req);
         const purchases = await getElearningBySiren(siren);
         res.json({ purchases });
     } catch (error) {
@@ -89,12 +89,12 @@ const profileTransactions = async (req, res) => {
                 const { id_item: idItem, date_transaction: dateTransaction, status } = transaction;
 
                 const productData = await getProductData(idItem);
-                const { idEmplacement } = productData;
+                const { idEmplacement, title } = productData;
 
                 const containerInfo = await getAdressContainerByEmplacement(idEmplacement);
                 const { adress: address, zipcode } = containerInfo[0];
 
-                return { idItem, dateTransaction, status, address, zipcode };
+                return { idItem,title, dateTransaction, status, address, zipcode };
             })
         );
         res.json({ transactions: enrichedTransactions });

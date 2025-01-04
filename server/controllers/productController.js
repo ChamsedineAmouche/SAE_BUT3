@@ -5,7 +5,7 @@ const product = async (req, res) => {
         const { id } = req.query;
         let pageProductData;
         if (req.session.user) {
-            pageProductData = await getDataForProductPageById(id, req.session.user);
+            pageProductData = await getDataForProductPageById(id, req.session.user.siren);
         }
         else {
             pageProductData = await getDataForProductPageById(id, "");

@@ -160,7 +160,7 @@ async function getAccountFavorites(siren) {
         const depots = await Promise.all(
             depotFav.map(async (depot) => {
                 const productData = await getProductData(depot.id_item);
-                return { ...depot, productData };
+                return { ... productData };
             })
         );
 
