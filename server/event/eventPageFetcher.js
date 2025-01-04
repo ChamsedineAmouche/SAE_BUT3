@@ -36,12 +36,4 @@ async function getInscriptionCompany(id) {
     return company;
 }
 
-async function inscrireEvent(eventId, siren) {
-    try {
-        await insertNewInscriptionForEvent(eventId, siren);
-    } catch (error) {
-        console.error('Erreur lors de la récupération des données :', error);
-    }
-}
-
-module.exports = { getDataForEventPage, inscrireEvent };
+module.exports = { getDataForEventPage };

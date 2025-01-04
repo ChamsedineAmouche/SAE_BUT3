@@ -1,5 +1,5 @@
 const { getDataForEventPage } = require('../event/eventPageFetcher')
-const { inscrireEvent } = require('../event/eventPageFetcher')
+const {insertNewInscriptionForEvent} = require("../db_utils/db_insertion");
 
 const getEventPageData = async (req, res) => {
     try {
@@ -17,7 +17,7 @@ const inscriptionEvent = async (req, res) => {
     try {
         const {eventId, siren} = req.query;
 
-        await inscrireEvent(eventId, siren);
+        await insertNewInscriptionForEvent(eventId, siren);
 
         // Si besoin, sauvegarde des fichiers et des données dans une base ou un fichier
         res.status(200).json({ message: 'Soumission reçue avec succès'});
