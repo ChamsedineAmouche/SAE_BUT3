@@ -3,8 +3,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import LocalisationSwal from '../components/LocalisationSwal/LocalisationSwal';
 import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
 const NewDeposit = () => {
+  const navigate = useNavigate();
   const [title, setTitle] = useState('');
   const [dimensions, setDimensions] = useState({ longueur: '', largeur: '', hauteur: '' });
   const [description, setDescription] = useState('');
@@ -83,7 +86,20 @@ const NewDeposit = () => {
 
       const result = await response.json();
       setSubmissions([...submissions, newSubmission]);
-      toast.success("Annonce publiée avec succès !");
+      Swal.fire({
+        icon: 'success',
+        title: 'Succès',
+        text: 'Annonce publiée avec succès !',
+        showCancelButton: true,
+        confirmButtonText: 'Voir',
+        cancelButtonText: 'Fermer',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          navigate(`/annonce/${result.id}`);
+        } else {
+          navigate('/');
+        }
+      });
     } catch (error) {
       toast.error("Erreur lors de la publication de l'annonce, veuillez réessayer.");
     }
