@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHeart as faHeartEmpty } from "@fortawesome/free-regular-svg-icons";
+import { faHeart as faHeartSolid } from "@fortawesome/free-solid-svg-icons";
 
-const DepositThumbnail = ({ object }) => {
+const DepositThumbnail = ({ object, isFavorite, onToggleFavorite }) => {
   const [image, setImage] = useState(null);
 
   useEffect(() => {
@@ -29,11 +32,10 @@ const DepositThumbnail = ({ object }) => {
     return <div>Pas d'objet disponible</div>;
   }
 
-  const { title, category, condition, availabilityDate, isUrgent } = object;
+  const { title, category, condition, id_item } = object;
 
   return (
     <div className="rounded-lg shadow-lg overflow-hidden relative w-full h-full bg-white">
-      {/* Image */}
       <div className="relative bg-yellowGreen1 bg-opacity-50 h-1/2">
         {image ? (
           <img src={image} alt={title} className="w-full h-full object-cover rounded-b-lg" />
@@ -41,26 +43,25 @@ const DepositThumbnail = ({ object }) => {
           <div className="w-full h-full bg-gray-200 flex items-center justify-center">
             <p>Chargement de l'image...</p>
           </div>
-        )}  
+        )}
       </div>
 
-      {/* Contenu */}
       <div className="p-3 h-full bg-yellowGreen1 bg-opacity-50">
-        {/* Titre */}
         <h3 className="text-2xl font-bold text-darkGreen mb-2 line-clamp-2">{title}</h3>
-        {/* Catégorie */}
         <p className="text-m font-semibold text-darkGreen">{category}</p>
-        {/* État */}
         <p className="text-sm text-darkGreen">{condition}</p>
-        {/* Badge URGENT */}
-        {isUrgent && (
-          <div className="absolute top-4 left-4 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-md">
-            URGENT
-          </div>
-        )}
+
+        <div className="absolute top-4 left-4">
+          <FontAwesomeIcon
+            icon={isFavorite ? faHeartSolid : faHeartEmpty}
+            className={`text-xl ${isFavorite ? 'text-red' : 'text-black'} cursor-pointer`}
+            onClick={() => onToggleFavorite(id_item, isFavorite)}
+          />
+        </div>
       </div>
     </div>
   );
 };
+
 
 export default DepositThumbnail;

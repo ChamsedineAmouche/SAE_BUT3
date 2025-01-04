@@ -20,6 +20,7 @@ import DetailsEvent from "./pages/DetailsEvents.jsx";
 import DetailsEventFuture from "./pages/DetailsEventsFuture.jsx";
 import DetailsVeille from "./pages/DetailsVeille.jsx";
 import DetailsElearning from "./pages/DetailsElearning.jsx";
+import DetailsDeposit from "./pages/DetailsDeposit.jsx";
 
 const App = () => {
   return (
@@ -48,7 +49,8 @@ const App = () => {
           <Route path="/details_event_future" element={<DetailsEventFuture />} />
           <Route path="/details_veille" element={<DetailsVeille />} />
           <Route path="/details_elearning" element={<DetailsElearning />} />
-        </Route>
+          <Route path="/depot/:id" element={<DetailsDeposit />} />
+          </Route>
       </Routes>
     </Router>
   );
