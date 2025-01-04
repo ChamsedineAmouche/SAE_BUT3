@@ -11,7 +11,6 @@ import OtherThumbnail from "../components/OtherThumbnail/OtherThumbnail";
 const Home = () => {
   
   const navigate = useNavigate()
-  const items = ["exemple 1", "exemple 2", "exemple 3", "exemple 4", "exemple 5", "exemple 6", "exemple 7", "exemple 8", "exemple 9"];
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [lastObject, setLastObject] = useState(null);
@@ -134,7 +133,10 @@ const Home = () => {
           >
             Voir les dépôts
           </button>
-          <button className="bg-white text-darkGreen px-6 py-3 text-lg font-semibold rounded-md hover:bg-opacity-90 transition duration-200">
+          <button 
+            className="bg-white text-darkGreen px-6 py-3 text-lg font-semibold rounded-md hover:bg-opacity-90 transition duration-200"
+            onClick={ () => navigate("/elearning")}
+          >
             Voir les e-learning
           </button>
         </div>
