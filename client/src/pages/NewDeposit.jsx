@@ -93,9 +93,13 @@ const NewDeposit = () => {
         showCancelButton: true,
         confirmButtonText: 'Voir',
         cancelButtonText: 'Fermer',
+        customClass: {
+          confirmButton: "px-4 py-2 bg-oliveGreen text-white rounded-md shadow hover:bg-yellowGreen1 mx-2",
+          cancelButton: "px-4 py-2 border bg-white border-oliveGreen text-oliveGreen rounded-md shadow hover:bg-oliveGreen hover:bg-opacity-20 mx-2",
+        },
       }).then((result) => {
         if (result.isConfirmed) {
-          navigate(`/annonce/${result.id}`);
+          navigate(`/depot/${result.id_item}`);
         } else {
           navigate('/');
         }

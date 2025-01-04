@@ -2,6 +2,7 @@ const mysql = require('mysql2');
 const {getResultOfQuery} = require("../db_utils/db_functions");
 
 async function getDataForProductPageById(id, currentSiren) {
+    console.log('ici' + currentSiren)
     const productData = await getProductDataById(id);
     const productWithSameCat = await getAllProductDataWithSameCategories(productData[0].id_object_type, id);
     const company = await getCompanyDataBySiren(productData[0].siren);
