@@ -4,10 +4,15 @@ const {getResultOfQuery} = require("../db_utils/db_functions");
 async function getDataForCatalogPage() {
     try {
         const allOfObjects =
-            await getResultOfQuery('vue_user', `SELECT l.id_item, l.title, l.date_posted, ct.label AS state, ot.label AS category
+            await getResultOfQuery('vue_user', `SELECT l.id_item, l.title, l.date_posted, ct.label AS state, ot.label AS category, COALESCE(lf.count, 0) AS nbLikes
             FROM listing l
             JOIN condition_type ct ON l.id_condition_type = ct.id_condition_type 
-            JOIN object_type ot ON l.id_object_type = ot.id_object_type 
+            JOIN object_type ot ON l.id_object_type = ot.id_object_type
+            LEFT JOIN (
+                SELECT id_item, COUNT(*) AS count
+                FROM listing_favorites
+                GROUP BY id_item
+            ) lf ON l.id_item = lf.id_item
             WHERE l.status = "active"
             ORDER BY l.date_posted DESC;
             `);
