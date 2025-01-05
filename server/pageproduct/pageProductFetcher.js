@@ -15,16 +15,27 @@ async function getDataForProductPageById(id, currentSiren) {
         "product" : productData,
         "recommandation" : productWithSameCat,
         "companySeller" : company,
-        "currentCompany" : currentCompany,
-        "localisation" : localisation
+        "currentCompany" : currentCompany
     };
 }
 
 async function getProductDataById(id) {
     try {
+        console.log(id);
         const query = `
-            SELECT l.*, ct.label AS state, ot.label AS category, c.adress, c.city, c.zipcode
+            SELECT l.*, 
+                   ct.label AS state, 
+                   ot.label AS category,
+                   c.adress, 
+                   c.city, 
+                   c.zipcode,
+                   COALESCE(lf.count, 0) AS nbLikes
             FROM listing l
+            LEFT JOIN (
+                SELECT id_item, COUNT(*) AS count
+                FROM listing_favorites
+                GROUP BY id_item
+            ) lf ON l.id_item = lf.id_item
             JOIN condition_type ct ON l.id_condition_type = ct.id_condition_type
             JOIN object_type ot ON l.id_object_type = ot.id_object_type
             JOIN emplacement e ON l.id_emplacement = e.id_emplacement
@@ -39,32 +50,17 @@ async function getProductDataById(id) {
 
 async function getAllProductDataWithSameCategories(categorieId, id) {
     try {
-        const query = `SELECT * FROM listing WHERE id_object_type = ${categorieId} AND id_item != ${id}`;
-        const productsData = await getResultOfQuery("vue_user", query);
-        const formattedProducts = await Promise.all(
-            productsData.map(async (product) => {
-                const {
-                    id_item,
-                    id_object_type: idObjectType,
-                    id_condition_type: idConditionType,
-                    title,
-                    status,
-                } = product;
-                const state = await getConditionByID(idConditionType);
-                const category = await getCategoryByID(idObjectType);
-                return {
-                    id_item,
-                    title,
-                    status,
-                    state,
-                    category,
-                };
-            })
-        );
-
-        return formattedProducts; // Retourne un tableau de produits formatés
+        const query = `SELECT l.*, COALESCE(lf.count, 0) AS nbLikes
+        FROM listing l
+        LEFT JOIN (
+            SELECT id_item, COUNT(*) AS count
+            FROM listing_favorites
+            GROUP BY id_item
+        ) lf ON l.id_item = lf.id_item
+           WHERE id_object_type = '${categorieId}' AND l.id_item != ` + id;
+        return await getResultOfQuery("vue_user", query);
     } catch (error) {
-        console.error("Erreur lors de la récupération des données des produits associés:", error);
+        console.error("Erreur lors de la récupération des données des produit associes:", error);
         throw error;
     }
 }
@@ -116,7 +112,7 @@ async function getProductData(id) {
             status,
             id_emplacement: idEmplacement,
             siren } = productData[0];
-        const state = await getConditionByID(idConditionType);
+        const condition = await getConditionByID(idConditionType);
         const category = await getCategoryByID(idObjectType);
         return {
             id_item,
@@ -126,7 +122,7 @@ async function getProductData(id) {
             date: datePosted,
             status,
             siren,
-            state,
+            condition,
             category,
             idEmplacement
         };
