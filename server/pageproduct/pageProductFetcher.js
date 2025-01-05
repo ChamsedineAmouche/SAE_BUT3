@@ -58,7 +58,30 @@ async function getAllProductDataWithSameCategories(categorieId, id) {
             GROUP BY id_item
         ) lf ON l.id_item = lf.id_item
            WHERE id_object_type = '${categorieId}' AND l.id_item != ` + id;
-        return await getResultOfQuery("vue_user", query);
+        const productsData = await getResultOfQuery("vue_user", query);
+        const formattedProducts = await Promise.all(
+            productsData.map(async (product) => {
+                const {
+                    id_item,
+                    id_object_type : idObjectType,
+                    id_condition_type : idConditionType,
+                    title,
+                    status,
+                    nbLikes
+                } = product;
+                const state = await getConditionByID(idConditionType);
+                const category = await getCategoryByID(idObjectType);
+                return {
+                    id_item,
+                    title,
+                    status,
+                    state,
+                    category,
+                    nbLikes
+                };
+            })
+        );
+        return formattedProducts;
     } catch (error) {
         console.error("Erreur lors de la récupération des données des produit associes:", error);
         throw error;
