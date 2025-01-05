@@ -32,7 +32,7 @@ const DepositThumbnail = ({ object, isFavorite, onToggleFavorite }) => {
     return <div>Pas d'objet disponible</div>;
   }
 
-  const { title, category, condition, id_item } = object;
+  const { title, category, state, id_item } = object;
 
   return (
     <div className="rounded-lg shadow-lg overflow-hidden relative w-full h-full bg-white">
@@ -49,7 +49,7 @@ const DepositThumbnail = ({ object, isFavorite, onToggleFavorite }) => {
       <div className="p-3 h-full bg-yellowGreen1 bg-opacity-50">
         <h3 className="text-2xl font-bold text-darkGreen mb-2 line-clamp-2">{title}</h3>
         <p className="text-m font-semibold text-darkGreen">{category}</p>
-        <p className="text-sm text-darkGreen">{condition}</p>
+        <p className="text-sm text-darkGreen">{state}</p>
 
         <div className="absolute top-4 left-4">
           <FontAwesomeIcon
