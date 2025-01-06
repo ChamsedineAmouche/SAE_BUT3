@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Switch from "../Switch/Switch";
-import SquareGrid from "../SquareGrid/SquareGrid";
+import StaticGrid from "../StaticGrid/StaticGrid";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBuildingColumns, faEdit, faPlusSquare, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
@@ -114,7 +114,7 @@ const MyPurchase = () => {
 
 	{selectedOption === "E-learning acheté" && (
         <div id="E-learning acheté" className="overflow-y-auto h-[70vh]">
-          <SquareGrid items={elearningThumbnail}/>
+          <StaticGrid items={elearningThumbnail}/>
         </div>
       )}
 

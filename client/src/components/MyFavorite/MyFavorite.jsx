@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Switch from "../Switch/Switch";
-import SquareGrid from "../SquareGrid/SquareGrid";
+import StaticGrid from "../StaticGrid/StaticGrid";
 import DepositThumbnail from "../DepositThumbnail/DepositThumbnail";
 import ElearningThumbnail from "../ElearningThumbnail/ElearningThumbnail";
 
@@ -118,12 +118,12 @@ const MyFavorite = () => {
 
       {selectedOption === "Dépots" && (
         <div id="Dépots" className="overflow-y-auto h-[70vh]">
-          <SquareGrid items={depositThumbnails} />
+          <StaticGrid items={depositThumbnails} />
         </div>
       )}
       {selectedOption === "E-learnings" && (
         <div id="E-learnings" className="overflow-y-auto h-[70vh]">
-          <SquareGrid items={elearningThumbnail} />
+          <StaticGrid items={elearningThumbnail} />
         </div>
       )}
     </div>
