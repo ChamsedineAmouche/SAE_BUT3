@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom"; // Pour la navigation après connexion
+import Cookies from 'js-cookie';
+
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -33,6 +35,11 @@ const Login = () => {
       if (result.success) {
         setErrorMessage(result.message);
         navigate("/");
+        Cookies.set('jwt', result.token, {
+          path: '/',
+          secure: false,
+          sameSite: 'Strict',
+        });
         window.location.reload();
       } else {
         setErrorMessage(result.message);

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBell, faSearch, faSquarePlus, faEllipsis } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
+import Cookies from 'js-cookie'
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -52,6 +53,7 @@ const Navbar = () => {
       if (response.ok) {
         setUserSession(null);
         setIsAdmin(false);
+        Cookies.remove('jwt',{path:'/'})
         navigate("/login"); 
       } else {
         console.error("Échec de la déconnexion");
