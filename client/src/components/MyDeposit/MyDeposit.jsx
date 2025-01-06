@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Switch from "../Switch/Switch";
-import SquareGrid from "../SquareGrid/SquareGrid";
+import StaticGrid from "../StaticGrid/StaticGrid";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlusSquare } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
@@ -72,12 +72,12 @@ const MyDeposit = () => {
 
       {selectedOption === "Publié" && (
         <div id="Publié" className="overflow-y-auto h-[70vh]">
-          <SquareGrid items={activeDepositThumbnails}/>
+          <StaticGrid items={activeDepositThumbnails}/>
         </div>
       )}
       {selectedOption === "Brouillon" && (
         <div id="Brouillon" className="overflow-y-auto h-[70vh]">
-          <SquareGrid items={draftDepositThumbnails}/>
+          <StaticGrid items={draftDepositThumbnails}/>
         </div>
       )}
     </div>
