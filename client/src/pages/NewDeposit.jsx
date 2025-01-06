@@ -5,6 +5,7 @@ import LocalisationSwal from '../components/LocalisationSwal/LocalisationSwal';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
+import Cookies from 'js-cookie';
 
 const NewDeposit = () => {
   const navigate = useNavigate();
@@ -22,8 +23,18 @@ const NewDeposit = () => {
 
   const handleFileChange = (event) => {
     const filesRecup = Array.from(event.target.files);
-    setSelectedFiles(filesRecup);
+    //Filtre pour garder que les images
+    const imageFiles = filesRecup.filter((file) => {
+      if (!file.type.startsWith("image/")) {
+        alert(`Fichier non autorisé : ${file.name}! Seules les images sont autorisées !!`);
+        return false;
+      }
+      return true;
+    });
+    console.log('Fichiers sélectionnés :', imageFiles);
+    setSelectedFiles(imageFiles);
   };
+
 
   const readFileAsBase64 = (file) => {
     return new Promise((resolve, reject) => {
@@ -134,18 +145,32 @@ const NewDeposit = () => {
   };
 
   useEffect(() => {
-    fetch('/addAnnounce')
-      .then((response) => response.json())
-      .then((data) => {
-        setData(data);
-        setIsLoading(false);
-      })
-      .catch((error) => {
-        setIsLoading(false);
-        toast.error('Erreur lors du chargement des données');
-      });
-  }, []);
+    const authToken = Cookies.get('jwt');
+    if (!authToken) {
+      toast.error("Connectez vous pour déposer une annonce")
+      navigate("/login");
+      return; 
+    }
+  
+    fetch('/addAnnounce', { headers: { 'Authorization': authToken } })
+    .then((response) => {
+      if (!response.status==401) {
+        toast.error("Connectez vous pour déposer une annonce")
+        navigate("/login");
+      }
+      return response.json();
+    })
+    .then((data) => {
+      setData(data);
+      setIsLoading(false);
+    })
+    .catch((error) => {
+      console.log(error)
+      setIsLoading(false);
+      toast.error('Erreur lors du chargement des données');
+    });
 
+  }, []);
   if (isLoading) return <p>Chargement...</p>;
 
   return (

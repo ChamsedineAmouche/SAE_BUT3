@@ -1,4 +1,5 @@
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 const { getResultOfQuery } = require("../db_utils/db_functions");
 
 async function validateActive(email) {
@@ -42,7 +43,8 @@ async function verifyCredentials(email, password) {
         }
 
         console.log("Connexion réussie");
-        return { success: true, message: "Connexion réussie", siren : result[0].siren};
+        const token = jwt.sign({ siren: result[0].siren}, 'mdp', {expiresIn: '1h'});
+        return { success: true, message: "Connexion réussie", siren : result[0].siren, token: token};
     } catch (error) {
         return { success: false, message: "Erreur interne de vérification" };
     }
