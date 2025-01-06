@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import circularEconomyImg from "../assets/images/circular_economy.png"; 
-import SquareGrid from "../components/SquareGrid/SquareGrid"; 
+import circularEconomyImg from "../assets/images/circular_economy.png";  
 import Carousel from "../components/Carousel/Carousel";
 
 const Evenement = () => {
@@ -8,9 +7,7 @@ const Evenement = () => {
 
   const handleChange = (event) => {
     setSearchText(event.target.value);
-  };
-
-  const items = ["Exemple 1", "Exemple 2", "Exemple 3", "Exemple 4", "Exemple 5"]; 
+  }; 
 
   const items2 = ["exemple 1", "exemple 2", "exemple 3", "exemple 4", "exemple 5", "exemple 6", "exemple 7", "exemple 8", "exemple 9"];
 
@@ -34,7 +31,7 @@ const Evenement = () => {
             type="text"
             value={searchText}
             onChange={handleChange}
-            placeholder="Rechercher un objet"
+            placeholder="Rechercher un événement"
             className="bg-white text-black px-4 py-2 rounded-full focus:outline-none w-full"
           />
           <svg

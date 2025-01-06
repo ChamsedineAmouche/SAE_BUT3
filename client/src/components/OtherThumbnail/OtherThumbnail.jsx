@@ -51,8 +51,6 @@ const OtherThumbnail = ({ other, type }) => {
         <h3 className="text-2xl font-bold text-darkGreen mb-2 line-clamp-2">
           {title}
         </h3>
-        {/* Catégorie */}
-        <p className="text-m font-semibold text-darkGreen w-full">Catégorie</p>
       </div>
     </div>
   );
