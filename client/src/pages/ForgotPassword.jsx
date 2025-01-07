@@ -73,7 +73,7 @@ const ForgotPassword = () => {
             <div className="flex flex-col items-center gap-4">
               <button
                 type="submit"
-                className="bg-darkGreen text-white px-6 py-3 text-lg font-semibold rounded-md hover:bg-opacity-80 transition duration-200"
+                className="bg-oliveGreen text-white px-6 py-3 text-lg font-semibold rounded-md hover:bg-opacity-90 transition duration-200"
               >
                 Envoyer
               </button>

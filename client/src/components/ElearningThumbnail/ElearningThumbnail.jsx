@@ -4,35 +4,66 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart as faHeartEmpty } from "@fortawesome/free-regular-svg-icons";
 import { faHeart as faHeartSolid } from "@fortawesome/free-solid-svg-icons";
 
-const ElearningThumbnail = ({ elearning, isFavorite, onToggleFavorite }) => {
+const ElearningThumbnail = ({ elearning }) => {
   const navigate = useNavigate(); // Hook pour navigation
-  const [favorite, setFavorite] = useState(isFavorite); // État local pour le favori
+  const [favorite, setFavorite] = useState(false); // État local pour le favori
 
   useEffect(() => {
-    setFavorite(isFavorite); // Mettre à jour l'état local si isFavorite change
-  }, [isFavorite]);
+    if (!elearning || !elearning.course_id) return;
+
+    // Vérifier si l'élément est favori
+    fetch(`/profileFavorite`)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        const isFavorited = data.elearning.some((item) => item.course_id === elearning.course_id);
+        setFavorite(isFavorited);
+      })
+      .catch((error) => {
+        console.error("Erreur lors de la vérification des favoris :", error);
+      });
+  }, [elearning]);
 
   if (!elearning) {
     return <div>Pas d'e-learning disponible</div>;
   }
 
-  const { course_id, title, price, categoryName } = elearning; // Récupération des infos de l'e-learning
+  const { course_id, title, price, categoryName } = elearning;
 
-  // Fonction pour naviguer lorsque l'élément est cliqué
-   const handleClick = () => {
-     navigate(`/details_elearning?id=${course_id}`); // Redirection vers la page DetailsElearning avec l'ID
+  const handleClick = () => {
+    navigate(`/details_elearning?id=${course_id}`);
   };
 
-  // Fonction pour gérer le changement de favori
-  const handleFavoriteClick = () => {
-    setFavorite(!favorite); // Changer l'état du favori localement
-    onToggleFavorite(); // Appeler la fonction onToggleFavorite pour mettre à jour le serveur
+  const handleFavoriteClick = (e) => {
+    e.stopPropagation();
+
+    const endpoint = favorite
+      ? `/deleteElearningFavorite?elearningid=${course_id}`
+      : `/addElearningFavorite?elearningid=${course_id}`;
+
+    setFavorite(!favorite);
+
+    fetch(endpoint, { method: "GET" })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .catch((error) => {
+        console.error("Erreur lors de la mise à jour des favoris :", error);
+        setFavorite((prev) => !prev);
+      });
   };
 
   return (
     <div 
       onClick={handleClick}
-      className="rounded-lg shadow-lg overflow-hidden relative w-full h-full bg-white cursor-pointer transform hover:scale-105 transition-all duration-300"
+      className="rounded-lg shadow-lg overflow-hidden relative w-full h-full bg-white cursor-pointer"
     >
       {/* Image */}
       <div className="relative bg-yellowGreen1 bg-opacity-50 h-1/2">
@@ -57,11 +88,11 @@ const ElearningThumbnail = ({ elearning, isFavorite, onToggleFavorite }) => {
         {/* Cœur pour favori */}
         <div 
           className="absolute top-4 left-4 cursor-pointer"
-          onClick={handleFavoriteClick} // Gestion du clic pour changer l'état du favori
+          onClick={handleFavoriteClick}
         >
           <FontAwesomeIcon
-            icon={favorite ? faHeartSolid : faHeartEmpty} // Afficher un cœur plein ou vide selon favorite
-            className={`text-xl ${favorite ? 'text-red' : 'text-black'}`} // Si favori = vrai, rouge, sinon noir
+            icon={favorite ? faHeartSolid : faHeartEmpty}
+            className={`text-xl ${favorite ? 'text-red' : 'text-black'}`}
           />
         </div>
       </div>
