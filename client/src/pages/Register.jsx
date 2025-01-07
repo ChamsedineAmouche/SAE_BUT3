@@ -27,7 +27,7 @@ const Register = () => {
     console.log("Sending form data:", formData);  
   
     try {
-      const response = await fetch("/register", {
+      const response = await fetch("/inscription", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -51,7 +51,7 @@ const Register = () => {
   return (
     <div className="register-page">
       {/* Section Formulaire */}
-      <div className="flex justify-center items-center h-screen bg-gray-100 mt-12">
+      <div className="flex justify-center items-center h-screen bg-gray-100">
         <div className="w-full max-w-4xl bg-white p-8 rounded-lg shadow-lg">
           <h2 className="text-3xl font-semibold text-darkGreen text-center mb-8">
             Inscription

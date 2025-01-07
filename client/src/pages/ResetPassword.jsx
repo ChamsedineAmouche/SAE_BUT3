@@ -60,7 +60,7 @@ const ResetPassword = () => {
         setErrorMessage(result.message);
 
         setTimeout(() => {
-          navigate("/login"); // Redirection vers la page de login après 3 secondes
+          navigate("/connexion"); // Redirection vers la page de login après 3 secondes
         }, 3000); // Délai de 3000 millisecondes (3 secondes)
         
       }  else {

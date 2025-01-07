@@ -20,7 +20,7 @@ const Login = () => {
     console.log("Sending login data:", formData);  
 
     try {
-      const response = await fetch("/login", {
+      const response = await fetch("/connexion", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -98,14 +98,14 @@ const Login = () => {
                 Se connecter
               </button>
 
-              <a href="/register" className="w-full">
+              <a href="/inscription" className="w-full">
               <p className="text-center text-sm text-darkGreen underline">
               Pas de compte ?
               S'enregistrer
               </p>
 
               </a>
-              <a href="/forgot_password" className="w-full">
+              <a href="/oubli_mot_de_passe" className="w-full">
               <p className="text-center text-sm text-darkGreen underline">
               Mot de passe oublié ?
               </p>

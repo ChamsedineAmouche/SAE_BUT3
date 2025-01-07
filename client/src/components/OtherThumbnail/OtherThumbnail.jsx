@@ -41,7 +41,7 @@ const OtherThumbnail = ({ other, type }) => {
   return (
     <div
       onClick={handleClick}
-      className="rounded-lg shadow-lg overflow-hidden relative w-full h-full bg-white cursor-pointer transform hover:scale-105 transition-all duration-300"
+      className="rounded-lg shadow-lg overflow-hidden relative w-full h-full bg-white cursor-pointer"
     >
       {/* Image */}
       <div className="relative bg-yellowGreen1 bg-opacity-50 h-1/2">

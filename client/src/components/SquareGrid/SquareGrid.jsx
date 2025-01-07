@@ -7,7 +7,7 @@ const SquareGrid = ({ items }) => {
         <div
           key={index}
           onClick={item.onClick} // Appel de la fonction onClick pour scroller
-          className="w-80 h-80 bg-gray-300 text-black flex justify-center items-center rounded-lg shadow-md hover:bg-gray-400 transition-colors cursor-pointer"
+          className="w-40 h-40 bg-gray-300 text-black flex justify-center items-center rounded-lg shadow-md hover:bg-gray-400 transition-colors cursor-pointer"
         >
           {item.label} {/* Affiche le nom de la catégorie */}
         </div>
