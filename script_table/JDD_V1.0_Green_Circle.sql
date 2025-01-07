@@ -1,3 +1,23 @@
+-- payment_data
+use payment_data
+
+-- Delete all records from the tables in payment_data
+DELETE FROM payment_data.payment_cards;
+
+INSERT INTO payment_data.payment_cards (card_name, card_holder_first_name, card_holder_last_name, encrypted_card_number, expiration_date, siren, is_default, encryption_key)
+VALUES
+('Carte d''entreprise', 'CCI', 'Val d''europe', 'ff8a18a48550d9a0d3e509bb4627818e:94c5496d47822845fc4eb7aee0864f97efd95e0f2dba021ff22de02edcd983b5', '15/26', '18770918300235', 1, 'c868236ed8c141f4e70d2b5f5b1bb389cd2d54d76b31514ae1ca2f6ce1c353e0'),
+('Carte CE', 'Jules', 'Dupont', '48546f8ca0d7392aabd72d91ddd17c37:692e07f0254f279713a68bd3bfcbf72fd8f88b46b9d533207092f35c4e27c236', '12/29', '18770918300235', 0,  '53b702b8c6427892fb718b3e501f5969c375232f3c933792ecf0d3cb241fb824'),
+('Carte Serris', 'CCI', 'Val d''europe', '04b3023fdf48d7872b6c507a0c936d5d:0e0bdd244b777128c4854748b69dae1616676a35ce22f1c99e22aba44a9866af', '10/25', '18770918300235', 0,  'a2e84f76e49a4767a1ca0edf706141638138e134ba5568b6f15abc83c3a14561'),
+('Carte d''entreprise', 'Ada', 'Val d''europe', '82165431841e2ca3097fbc89eb68ec12:3d986c075d603cd5566d5478f404761ffcabb938e166758ac6dac82f82f4501c', '12/25', '33865714102081', 1,  '2ddb197c75b3dc81e38201243b3e12e61a61fab9f8e2bb1b78e68306a83af269'),
+('Carte Pro', 'Andreu', 'Corp', '2b89f0a0a23eb3d347b3d0cd97469f3b:c7697449887a04ba66c42e85870f3ac2076c5f80f95e6369de0933df81266b44', '12/25', '39966767400051', 1,  '5a12b1d68ee7b615e858c5858a0c802e0f81aad8bdae27e6352c87f674df1e65'),
+('Carte Professionelle', 'Ludendo', 'Corp', '2aecc4b2e9168592f4ec40fd55bb6ba9:06d8473c54f7cd2a9b4190ad92e2fdca8b84b2505db6b09b56801a34232cdde0', '12/25', '48830276100090', 1, 'd10e3663369336cf3e52f7d8e591f65515269bafae2673ddfba71bfb376a82d7'),
+('Carte Garde', 'SIMT', 'Medecine du travail', '3b3a2a332a3dec71306fee3097a696d6:1cbc05645086230496fdc8a73fc779067a0143006c680e6ed928b553375c7f24', '09/25', '78496197100305', 1, 
+'0a9a86535995c333b218ef187a20b0bf89882606558e6af20d582d673694d25c'),
+('Carte Achat', 'LGP', 'Entreprise', 'dc0aea6690d8d41bb2036c68cb6df34e:7258c4e6916f2db1a79205d6784f34b99af9c890e855caa67af4aa9a395148e4', '07/25', '80503352900027', 1,  'bc6ea0f8355bd1665e4400d46a5e349111b26a1a834d402701607b5db0306ee4'),
+('Carte Pro', 'Sessad', 'Corp', '1ddd6d1bc8d959425c90a432ae62eb21:1c1526a374d8a35a8aa8e3d692a93c80e64d6773588361f2b99eb9e11777ac71', '01/25', '80503352900027', 1,  'cf6f99cb0d06e33f96fe2a07310ea539202b05e5925d6cba510cb6ad5d462ec7');
+
+
 -- vue_admin
 USE vue_admin;
 
