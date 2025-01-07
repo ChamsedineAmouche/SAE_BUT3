@@ -226,14 +226,14 @@ USE payment_data;
 -- Création des tables pour le schéma bank_data
 CREATE TABLE payment_cards (
     id SERIAL PRIMARY KEY,
-    card_name VARCHAR(100) NOT NULL,       -- Nom donné à la carte (ex: "Carte Pro")
-    card_holder_first_name VARCHAR(50),   -- Prénom sur la carte
-    card_holder_last_name VARCHAR(50),    -- Nom sur la carte
-    encrypted_card_number VARCHAR(255), -- Numéro de carte (chiffré)
-    expiration_date VARCHAR(5) NOT NULL,        -- Date d'expiration (format: YYYY-MM-DD)
-    siren CHAR(14),                  -- SIREN auquel appartient la carte
-    is_default BOOLEAN DEFAULT FALSE,     -- Carte par défaut
+    card_name VARCHAR(100) NOT NULL,      
+    card_holder_first_name VARCHAR(50),  
+    card_holder_last_name VARCHAR(50),   
+    encrypted_card_number VARCHAR(255), 
+    expiration_date VARCHAR(5) NOT NULL,     
+    siren CHAR(14),                
+    is_default BOOLEAN DEFAULT FALSE,   
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    encryption_key VARCHAR(255) -- Numéro de carte (chiffré)
+    encryption_key VARCHAR(255) 
 );
