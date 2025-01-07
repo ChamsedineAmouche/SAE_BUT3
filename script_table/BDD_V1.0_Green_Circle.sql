@@ -229,11 +229,11 @@ CREATE TABLE payment_cards (
     card_name VARCHAR(100) NOT NULL,       -- Nom donné à la carte (ex: "Carte Pro")
     card_holder_first_name VARCHAR(50),   -- Prénom sur la carte
     card_holder_last_name VARCHAR(50),    -- Nom sur la carte
-    encrypted_card_number VARBINARY(512), -- Numéro de carte (chiffré)
+    encrypted_card_number VARCHAR(255), -- Numéro de carte (chiffré)
     expiration_date DATE NOT NULL,        -- Date d'expiration (format: YYYY-MM-DD)
     siren CHAR(14),                  -- SIREN auquel appartient la carte
     is_default BOOLEAN DEFAULT FALSE,     -- Carte par défaut
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    iv VARBINARY(16) NOT NULL             -- Vecteur d'initialisation pour le chiffrement
+    encryption_key VARCHAR(255) -- Numéro de carte (chiffré)
 );

@@ -1,26 +1,58 @@
 const crypto = require('crypto');
+const { getResultOfQuery } = require('../db_utils/db_functions');
 
-async function decryptCardNumber(encryptedData, iv) {
-    const algorithm = 'aes-256-cbc';
-    const key = crypto.randomBytes(32); // Clé utilisée pour le chiffrement
-    const decipher = crypto.createDecipheriv(algorithm, key, Buffer.from(iv, 'hex'));
-    let decrypted = decipher.update(encryptedData, 'hex', 'utf8');
-    decrypted += decipher.final('utf8');
-    return decrypted;
+const ALGORITHM = 'aes-256-cbc';
+// Clé de chiffrement (32 octets pour AES-256)
+
+function decryptCardNumber(encryptedData, encryptionKey) {
+    const [initializationVectorAsHex, encryptedDataAsHex] = encryptedData?.split(':');
+    const initializationVector = Buffer.from(initializationVectorAsHex, 'hex');
+    const hashedEncryptionKey = crypto.createHash('sha256').update(encryptionKey).digest('hex').substring(0, 32);
+    const decipher = crypto.createDecipheriv('aes256', hashedEncryptionKey, initializationVector);
+    
+    let decryptedText = decipher.update(Buffer.from(encryptedDataAsHex, 'hex'));
+    decryptedText = Buffer.concat([decryptedText, decipher.final()]);
+  
+    return decryptedText.toString();
+}
+
+function formatDateToDM(dateString) {
+    const date = new Date(dateString);
+    const day = date.getUTCDate();
+    const month = date.getUTCMonth() + 1; // Les mois sont indexés à partir de 0
+    return `${day}/${month}`;
+}
+
+function maskCardNumber(cardNumber) {
+    const visibleDigits = cardNumber.slice(-4);
+    return '•'.repeat(12) + visibleDigits; // Utilisation de dots pour masquer
 }
 
 async function getCardDetailsBySiren(siren) {
     try {
-        const query = `SELECT encrypted_card_number, iv FROM payment_cards WHERE siren=${siren}`;
-        const result =await getResultOfQuery("payment_data", query);
-        const { encrypted_card_number, iv } = result.rows[0];
+        const query = `SELECT id, encrypted_card_number, encryption_key, expiration_date FROM payment_cards WHERE siren=${siren}`;
+        console.log("Executing query:", query);
+        const results = await getResultOfQuery("payment_data", query);
 
-        // Déchiffrement
-        const cardNumber = decryptCardNumber(encrypted_card_number, iv);
-        return cardNumber;
+        if (!results || results.length === 0) {
+            throw new Error("Aucune carte trouvée pour ce SIREN.");
+        }
+
+        const cards = results.map((row) => {
+            const {id :id, encrypted_card_number: encryptedCard, encryption_key: encryptionKey, expiration_date: expiryDate } = row;
+            const cardNumber = decryptCardNumber(encryptedCard, encryptionKey);
+            const maskedCardNumber = maskCardNumber(cardNumber);
+            const formattedDate = formatDateToDM(expiryDate);
+
+            return { id : id, cardNumber: maskedCardNumber, expiryDate: formattedDate };
+        });
+        return cards;
     } catch (error) {
-        throw new Error("Erreur lors de la récupération des labels des types d'objet");
+        console.error('Erreur lors de la récupération des détails des cartes :', error);
+        throw new Error("Erreur lors de la récupération des détails des cartes.");
     }
 }
 
-module.exports = { getCardDetailsBySiren };
+
+
+module.exports = { getCardDetailsBySiren, decryptCardNumber };
