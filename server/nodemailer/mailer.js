@@ -47,5 +47,35 @@ L'équipe GreenCircle.`;
     return sendMail(toEmail, subject, text);
 };
 
+const sendMailForReservation = (toEmail, itemName, companyName, itemId ) => {
+    const subject = 'Objet réservé';
+    const url = `http://localhost:3000/product?id=${itemId}`;
+    const text = `Bonjour ${companyName},
+    
+Vous avez bien réservé un(e) ${itemName}.
+Cliquez sur le lien suivant pour consulter l'objet : ${url}
 
-module.exports = { sendMail, sendConfirmationEmail, sendMailForgotPassword };
+S'il ne s'agit pas de vous contactez au plus vite les équipes de Green Circle.
+
+Cordialement,
+L'équipe GreenCircle.`;
+
+    return sendMail(toEmail, subject, text);
+};
+
+const sendMailForReservationOurObject = (toEmail, itemName, companyName, itemId ) => {
+    const subject = 'Objet réservé';
+    const url = `http://localhost:3000/product?id=${itemId}`;
+    const text = `Bonjour ${companyName},
+    
+Votre ${itemName} a été réservé(e) !.
+Cliquez sur le lien suivant pour consulter l'objet : ${url}
+
+Cordialement,
+L'équipe GreenCircle.`;
+
+    return sendMail(toEmail, subject, text);
+};
+
+
+module.exports = { sendMail, sendConfirmationEmail, sendMailForgotPassword, sendMailForReservation, sendMailForReservationOurObject };
