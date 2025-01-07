@@ -27,9 +27,9 @@ const reserveProduct = async (req, res) => {
         await reserveProductInDataBase(idItem, siren)
         const companyData = await getCompanyDataBySiren(siren);
         const productData = await getProductData(idItem);
-        const companyOfObject = await getCompanyDataBySiren(productData[0].siren);
-        sendMailForReservation(companyData[0].email, productData[0].title, companyData[0].nom, idItem);
-        sendMailForReservationOurObject(companyOfObject[0].email, productData[0].title, companyOfObject[0].nom, idItem);
+        const companyOfObject = await getCompanyDataBySiren(productData.siren);
+        sendMailForReservation(companyData[0].email, productData.title, companyData[0].nom, idItem);
+        sendMailForReservationOurObject(companyOfObject[0].email, productData.title, companyOfObject[0].nom, idItem);
         res.status(200).json({ message: 'Soumission reçue avec succès'});
     } catch (error) {
         console.error("Erreur lors du traitement des paramètres :", error);
