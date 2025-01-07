@@ -16,7 +16,7 @@ const ElearningThumbnail = ({ elearning, isFavorite, onToggleFavorite }) => {
     return <div>Pas d'e-learning disponible</div>;
   }
 
-  const { course_id, title, price } = elearning; // Récupération des infos de l'e-learning
+  const { course_id, title, price, categoryName } = elearning; // Récupération des infos de l'e-learning
 
   // Fonction pour naviguer lorsque l'élément est cliqué
    const handleClick = () => {
@@ -49,7 +49,7 @@ const ElearningThumbnail = ({ elearning, isFavorite, onToggleFavorite }) => {
         <h3 className="text-2xl font-bold text-darkGreen mb-2 line-clamp-2">{title}</h3>
         <div className="flex justify-between items-center">
           {/* Catégorie */}
-          <p className="text-m font-semibold text-darkGreen w-full">Catégorie</p>
+          <p className="text-m font-semibold text-darkGreen w-full">{categoryName}</p>
           {/* Prix */}
           <p className="text-5xl font-bold text-darkGreen pr-2">{price}€</p>
         </div>

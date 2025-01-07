@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import circularEconomyImg from "../assets/images/circular_economy.png";  
+import circularEconomyImg from "../assets/images/circular_economy.png";
 import Carousel from "../components/Carousel/Carousel";
 import OtherThumbnail from "../components/OtherThumbnail/OtherThumbnail";
 
@@ -23,16 +23,9 @@ const Evenement = () => {
         }
         const data = await response.json();
 
-        const now = new Date();
-        const incoming = data.events.Incoming.map((event) => ({
-          ...event,
-          event_date: new Date(event.event_date), // Convertir en objet Date
-        }));
-        const passed = incoming.filter((event) => event.event_date < now);
-        const upcoming = incoming.filter((event) => event.event_date >= now);
-
-        setIncomingEvents(upcoming);
-        setPassedEvents(passed);
+        // Utilisation directe des données fournies par l'endpoint
+        setIncomingEvents(data.events.Incoming || []);
+        setPassedEvents(data.events.Passed || []);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -119,7 +112,7 @@ const Evenement = () => {
               <OtherThumbnail
                 key={event.event_id}
                 other={{
-                  id_item: event.event_id,
+                  id_event: event.event_id,
                   title: event.title,
                 }}
                 type="event"
