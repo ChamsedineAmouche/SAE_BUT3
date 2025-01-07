@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Layout from "./components/Layout/Layout.jsx";
 import Home from "./pages/Home";
@@ -15,31 +15,168 @@ import Test from "./pages/Test.jsx";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword.jsx";
 import Account from "./pages/Account.jsx";
-import { Toaster } from 'react-hot-toast';  // Importation de Toaster
+import { Toaster } from 'react-hot-toast';  
+import DetailsEvent from "./pages/DetailsEvents.jsx";
+import DetailsEventFuture from "./pages/DetailsEventsFuture.jsx";
+import DetailsVeille from "./pages/DetailsVeille.jsx";
+import DetailsElearning from "./pages/DetailsElearning.jsx";
+import DetailsDeposit from "./pages/DetailsDeposit.jsx";
+import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute .jsx";
 
 const App = () => {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [loading, setLoading] = useState(true);
+  
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const response = await fetch("/getSession", {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+        });
+  
+        if (response.ok) {
+          setIsAuthenticated(true);
+        } else {
+          setIsAuthenticated(false);
+        }
+      } catch (error) {
+        console.error("Erreur lors de la vérification de l'authentification :", error);
+        setIsAuthenticated(false);
+      } finally {
+        setLoading(false);
+      }
+    };
+  
+    checkAuth();
+  }, []);
+  
+  if (loading) {
+    return <div>Chargement...</div>; // Ou un spinner de chargement
+  }
+  
+  
   return (
     <Router>
-      {/* Le composant Toaster est ici pour afficher les toasts */}
       <Toaster />
       <Routes>
+          {/* Pages auxquelles on peut accéder sans être connecté */}
+          <Route path="/connexion" element={<Login />} />
+          <Route path="/connexion_admin" element={<LoginAdmin />} />
+          <Route path="/inscription" element={<Register />} />
+          <Route path="/inscription_validation" element={<InscriptionValidation />} />
+          <Route path="/oubli_mot_de_passe" element={<ForgotPassword />} />
+          <Route path="/reinitialisation_mot_de_passe" element={<ResetPassword />} />
+
         {/* Route avec le Layout global */}
         <Route path="/" element={<Layout />}>
-          <Route index element={<Home />} />
+          {/* Pages où la connexion est obligatoire */}
+          <Route 
+            index 
+            element={
+              <ProtectedRoute isAuthenticated={isAuthenticated}>
+                <Home />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/depot" 
+            element={
+              <ProtectedRoute isAuthenticated={isAuthenticated}>
+                <Deposit />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/nouveau_depot" 
+            element={
+              <ProtectedRoute isAuthenticated={isAuthenticated}>
+                <NewDeposit />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/evenement" 
+            element={
+              <ProtectedRoute isAuthenticated={isAuthenticated}>
+                <Evenenement />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/veille" 
+            element={
+              <ProtectedRoute isAuthenticated={isAuthenticated}>
+                <Veille />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/elearning" 
+            element={
+              <ProtectedRoute isAuthenticated={isAuthenticated}>
+                <Elearning />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/test" 
+            element={
+              <ProtectedRoute isAuthenticated={isAuthenticated}>
+                <Test />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/mon_compte" 
+            element={
+              <ProtectedRoute isAuthenticated={isAuthenticated}>
+                <Account />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/details_event" 
+            element={
+              <ProtectedRoute isAuthenticated={isAuthenticated}>
+                <DetailsEvent />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/details_event_future" 
+            element={
+              <ProtectedRoute isAuthenticated={isAuthenticated}>
+                <DetailsEventFuture />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/details_veille" 
+            element={
+              <ProtectedRoute isAuthenticated={isAuthenticated}>
+                <DetailsVeille />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/details_elearning" 
+            element={
+              <ProtectedRoute isAuthenticated={isAuthenticated}>
+                <DetailsElearning />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/depot/:id" 
+            element={
+              <ProtectedRoute isAuthenticated={isAuthenticated}>
+                <DetailsDeposit />
+              </ProtectedRoute>
+            } 
+          />
           <Route path="*" element={<h1>404 - Page non trouvée</h1>} />
-          <Route path="/depot" element={<Deposit />} />
-          <Route path="/nouveau_depot" element={<NewDeposit />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/loginadmin" element={<LoginAdmin />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/evenement" element={<Evenenement />} />
-          <Route path="/veille" element={<Veille />} />
-          <Route path="/elearning" element={<Elearning />} />
-          <Route path="/inscription_validation" element={<InscriptionValidation />} />
-          <Route path="/forgot_password" element={<ForgotPassword />} />
-          <Route path="/reset_password" element={<ResetPassword />} />
-          <Route path="/test" element={<Test />} />
-          <Route path="/mon_compte" element={<Account />} />
         </Route>
       </Routes>
     </Router>

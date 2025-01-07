@@ -15,19 +15,19 @@ const ResetPassword = () => {
       const token = params.get("token");
       const siren = params.get("siren");
 
-      try {
-        const response = await fetch(`/verifyToken?token=${token}&siren=${siren}`);
-        const result = await response.json();
+      // try {
+      //   const response = await fetch(`/verifyToken?token=${token}&siren=${siren}`);
+      //   const result = await response.json();
 
-        if (!result.success) {
-          setErrorMessage(result.message);
-          navigate("/"); // Redirection vers la page d'accueil
-        }
-      } catch (error) {
-        console.error("Erreur :", error);
-        setErrorMessage("Une erreur est survenue. Veuillez réessayer.");
-        navigate("/"); // Redirection en cas d'erreur
-      }
+      //   if (!result.success) {
+      //     setErrorMessage(result.message);
+      //     navigate("/"); // Redirection vers la page d'accueil
+      //   }
+      // } catch (error) {
+      //   console.error("Erreur :", error);
+      //   setErrorMessage("Une erreur est survenue. Veuillez réessayer.");
+      //   navigate("/"); // Redirection en cas d'erreur
+      // }
     };
 
     verifyToken();
@@ -60,7 +60,7 @@ const ResetPassword = () => {
         setErrorMessage(result.message);
 
         setTimeout(() => {
-          navigate("/login"); // Redirection vers la page de login après 3 secondes
+          navigate("/connexion"); // Redirection vers la page de login après 3 secondes
         }, 3000); // Délai de 3000 millisecondes (3 secondes)
         
       }  else {
@@ -121,7 +121,7 @@ const ResetPassword = () => {
             <div className="flex flex-col items-center gap-4">
               <button
                 type="submit"
-                className="bg-darkGreen text-white px-6 py-3 text-lg font-semibold rounded-md hover:bg-opacity-80 transition duration-200"
+                className="bg-oliveGreen text-white px-6 py-3 text-lg font-semibold rounded-md hover:bg-opacity-90 transition duration-200"
               >
                 Envoyer
               </button>

@@ -1,4 +1,5 @@
-const {getResultOfQuery, insertListingWithImages} = require('../db_utils/db_functions');
+const {getResultOfQuery} = require('../db_utils/db_functions');
+const {insertListingWithImages} = require('../db_utils/db_insertion')
 
 const mysql = require('mysql2');
 

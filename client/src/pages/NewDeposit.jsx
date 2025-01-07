@@ -3,8 +3,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import LocalisationSwal from '../components/LocalisationSwal/LocalisationSwal';
 import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
 const NewDeposit = () => {
+  const navigate = useNavigate();
   const [title, setTitle] = useState('');
   const [dimensions, setDimensions] = useState({ longueur: '', largeur: '', hauteur: '' });
   const [description, setDescription] = useState('');
@@ -83,7 +86,24 @@ const NewDeposit = () => {
 
       const result = await response.json();
       setSubmissions([...submissions, newSubmission]);
-      toast.success("Annonce publiée avec succès !");
+      Swal.fire({
+        icon: 'success',
+        title: 'Succès',
+        text: 'Annonce publiée avec succès !',
+        showCancelButton: true,
+        confirmButtonText: 'Voir',
+        cancelButtonText: 'Fermer',
+        customClass: {
+          confirmButton: "px-4 py-2 bg-oliveGreen text-white rounded-md shadow hover:bg-yellowGreen1 mx-2",
+          cancelButton: "px-4 py-2 border bg-white border-oliveGreen text-oliveGreen rounded-md shadow hover:bg-oliveGreen hover:bg-opacity-20 mx-2",
+        },
+      }).then((result) => {
+        if (result.isConfirmed) {
+          navigate(`/depot/${result.id_item}`);
+        } else {
+          navigate('/');
+        }
+      });
     } catch (error) {
       toast.error("Erreur lors de la publication de l'annonce, veuillez réessayer.");
     }

@@ -102,4 +102,3 @@ const insertListingWithImages = async (newSubmission) => {
 };
 
 module.exports = { getResultOfQuery, insertListingWithImages,getSafeResultOfQuery };
-

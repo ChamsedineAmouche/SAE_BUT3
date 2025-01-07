@@ -33,7 +33,7 @@ L'équipe GreenCircle.`;
 
 const sendMailForgotPassword = (siren, toEmail, token, companyName ) => {
     const subject = 'Modification de votre mot de passe';
-    const resetLink = `http://localhost:3000/reset_password?token=${token}&siren=${siren}`;
+    const resetLink = `http://localhost:3000/reinitialisation_mot_de_passe?token=${token}&siren=${siren}`;
     const text = `Bonjour ${companyName},
     
 Vous avez fait une demande de réinitialisation de votre mot de passe.

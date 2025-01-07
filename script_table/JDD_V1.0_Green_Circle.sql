@@ -262,7 +262,8 @@ Ces solutions technologiques, combinées à des politiques publiques ambitieuses
 INSERT INTO vue_admin.event (title,description,event_date,location,capacity,status,admin_id) VALUES
 	('Réunion avec les acteurs Green Circle','Réunion avec les acteurs de Green Circle pour comprendre l''organisation et les tenants et aboutissant de l''application ','2025-02-01 15:15:01','Online',10,'Incoming', 77939440),
 	('Réunion de lancement de Green Circle','Réunion de lancement de l''application en compagnie de tout les acteurs','2025-02-03 10:15:01','IRL',15,'Incoming', 77939440),
-	('Explication de l''application aux usagers','Réunion d''explication du fonctionnement de l''application aux usagers','2025-02-02 23:30:01','Online',3,'Full', 77939440);
+	('Explication de l''application aux usagers','Réunion d''explication du fonctionnement de l''application aux usagers','2025-02-02 23:30:01','Online',3,'Incoming', 77939440),
+     ('Premiers tests du site web','Réunion pour tester le site et verifier que nous avons aucuns bug','2024-12-07 23:30:01','Online',6,'Passed', 77939440);
 
 INSERT INTO vue_admin.elearning_list (course_id, title, description, price, admin_id,category) VALUES
 	('1', 'La Face Cachée de l''économie Circulaire', 'Ce cours explore les aspects méconnus et les défis de l''économie circulaire, souvent perçue comme une solution idéale pour la durabilité. Il met en lumière les paradoxes de ce modèle, comme la surconsommation liée à la prolongation de la vie des produits et les effets pervers sur certaines chaînes de valeur. Le cours examine aussi les inégalités sociales et économiques, notamment l''accès aux ressources et aux emplois dans ce secteur. Les limites technologiques et logistiques du recyclage sont analysées, tout comme les difficultés de gouvernance liées à l''absence de normes mondiales. Enfin, il propose des pistes pour rendre l''économie circulaire plus inclusive, équitable et efficace.', '35', 77939440, 1),
@@ -419,7 +420,8 @@ INSERT INTO vue_user.emplacement (available,dimension,id_Container) VALUES
 INSERT INTO vue_user.event (event_id,title,description,event_date,location,capacity,status) VALUES
 	(1,'Réunion avec les acteurs Green Circle','Réunion avec les acteurs de Green Circle pour comprendre l''organisation et les tenants et aboutissant de l''application ','2025-02-01 15:15:01','Online',10,'Incoming'),
 	(2,'Réunion de lancement de Green Circle','Réunion de lancement de l''application en compagnie de tout les acteurs','2025-02-03 10:15:01','IRL',15,'Incoming'),
-	(3,'Explication de l''application aux usagers','Réunion d''explication du fonctionnement de l''application aux usagers','2025-02-02 23:30:01','Online',3,'Full');
+	(3,'Explication de l''application aux usagers','Réunion d''explication du fonctionnement de l''application aux usagers','2025-02-02 23:30:01','Online',3,'Incoming'),
+	(4,'Premiers tests du site web','Réunion pour tester le site et verifier que nous avons aucuns bug','2024-12-07 23:30:01','Online',6,'Passed');
 
 INSERT INTO vue_user.category (Libelle) VALUES('Economie Circulaire'),('Développement durable et entreprises '),('Formation aux normes'),('Gouvernances d''entreprises');
 

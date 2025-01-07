@@ -62,13 +62,13 @@ const Account = () => {
         </ul>
         <div className="mt-24 flex justify-center">
             <button className="bg-oliveGreen text-white px-6 py-3 text-lg font-semibold rounded-md hover:bg-opacity-90 transition duration-200">
-                Se déconncter
+                Se déconnecter
             </button>
         </div>
       </div>
 
       {/* Contenu principal */}
-      <div className="flex-1 p-8">
+      <div className="flex-1 p-8 overflow-y-auto"> 
         {activeComponent}
       </div>
     </div>

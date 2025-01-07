@@ -1,30 +1,70 @@
-import React, { useState } from "react";
-import circularEconomyImg from "../assets/images/circular_economy.png"; 
-import SquareGrid from "../components/SquareGrid/SquareGrid"; 
+import React, { useState, useEffect, useRef } from "react";
+import circularEconomyImg from "../assets/images/circular_economy.png";
+import SquareGrid from "../components/SquareGrid/SquareGrid";
 import Carousel from "../components/Carousel/Carousel";
+import ElearningThumbnail from "../components/ElearningThumbnail/ElearningThumbnail";
 
 const Elearning = () => {
   const [searchText, setSearchText] = useState("");
+  const [categories, setCategories] = useState([]);
+  const [elearningsByCategory, setElearningsByCategory] = useState({});
+  const carouselRefs = useRef([]);
+
+  useEffect(() => {
+    // Fetch des données de l'API
+    const fetchElearningData = async () => {
+      try {
+        const response = await fetch("/elearningList");
+        const data = await response.json();
+        console.log(data);
+
+        // Extraire les catégories
+        const categories = data.categories.map((category) => ({
+          label: category.Libelle,
+          id_category: category.id,
+        }));
+
+        // Grouper les e-learnings par catégorie
+        const groupedElearnings = categories.reduce((acc, category) => {
+          acc[category.label] = data.eLearnings
+            .filter((elearning) => elearning.id_category === category.id_category)
+            .flatMap((elearning) => elearning.elearning_info);
+          return acc;
+        }, {});
+
+        setCategories(categories);
+        setElearningsByCategory(groupedElearnings);
+      } catch (error) {
+        console.error("Erreur lors du fetch des données :", error);
+      }
+    };
+
+    fetchElearningData();
+  }, []);
 
   const handleChange = (event) => {
     setSearchText(event.target.value);
   };
 
-  const items = ["Exemple 1", "Exemple 2", "Exemple 3", "Exemple 4", "Exemple 5"]; 
-
-  const items2 = ["exemple 1", "exemple 2", "exemple 3", "exemple 4", "exemple 5", "exemple 6", "exemple 7", "exemple 8", "exemple 9"];
+  const handleCategoryClick = (index) => {
+    carouselRefs.current[index].scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+  };
 
   return (
-    <div className="deposit relative">
-      {/* Image en haut à droite */}
-      <img 
-        src={circularEconomyImg} 
-        alt="Circular Economy" 
+    <div className="catalogue relative">
+      {/* Image décorative */}
+      <img
+        src={circularEconomyImg}
+        alt="Circular Economy"
         className="absolute top-1 right-1 w-1/5 h-auto"
       />
-      
+
+      {/* Titre principal */}
       <h1 className="text-4xl font-poppins max-w-[51%] pt-[150px] pl-[60px]">
-        Bienvenue sur la page e-learning, explorez le catalogue et faites votre choix !
+        Bienvenue sur la page e-learning, explorez nos formations et développez vos compétences !
       </h1>
 
       {/* Barre de recherche */}
@@ -34,7 +74,7 @@ const Elearning = () => {
             type="text"
             value={searchText}
             onChange={handleChange}
-            placeholder="Rechercher un objet"
+            placeholder="Rechercher une formation"
             className="bg-white text-black px-4 py-2 rounded-full focus:outline-none w-full"
           />
           <svg
@@ -44,23 +84,44 @@ const Elearning = () => {
             viewBox="0 0 24 24"
             stroke="currentColor"
           >
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-4.35-4.35M8 11a4 4 0 118 0 4 4 0 01-8 0z" />
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M21 21l-4.35-4.35M8 11a4 4 0 118 0 4 4 0 01-8 0z"
+            />
           </svg>
         </div>
       </div>
-      <SquareGrid items={items} />
-      <div className="p-8">
-        <Carousel items={items2} title={"Exemple de catégorie"} />
-      </div>
-      <div className="p-8">
-        <Carousel items={items2} title={"Exemple de catégorie"} />
-      </div>
-      <div className="p-8">
-        <Carousel items={items2} title={"Exemple de catégorie"} />
-      </div>
-      <div className="p-8">
-        <Carousel items={items2} title={"Exemple de catégorie"} />
-      </div>
+
+      {/* SquareGrid avec les catégories */}
+      <SquareGrid
+        items={categories.map((category, index) => ({
+          label: category.label,
+          onClick: () => handleCategoryClick(index),
+        }))}
+      />
+
+      {/* Carrousels pour chaque catégorie */}
+      {categories.map((category, index) => (
+        <div
+          className="p-8"
+          key={category.id_category}
+          ref={(el) => (carouselRefs.current[index] = el)}
+        >
+          <Carousel
+            items={
+              elearningsByCategory[category.label]?.map((elearning) => (
+                <ElearningThumbnail
+                  key={`thumbnail-${elearning.course_id}`}
+                  elearning={elearning}
+                />
+              )) || []
+            }
+            title={`Formations dans la catégorie : ${category.label}`}
+          />
+        </div>
+      ))}
     </div>
   );
 };

@@ -7,6 +7,7 @@ const Navbar = () => {
   const navigate = useNavigate();
   const [userSession, setUserSession] = useState(null); 
   const [isAdmin, setIsAdmin] = useState(false);
+  const [showAccountMenu, setShowAccountMenu] = useState(false);
 
   useEffect(() => {
     const checkSession = async () => {
@@ -52,7 +53,7 @@ const Navbar = () => {
       if (response.ok) {
         setUserSession(null);
         setIsAdmin(false);
-        navigate("/login"); 
+        navigate("/connexion"); 
       } else {
         console.error("Échec de la déconnexion");
       }
@@ -61,13 +62,17 @@ const Navbar = () => {
     }
   };
 
+  const toggleAccountMenu = () => {
+    setShowAccountMenu((prev) => !prev);
+  };
+
   return (
-    <nav className="bg-oliveGreen text-white fixed top-0 left-0 w-full h-20 z-20 shadow-xl">
-      <div className="flex items-center justify-between py-4 px-4 ">
+    <nav className="bg-oliveGreen text-white fixed top-0 left-0 w-full z-20 shadow-xl">
+      <div className="flex items-center justify-between py-3 px-4 ">
         {/* Left Section - Logo */}
         <div className="flex items-center space-x-4 flex-shrink-0">
           <a href="/">
-            <img src="" alt="Logo" className="h-10 w-10" />
+            <img src="/logo_gc.png" alt="Logo" className="h-14" />
           </a>
 
           <h1 className="text-xl font-bold">
@@ -106,25 +111,31 @@ const Navbar = () => {
             <FontAwesomeIcon icon={faBell} className="text-2xl hover:text-darkGreen" />
           </button>
 
-
-          <div className="h-10 w-10 rounded-full overflow-hidden border border-white ml-12">
-            <a href="/mon_compte">
+          <div className="relative">
+            <div 
+              className="h-10 w-10 rounded-full overflow-hidden border border-white cursor-pointer"
+              onClick={toggleAccountMenu}
+            >
               <img src="/default_user.png" alt="Profil" className="h-full w-full object-cover" />
-            </a>
+            </div>
 
-          </div>
-
-          {/* "Logout" or "Se connecter" button */}
-          {userSession ? (
-            <button onClick={handleLogout} className="ml-4 text-white hover:text-darkGreen">
-              Logout
-            </button>
-          ) : (
-            <button onClick={() => navigate("/login")} className="ml-4 text-white hover:text-darkGreen">
-              Se connecter
-            </button>
+            {showAccountMenu && (
+            <div className="absolute right-0 mt-2 w-48 bg-white text-black rounded-lg shadow-lg">
+              <button 
+                className="block w-full text-left px-4 py-2 hover:bg-gray-200 hover:rounded-t-lg"
+                onClick={() => navigate("/mon_compte")}
+              >
+                Voir le profil
+              </button>
+              <button 
+                className="block w-full text-left px-4 py-2 hover:bg-gray-200 hover:rounded-b-lg"
+                onClick={handleLogout}
+              >
+                Se déconnecter
+              </button>
+            </div>
           )}
-
+          </div>
         </div>
       </div>
     </nav>

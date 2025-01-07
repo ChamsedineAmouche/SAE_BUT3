@@ -1,18 +1,48 @@
-import React, { useState } from "react";
-import circularEconomyImg from "../assets/images/circular_economy.png"; 
-import SquareGrid from "../components/SquareGrid/SquareGrid"; 
+import React, { useState, useEffect } from "react";
+import circularEconomyImg from "../assets/images/circular_economy.png";
 import Carousel from "../components/Carousel/Carousel";
+import OtherThumbnail from "../components/OtherThumbnail/OtherThumbnail";
 
 const Evenement = () => {
   const [searchText, setSearchText] = useState("");
+  const [incomingEvents, setIncomingEvents] = useState([]);
+  const [passedEvents, setPassedEvents] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   const handleChange = (event) => {
     setSearchText(event.target.value);
   };
 
-  const items = ["Exemple 1", "Exemple 2", "Exemple 3", "Exemple 4", "Exemple 5"]; 
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        const response = await fetch("/catalogEvent");
+        if (!response.ok) {
+          throw new Error("Erreur lors de la récupération des événements.");
+        }
+        const data = await response.json();
 
-  const items2 = ["exemple 1", "exemple 2", "exemple 3", "exemple 4", "exemple 5", "exemple 6", "exemple 7", "exemple 8", "exemple 9"];
+        // Utilisation directe des données fournies par l'endpoint
+        setIncomingEvents(data.events.Incoming || []);
+        setPassedEvents(data.events.Passed || []);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchEvents();
+  }, []);
+
+  if (loading) {
+    return <div className="text-center mt-24">Chargement des événements...</div>;
+  }
+
+  if (error) {
+    return <div className="text-center mt-24 text-red-500">{error}</div>;
+  }
 
   return (
     <div className="evenement">
@@ -34,7 +64,7 @@ const Evenement = () => {
             type="text"
             value={searchText}
             onChange={handleChange}
-            placeholder="Rechercher un objet"
+            placeholder="Rechercher un événement"
             className="bg-white text-black px-4 py-2 rounded-full focus:outline-none w-full"
           />
           <svg
@@ -48,11 +78,48 @@ const Evenement = () => {
           </svg>
         </div>
       </div>
+
+      {/* Carrousel des événements Incoming */}
       <div className="p-8">
-        <Carousel items={items2} title={"Les prochains événements à ne pas manquer"} />
+        <Carousel
+          items={incomingEvents
+            .filter((event) =>
+              event.title.toLowerCase().includes(searchText.toLowerCase())
+            )
+            .map((event) => (
+              <OtherThumbnail
+                key={event.event_id}
+                other={{
+                  id_event: event.event_id,
+                  title: event.title,
+                  status: event.status
+                }}
+                type="event"
+              />
+            ))}
+          title={"Les prochains événements à ne pas manquer"}
+        />
       </div>
+
+      {/* Carrousel des événements Passés */}
       <div className="p-8">
-        <Carousel items={items2} title={"Replay des derniers événements"} />
+        <Carousel
+          items={passedEvents
+            .filter((event) =>
+              event.title.toLowerCase().includes(searchText.toLowerCase())
+            )
+            .map((event) => (
+              <OtherThumbnail
+                key={event.event_id}
+                other={{
+                  id_event: event.event_id,
+                  title: event.title,
+                }}
+                type="event"
+              />
+            ))}
+          title={"Replay des derniers événements"}
+        />
       </div>
     </div>
   );
