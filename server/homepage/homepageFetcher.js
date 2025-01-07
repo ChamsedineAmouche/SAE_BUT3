@@ -59,7 +59,7 @@ async function getDataForHomePage(){
             ORDER BY l.date_posted DESC;
             `);
         const event = await getResultOfQuery('vue_admin','SELECT * FROM event');
-        const elearning = await getResultOfQuery('vue_admin','SELECT * FROM elearning_list');
+        const elearning = await getResultOfQuery('vue_admin','SELECT l.*, c.Libelle AS categoryName FROM vue_admin.elearning_list l JOIN vue_user.category c ON l.category = c.id');
         const article = await getResultOfQuery('vue_admin','SELECT * FROM article ORDER BY article_date DESC');
         return {
             "numberOfCompany" : numberOfCompany,
