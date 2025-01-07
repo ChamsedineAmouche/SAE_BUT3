@@ -400,7 +400,8 @@ INSERT INTO vue_user.emplacement (available,dimension,id_Container) VALUES
 INSERT INTO vue_user.event (event_id,title,description,event_date,location,capacity,status) VALUES
 	(1,'Réunion avec les acteurs Green Circle','Réunion avec les acteurs de Green Circle pour comprendre l''organisation et les tenants et aboutissant de l''application ','2025-02-01 15:15:01','Online',10,'Incoming'),
 	(2,'Réunion de lancement de Green Circle','Réunion de lancement de l''application en compagnie de tout les acteurs','2025-02-03 10:15:01','IRL',15,'Incoming'),
-	(3,'Explication de l''application aux usagers','Réunion d''explication du fonctionnement de l''application aux usagers','2025-02-02 23:30:01','Online',3,'Incoming');
+	(3,'Explication de l''application aux usagers','Réunion d''explication du fonctionnement de l''application aux usagers','2025-02-02 23:30:01','Online',3,'Incoming'),
+	('Premiers tests du site web','Réunion pour tester le site et verifier que nous avons aucuns bug','2024-12-07 23:30:01','Online',6,'Passed', 77939440);
 
 INSERT INTO vue_user.category (Libelle) VALUES('Economie Circulaire'),('Développement durable et entreprises '),('Formation aux normes'),('Gouvernances d''entreprises');
 
