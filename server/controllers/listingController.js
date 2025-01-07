@@ -39,4 +39,4 @@ const deleteListingFavorite = async (req, res) => {
         res.status(500).json({ error: error.message || "Erreur interne du serveur" });
     }
 };
-module.exports = { addListingFavorite, deleteListingFavorite };
+module.exports = { addListingFavorite, deleteListingFavorite, getSirenFromRequest };

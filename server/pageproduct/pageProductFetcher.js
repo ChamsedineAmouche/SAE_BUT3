@@ -176,4 +176,4 @@ async function getListingBySirenAndStatus(siren, status){
     }
 }
 
-module.exports = { getDataForProductPageById, getProductData, getListingBySirenAndStatus };
+module.exports = { getDataForProductPageById, getProductData, getListingBySirenAndStatus, getCompanyDataBySiren };
