@@ -12,7 +12,6 @@ const DepositThumbnail = ({ object }) => {
   useEffect(() => {
     if (!object || !object.id_item) return;
 
-    // Fetch the image
     fetch(`/image?id=${object.id_item}`)
       .then((response) => {
         if (!response.ok) {
@@ -32,7 +31,6 @@ const DepositThumbnail = ({ object }) => {
         console.error("Erreur lors de la récupération des images :", error);
       });
 
-    // Check if the item is in the favorites
     fetch(`/profileFavorite`)
       .then((response) => {
         if (!response.ok) {
@@ -58,7 +56,6 @@ const DepositThumbnail = ({ object }) => {
       ? `/deleteListingFavorite?idItem=${object.id_item}`
       : `/addListingFavorite?idItem=${object.id_item}`;
 
-    // Optimistic update
     setIsFavorite(!isFavorite);
 
     fetch(endpoint, { method: "GET" })
@@ -70,7 +67,6 @@ const DepositThumbnail = ({ object }) => {
       })
       .catch((error) => {
         console.error("Erreur lors de la mise à jour des favoris :", error);
-        // Revert optimistic update on failure
         setIsFavorite((prev) => !prev);
       });
   };
