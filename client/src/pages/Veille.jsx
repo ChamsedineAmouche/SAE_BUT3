@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import circularEconomyImg from "../assets/images/circular_economy.png";
 import Carousel from "../components/Carousel/Carousel";
 import OtherThumbnail from "../components/OtherThumbnail/OtherThumbnail";
+import {getAuthHeaders}  from "../utils/jwtAuth";
 
 const Veille = () => {
   const [searchText, setSearchText] = useState("");

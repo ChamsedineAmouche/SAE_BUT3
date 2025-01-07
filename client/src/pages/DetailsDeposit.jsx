@@ -8,6 +8,7 @@ import Map from "../components/Map/Map";
 import Swal from "sweetalert2";
 import Zoom from 'react-medium-image-zoom';
 import 'react-medium-image-zoom/dist/styles.css';
+import {getAuthHeaders}  from "../utils/jwtAuth";
 
 const DetailsDeposit = () => {
   const { id } = useParams();
@@ -41,10 +42,14 @@ const DetailsDeposit = () => {
   };
 
   useEffect(() => {
-    fetch(`/product?id=${id}`)
+    fetch(`/product?id=${id}`,{ headers: { 'Authorization': getAuthHeaders } })
       .then((response) => {
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
+        if (!response.status==401) {
+          //toast.error("Connectez vous")
+          navigate("/login");
+        }
+        else if(!response.ok){
+          throw new Error(`Erreur HTTP: ${response.status}`);
         }
         return response.json();
       })

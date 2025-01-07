@@ -6,6 +6,7 @@ import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import Cookies from 'js-cookie';
+import { getAuthHeaders } from '../utils/jwtAuth';
 
 const NewDeposit = () => {
   const navigate = useNavigate();
@@ -87,13 +88,19 @@ const NewDeposit = () => {
     };
 
     try {
-      const response = await fetch('http://localhost:5001/insert', {
+      const response = await fetch('/insert', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', ...getAuthHeaders() },
         body: JSON.stringify(newSubmission),
       });
-
-      if (!response.ok) throw new Error(`Erreur HTTP: ${response.status}`);
+      console.log(response)
+      if (!response.status==401) {
+        toast.error("Connectez vous pour déposer une annonce")
+        navigate("/login");
+      }
+      else if(!response.ok){
+        throw new Error(`Erreur HTTP: ${response.status}`);
+      }
 
       const result = await response.json();
       setSubmissions([...submissions, newSubmission]);
@@ -152,7 +159,7 @@ const NewDeposit = () => {
       return; 
     }
   
-    fetch('/addAnnounce', { headers: { 'Authorization': authToken } })
+    fetch('/addAnnounce', { headers: getAuthHeaders() })
     .then((response) => {
       if (!response.status==401) {
         toast.error("Connectez vous pour déposer une annonce")
