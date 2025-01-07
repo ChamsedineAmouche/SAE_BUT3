@@ -7,6 +7,7 @@ import { faBoxArchive, faCalendarDay, faEye, faGraduationCap } from "@fortawesom
 import DepositThumbnail from "../components/DepositThumbnail/DepositThumbnail";
 import ElearningThumbnail from "../components/ElearningThumbnail/ElearningThumbnail";
 import OtherThumbnail from "../components/OtherThumbnail/OtherThumbnail";
+import {getAuthHeaders}  from "../utils/jwtAuth";
 
 const Home = () => {
   
