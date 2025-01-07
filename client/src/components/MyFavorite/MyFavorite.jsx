@@ -88,10 +88,6 @@ const MyFavorite = () => {
     <DepositThumbnail
       key={`thumbnail-${depots.id_item}`}
       object={depots}
-      isFavorite={favorites.includes(depots.id_item)}
-      onToggleFavorite={() =>
-        toggleFavorite(depots.id_item, favorites.includes(depots.id_item), "deposit")
-      }
     />
   ));
 
