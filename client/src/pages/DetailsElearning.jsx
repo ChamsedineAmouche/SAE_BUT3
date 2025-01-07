@@ -1,11 +1,18 @@
 import React, { useEffect } from "react";
+import { useLocation } from "react-router-dom"; // Importer useLocation
 import Carousel from "../components/Carousel/Carousel"; // Assurez-vous d'importer le Carousel correctement
 import productImage from "../assets/images/circular_economy.png"; // Exemple d'image
 
 const DetailsElearning = () => {
+  const location = useLocation(); // Hook pour accéder à l'URL
+  const queryParams = new URLSearchParams(location.search); // Crée un objet pour lire les paramètres de l'URL
+  const id = queryParams.get("id"); // Récupère la valeur de "id"
+
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, []);
+    // Optionnel : vous pouvez utiliser `id` ici pour effectuer une requête API
+    console.log("ID récupéré :", id);
+  }, [id]);
 
   const price = "999,99 €"; // Exemple de prix, vous pouvez mettre n'importe quel prix jusqu'à 1000 €
   const items = [
@@ -21,7 +28,7 @@ const DetailsElearning = () => {
       {/* Texte en haut à gauche */}
       <div className="text-left">
         <p className="text-lg font-medium text-gray-700">
-          E-learning/RSE
+          E-learning/RSE (ID: {id}) {/* Affichage de l'ID pour vérification */}
         </p>
       </div>
 
@@ -35,7 +42,11 @@ const DetailsElearning = () => {
       {/* Pavé de texte centré */}
       <div className="text-center mt-12 max-w-3xl mx-auto">
         <p className="text-lg text-gray-600 leading-relaxed">
-          Cette formation vous permettra de développer des compétences essentielles pour votre avenir. Nos experts vous guideront à travers un programme complet qui vous prépare aux défis du monde professionnel. Ne manquez pas cette opportunité d'apprendre auprès des meilleurs !
+          Cette formation vous permettra de développer des compétences
+          essentielles pour votre avenir. Nos experts vous guideront à travers
+          un programme complet qui vous prépare aux défis du monde
+          professionnel. Ne manquez pas cette opportunité d'apprendre auprès
+          des meilleurs !
         </p>
       </div>
 
