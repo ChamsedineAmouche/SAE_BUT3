@@ -24,10 +24,17 @@ const OtherThumbnail = ({ other, type }) => {
 
   const handleClick = () => {
     if (type === "event") {
-      navigate("/details_event"); 
+      const {id_event, status} = other;
+      if (status === "Incoming") {
+        navigate(`/details_event_future?id=${id_event}`);
+      }
+      else {
+        navigate(`/details_event?id=${id_event}`);
+      } 
     }
     if (type === "veille") {
-      navigate("/details_veille"); 
+      const {id_veille} = other;
+      navigate(`/details_veille?id=${id_veille}`); 
     }
   };
 

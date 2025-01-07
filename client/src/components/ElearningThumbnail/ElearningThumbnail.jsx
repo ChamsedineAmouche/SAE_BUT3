@@ -16,12 +16,12 @@ const ElearningThumbnail = ({ elearning, isFavorite, onToggleFavorite }) => {
     return <div>Pas d'e-learning disponible</div>;
   }
 
-  const { id_elearning, title, price } = elearning; // Récupération des infos de l'e-learning
+  const { course_id, title, price } = elearning; // Récupération des infos de l'e-learning
 
   // Fonction pour naviguer lorsque l'élément est cliqué
-  // const handleClick = () => {
-  //   navigate(`/details_elearning/${id_elearning}`); // Redirection vers la page DetailsElearning avec l'ID
-  // };
+   const handleClick = () => {
+     navigate(`/details_elearning?id=${course_id}`); // Redirection vers la page DetailsElearning avec l'ID
+  };
 
   // Fonction pour gérer le changement de favori
   const handleFavoriteClick = () => {
@@ -31,7 +31,8 @@ const ElearningThumbnail = ({ elearning, isFavorite, onToggleFavorite }) => {
 
   return (
     <div 
-      className="rounded-lg shadow-lg overflow-hidden relative w-full h-full bg-white transform transition-all duration-300"
+      onClick={handleClick}
+      className="rounded-lg shadow-lg overflow-hidden relative w-full h-full bg-white cursor-pointer transform hover:scale-105 transition-all duration-300"
     >
       {/* Image */}
       <div className="relative bg-yellowGreen1 bg-opacity-50 h-1/2">

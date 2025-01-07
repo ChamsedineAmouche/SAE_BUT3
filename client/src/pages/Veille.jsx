@@ -78,7 +78,7 @@ const Veille = () => {
             <OtherThumbnail
               key={article.id_veille}
               other={{
-                id_item: article.id_veille,
+                id_veille: article.id_veille,
                 title: article.title,
               }}
               type="veille"
