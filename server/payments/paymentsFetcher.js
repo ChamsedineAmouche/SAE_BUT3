@@ -16,13 +16,6 @@ function decryptCardNumber(encryptedData, encryptionKey) {
     return decryptedText.toString();
 }
 
-function formatDateToDM(dateString) {
-    const date = new Date(dateString);
-    const day = date.getUTCDate();
-    const month = date.getUTCMonth() + 1; // Les mois sont indexés à partir de 0
-    return `${day}/${month}`;
-}
-
 function maskCardNumber(cardNumber) {
     const visibleDigits = cardNumber.slice(-4);
     return '•'.repeat(12) + visibleDigits; // Utilisation de dots pour masquer
@@ -42,9 +35,8 @@ async function getCardDetailsBySiren(siren) {
             const {id :id, encrypted_card_number: encryptedCard, encryption_key: encryptionKey, expiration_date: expiryDate } = row;
             const cardNumber = decryptCardNumber(encryptedCard, encryptionKey);
             const maskedCardNumber = maskCardNumber(cardNumber);
-            const formattedDate = formatDateToDM(expiryDate);
 
-            return { id : id, cardNumber: maskedCardNumber, expiryDate: formattedDate };
+            return { id : id, cardNumber: maskedCardNumber, expiryDate: expiryDate };
         });
         return cards;
     } catch (error) {

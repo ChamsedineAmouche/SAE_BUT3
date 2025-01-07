@@ -230,7 +230,7 @@ CREATE TABLE payment_cards (
     card_holder_first_name VARCHAR(50),   -- Prénom sur la carte
     card_holder_last_name VARCHAR(50),    -- Nom sur la carte
     encrypted_card_number VARCHAR(255), -- Numéro de carte (chiffré)
-    expiration_date DATE NOT NULL,        -- Date d'expiration (format: YYYY-MM-DD)
+    expiration_date VARCHAR(5) NOT NULL,        -- Date d'expiration (format: YYYY-MM-DD)
     siren CHAR(14),                  -- SIREN auquel appartient la carte
     is_default BOOLEAN DEFAULT FALSE,     -- Carte par défaut
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
