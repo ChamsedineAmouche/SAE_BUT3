@@ -1,5 +1,5 @@
 const {insertCardDetails } = require("../payments/paymenstInsert")
-const {getCardDetailsBySiren } = require("../payments/paymentsFetcher")
+const {getCardDetailsBySiren, getDefaultCardBySiren } = require("../payments/paymentsFetcher")
 const {deleteCardById} = require("../payments/paymentDelete")
 const {updateCardByID} = require("../payments/paymentUpdate")
 const getSirenFromRequest = (req) => {
@@ -27,7 +27,7 @@ const insertCard = async (req, res) => {
     }
 };
 
-const getCard = async (req, res) => {
+const getCards = async (req, res) => {
     try {
         const { siren, source } = getSirenFromRequest(req);
 
@@ -42,6 +42,23 @@ const getCard = async (req, res) => {
         res.status(500).json({ error: 'Erreur interne.' });
     }
 };
+
+const getDefaultCard = async (req, res) => {
+    try {
+        const { siren, source } = getSirenFromRequest(req);
+
+        if (source === "session") {
+            const cards = await getDefaultCardBySiren(siren);
+            res.status(200).json({ cards });
+        } else {
+            res.status(400).json({ error: 'Source invalide.' });
+        }
+    } catch (error) {
+        console.error('Erreur lors du traitement de la soumission :', error);
+        res.status(500).json({ error: 'Erreur interne.' });
+    }
+};
+
 
 const deleteCard = async (req, res) => {
     try {
@@ -81,4 +98,4 @@ const updateCard = async (req, res) => {
     }
 };
 
-module.exports = { insertCard,getCard, deleteCard, updateCard };
+module.exports = { insertCard,getCards, deleteCard, updateCard, getDefaultCard };

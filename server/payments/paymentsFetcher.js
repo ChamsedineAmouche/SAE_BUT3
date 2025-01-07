@@ -45,6 +45,29 @@ async function getCardDetailsBySiren(siren) {
     }
 }
 
+async function getDefaultCardBySiren(siren) {
+    try {
+        const query = `SELECT id, encrypted_card_number, encryption_key, expiration_date FROM payment_cards WHERE siren=${siren} and is_default=1`;
+        console.log("Executing query:", query);
+        const results = await getResultOfQuery("payment_data", query);
+
+        if (!results || results.length === 0) {
+            throw new Error("Aucune carte trouvée pour ce SIREN.");
+        }
+
+        const cards = results.map((row) => {
+            const {id :id, encrypted_card_number: encryptedCard, encryption_key: encryptionKey, expiration_date: expiryDate } = row;
+            const cardNumber = decryptCardNumber(encryptedCard, encryptionKey);
+            const maskedCardNumber = maskCardNumber(cardNumber);
+
+            return { id : id, cardNumber: maskedCardNumber, expiryDate: expiryDate };
+        });
+        return cards;
+    } catch (error) {
+        console.error('Erreur lors de la récupération des détails des cartes :', error);
+        throw new Error("Erreur lors de la récupération des détails des cartes.");
+    }
+}
 
 
-module.exports = { getCardDetailsBySiren, decryptCardNumber };
+module.exports = { getCardDetailsBySiren, decryptCardNumber, getDefaultCardBySiren };

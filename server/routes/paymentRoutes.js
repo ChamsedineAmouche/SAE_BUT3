@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const {insertCard , getCard, deleteCard, updateCard} = require('../controllers/paymentController');
+const {insertCard , getCards, deleteCard, updateCard, getDefaultCard} = require('../controllers/paymentController');
 
-router.get('/getCard', getCard);
+router.get('/getCards', getCards);
+router.get('/getDefaultCard', getDefaultCard);
 
 router.get('/insertCard', insertCard);
 
