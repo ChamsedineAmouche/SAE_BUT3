@@ -63,6 +63,7 @@ const Navbar = () => {
         setIsAdmin(false);
         Cookies.remove('jwt',{path:'/'})
         navigate("/connexion"); 
+
       } else {
         console.error("Échec de la déconnexion");
       }
