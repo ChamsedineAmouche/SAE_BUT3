@@ -22,6 +22,10 @@ import DetailsVeille from "./pages/DetailsVeille.jsx";
 import DetailsElearning from "./pages/DetailsElearning.jsx";
 import DetailsDeposit from "./pages/DetailsDeposit.jsx";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute .jsx";
+import PaymentPage from "./pages/PaymentPage.jsx";
+import ElearningAccess from "./pages/ElearningAcces.jsx";
+import ElearningEmploye from "./pages/ElearningEmploye.jsx";
+import PrivateRoute from "./components/PrivateRoute/PrivateRoute.jsx"
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -173,6 +177,32 @@ const App = () => {
             element={
               <ProtectedRoute isAuthenticated={isAuthenticated}>
                 <DetailsDeposit />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/payement" 
+            element={
+              <ProtectedRoute isAuthenticated={isAuthenticated}>
+                <PaymentPage />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/acces_elearning" 
+            element={
+              <ProtectedRoute isAuthenticated={isAuthenticated}>
+                <ElearningAccess />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/elearning_employe" 
+            element={
+              <ProtectedRoute isAuthenticated={isAuthenticated}>
+                <PrivateRoute>
+                  <ElearningEmploye />
+                </PrivateRoute>
               </ProtectedRoute>
             } 
           />
