@@ -25,6 +25,7 @@ const MyReservation = () => {
   }, []);
 
   const columns = ['title', 'dateTransaction', 'address', 'status'];
+  const columnNames = ['Titre', 'Date de récupération', 'Adresse', 'Statut'];
 
   const formattedReservations = reservations.map((reservation) => ({
     title: reservation.title,
@@ -39,7 +40,7 @@ const MyReservation = () => {
       {isLoading ? (
         <p>Chargement en cours...</p>
       ) : (
-        <DataTable columns={columns} data={formattedReservations} rowsPerPage={10} />
+        <DataTable columns={columns} columnNames={columnNames}  data={formattedReservations} rowsPerPage={10} />
       )}
     </div>
   );
