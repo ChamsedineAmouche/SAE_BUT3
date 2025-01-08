@@ -1,30 +1,26 @@
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import veilleImage from "../assets/images/circular_economy.png";
 import Carousel from "../components/Carousel/Carousel";
-import OtherThumbnail from "../components/OtherThumbnail/OtherThumbnail"; // Assurez-vous d'importer correctement ce composant
+import OtherThumbnail from "../components/OtherThumbnail/OtherThumbnail";
 
 const DetailsVeille = () => {
-  const location = useLocation();
-  const queryParams = new URLSearchParams(location.search);
-  const id = queryParams.get("id");
+  const { id } = useParams();
 
-  const [article, setArticle] = useState(null); // État pour stocker les données de l'article
-  const [lastArticles, setLastArticles] = useState([]); // État pour stocker les dernières actualités
-  const [loading, setLoading] = useState(true); // État de chargement
-  const [error, setError] = useState(null); // État pour gérer les erreurs
+  const [article, setArticle] = useState(null);
+  const [lastArticles, setLastArticles] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     window.scrollTo(0, 0);
 
-    // Vérifier si l'ID est valide
     if (!id) {
       setError("Aucun ID fourni dans l'URL.");
       setLoading(false);
       return;
     }
 
-    // Appel API pour récupérer les données de l'article
     const fetchArticle = async () => {
       try {
         const response = await fetch(`/article?id=${id}`);
@@ -32,8 +28,8 @@ const DetailsVeille = () => {
           throw new Error("Erreur lors de la récupération des données.");
         }
         const data = await response.json();
-        setArticle(data.articleData[0]); // On prend le premier article
-        setLastArticles(data.lastArticles); // On stocke les dernières actualités
+        setArticle(data.articleData[0]);
+        setLastArticles(data.lastArticles);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -62,13 +58,6 @@ const DetailsVeille = () => {
 
   return (
     <div className="details-veille pt-24 px-6 md:px-12 lg:px-24">
-      {/* Texte en haut à gauche */}
-      <div className="text-left">
-        <p className="text-lg font-medium text-gray-700">
-          Veille/{article.title}
-        </p>
-      </div>
-
       {/* Titre centré */}
       <div className="text-center mt-12">
         <h1 className="text-4xl font-bold text-darkGreen">{article.title}</h1>

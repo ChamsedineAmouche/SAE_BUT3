@@ -1,17 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
-import eventImage from "../assets/images/circular_economy.png"; // Exemple d'image
+import { useParams } from "react-router-dom";
+import eventImage from "../assets/images/circular_economy.png";
 
 const DetailsEvent = () => {
   const [eventData, setEventData] = useState(null);
   const [participantCount, setParticipantCount] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const { eventId } = useParams();
 
-  // Récupération de l'ID depuis l'URL
-  const location = useLocation();
-  const queryParams = new URLSearchParams(location.search);
-  const eventId = queryParams.get("id");
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -56,13 +53,6 @@ const DetailsEvent = () => {
 
   return (
     <div className="details-event pt-24 px-6 md:px-12 lg:px-24">
-      {/* Texte en haut à gauche */}
-      <div className="text-left">
-        <p className="text-lg font-medium text-gray-700">
-          {`Événements/passés/${eventData.title}`}
-        </p>
-      </div>
-
       {/* Titre centré */}
       <div className="text-center mt-12">
         <h1 className="text-4xl font-bold text-darkGreen">{eventData.title}</h1>

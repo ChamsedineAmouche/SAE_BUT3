@@ -1,12 +1,11 @@
 import React, { useEffect } from "react";
-import { useLocation } from "react-router-dom"; // Importer useLocation
+import { useParams } from "react-router-dom"; // Importer useLocation
 import Carousel from "../components/Carousel/Carousel"; // Assurez-vous d'importer le Carousel correctement
 import productImage from "../assets/images/circular_economy.png"; // Exemple d'image
 
 const DetailsElearning = () => {
-  const location = useLocation(); // Hook pour accéder à l'URL
-  const queryParams = new URLSearchParams(location.search); // Crée un objet pour lire les paramètres de l'URL
-  const id = queryParams.get("id"); // Récupère la valeur de "id"
+  const { id } = useParams();
+
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -25,13 +24,6 @@ const DetailsElearning = () => {
 
   return (
     <div className="details-elearning pt-24 px-6 md:px-12 lg:px-24">
-      {/* Texte en haut à gauche */}
-      <div className="text-left">
-        <p className="text-lg font-medium text-gray-700">
-          E-learning/RSE (ID: {id}) {/* Affichage de l'ID pour vérification */}
-        </p>
-      </div>
-
       {/* Titre centré */}
       <div className="text-center mt-12">
         <h1 className="text-4xl font-bold text-darkGreen">
