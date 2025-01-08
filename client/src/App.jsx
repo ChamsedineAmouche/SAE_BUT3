@@ -137,7 +137,7 @@ const App = () => {
             } 
           />
           <Route 
-            path="/details_event" 
+            path="/details_event/:eventId" 
             element={
               <ProtectedRoute isAuthenticated={isAuthenticated}>
                 <DetailsEvent />
@@ -145,7 +145,7 @@ const App = () => {
             } 
           />
           <Route 
-            path="/details_event_future" 
+            path="/details_event_future/:eventId" 
             element={
               <ProtectedRoute isAuthenticated={isAuthenticated}>
                 <DetailsEventFuture />
@@ -153,7 +153,7 @@ const App = () => {
             } 
           />
           <Route 
-            path="/details_veille" 
+            path="/details_veille/:id" 
             element={
               <ProtectedRoute isAuthenticated={isAuthenticated}>
                 <DetailsVeille />
@@ -161,7 +161,7 @@ const App = () => {
             } 
           />
           <Route 
-            path="/details_elearning" 
+            path="/details_elearning/:id" 
             element={
               <ProtectedRoute isAuthenticated={isAuthenticated}>
                 <DetailsElearning />

@@ -35,7 +35,7 @@ const ElearningThumbnail = ({ elearning }) => {
   const { course_id, title, price, categoryName } = elearning;
 
   const handleClick = () => {
-    navigate(`/details_elearning?id=${course_id}`);
+    navigate(`/details_elearning/${course_id}`);
   };
 
   const handleFavoriteClick = (e) => {
