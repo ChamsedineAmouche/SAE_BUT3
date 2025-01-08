@@ -26,14 +26,10 @@ import PaymentPage from "./pages/PaymentPage.jsx";
 import ElearningAccess from "./pages/ElearningAcces.jsx";
 import ElearningEmploye from "./pages/ElearningEmploye.jsx";
 import PrivateRoute from "./components/PrivateRoute/PrivateRoute.jsx"
-import Admin from "./pages/Admin.jsx";
-import Admin from "./pages/Admin.jsx";
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [isAdmin, setIsAdmin] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(false);
   
   useEffect(() => {
     const checkAuth = async () => {
@@ -45,21 +41,13 @@ const App = () => {
         });
   
         if (response.ok) {
-          const data = await response.json();
-          const data = await response.json();
           setIsAuthenticated(true);
-          setIsAdmin(data.role === "admin");
-          setIsAdmin(data.role === "admin");
         } else {
           setIsAuthenticated(false);
-          setIsAdmin(false);
-          setIsAdmin(false);
         }
       } catch (error) {
         console.error("Erreur lors de la vérification de l'authentification :", error);
         setIsAuthenticated(false);
-        setIsAdmin(false);
-        setIsAdmin(false);
       } finally {
         setLoading(false);
       }
@@ -147,17 +135,8 @@ const App = () => {
           <Route 
             path="/mon_compte" 
             element={
-              <ProtectedRoute isAuthenticated={isAuthenticated && !isAdmin}>
-              <ProtectedRoute isAuthenticated={isAuthenticated && !isAdmin}>
+              <ProtectedRoute isAuthenticated={isAuthenticated}>
                 <Account />
-              </ProtectedRoute>
-            } 
-          />
-          <Route 
-            path="/admin"
-            element={
-              <ProtectedRoute isAuthenticated={isAdmin}>
-                <Admin />
               </ProtectedRoute>
             } 
           />
@@ -170,7 +149,7 @@ const App = () => {
             } 
           />
           <Route 
-            path="/details_event_future" 
+            path="/details_event_future/:eventId" 
             element={
               <ProtectedRoute isAuthenticated={isAuthenticated}>
                 <DetailsEventFuture />
@@ -178,7 +157,7 @@ const App = () => {
             } 
           />
           <Route 
-            path="/details_veille" 
+            path="/details_veille/:id" 
             element={
               <ProtectedRoute isAuthenticated={isAuthenticated}>
                 <DetailsVeille />
@@ -186,7 +165,7 @@ const App = () => {
             } 
           />
           <Route 
-            path="/details_elearning" 
+            path="/details_elearning/:id" 
             element={
               <ProtectedRoute isAuthenticated={isAuthenticated}>
                 <DetailsElearning />
@@ -198,6 +177,32 @@ const App = () => {
             element={
               <ProtectedRoute isAuthenticated={isAuthenticated}>
                 <DetailsDeposit />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/payement" 
+            element={
+              <ProtectedRoute isAuthenticated={isAuthenticated}>
+                <PaymentPage />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/acces_elearning" 
+            element={
+              <ProtectedRoute isAuthenticated={isAuthenticated}>
+                <ElearningAccess />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/elearning_employe" 
+            element={
+              <ProtectedRoute isAuthenticated={isAuthenticated}>
+                <PrivateRoute>
+                  <ElearningEmploye />
+                </PrivateRoute>
               </ProtectedRoute>
             } 
           />
