@@ -2,15 +2,14 @@ import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faPen,
-  faHeart,
-  faBox,
-  faShoppingCart,
-  faCalendarCheck,
-  faCog,
-  faQuestionCircle,
+  faGraduationCap,
+  faCalendarAlt,
+  faEye,
+  faComments,
+  faWarehouse
 } from "@fortawesome/free-solid-svg-icons";
 
-import EditProfile from "../components/EditProfile/EditProfile";
+import Users from "../components/Users/Users";
 import MyFavorite from "../components/MyFavorite/MyFavorite";
 import MyDeposit from "../components/MyDeposit/MyDeposit";
 import MyPurchase from "../components/MyPurchase/MyPurchase"
@@ -19,13 +18,12 @@ import Parameters from "../components/Parameters/Parameters";
 
 const Account = () => {
   const menuItems = [
-    { id: 1, label: "Admin", icon: faPen, component: <EditProfile /> },
-    { id: 2, label: "Mes favoris", icon: faHeart, component: <MyFavorite/> },
-    { id: 3, label: "Mes dépôts", icon: faBox, component: <MyDeposit /> },
-    { id: 4, label: "Mes achats", icon: faShoppingCart, component: <MyPurchase /> },
-    { id: 5, label: "Mes réservations", icon: faCalendarCheck, component: <MyReservation /> },
-    { id: 6, label: "Paramètres", icon: faCog, component: <Parameters/> },
-    { id: 7, label: "Aide", icon: faQuestionCircle, component: <div>Contenu pour Aide</div> },
+    { id: 1, label: "Utilisateurs", icon: faPen, component: <Users /> },
+    { id: 2, label: "Dépôts", icon: faWarehouse, component: <MyFavorite/> },
+    { id: 3, label: "E-learning", icon: faGraduationCap, component: <MyDeposit /> },
+    { id: 4, label: "Evenements", icon: faCalendarAlt, component: <MyPurchase /> },
+    { id: 5, label: "Veilles", icon: faEye, component: <MyReservation /> },
+    { id: 6, label: "Forum", icon: faComments, component: <Parameters/> }
   ];
 
   // Initialiser l'état avec le premier élément actif
