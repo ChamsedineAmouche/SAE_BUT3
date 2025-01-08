@@ -1,6 +1,8 @@
 const { getDataForProductPageById, getCompanyDataBySiren, getProductData} = require('../pageproduct/pageProductFetcher')
 const {reserveProductInDataBase} = require('../reserveProduct/productReserver')
-const {sendMailForReservation, sendMailForReservationOurObject} = require("../nodemailer/mailer");
+const {sendMailForReservation, sendMailForReservationOurObject, sendMailForFavoritesObjects} = require("../nodemailer/mailer");
+const {pickProductById} = require("../pickProduct/productPicker");
+const {getResultOfQuery} = require("../db_utils/db_functions");
 
 const product = async (req, res) => {
     try {
@@ -21,16 +23,65 @@ const product = async (req, res) => {
 
 const reserveProduct = async (req, res) => {
     try {
-        const siren = req.query.siren;
+        let siren = "";
+        if (req.session && req.session.user && req.session.user.siren) {
+            siren = req.session.user.siren;
+        } else {
+            throw new Error("Le SIREN est requis mais introuvable dans la query ou la session.");
+        }
 
         const { idItem } = req.query;
-        await reserveProductInDataBase(idItem, siren)
-        const companyData = await getCompanyDataBySiren(siren);
         const productData = await getProductData(idItem);
-        const companyOfObject = await getCompanyDataBySiren(productData.siren);
-        sendMailForReservation(companyData[0].email, productData.title, companyData[0].nom, idItem);
-        sendMailForReservationOurObject(companyOfObject[0].email, productData.title, companyOfObject[0].nom, idItem);
-        res.status(200).json({ message: 'Soumission reçue avec succès'});
+        const status = productData.status;
+        if (status === 'reserved' || status === 'picked') {
+            res.status(500).json({ error: "L'objet est déjà réservé ou récupéré" });
+        } else {
+            await reserveProductInDataBase(idItem, siren)
+            const companyData = await getCompanyDataBySiren(siren);
+            const companyOfObject = await getCompanyDataBySiren(productData.siren);
+            sendMailForReservation(companyData[0].email, productData.title, companyData[0].nom, idItem, status);
+            sendMailForReservationOurObject(companyOfObject[0].email, productData.title, companyOfObject[0].nom, idItem, status);
+            res.status(200).json({ message: 'Soumission reçue avec succès'});
+        }
+    } catch (error) {
+        console.error("Erreur lors du traitement des paramètres :", error);
+        res.status(500).json({ error: error.message || "Erreur interne du serveur" });
+    }
+};
+
+const pickProduct = async (req, res) => {
+    try {
+        let siren = "";
+        if (req.session && req.session.user && req.session.user.siren) {
+            siren = req.session.user.siren;
+        } else {
+            throw new Error("Le SIREN est requis mais introuvable dans la query ou la session.");
+        }
+
+        const { idItem } = req.query;
+        const productData = await getProductData(idItem);
+        const status = productData.status;
+        if (status === 'picked') {
+            res.status(500).json({ error: "L'objet est déjà récupéré" });
+        } else {
+            if (status === 'waiting') {
+                const companyData = await getCompanyDataBySiren(siren);
+                const companyOfObject = await getCompanyDataBySiren(productData.siren);
+                sendMailForReservation(companyData[0].email, productData.title, companyData[0].nom, idItem, status);
+                sendMailForReservationOurObject(companyOfObject[0].email, productData.title, companyOfObject[0].nom, idItem, status);
+
+                const query = `SELECT c.email FROM company c JOIN listing_favorites lf ON c.siren = lf.siren WHERE lf.id_item = ${idItem}`;
+                const companyWhoLike = await getResultOfQuery('vue_user', query);
+                console.log(companyWhoLike);
+                for (const key in companyWhoLike[0]) {
+                    const email = companyWhoLike[0][key]
+                    console.log(email);
+                    sendMailForFavoritesObjects(email, productData.title, companyData[0].nom, idItem);
+                }
+            }
+            await pickProductById(idItem, siren, status)
+            res.status(200).json({ message: 'Soumission reçue avec succès'});
+        }
     } catch (error) {
         console.error("Erreur lors du traitement des paramètres :", error);
         res.status(500).json({ error: error.message || "Erreur interne du serveur" });
@@ -38,4 +89,4 @@ const reserveProduct = async (req, res) => {
 };
 
 
-module.exports = { product, reserveProduct };
+module.exports = { product, reserveProduct, pickProduct };

@@ -1,4 +1,3 @@
-const {getResultOfQuery} = require('../db_utils/db_functions');
 const getDbConnection = require("../db_utils/db_connection");
 
 async function reserveProductInDataBase(idItem, siren) {
@@ -8,9 +7,6 @@ async function reserveProductInDataBase(idItem, siren) {
         await promiseConnection.beginTransaction();
 
         const currentDate = new Date().toISOString().slice(0, 19).replace('T', ' ');
-        console.log(currentDate);
-        console.log(idItem);
-        console.log(siren);
         const [insertResult] = await promiseConnection.execute(
             `INSERT INTO transaction (status, date_transaction, id_item, siren) VALUES (?, ?, ?, ?)`, ['reserved', currentDate, idItem, siren]);
         const [updateResult] = await promiseConnection.execute(`UPDATE listing SET status = 'reserved' WHERE id_item = ${idItem}`);

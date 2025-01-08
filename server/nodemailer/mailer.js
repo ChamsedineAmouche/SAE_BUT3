@@ -47,12 +47,20 @@ L'équipe GreenCircle.`;
     return sendMail(toEmail, subject, text);
 };
 
-const sendMailForReservation = (toEmail, itemName, companyName, itemId ) => {
-    const subject = 'Objet réservé';
+const sendMailForReservation = (toEmail, itemName, companyName, itemId, status ) => {
+    let subject = '';
+    let firstText = '';
+    if (status === 'reserved') {
+        subject = 'Objet réservé';
+        firstText = `Vous avez bien réservé un(e) ${itemName}.`;
+    } else {
+        subject = 'Objet récupéré';
+        firstText = `Vous avez bien récupéré un(e) ${itemName}.`;
+    }
     const url = `http://localhost:3000/product?id=${itemId}`;
     const text = `Bonjour ${companyName},
     
-Vous avez bien réservé un(e) ${itemName}.
+${firstText}
 Cliquez sur le lien suivant pour consulter l'objet : ${url}
 
 S'il ne s'agit pas de vous contactez au plus vite les équipes de Green Circle.
@@ -63,12 +71,20 @@ L'équipe GreenCircle.`;
     return sendMail(toEmail, subject, text);
 };
 
-const sendMailForReservationOurObject = (toEmail, itemName, companyName, itemId ) => {
-    const subject = 'Objet réservé';
+const sendMailForReservationOurObject = (toEmail, itemName, companyName, itemId, status) => {
+    let subject = '';
+    let firstText = '';
+    if (status === 'reserved') {
+        subject = 'Objet réservé';
+        firstText = `Vous avez bien réservé un(e) ${itemName}.`;
+    } else {
+        subject = 'Objet récupéré';
+        firstText = `Vous avez bien récupéré un(e) ${itemName}.`;
+    }
     const url = `http://localhost:3000/product?id=${itemId}`;
     const text = `Bonjour ${companyName},
     
-Votre ${itemName} a été réservé(e) !.
+${firstText}
 Cliquez sur le lien suivant pour consulter l'objet : ${url}
 
 Cordialement,
@@ -77,5 +93,23 @@ L'équipe GreenCircle.`;
     return sendMail(toEmail, subject, text);
 };
 
+const sendMailForFavoritesObjects = (toEmail, itemName, companyName, itemId) => {
+    const subject = `Un objet a été récupéré`;
+    const url = `http://localhost:3000/product?id=${itemId}`;
+    const urlCatalog = `http://localhost:3000/catalog`;
+    const text = `Bonjour ${companyName},
+    
+L'objet que vous aviez mis en favori a été récupéré par une autre entreprise !
+Cliquez sur le lien suivant pour consulter l'objet : ${url}
 
-module.exports = { sendMail, sendConfirmationEmail, sendMailForgotPassword, sendMailForReservation, sendMailForReservationOurObject };
+Mais pas de panique ! D'autres objets pourraient vous intéresser.
+Cliquez sur le lien suivant pour consulter le catalog : ${urlCatalog}
+
+Cordialement,
+L'équipe GreenCircle.`;
+
+    return sendMail(toEmail, subject, text);
+};
+
+
+module.exports = { sendMail, sendConfirmationEmail, sendMailForgotPassword, sendMailForReservation, sendMailForReservationOurObject, sendMailForFavoritesObjects };
