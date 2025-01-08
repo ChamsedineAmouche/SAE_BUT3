@@ -24,9 +24,7 @@ const product = async (req, res) => {
 const reserveProduct = async (req, res) => {
     try {
         let siren = "";
-        if (req.query && req.query.siren) {
-            siren = req.query.siren;
-        } else if (req.session && req.session.user && req.session.user.siren) {
+        if (req.session && req.session.user && req.session.user.siren) {
             siren = req.session.user.siren;
         } else {
             throw new Error("Le SIREN est requis mais introuvable dans la query ou la session.");
@@ -54,9 +52,7 @@ const reserveProduct = async (req, res) => {
 const pickProduct = async (req, res) => {
     try {
         let siren = "";
-        if (req.query && req.query.siren) {
-            siren = req.query.siren;
-        } else if (req.session && req.session.user && req.session.user.siren) {
+        if (req.session && req.session.user && req.session.user.siren) {
             siren = req.session.user.siren;
         } else {
             throw new Error("Le SIREN est requis mais introuvable dans la query ou la session.");
