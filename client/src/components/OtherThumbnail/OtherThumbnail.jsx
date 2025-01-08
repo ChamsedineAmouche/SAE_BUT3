@@ -24,17 +24,24 @@ const OtherThumbnail = ({ other, type }) => {
 
   const handleClick = () => {
     if (type === "event") {
-      navigate("/details_event"); 
+      const {id_event, status} = other;
+      if (status === "Incoming") {
+        navigate(`/details_event_future/${id_event}`);
+      }
+      else {
+        navigate(`/details_event/${id_event}`);
+      } 
     }
     if (type === "veille") {
-      navigate("/details_veille"); 
+      const {id_veille} = other;
+      navigate(`/details_veille/${id_veille}`); 
     }
   };
 
   return (
     <div
       onClick={handleClick}
-      className="rounded-lg shadow-lg overflow-hidden relative w-full h-full bg-white cursor-pointer transform hover:scale-105 transition-all duration-300"
+      className="rounded-lg shadow-lg overflow-hidden relative w-full h-full bg-white cursor-pointer"
     >
       {/* Image */}
       <div className="relative bg-yellowGreen1 bg-opacity-50 h-1/2">

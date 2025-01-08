@@ -1,11 +1,17 @@
 import React, { useEffect } from "react";
+import { useParams } from "react-router-dom"; // Importer useLocation
 import Carousel from "../components/Carousel/Carousel"; // Assurez-vous d'importer le Carousel correctement
 import productImage from "../assets/images/circular_economy.png"; // Exemple d'image
 
 const DetailsElearning = () => {
+  const { id } = useParams();
+
+
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, []);
+    // Optionnel : vous pouvez utiliser `id` ici pour effectuer une requête API
+    console.log("ID récupéré :", id);
+  }, [id]);
 
   const price = "999,99 €"; // Exemple de prix, vous pouvez mettre n'importe quel prix jusqu'à 1000 €
   const items = [
@@ -18,13 +24,6 @@ const DetailsElearning = () => {
 
   return (
     <div className="details-elearning pt-24 px-6 md:px-12 lg:px-24">
-      {/* Texte en haut à gauche */}
-      <div className="text-left">
-        <p className="text-lg font-medium text-gray-700">
-          E-learning/RSE
-        </p>
-      </div>
-
       {/* Titre centré */}
       <div className="text-center mt-12">
         <h1 className="text-4xl font-bold text-darkGreen">
@@ -35,7 +34,11 @@ const DetailsElearning = () => {
       {/* Pavé de texte centré */}
       <div className="text-center mt-12 max-w-3xl mx-auto">
         <p className="text-lg text-gray-600 leading-relaxed">
-          Cette formation vous permettra de développer des compétences essentielles pour votre avenir. Nos experts vous guideront à travers un programme complet qui vous prépare aux défis du monde professionnel. Ne manquez pas cette opportunité d'apprendre auprès des meilleurs !
+          Cette formation vous permettra de développer des compétences
+          essentielles pour votre avenir. Nos experts vous guideront à travers
+          un programme complet qui vous prépare aux défis du monde
+          professionnel. Ne manquez pas cette opportunité d'apprendre auprès
+          des meilleurs !
         </p>
       </div>
 

@@ -35,7 +35,7 @@ const DetailsDeposit = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [selectedImage, setSelectedImage] = useState(null);
   const [companySeller, setCompanySeller] = useState(null);
-  const [currentCompany, setCurrenteCompany] = useState(null);
+  const [currentCompany, setCurrentCompany] = useState(null);
 
   const handleImageClick = (image) => {
     setSelectedImage(image);
@@ -54,7 +54,6 @@ const DetailsDeposit = () => {
         return response.json();
       })
       .then((data) => {
-        console.log(data);
         setData(data);
         setIsLoading(false);
         setItemsData((prevState) => ({
@@ -71,7 +70,7 @@ const DetailsDeposit = () => {
           likes: data.product[0].nbLikes,
         }));
         setCompanySeller(data.companySeller[0]);
-        setCurrenteCompany(data.currentCompany[0]);
+        setCurrentCompany(data.currentCompany[0]);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);

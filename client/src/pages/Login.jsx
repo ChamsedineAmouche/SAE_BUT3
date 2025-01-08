@@ -9,7 +9,7 @@ const Login = () => {
     password: "",
   });
   const [errorMessage, setErrorMessage] = useState("");
-  const navigate = useNavigate(); // Pour rediriger après connexion réussie
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -22,7 +22,7 @@ const Login = () => {
     console.log("Sending login data:", formData);  
 
     try {
-      const response = await fetch("/login", {
+      const response = await fetch("/connexion", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -94,26 +94,26 @@ const Login = () => {
             </div>
 
             {/* Affichage des erreurs */}
-            {errorMessage && <div className="text-red-500 text-center mt-2">{errorMessage}</div>}
+            {errorMessage && <div className="text-red text-center mt-2">{errorMessage}</div>}
 
             {/* Bouton de soumission */}
             <div className="flex flex-col items-center gap-4">
               <button
                 type="submit"
-                className="bg-darkGreen text-white px-6 py-3 text-lg font-semibold rounded-md hover:bg-opacity-80 transition duration-200"
+                className="bg-oliveGreen text-white px-6 py-3 text-lg font-semibold rounded-md hover:bg-opacity-90 transition duration-200"
               >
                 Se connecter
               </button>
 
-              <a href="/register" className="w-full">
-              <p className="text-center text-sm text-gray-600">
+              <a href="/inscription" className="w-full">
+              <p className="text-center text-sm text-darkGreen underline">
               Pas de compte ?
               S'enregistrer
               </p>
 
               </a>
-              <a href="/forgot_password" className="w-full">
-              <p className="text-center text-sm text-gray-600">
+              <a href="/oubli_mot_de_passe" className="w-full">
+              <p className="text-center text-sm text-darkGreen underline">
               Mot de passe oublié ?
               </p>
 

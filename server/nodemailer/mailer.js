@@ -33,7 +33,7 @@ L'équipe GreenCircle.`;
 
 const sendMailForgotPassword = (siren, toEmail, token, companyName ) => {
     const subject = 'Modification de votre mot de passe';
-    const resetLink = `http://localhost:3000/reset_password?token=${token}&siren=${siren}`;
+    const resetLink = `http://localhost:3000/reinitialisation_mot_de_passe?token=${token}&siren=${siren}`;
     const text = `Bonjour ${companyName},
     
 Vous avez fait une demande de réinitialisation de votre mot de passe.
@@ -47,5 +47,69 @@ L'équipe GreenCircle.`;
     return sendMail(toEmail, subject, text);
 };
 
+const sendMailForReservation = (toEmail, itemName, companyName, itemId, status ) => {
+    let subject = '';
+    let firstText = '';
+    if (status === 'reserved') {
+        subject = 'Objet réservé';
+        firstText = `Vous avez bien réservé un(e) ${itemName}.`;
+    } else {
+        subject = 'Objet récupéré';
+        firstText = `Vous avez bien récupéré un(e) ${itemName}.`;
+    }
+    const url = `http://localhost:3000/product?id=${itemId}`;
+    const text = `Bonjour ${companyName},
+    
+${firstText}
+Cliquez sur le lien suivant pour consulter l'objet : ${url}
 
-module.exports = { sendMail, sendConfirmationEmail, sendMailForgotPassword };
+S'il ne s'agit pas de vous contactez au plus vite les équipes de Green Circle.
+
+Cordialement,
+L'équipe GreenCircle.`;
+
+    return sendMail(toEmail, subject, text);
+};
+
+const sendMailForReservationOurObject = (toEmail, itemName, companyName, itemId, status) => {
+    let subject = '';
+    let firstText = '';
+    if (status === 'reserved') {
+        subject = 'Objet réservé';
+        firstText = `Vous avez bien réservé un(e) ${itemName}.`;
+    } else {
+        subject = 'Objet récupéré';
+        firstText = `Vous avez bien récupéré un(e) ${itemName}.`;
+    }
+    const url = `http://localhost:3000/product?id=${itemId}`;
+    const text = `Bonjour ${companyName},
+    
+${firstText}
+Cliquez sur le lien suivant pour consulter l'objet : ${url}
+
+Cordialement,
+L'équipe GreenCircle.`;
+
+    return sendMail(toEmail, subject, text);
+};
+
+const sendMailForFavoritesObjects = (toEmail, itemName, companyName, itemId) => {
+    const subject = `Un objet a été récupéré`;
+    const url = `http://localhost:3000/product?id=${itemId}`;
+    const urlCatalog = `http://localhost:3000/catalog`;
+    const text = `Bonjour ${companyName},
+    
+L'objet que vous aviez mis en favori a été récupéré par une autre entreprise !
+Cliquez sur le lien suivant pour consulter l'objet : ${url}
+
+Mais pas de panique ! D'autres objets pourraient vous intéresser.
+Cliquez sur le lien suivant pour consulter le catalog : ${urlCatalog}
+
+Cordialement,
+L'équipe GreenCircle.`;
+
+    return sendMail(toEmail, subject, text);
+};
+
+
+module.exports = { sendMail, sendConfirmationEmail, sendMailForgotPassword, sendMailForReservation, sendMailForReservationOurObject, sendMailForFavoritesObjects };
