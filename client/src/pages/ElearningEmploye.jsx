@@ -5,13 +5,13 @@ const ElearningEmploye = () => {
   return (
     <div className="min-h-screen flex flex-col items-center justify-start bg-gray-100 px-4 py-8">
       {/* Titre */}
-      <h1 className="text-3xl font-bold text-gray-800 mb-6">E-Learning Employé</h1>
+      <h1 className="text-3xl font-bold text-gray-800 mb-6 mt-12">E-Learning Employé</h1>
 
       {/* Image */}
       <img
         src={productImage}
         alt="E-learning"
-        className="w-1/2 max-w-sm rounded-lg shadow-md mb-6"
+        className="w-1/2 max-w-sm rounded-lg shadow-md mb-6 mt-6"
       />
 
       {/* Pavé de texte */}

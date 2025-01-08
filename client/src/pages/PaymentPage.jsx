@@ -5,49 +5,114 @@ const PaymentPage = () => {
   const currentYear = new Date().getFullYear();
   const years = Array.from({ length: 14 }, (_, i) => currentYear + i);
   const months = [
-    "Janvier",
-    "Février",
-    "Mars",
-    "Avril",
-    "Mai",
-    "Juin",
-    "Juillet",
-    "Août",
-    "Septembre",
-    "Octobre",
-    "Novembre",
-    "Décembre",
+    "01", "02", "03", "04", "05", "06", "07",
+    "08", "09", "10", "11", "12"
   ];
 
+  const [cards, setCards] = useState([]);
+  const [selectedCard, setSelectedCard] = useState(null);
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [cardName, setCardName] = useState("");
   const [cardNumber, setCardNumber] = useState("");
   const [selectedMonth, setSelectedMonth] = useState("");
   const [selectedYear, setSelectedYear] = useState("");
   const [cvc, setCvc] = useState("");
   const [saveCard, setSaveCard] = useState(false);
 
+  // Récupérer les cartes via l'API
   useEffect(() => {
-    const fetchDefaultCard = async () => {
+    const fetchCards = async () => {
       try {
-        const response = await fetch("/getDefaultCard");
+        const response = await fetch("/getCards");
         const data = await response.json();
-
-        if (data.cards && data.cards.length > 0) {
-          const defaultCard = data.cards[0];
-          const [month, year] = defaultCard.expiryDate.split("/");
-
-          setCardNumber(defaultCard.cardNumber);
-          setSelectedMonth(month);
-          setSelectedYear(`20${year}`);
-        }
+        setCards(data.cards || []);
       } catch (error) {
-        console.error("Erreur lors du fetch de la carte par défaut :", error);
+        console.error("Erreur lors de la récupération des cartes :", error);
       }
     };
 
-    fetchDefaultCard();
+    fetchCards();
   }, []);
 
-  const handlePayment = () => {
+  // Mise à jour des champs de formulaire avec les données de la carte sélectionnée
+  const handleCardSelect = (card) => {
+    setSelectedCard(card);
+    const [month, year] = card.expiryDate.split("/");
+
+    setFirstName(card.firstName);
+    setLastName(card.lastName);
+    setCardName(card.cardName);
+    setCardNumber(card.cardNumber); // Masquer les numéros de carte sauf les 4 derniers
+    setSelectedMonth(month);
+    setSelectedYear(`20${year}`);
+  };
+
+// Insérer la carte via l'API avec les paramètres dans l'URL
+const insertCard = async () => {
+  try {
+    const queryParams = new URLSearchParams({
+      cardName,
+      firstName,
+      lastName,
+      cardNumber,
+      expirationDate: `${selectedMonth}/${selectedYear.slice(-2)}`,
+      isDefault: 0, 
+    });
+
+    const response = await fetch(`/insertCard?${queryParams.toString()}`, {
+      method: "GET",
+    });
+
+    if (response.ok) {
+      console.log("Carte insérée avec succès");
+    } else {
+      console.error("Erreur lors de l'insertion de la carte");
+    }
+  } catch (error) {
+    console.error("Erreur lors de l'insertion de la carte :", error);
+  }
+};
+
+  
+
+  // Soumettre le paiement
+  const handlePayment = async () => {
+     // Vérifications des champs
+  if (!firstName || !lastName || !cardName || !cardNumber || !selectedMonth || !selectedYear || !cvc) {
+    Swal.fire({
+      title: "Erreur",
+      text: "Tous les champs doivent être remplis.",
+      icon: "error",
+      confirmButtonText: "OK",
+      confirmButtonColor: "#d33",
+    });
+    return;
+  }
+
+  if (cvc.length !== 3 || !/^\d{3}$/.test(cvc)) {
+    Swal.fire({
+      title: "Erreur",
+      text: "Le CVC doit contenir exactement 3 chiffres.",
+      icon: "error",
+      confirmButtonText: "OK",
+      confirmButtonColor: "#d33",
+    });
+    return;
+  }
+
+  if (cardNumber.length !== 16) {
+    Swal.fire({
+      title: "Erreur",
+      text: "Le numéro de carte doit contenir exactement 16 chiffres.",
+      icon: "error",
+      confirmButtonText: "OK",
+      confirmButtonColor: "#d33",
+    });
+    return;
+  }
+
+    // Afficher la fenêtre de succès pour l'achat
     Swal.fire({
       title: "Achat effectué avec succès !",
       html: `
@@ -60,9 +125,8 @@ const PaymentPage = () => {
       icon: "success",
       confirmButtonText: "Autres formations",
       confirmButtonColor: "#587208",
-      allowOutsideClick: false, // Désactiver la fermeture en dehors du modal
+      allowOutsideClick: false,
       didOpen: () => {
-        // Ajouter un événement pour le lien dans Swal
         const elearningLink = document.getElementById("elearning-link");
         elearningLink.addEventListener("click", () => {
           window.location.href = "/acces_elearning";
@@ -73,12 +137,59 @@ const PaymentPage = () => {
         window.location.href = "/elearning";
       }
     });
+    if (saveCard) {
+      // Si la checkbox est cochée, appeler l'endpoint /insertCard
+      await insertCard();
+    }
   };
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 px-4">
-      <h1 className="text-3xl font-bold text-gray-800 mb-6">Paiement</h1>
+      <h1 className="text-3xl font-bold text-gray-800 mb-6 mt-12">Paiement</h1>
 
+      {/* Liste des cartes avec checkboxes (cercle) alignées horizontalement */}
+      <div className="w-full max-w-md mb-6 flex gap-6 justify-center">
+        {cards.map((card) => (
+          <div key={card.id} className="flex items-center">
+            <input
+              type="checkbox"
+              checked={selectedCard?.id === card.id}
+              onChange={() => handleCardSelect(card)}
+              className="h-6 w-6 border-2 border-gray-300 rounded-full text-green-500 focus:ring-green-500"
+            />
+            <label className="ml-2 text-gray-700">{card.cardName}</label>
+          </div>
+        ))}
+      </div>
+
+      {/* Input pour le prénom */}
+      <input
+        type="text"
+        placeholder="Prénom"
+        value={firstName}
+        onChange={(e) => setFirstName(e.target.value)}
+        className="w-full max-w-md p-3 mb-4 border rounded-full text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500"
+      />
+
+      {/* Input pour le nom */}
+      <input
+        type="text"
+        placeholder="Nom"
+        value={lastName}
+        onChange={(e) => setLastName(e.target.value)}
+        className="w-full max-w-md p-3 mb-4 border rounded-full text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500"
+      />
+
+      {/* Input pour le nom de la carte */}
+      <input
+        type="text"
+        placeholder="Nom de la carte"
+        value={cardName}
+        onChange={(e) => setCardName(e.target.value)}
+        className="w-full max-w-md p-3 mb-4 border rounded-full text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500"
+      />
+
+      {/* Input pour le numéro de carte */}
       <input
         type="text"
         placeholder="Numéro de la carte"

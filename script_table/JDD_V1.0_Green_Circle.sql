@@ -6,7 +6,7 @@ DELETE FROM payment_data.payment_cards;
 
 INSERT INTO payment_data.payment_cards (card_name, card_holder_first_name, card_holder_last_name, encrypted_card_number, expiration_date, siren, is_default, encryption_key)
 VALUES
-('Carte d''entreprise', 'CCI', 'Val d''europe', 'ff8a18a48550d9a0d3e509bb4627818e:94c5496d47822845fc4eb7aee0864f97efd95e0f2dba021ff22de02edcd983b5', '15/26', '18770918300235', 1, 'c868236ed8c141f4e70d2b5f5b1bb389cd2d54d76b31514ae1ca2f6ce1c353e0'),
+('Carte d''entreprise', 'CCI', 'Val d''europe', 'ff8a18a48550d9a0d3e509bb4627818e:94c5496d47822845fc4eb7aee0864f97efd95e0f2dba021ff22de02edcd983b5', '03/26', '18770918300235', 1, 'c868236ed8c141f4e70d2b5f5b1bb389cd2d54d76b31514ae1ca2f6ce1c353e0'),
 ('Carte CE', 'Jules', 'Dupont', '48546f8ca0d7392aabd72d91ddd17c37:692e07f0254f279713a68bd3bfcbf72fd8f88b46b9d533207092f35c4e27c236', '12/29', '18770918300235', 0,  '53b702b8c6427892fb718b3e501f5969c375232f3c933792ecf0d3cb241fb824'),
 ('Carte Serris', 'CCI', 'Val d''europe', '04b3023fdf48d7872b6c507a0c936d5d:0e0bdd244b777128c4854748b69dae1616676a35ce22f1c99e22aba44a9866af', '10/25', '18770918300235', 0,  'a2e84f76e49a4767a1ca0edf706141638138e134ba5568b6f15abc83c3a14561'),
 ('Carte d''entreprise', 'Ada', 'Val d''europe', '82165431841e2ca3097fbc89eb68ec12:3d986c075d603cd5566d5478f404761ffcabb938e166758ac6dac82f82f4501c', '12/25', '33865714102081', 1,  '2ddb197c75b3dc81e38201243b3e12e61a61fab9f8e2bb1b78e68306a83af269'),
