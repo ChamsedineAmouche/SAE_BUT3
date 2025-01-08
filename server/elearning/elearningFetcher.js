@@ -2,7 +2,7 @@ const {getResultOfQuery} = require("../db_utils/db_functions");
 
 async function getElearningBySiren(siren) {
     try {
-        const query = `SELECT * FROM elearning WHERE siren = ` + siren;
+        const query = `SELECT e.*, c.Libelle AS categoryName FROM elearning e JOIN category c ON e.category = c.id WHERE siren =`  + siren;
         console.log(query)
         return await getResultOfQuery("vue_user", query);
     } catch (error) {
@@ -35,7 +35,8 @@ async function getElearningByCategory() {
                                     'title', e.title,
                                     'description', e.description,
                                     'price', e.price,
-                                    'admin_id', e.admin_id
+                                    'admin_id', e.admin_id,
+                                    'categoryName', c.Libelle
                                 )
                             ELSE NULL
                         END

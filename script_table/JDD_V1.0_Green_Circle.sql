@@ -1,5 +1,5 @@
 -- payment_data
-use payment_data
+use payment_data;
 
 -- Delete all records from the tables in payment_data
 DELETE FROM payment_data.payment_cards;
