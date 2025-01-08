@@ -3,6 +3,7 @@ import circularEconomyImg from "../assets/images/circular_economy.png";
 import SquareGrid from "../components/SquareGrid/SquareGrid";
 import Carousel from "../components/Carousel/Carousel";
 import ElearningThumbnail from "../components/ElearningThumbnail/ElearningThumbnail";
+import {getAuthHeaders}  from "../utils/jwtAuth";
 
 const Elearning = () => {
   const [searchText, setSearchText] = useState("");
@@ -14,7 +15,7 @@ const Elearning = () => {
     // Fetch des données de l'API
     const fetchElearningData = async () => {
       try {
-        const response = await fetch("/elearningList");
+        const response = await fetch("/elearningList",{ headers: { 'Authorization': getAuthHeaders } });
         const data = await response.json();
         console.log(data);
 

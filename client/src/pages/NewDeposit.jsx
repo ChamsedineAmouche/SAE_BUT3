@@ -5,6 +5,8 @@ import LocalisationSwal from '../components/LocalisationSwal/LocalisationSwal';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
+import Cookies from 'js-cookie';
+import { getAuthHeaders } from '../utils/jwtAuth';
 
 const NewDeposit = () => {
   const navigate = useNavigate();
@@ -22,8 +24,18 @@ const NewDeposit = () => {
 
   const handleFileChange = (event) => {
     const filesRecup = Array.from(event.target.files);
-    setSelectedFiles(filesRecup);
+    //Filtre pour garder que les images
+    const imageFiles = filesRecup.filter((file) => {
+      if (!file.type.startsWith("image/")) {
+        alert(`Fichier non autorisé : ${file.name}! Seules les images sont autorisées !!`);
+        return false;
+      }
+      return true;
+    });
+    console.log('Fichiers sélectionnés :', imageFiles);
+    setSelectedFiles(imageFiles);
   };
+
 
   const readFileAsBase64 = (file) => {
     return new Promise((resolve, reject) => {
@@ -76,13 +88,19 @@ const NewDeposit = () => {
     };
 
     try {
-      const response = await fetch('http://localhost:5001/insert', {
+      const response = await fetch('/insert', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', ...getAuthHeaders() },
         body: JSON.stringify(newSubmission),
       });
-
-      if (!response.ok) throw new Error(`Erreur HTTP: ${response.status}`);
+      console.log(response)
+      if (!response.status==401) {
+        toast.error("Connectez vous pour déposer une annonce")
+        navigate("/login");
+      }
+      else if(!response.ok){
+        throw new Error(`Erreur HTTP: ${response.status}`);
+      }
 
       const result = await response.json();
       setSubmissions([...submissions, newSubmission]);
@@ -134,18 +152,32 @@ const NewDeposit = () => {
   };
 
   useEffect(() => {
-    fetch('/addAnnounce')
-      .then((response) => response.json())
-      .then((data) => {
-        setData(data);
-        setIsLoading(false);
-      })
-      .catch((error) => {
-        setIsLoading(false);
-        toast.error('Erreur lors du chargement des données');
-      });
-  }, []);
+    const authToken = Cookies.get('jwt');
+    if (!authToken) {
+      toast.error("Connectez vous pour déposer une annonce")
+      navigate("/login");
+      return; 
+    }
+  
+    fetch('/addAnnounce', { headers: getAuthHeaders() })
+    .then((response) => {
+      if (!response.status==401) {
+        toast.error("Connectez vous pour déposer une annonce")
+        navigate("/login");
+      }
+      return response.json();
+    })
+    .then((data) => {
+      setData(data);
+      setIsLoading(false);
+    })
+    .catch((error) => {
+      console.log(error)
+      setIsLoading(false);
+      toast.error('Erreur lors du chargement des données');
+    });
 
+  }, []);
   if (isLoading) return <p>Chargement...</p>;
 
   return (
