@@ -26,10 +26,12 @@ import PaymentPage from "./pages/PaymentPage.jsx";
 import ElearningAccess from "./pages/ElearningAcces.jsx";
 import ElearningEmploye from "./pages/ElearningEmploye.jsx";
 import PrivateRoute from "./components/PrivateRoute/PrivateRoute.jsx"
+import Admin from "./pages/Admin.jsx";
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [isAdmin, setIsAdmin] = useState(false);
   
   useEffect(() => {
     const checkAuth = async () => {
@@ -41,13 +43,17 @@ const App = () => {
         });
   
         if (response.ok) {
+          const data = await response.json();
           setIsAuthenticated(true);
+          setIsAdmin(data.role === "admin");
         } else {
           setIsAuthenticated(false);
+          setIsAdmin(false);
         }
       } catch (error) {
         console.error("Erreur lors de la vérification de l'authentification :", error);
         setIsAuthenticated(false);
+        setIsAdmin(false);
       } finally {
         setLoading(false);
       }
@@ -135,8 +141,16 @@ const App = () => {
           <Route 
             path="/mon_compte" 
             element={
-              <ProtectedRoute isAuthenticated={isAuthenticated}>
+              <ProtectedRoute isAuthenticated={isAuthenticated && !isAdmin}>
                 <Account />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/admin"
+            element={
+              <ProtectedRoute isAuthenticated={isAdmin}>
+                <Admin />
               </ProtectedRoute>
             } 
           />
