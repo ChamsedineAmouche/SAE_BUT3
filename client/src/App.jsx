@@ -194,32 +194,6 @@ const App = () => {
               </ProtectedRoute>
             } 
           />
-          <Route 
-            path="/payement" 
-            element={
-              <ProtectedRoute isAuthenticated={isAuthenticated}>
-                <PaymentPage />
-              </ProtectedRoute>
-            } 
-          />
-          <Route 
-            path="/acces_elearning" 
-            element={
-              <ProtectedRoute isAuthenticated={isAuthenticated}>
-                <ElearningAccess />
-              </ProtectedRoute>
-            } 
-          />
-          <Route 
-            path="/elearning_employe" 
-            element={
-              <ProtectedRoute isAuthenticated={isAuthenticated}>
-                <PrivateRoute>
-                  <ElearningEmploye />
-                </PrivateRoute>
-              </ProtectedRoute>
-            } 
-          />
           <Route path="*" element={<h1>404 - Page non trouvée</h1>} />
         </Route>
       </Routes>
