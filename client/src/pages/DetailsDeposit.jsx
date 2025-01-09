@@ -42,7 +42,7 @@ const DetailsDeposit = () => {
   };
 
   useEffect(() => {
-    fetch(`/product?id=${id}`,{ headers: { 'Authorization': getAuthHeaders } })
+    fetch(`/product?id=${id}`) //{ headers: { 'Authorization': getAuthHeaders } }
       .then((response) => {
         if (!response.status==401) {
           //toast.error("Connectez vous")
