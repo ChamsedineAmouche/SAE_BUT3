@@ -9,6 +9,7 @@ import Swal from "sweetalert2";
 import Zoom from 'react-medium-image-zoom';
 import 'react-medium-image-zoom/dist/styles.css';
 import {getAuthHeaders}  from "../utils/jwtAuth";
+import ReservationSwal from "../components/ReservationSwal/ReservationSwal";
 
 const DetailsDeposit = () => {
   const { id } = useParams();
@@ -54,6 +55,7 @@ const DetailsDeposit = () => {
         return response.json();
       })
       .then((data) => {
+        console.log(data);
         setData(data);
         setIsLoading(false);
         setItemsData((prevState) => ({
@@ -68,6 +70,7 @@ const DetailsDeposit = () => {
           dimensions: data.product[0].dimension,
           datePosted: data.product[0].date_posted,
           likes: data.product[0].nbLikes,
+          status: data.product[0].status,
         }));
         setCompanySeller(data.companySeller[0]);
         setCurrentCompany(data.currentCompany[0]);
@@ -87,7 +90,8 @@ const DetailsDeposit = () => {
         return response.json();
       })
       .then((dataImg) => {
-        if (dataImg.length > 0) {
+        console.log(dataImg);
+        if (dataImg && dataImg.length > 0) {
           const images = dataImg.map((imageData) => {
             const byteArray = new Uint8Array(imageData.data);
             const blob = new Blob([byteArray], { type: imageData.mimeType });
@@ -117,8 +121,12 @@ const DetailsDeposit = () => {
     return <p>Chargement en cours...</p>;
   }
 
+  if (!dataImg) {
+    setDataImg(['/' + itemsData.category.replace(/ /g, '_').replace(/é/g, 'e').replace(/'/g, '_').toLowerCase() + '.jpg']);
+  }
+
   if (!data || !dataImg) {
-    return <p>Erreur lors du chargement des données.</p>;
+    return <p className="h-screen top-50">Erreur lors du chargement des données.</p>;
   }
 
   const depositThumbnails = data.recommandation.map((object) => (
@@ -178,6 +186,17 @@ const DetailsDeposit = () => {
     <div className="h-screen mt-24 px-10 overflow-y-auto">
       {/* Section top */}
       <div className="px-12 flex justify-end space-x-6">
+        {itemsData.status === "reserved" &&
+        (
+          <div className="bg-oliveGreen bg-opacity-60 px-6 py-3 text-lg font-semibold rounded-md text-white">
+            Réservé
+          </div>
+        )}
+        {itemsData.status === "picked" && (
+          <div className="bg-oliveGreen bg-opacity-60 px-6 py-3 text-lg font-semibold rounded-md text-white">
+            Donné
+          </div>
+        )}
         <div className="flex items-center justify-end space-x-2 border p-3 rounded-lg">
             <button
               className="text-lightGreen hover:text-red transition duration-200"
@@ -186,26 +205,6 @@ const DetailsDeposit = () => {
             </button>
             <span className="text-lightGreen">{itemsData.likes} favoris</span>
           </div>
-        {companySeller.siren === currentCompany.siren ? (
-          <div className="flex space-x-4">
-            <button
-              className="bg-blue text-white px-6 py-3 text-lg font-semibold rounded-md hover:bg-opacity-90 transition duration-200"
-              onClick={() => navigate('/nouveau_depot')}
-            >
-              <FontAwesomeIcon icon={faEdit} className="mr-2" />
-              Modifier
-            </button>
-            <button
-              className="bg-red text-white px-6 py-3 text-lg font-semibold rounded-md hover:bg-opacity-90 transition duration-200"
-              onClick={() => console.log("Supprimer l'annonce")}
-            >
-              <FontAwesomeIcon icon={faTrash} className="mr-2" />
-              Supprimer
-            </button>
-          </div>
-        ) : (
-          ""
-        )}
       </div>
 
       {/* Section principale */}
@@ -259,22 +258,38 @@ const DetailsDeposit = () => {
           <div className="flex flex-col">
             <div className="flex w-full space-x-4">
               {/* Première colonne (boutons) */}
-              <div className="flex flex-col w-1/2 space-y-4">
-                <p className="text-2xl font-semibold text-darkGreen">{itemsData.category}</p>
-                {/* Bouton "Réserver" */}
-                <button className="bg-oliveGreen text-white px-6 py-3 text-lg font-semibold rounded-md hover:bg-opacity-90 transition duration-200 h-14">
-                  <FontAwesomeIcon icon={faTicket} className="mr-2 text-xl"/>
-                  Réserver
-                </button>
-                <button 
-                  className="bg-oliveGreen bg-opacity-60 text-white px-6 py-3 text-lg font-semibold rounded-md hover:bg-opacity-50 transition duration-200 h-14"
-                  onClick={handleContactSeller}
-                >
-                  <FontAwesomeIcon icon={faEnvelope} className="mr-2 text-xl"/>
-                  Contacter le vendeur
-                </button>
-              </div>
-
+              
+              {companySeller.siren === currentCompany.siren 
+                ? (<div className="flex flex-col w-1/2 space-y-4">
+                    <p className="text-2xl font-semibold text-darkGreen">{itemsData.category}</p>
+                    <button
+                      className="bg-blue text-white px-6 py-3 text-lg font-semibold rounded-md hover:bg-opacity-90 transition duration-200 h-14"
+                      onClick={() => navigate('/nouveau_depot')}
+                    >
+                      <FontAwesomeIcon icon={faEdit} className="mr-2" />
+                      Modifier
+                    </button>
+                    <button
+                      className="bg-red text-white px-6 py-3 text-lg font-semibold rounded-md hover:bg-opacity-90 transition duration-200 h-14"
+                      onClick={() => console.log("Supprimer l'annonce")}
+                    >
+                      <FontAwesomeIcon icon={faTrash} className="mr-2" />
+                      Supprimer
+                    </button>
+                  </div>)
+                : (<div className="flex flex-col w-1/2 space-y-4">
+                  <p className="text-2xl font-semibold text-darkGreen">{itemsData.category}</p>
+                    {/* Bouton "Réserver" */}
+                    <ReservationSwal id={id} />
+                    <button 
+                      className="bg-oliveGreen bg-opacity-60 text-white px-6 py-3 text-lg font-semibold rounded-md hover:bg-opacity-50 transition duration-200 h-14"
+                      onClick={handleContactSeller}
+                    >
+                      <FontAwesomeIcon icon={faEnvelope} className="mr-2 text-xl"/>
+                      Contacter le donneur
+                    </button>
+                  </div>)
+              }
               {/* Deuxième colonne (description) */}
               <div className="flex flex-col w-1/2 space-y-4">
                 <p className="text-2xl text-darkGreen/75">{itemsData.condition}</p>
@@ -310,9 +325,9 @@ const DetailsDeposit = () => {
       </div>
                     
       {/* Section Recommandations */}
-      <div className="p-8">
+      {depositThumbnails[0] &&<div className="p-8">
         <Carousel items={depositThumbnails} title={"Ces objets pourraient vous intéressser..."} />
-      </div>
+      </div>}
     </div>
   );
 };
