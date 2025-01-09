@@ -15,7 +15,7 @@ const Deposit = () => {
     // Fetch des données de l'API
     const fetchCatalogueData = async () => {
       try {
-        const response = await fetch("/catalog", { headers: { 'Authorization': getAuthHeaders } });
+        const response = await fetch("/catalog");//{ headers: { 'Authorization': getAuthHeaders } } fait bugger !
         const data = await response.json();
 
         // Extraire les catégories
