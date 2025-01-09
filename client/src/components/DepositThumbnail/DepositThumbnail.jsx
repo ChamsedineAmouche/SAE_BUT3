@@ -51,7 +51,8 @@ const DepositThumbnail = ({ object }) => {
     navigate(`/depot/${id_item}`);
   };
 
-  const handleFavoriteClick = () => {
+  const handleFavoriteClick = (e) => {
+    e.stopPropagation();
     const endpoint = isFavorite
       ? `/deleteListingFavorite?idItem=${object.id_item}`
       : `/addListingFavorite?idItem=${object.id_item}`;

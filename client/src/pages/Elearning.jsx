@@ -15,7 +15,7 @@ const Elearning = () => {
     // Fetch des données de l'API
     const fetchElearningData = async () => {
       try {
-        const response = await fetch("/elearningList",{ headers: { 'Authorization': getAuthHeaders } });
+        const response = await fetch("/elearningList");//{ headers: { 'Authorization': getAuthHeaders } } fait bugger !
         const data = await response.json();
         console.log(data);
 
