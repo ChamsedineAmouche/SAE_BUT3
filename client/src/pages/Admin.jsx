@@ -10,20 +10,20 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 import Users from "../components/Users/Users";
-import MyFavorite from "../components/MyFavorite/MyFavorite";
-import MyDeposit from "../components/MyDeposit/MyDeposit";
-import MyPurchase from "../components/MyPurchase/MyPurchase"
-import MyReservation from "../components/MyReservation/MyReservation";
-import Parameters from "../components/Parameters/Parameters";
+import DepositsAdmin from "../components/DepositsAdmin/DepositsAdmin";
+import ElearningAdmin from "../components/ElearningAdmin/ElearningAdmin";
+import EventsAdmin from "../components/EventsAdmin/EventsAdmin";
+import VeillesAdmin from "../components/VeillesAdmin/VeillesAdmin";
+import ForumAdmin from "../components/ForumAdmin/ForumAdmin"
 
 const Account = () => {
   const menuItems = [
     { id: 1, label: "Utilisateurs", icon: faPen, component: <Users /> },
-    { id: 2, label: "Dépôts", icon: faWarehouse, component: <MyFavorite/> },
-    { id: 3, label: "E-learning", icon: faGraduationCap, component: <MyDeposit /> },
-    { id: 4, label: "Evenements", icon: faCalendarAlt, component: <MyPurchase /> },
-    { id: 5, label: "Veilles", icon: faEye, component: <MyReservation /> },
-    { id: 6, label: "Forum", icon: faComments, component: <Parameters/> }
+    { id: 2, label: "Dépôts", icon: faWarehouse, component: <DepositsAdmin/> },
+    { id: 3, label: "E-learning", icon: faGraduationCap, component: <ElearningAdmin /> },
+    { id: 4, label: "Evenements", icon: faCalendarAlt, component: <EventsAdmin /> },
+    { id: 5, label: "Veilles", icon: faEye, component: <VeillesAdmin /> },
+    { id: 6, label: "Forum", icon: faComments, component: <ForumAdmin/> }
   ];
 
   // Initialiser l'état avec le premier élément actif

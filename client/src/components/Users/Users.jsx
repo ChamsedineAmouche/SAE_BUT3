@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
 import Switch from "../Switch/Switch";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useNavigate } from "react-router-dom";
+import { faCheck, faEdit, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import DataTable from '../DataTable/DataTable';
 
 const Users = () => {
-    const navigate = useNavigate();
     const [selectedOption, setSelectedOption] = useState("Liste des utilisateurs");
     const [allUsers, setAllUsers] = useState([]);
     const [allInscriptions, setAllInscriptions] = useState([]);
@@ -38,7 +37,22 @@ const Users = () => {
         email: user.email,
         phone: user.phone,
         address: user.adress,
-        action: 'modif/suppr'
+        action: (
+            <div className="flex space-x-2">
+                <button
+                    //onClick={() => }
+                    className="text-blue-600 bg-blue p-2 w-10 h-10 rounded-lg text-white text-lg hover:text-blue-400"
+                >
+                    <FontAwesomeIcon icon={faEdit} />
+                </button>
+                <button
+                    //onClick={() => }
+                    className="text-red-600 bg-red p-2 w-10 h-10 rounded-lg text-white text-lg hover:text-red-400"
+                >
+                    <FontAwesomeIcon icon={faTrashAlt} />
+                </button>
+            </div>
+        )
     }));
 
     const formattedInscriptions = allInscriptions.map((inscription) => ({
@@ -46,7 +60,22 @@ const Users = () => {
         email: inscription.email,
         phone: inscription.phone,
         address: inscription.adress,
-        action: 'valider/refuser'
+        action: (
+            <div className="flex space-x-2">
+                <button
+                    //onClick={() => }
+                    className="text-green-600 bg-green-500 p-2 w-10 h-10 rounded-lg text-white text-lg hover:text-green-400"
+                >
+                    <FontAwesomeIcon icon={faCheck} />
+                </button>
+                <button
+                    //onClick={() => }
+                    className="text-red-600 bg-red p-2 w-10 h-10 rounded-lg text-white text-lg hover:text-red-400"
+                >
+                    <FontAwesomeIcon icon={faTrashAlt} />
+                </button>
+            </div>
+        )
     }))
 
     const handleSwitchChange = (option) => {
