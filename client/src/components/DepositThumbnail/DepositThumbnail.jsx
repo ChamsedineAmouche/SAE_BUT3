@@ -76,13 +76,24 @@ const DepositThumbnail = ({ object }) => {
     return <div>Pas d'objet disponible</div>;
   }
 
-  const { id_item, title, category, state } = object;
+  const { id_item, title, category, state, status } = object;
 
   return (
     <div 
       onClick={handleClick}
       className="rounded-lg shadow-lg overflow-hidden relative w-full h-full bg-white cursor-pointer"
     >
+      {
+        (status === "reserved" || status === "waiting")
+        ? <div className="absolute top-0 left-0 w-full h-full bg-darkGreen bg-opacity-50 flex items-center justify-center z-50">
+          <p className="text-white text-2xl font-bold">Réservé</p>
+        </div>
+        : status === "picked"
+        ? <div className="absolute top-0 left-0 w-full h-full bg-darkGreen bg-opacity-50 flex items-center justify-center z-50">
+            <p className="text-white text-2xl font-bold">Donné</p>
+          </div>
+        : null
+      }
       <div className="relative bg-yellowGreen1 bg-opacity-50 h-1/2">
         {image ? (
           <img src={image} alt={title} className="w-full h-full object-cover rounded-b-lg" />
