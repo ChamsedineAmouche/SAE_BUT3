@@ -1,4 +1,4 @@
-const { getElearningCategory, getElearningByCategory, getElearningBySiren } = require('../elearning/elearningFetcher');
+const { getElearningCategory, getElearningByCategory, getElearningBySiren, getElearningDetail, getElearningDetailEmployee } = require('../elearning/elearningFetcher');
 const { addFavorite, deleteFavorite} = require('../elearning/elearningUpdate')
 
 const getSirenFromRequest = (req) => {
@@ -62,4 +62,24 @@ const deleteElearningFavorite = async (req, res) => {
     }
 };
 
-module.exports = { elearningList, addElearningFavorite, deleteElearningFavorite };
+const elearningPage = async (req, res) => {
+    try{
+        const {siren, source} = getSirenFromRequest(req)
+        if (source === "session") {
+            const { idElearning } = req.query;
+            const result = await getElearningDetail(idElearning, siren)
+            res.json(result)
+        }
+        if (source === "query"){
+            const { idElearning, password, token } = req.query;
+            const result = await getElearningDetailEmployee(idElearning, password, token, siren)
+            res.json(result)        
+        }
+    }
+    catch(error){
+        console.error("Erreur lors de la récupération des infos du elearning:" ,error)
+        res.status(500).json({ error: error.message || "Erreur interne du serveur" });
+    }
+}
+
+module.exports = { elearningList, addElearningFavorite, deleteElearningFavorite, elearningPage };
