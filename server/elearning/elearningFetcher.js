@@ -52,10 +52,22 @@ async function getElearningByCategory() {
         console.error("Erreur lors de la récupération des données :", error);
         throw error;}
 }
+async function getElearningInfo(courseId){
+    try{
+    const query = `SELECT * FROM elearning_list WHERE  course_id = ${courseId}`;
+    result = getResultOfQuery("vue_admin", query)
+    return {eLearning : result}
+    }
+    catch(error){
+        console.error("Erreur lors de la récupération des données :", error);
+        throw error;
+    }
+
+}
 
 async function getElearningDetail(id_elearning, siren){
     try {
-        const query = `SELECT * FROM elearning WHERE id_elearning = ${id_elearning}`;
+        const query = `SELECT * FROM elearning WHERE siren = ${siren} and id_elearning = ${id_elearning}`;
 
         result = await getResultOfQuery("vue_user", query);
         console.log(result)
@@ -105,4 +117,4 @@ async function getElearningDetailEmployee(idElearning, password, token, siren) {
 }
 
 
-module.exports = { getElearningBySiren, getElearningCategory, getElearningByCategory, getElearningDetail, getElearningDetailEmployee };
+module.exports = { getElearningBySiren, getElearningCategory, getElearningByCategory, getElearningDetail, getElearningDetailEmployee, getElearningInfo };
