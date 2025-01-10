@@ -54,10 +54,13 @@ async function getElearningByCategory() {
 async function getElearningInfo(courseId){
     try{
     const query = `SELECT * FROM elearning_list WHERE course_id = ${courseId}`;
-    console.log(query)
-    result = await getResultOfQuery("vue_admin", query)
-    console.log(result)
-    return {success : "True", eLearning : result}
+    elearningInfo = await getResultOfQuery("vue_admin", query)
+    const { category } = elearningInfo[0]
+
+    const queryCategory = `SELECT * FROM elearning_list WHERE category = ${category}`;
+    otherElearning = await getResultOfQuery("vue_admin", queryCategory)
+
+    return {success : "True", eLearning : elearningInfo, carousel : otherElearning}
     }
     catch(error){
         console.error("Erreur lors de la récupération des données :", error);
