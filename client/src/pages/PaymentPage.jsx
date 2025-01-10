@@ -162,6 +162,26 @@ const insertCard = async () => {
       // Si la checkbox est cochée, appeler l'endpoint /insertCard
       await insertCard();
     }
+
+    try {
+      // Appeler l'endpoint pour enregistrer l'achat
+      const response = await fetch(`/elearningInsert?courseId=${id}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+    } catch (error) {
+      Swal.fire({
+        title: "Erreur",
+        text: "Une erreur s'est produite lors du processus de paiement. Veuillez réessayer.",
+        icon: "error",
+        confirmButtonText: "OK",
+        confirmButtonColor: "#d33",
+      });
+      return;
+    }
+    
   };
 
   return (

@@ -8,16 +8,18 @@ const ElearningAccess = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Récupérer courseId à partir des query parameters
+  // Récupérer les paramètres de l'URL
   const searchParams = new URLSearchParams(location.search);
-  const courseId = searchParams.get("courseId"); // Assurez-vous que l'URL inclut ?courseId=
+  const courseId = searchParams.get("courseId");
+  const idElearning = searchParams.get("idElearning");
+  const token = searchParams.get("token");
+  const siren = searchParams.get("siren");
 
   useEffect(() => {
     const checkSession = async () => {
       try {
         const response = await fetch("/getSession");
         if (!response.ok) {
-          throw new Error("Erreur lors de la vérification de la session.");
         }
 
         const data = await response.json();
@@ -26,7 +28,6 @@ const ElearningAccess = () => {
           navigate(`/elearning_employe?id=${courseId}`);
         }
       } catch (err) {
-        setError(err.message);
       } finally {
         setLoading(false);
       }
@@ -35,12 +36,35 @@ const ElearningAccess = () => {
     checkSession();
   }, [courseId, navigate]);
 
-  const handleAccess = () => {
-    if (password === "votreMotDePasse") {
-      sessionStorage.setItem("accessGranted", "true");
-      navigate(`/elearning_employe?id=${courseId}`); // Redirige vers la page protégée avec courseId
-    } else {
-      alert("Mot de passe incorrect !");
+  const handleAccess = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      // Appeler l'endpoint avec les paramètres
+      const response = await fetch(
+        `/elearningPage?idElearning=${idElearning}&token=${token}&password=${password}&siren=${siren}`,
+        {
+          method: "GET",
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Erreur lors de l'accès au e-learning.");
+      }
+
+      const data = await response.json();
+
+      if (data.success === "True") {
+        sessionStorage.setItem("accessGranted", "true");
+        navigate(`/elearning_employe?id=${courseId}`); // Redirige vers la page protégée
+      } else {
+        setError("Accès refusé. Vérifiez vos informations.");
+      }
+    } catch (err) {
+      setError(err.message || "Erreur lors de l'accès.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -52,19 +76,16 @@ const ElearningAccess = () => {
     );
   }
 
-  if (error) {
-    return (
-      <div className="min-h-screen flex justify-center items-center bg-gray-100">
-        <p className="text-red-500">{error}</p>
-      </div>
-    );
-  }
-
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 px-4">
       <h1 className="text-3xl font-bold text-gray-800 mb-6 text-center">
         Accès au e-learning
       </h1>
+      {error && (
+        <p className="text-red-500 mb-4">
+          {error}
+        </p>
+      )}
       <input
         type="password"
         placeholder="Mot de passe"

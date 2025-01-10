@@ -92,11 +92,17 @@ const elearningInsert = async (req, res) => {
             const { courseId } = req.query;
             const result = await insertElearning(courseId, siren)
             const { password , token , idElearning } = result
-            var link = `http://localhost:3000/acces_elearning?idElearning=${idElearning}&token=${token}&siren=${siren}`
+            console.log(password)
+            var link = `http://localhost:3000/acces_elearning?courseId=${courseId}&idElearning=${idElearning}&token=${token}&siren=${siren}`
             const companyData = await getCompanyDataBySiren(siren);
             await sendElearningEmail(companyData[0].email, link, companyData[0].nom, password)
         }
     }
+    catch(error){
+        console.error("Erreur lors de l'insertion de l'elearning:" ,error)
+        res.status(500).json({ error: error.message || "Erreur interne du serveur" });
+    }
+}
   
 const elearningInfo = async (req, res) => {
     try{
@@ -110,7 +116,5 @@ const elearningInfo = async (req, res) => {
     }
 }
 
-
-}
 
 module.exports = { elearningList, addElearningFavorite, deleteElearningFavorite, elearningPage, elearningInfo, elearningInsert };
