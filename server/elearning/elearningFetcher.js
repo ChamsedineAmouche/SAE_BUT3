@@ -4,7 +4,6 @@ const bcrypt = require("bcryptjs");
 async function getElearningBySiren(siren) {
     try {
         const query = `SELECT e.*, c.Libelle AS categoryName FROM elearning e JOIN category c ON e.category = c.id WHERE siren =`  + siren;
-        console.log(query)
         return await getResultOfQuery("vue_user", query);
     } catch (error) {
         console.error("Erreur lors de la récupération des données :", error);
@@ -55,8 +54,10 @@ async function getElearningByCategory() {
 async function getElearningInfo(courseId){
     try{
     const query = `SELECT * FROM elearning_list WHERE course_id = ${courseId}`;
-    result = getResultOfQuery("vue_admin", query)
-    return {eLearning : result}
+    console.log(query)
+    result = await getResultOfQuery("vue_admin", query)
+    console.log(result)
+    return {success : "True", eLearning : result}
     }
     catch(error){
         console.error("Erreur lors de la récupération des données :", error);

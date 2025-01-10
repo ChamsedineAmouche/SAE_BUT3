@@ -14,11 +14,12 @@ const DetailsElearning = () => {
 
     const fetchElearningData = async () => {
       try {
-        const response = await fetch(`/elearningPage?idElearning=${id}`);
+        const response = await fetch(`/elearningInfo?courseId=${id}`);
         if (!response.ok) {
           throw new Error("Erreur lors de la récupération des données.");
         }
         const data = await response.json();
+        console.log(data)
         if (data.success === "True" && data.eLearning.length > 0) {
           setElearningData(data.eLearning[0]);
         } else {

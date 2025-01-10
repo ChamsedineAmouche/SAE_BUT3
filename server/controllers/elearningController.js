@@ -84,10 +84,9 @@ const elearningPage = async (req, res) => {
 
 const elearningInfo = async (req, res) => {
     try{
-    const { idElearning } = req.query;
-    const result = await getElearningInfo(idElearning, siren)
+    const { courseId } = req.query;
+    const result = await getElearningInfo(courseId)
     res.json(result)
-
 }
     catch(error){
         console.error("Erreur lors de la récupération des infos du elearning:" ,error)
