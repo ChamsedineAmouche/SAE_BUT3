@@ -111,5 +111,17 @@ L'équipe GreenCircle.`;
     return sendMail(toEmail, subject, text);
 };
 
+const sendElearningEmail = (toEmail, link, companyName, password) => {
+    const subject = 'Validation de votre paeiment';
+    const text = `Bonjour ${companyName},
 
-module.exports = { sendMail, sendConfirmationEmail, sendMailForgotPassword, sendMailForReservation, sendMailForReservationOurObject, sendMailForFavoritesObjects };
+    Votre paiement pour votre elearning a été validé, vous pouvez accéder à votre elearning via ce lien : ${link} avec ce mot de passe ${password}
+
+    Cordialement,
+    L'équipe GreenCircle.`;
+
+    return sendMail(toEmail, subject, text);
+};
+
+
+module.exports = { sendMail, sendConfirmationEmail, sendMailForgotPassword, sendMailForReservation, sendMailForReservationOurObject, sendMailForFavoritesObjects, sendElearningEmail };
