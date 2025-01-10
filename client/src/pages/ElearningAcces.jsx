@@ -1,14 +1,22 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const ElearningAccess = () => {
+  const location = useLocation();
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
+  // Récupérer courseId à partir des query parameters
+  const searchParams = new URLSearchParams(location.search);
+  const courseId = searchParams.get("courseId"); // Assurez-vous que l'URL inclut ?courseId=
+
   const handleAccess = () => {
-    // Vérifiez le mot de passe si nécessaire, puis accordez l'accès
-    sessionStorage.setItem("accessGranted", "true"); // Stocke une information d'accès
-    navigate("/elearning_employe"); // Redirige vers la page protégée
+    if (password === "votreMotDePasse") {
+      sessionStorage.setItem("accessGranted", "true");
+      navigate(`/elearning_employe?id=${courseId}`); // Redirige vers la page protégée avec courseId
+    } else {
+      alert("Mot de passe incorrect !");
+    }
   };
 
   return (

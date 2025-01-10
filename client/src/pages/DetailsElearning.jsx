@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom"; // Importer useNavigate
+import { useParams, useNavigate } from "react-router-dom";
 import Carousel from "../components/Carousel/Carousel";
+import ElearningThumbnail from "../components/ElearningThumbnail/ElearningThumbnail"; // Importer ElearningThumbnail
 
 const DetailsElearning = () => {
   const { id } = useParams();
-  const navigate = useNavigate(); // Initialiser useNavigate
+  const navigate = useNavigate();
   const [elearningData, setElearningData] = useState(null);
+  const [carouselItems, setCarouselItems] = useState([]); // État pour les éléments du carrousel
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -19,9 +21,11 @@ const DetailsElearning = () => {
           throw new Error("Erreur lors de la récupération des données.");
         }
         const data = await response.json();
-        console.log(data)
+        console.log(data);
+
         if (data.success === "True" && data.eLearning.length > 0) {
           setElearningData(data.eLearning[0]);
+          setCarouselItems(data.carousel || []); // Charger les éléments du carrousel
         } else {
           throw new Error("Aucune donnée trouvée pour cet ID.");
         }
@@ -61,8 +65,6 @@ const DetailsElearning = () => {
 
   const { title, description, price } = elearningData;
 
-  const items = ["Formation 1", "Formation 2", "Formation 3", "Formation 4"]; // Exemple de carrousel
-
   const handleBuyClick = () => {
     // Naviguer vers la page de paiement en passant l'ID de l'eLearning
     navigate(`/payement?id=${id}`);
@@ -83,7 +85,7 @@ const DetailsElearning = () => {
       {/* Bouton avec prix */}
       <div className="flex justify-center mt-12">
         <button
-          onClick={handleBuyClick} // Ajouter l'événement de clic
+          onClick={handleBuyClick}
           className="flex items-center justify-center bg-[#587208] text-white rounded-lg px-8 py-3"
         >
           <span className="text-lg font-semibold mr-4">Acheter</span>
@@ -94,8 +96,18 @@ const DetailsElearning = () => {
       </div>
 
       {/* Carrousel */}
-      <div>
-        <Carousel items={items} title={"Autres formations"} />
+      <div className="mt-12">
+        <Carousel
+          items={
+            carouselItems.map((elearning) => (
+              <ElearningThumbnail
+                key={`thumbnail-${elearning.course_id}`}
+                elearning={elearning}
+              />
+            )) || []
+          }
+          title={"Autres formations dans cette catégorie"}
+        />
       </div>
     </div>
   );
