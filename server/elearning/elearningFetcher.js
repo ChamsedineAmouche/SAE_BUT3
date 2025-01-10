@@ -55,7 +55,7 @@ async function getElearningByCategory() {
 
 async function getElearningDetail(id_elearning, siren){
     try {
-        const query = `SELECT * FROM elearning WHERE siren = ${siren} and id_elearning = ${id_elearning}`;
+        const query = `SELECT * FROM elearning WHERE id_elearning = ${id_elearning}`;
 
         result = await getResultOfQuery("vue_user", query);
         console.log(result)
