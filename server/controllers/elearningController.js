@@ -92,7 +92,7 @@ const elearningInsert = async (req, res) => {
             const { courseId } = req.query;
             const result = await insertElearning(courseId, siren)
             const { password , token , idElearning } = result
-            console.log(password)
+            console.log("Password processed successfully.")
             var link = `http://localhost:3000/acces_elearning?courseId=${courseId}&idElearning=${idElearning}&token=${token}&siren=${siren}`
             const companyData = await getCompanyDataBySiren(siren);
             await sendElearningEmail(companyData[0].email, link, companyData[0].nom, password)
