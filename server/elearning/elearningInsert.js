@@ -41,11 +41,9 @@ async function insertElearning(course_id, siren) {
 
         const queryInsert = `INSERT INTO elearning (title, description, price, subscription_date, token, password, course_id, siren, category) VALUES
         ('${escapeTitle}', '${escapeDesc}', '${price}', CURDATE(), '${token}', '${hashedPassword}', ${courseId}, '${siren}', '${category}')`;
-        console.log(queryInsert)
         result = await getResultOfQuery("vue_user", queryInsert);
 
         const queryFetch2 = `SELECT id_elearning FROM elearning WHERE course_id = ${course_id} and siren = ${siren}`;
-        console.log(queryFetch2)
         resultFetch = await getResultOfQuery("vue_user", queryFetch2);
         const { id_elearning : idElearning } = resultFetch[0]
         return {password : password, token : token, idElearning : idElearning }

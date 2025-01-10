@@ -16,7 +16,6 @@ async function getDataForCatalogEventPage() {
                 numberOfParticipants: numberOfParticipants[0].number,
                 capacityRemaining,
             });
-            console.log("eventsCapacity:", eventsCapacity);
         }
         return {
             "events" : await getFilteredEvents(allOfEvents),
@@ -29,7 +28,6 @@ async function getDataForCatalogEventPage() {
 
 async function getFilteredEvents(allOfEvents) {
     const result = {};
-    console.log(allOfEvents);
     for (const obj of allOfEvents) {
         const temporality = obj.status;
 

@@ -23,7 +23,7 @@ const loginUser = async (req, res) => {
 
     if (result.success) {
         req.session.user = { siren: result.siren };
-        console.log("Session after login:", req.session.user);
+        //console.log("Session after login:", req.session.user);
         res.status(201).json(result); 
     } else {
         res.status(500).json(result); 
@@ -37,7 +37,7 @@ const loginAdmin = async (req, res) => {
 
     if (result.success) {
         req.session.admin = { id: result.admin };
-        console.log("Session after login:", req.session.admin);
+        //console.log("Session after login:", req.session.admin);
         res.status(201).json(result); 
     } else {
         res.status(500).json(result); 

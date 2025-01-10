@@ -4,7 +4,6 @@ const { getResultOfQuery } = require('../db_utils/db_functions');
 async function updateCardById(cardId, siren, cardName ,firstName, lastName) {
     try {
         const query = `UPDATE FROM payment_cards WHERE id=${cardId} and siren=${siren} SET card_name=${cardName} and card_holder_first_name=${firstName} and card_holder_last_name=${lastName}`;
-        console.log("Executing query:", query);
         await getResultOfQuery("payment_data", query);
     } catch (error) {
         console.error('Erreur lors de la suppression de la carte :', error);

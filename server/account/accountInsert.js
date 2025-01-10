@@ -74,7 +74,6 @@ async function registerCompany(siren, nom, email, password,confirmPassword, adre
         const token = crypto.randomBytes(64).toString('hex');
 
         const query = `INSERT INTO company (siren, nom, email, password, adress, zipcode, city, phone, token) VALUES ('${siren}', '${nom}', '${email}', '${hashedPassword}', '${adress}','${zipcode}', '${city}', '${phone}', '${token}')`;
-        console.log(query)
         const result = await getResultOfQuery("vue_user", query);
 
         return { success: true, message: "Votre compte a été créé avec succès, un mail de confirmation vous sera envoyé quand un admin aura accepté votre demande." };
@@ -87,7 +86,6 @@ async function registerCompany(siren, nom, email, password,confirmPassword, adre
 async function validateCompany(siren) {
     try {
         const query = `UPDATE company SET active = '1'  WHERE siren = '${siren}'`;
-        console.log(query);
         const result = await getResultOfQuery("vue_user", query);
         if (result.length === 0) {
             console.log("Company validé !");
