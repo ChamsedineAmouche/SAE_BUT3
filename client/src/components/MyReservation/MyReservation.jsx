@@ -1,140 +1,105 @@
 import React, { useState, useEffect } from 'react';
+import DataTable from '../DataTable/DataTable';
+import Swal from 'sweetalert2';
 
 const MyReservation = () => {
-  // Données de réservation simulées (à remplacer par une API)
   const [reservations, setReservations] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [isLoading, setIsLoading] = useState(true)
-  const [status, setStatus] = useState("")
-  const reservationsPerPage = 10;
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Simuler la récupération de données (à remplacer par un appel API réel)
     fetch('/profileTransactions')
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      return response.json();
-    })
-    .then((data) => {
-      console.log(data)
-      setReservations(data.transactions);
-      setIsLoading(false);
-    })
-    .catch(error => {
-      console.error('Error fetching data:', error);
-      setIsLoading(false);
-    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log(data);
+        setReservations(data.transactions);
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        console.error('Error fetching data:', error);
+        setIsLoading(false);
+      });
   }, []);
 
-  // Logique pour gérer la pagination
-  const indexOfLastReservation = currentPage * reservationsPerPage;
-  const indexOfFirstReservation = indexOfLastReservation - reservationsPerPage;
-  const currentReservations = reservations.slice(indexOfFirstReservation, indexOfLastReservation);
+  const handlePickUp = (id) => {
+    Swal.fire({
+      title: 'Confirmation',
+      text: 'Êtes-vous sûr de bien avoir récupéré l\'objet et que tout s\'est bien passé ?',
+      icon: 'question',
+      showCancelButton: true,
+      customClass: {
+        confirmButton: "px-4 py-2 bg-oliveGreen text-white rounded-md shadow hover:bg-yellowGreen1 mx-2",
+        cancelButton: "px-4 py-2 border bg-white border-redd text-red rounded-md shadow hover:bg-rose-100 mx-2",
+      },
+      confirmButtonText: 'Oui, j\'ai récupéré',
+      cancelButtonText: 'Annuler',
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const response = await fetch(`/pickProduct?idItem=${id}`, {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          });
 
-  const totalPages = Math.ceil(reservations.length / reservationsPerPage);
-  console.log(totalPages)
-
-  const handlePageChange = (pageNumber) => {
-    setCurrentPage(pageNumber);
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          Swal.fire('Succès !', 'La récupération a été confirmée.', 'success');
+        } catch (error) {
+          console.error("Error:", error);
+          Swal.fire("Erreur", "Une erreur est survenue lors de la réservation.", "error");
+        }
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
+        Swal.fire("Annulé", "Votre réservation a été annulée.", "info");
+      }
+    });
   };
+
+  const columns = ['title', 'dateTransaction', 'address', 'status'];
+  const columnNames = ['Titre', 'Date de récupération', 'Adresse', 'Statut'];
+
+  const formattedReservations = reservations.map((reservation) => {
+    let statusElement;
+    if (reservation.status === 'picked') {
+      statusElement = <span className="text-oliveGreen font-semibold">Récupéré</span>;
+    } else if (reservation.status === 'waiting') {
+      statusElement = <span className="text-orange-500 font-semibold">En attente</span>;
+    } else if (reservation.status === 'reserved') {
+      statusElement = (
+        <button
+        className="bg-oliveGreen bg-opacity-80 text-white p-2 font-semibold rounded-md hover:bg-opacity-50 transition duration-200"
+        onClick={() => handlePickUp(reservation.idItem)}
+        >
+          J'ai récupéré l'objet
+        </button>
+      );
+    } else {
+      statusElement = <span className="text-gray-500">Inconnu</span>;
+    }
   
+    return {
+      id: reservation.idItem, 
+      title: reservation.title,
+      dateTransaction: new Date(reservation.dateTransaction).toLocaleDateString(),
+      address: reservation.address,
+      status: statusElement, // Statut formaté avec Tailwind
+    };
+  });
+
   return (
-    <div className="container mx-auto mt-10 px-4">
-      <h2 className="text-3xl font-bold text-darkGreen mb-8 text-center">Mes Reservations</h2>
-
-      <div className="overflow-x-auto bg-white rounded-lg shadow-lg">
-        <table className="min-w-full table-auto">
-          <thead className="bg-yellowGreen1 text-white">
-            <tr>
-              <th className="px-4 py-2 text-left">Nom objet</th>
-              <th className="px-4 py-2 text-left">Date de récupération</th>
-              <th className="px-4 py-2 text-left">Adresse de récupération</th>
-              <th className="px-4 py-2 text-left">Statut</th>
-            </tr>
-          </thead>
-          <tbody>
-            {currentReservations.map((reservation, index) => {
-              const date = new Date(reservation.dateTransaction);
-              const formattedDate = `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear()}`;
-                let statusText;
-                switch (reservation.status) {
-                case 'reserved':
-                  statusText = 'En attente';
-                  break;
-                case 'picked':
-                  statusText = 'Récupéré';
-                  break;
-                default:
-                  statusText = 'Inconnu';
-                }
-
-                return (
-                <tr key={reservation.id} className={index % 2 === 0 ? 'bg-yellowGreen1 bg-opacity-10' : 'bg-white'}>
-                  <td className="px-4 py-2">{reservation.title}</td>
-                  <td className="px-4 py-2">{formattedDate}</td>
-                  <td className="px-4 py-2">{reservation.address}</td>
-                  <td className="px-4 py-2">{statusText}</td>
-                </tr>
-                );
-            })}
-          </tbody>
-        </table>
-      </div>
-
-       {/* Pagination */}
-       <div className="flex justify-center mt-4">
-        <nav aria-label="Page navigation">
-          <ul className="flex list-style-none ">
-            {/* Previous Page */}
-            <li>
-              <button
-                onClick={() => handlePageChange(currentPage - 1)}
-                className={`px-4 py-2 border overflow-hidden text-darkGreen border-gray-300 rounded-l-lg ${
-                  currentPage === 1 
-                    ? 'bg-yellowGreen1 bg-opacity-20 text-darkGreen'
-                    : 'hover:bg-yellowGreen1 hover:text-white'
-                }`}
-                disabled={currentPage === 1}
-              >
-                Précedent
-              </button>
-            </li>
-            
-            {/* Page Numbers */}
-            {Array.from({ length: totalPages }, (_, i) => (
-              <li key={i + 1}>
-                <button
-                  onClick={() => handlePageChange(i + 1)}
-                  className={`px-4 py-2 border-y border-r text-darkGreen border-gray-300 ${
-                    i + 1 === currentPage
-                      ? 'bg-yellowGreen1 text-white'
-                      : 'hover:bg-yellowGreen1 hover:text-white'
-                  }`}
-                >
-                  {i + 1}
-                </button>
-              </li>
-            ))}
-            
-            {/* Next Page */}
-            <li>
-              <button
-                onClick={() => handlePageChange(currentPage + 1)}
-                className={`px-4 py-2 border-y border-r text-darkGreen border-gray-300 rounded-r-lg ${
-                  currentPage === totalPages
-                    ? 'bg-yellowGreen1 bg-opacity-20 text-darkGreen'
-                    : 'hover:bg-yellowGreen1 hover:text-white'
-                }`}
-                disabled={currentPage === totalPages}
-              >
-                Suivant
-              </button>
-            </li>
-          </ul>
-        </nav>
-      </div>
+    <div>
+      <h2 className="text-3xl font-bold text-darkGreen mb-8 text-center">Mes Réservations</h2>
+      {isLoading ? (
+        <p>Chargement en cours...</p>
+      ) : (
+        <DataTable columns={columns} columnNames={columnNames}  data={formattedReservations} rowsPerPage={10} />
+      )}
     </div>
   );
 };

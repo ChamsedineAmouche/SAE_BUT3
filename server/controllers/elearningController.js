@@ -1,4 +1,4 @@
-const { getElearningCategory, getElearningByCategory, getElearningBySiren, getElearningDetail, getElearningDetailEmployee } = require('../elearning/elearningFetcher');
+const { getElearningCategory, getElearningByCategory, getElearningBySiren, getElearningDetail, getElearningDetailEmployee, getElearningInfo } = require('../elearning/elearningFetcher');
 const { addFavorite, deleteFavorite} = require('../elearning/elearningUpdate')
 const { insertElearning } = require('../elearning/elearningInsert')
 const {sendElearningEmail} = require("../nodemailer/mailer")
@@ -97,10 +97,20 @@ const elearningInsert = async (req, res) => {
             await sendElearningEmail(companyData[0].email, link, companyData[0].nom, password)
         }
     }
+  
+const elearningInfo = async (req, res) => {
+    try{
+    const { courseId } = req.query;
+    const result = await getElearningInfo(courseId)
+    res.json(result)
+}
     catch(error){
         console.error("Erreur lors de la récupération des infos du elearning:" ,error)
         res.status(500).json({ error: error.message || "Erreur interne du serveur" });
     }
 }
 
-module.exports = { elearningList, addElearningFavorite, deleteElearningFavorite, elearningPage, elearningInsert};
+
+}
+
+module.exports = { elearningList, addElearningFavorite, deleteElearningFavorite, elearningPage, elearningInfo, elearningInsert };

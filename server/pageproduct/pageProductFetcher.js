@@ -57,7 +57,7 @@ async function getAllProductDataWithSameCategories(categorieId, id) {
             FROM listing_favorites
             GROUP BY id_item
         ) lf ON l.id_item = lf.id_item
-           WHERE id_object_type = '${categorieId}' AND l.id_item != ` + id;
+           WHERE id_object_type = '${categorieId}' AND l.status = "active" AND l.id_item != ` + id;
         const productsData = await getResultOfQuery("vue_user", query);
         const formattedProducts = await Promise.all(
             productsData.map(async (product) => {

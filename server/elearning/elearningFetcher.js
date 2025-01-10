@@ -3,7 +3,7 @@ const bcrypt = require("bcryptjs");
 
 async function getElearningBySiren(siren) {
     try {
-        const query = `SELECT * FROM elearning WHERE siren = ` + siren;
+        const query = `SELECT e.*, c.Libelle AS categoryName FROM elearning e JOIN category c ON e.category = c.id WHERE siren =`  + siren;
         return await getResultOfQuery("vue_user", query);
     } catch (error) {
         console.error("Erreur lors de la récupération des données :", error);
@@ -35,7 +35,8 @@ async function getElearningByCategory() {
                                     'title', e.title,
                                     'description', e.description,
                                     'price', e.price,
-                                    'admin_id', e.admin_id
+                                    'admin_id', e.admin_id,
+                                    'categoryName', c.Libelle
                                 )
                             ELSE NULL
                         END
@@ -49,6 +50,23 @@ async function getElearningByCategory() {
     } catch (error) {
         console.error("Erreur lors de la récupération des données :", error);
         throw error;}
+}
+async function getElearningInfo(courseId){
+    try{
+    const query = `SELECT * FROM elearning_list WHERE course_id = ${courseId}`;
+    elearningInfo = await getResultOfQuery("vue_admin", query)
+    const { category } = elearningInfo[0]
+
+    const queryCategory = `SELECT * FROM elearning_list WHERE category = ${category}`;
+    otherElearning = await getResultOfQuery("vue_admin", queryCategory)
+
+    return {success : "True", eLearning : elearningInfo, carousel : otherElearning}
+    }
+    catch(error){
+        console.error("Erreur lors de la récupération des données :", error);
+        throw error;
+    }
+
 }
 
 async function getElearningDetail(id_elearning, siren){
@@ -103,4 +121,4 @@ async function getElearningDetailEmployee(idElearning, password, token, siren) {
 }
 
 
-module.exports = { getElearningBySiren, getElearningCategory, getElearningByCategory, getElearningDetail, getElearningDetailEmployee };
+module.exports = { getElearningBySiren, getElearningCategory, getElearningByCategory, getElearningDetail, getElearningDetailEmployee, getElearningInfo };

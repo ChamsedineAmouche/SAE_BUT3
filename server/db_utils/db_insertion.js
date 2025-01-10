@@ -24,7 +24,6 @@ const insertListingWithImages = async (newSubmission) => {
         const idEmplacement = 7;
         const siren = "18770918300235";
 
-        // Générer la date actuelle (au format YYYY-MM-DD HH:mm:ss pour MySQL)
         const datePosted = new Date().toISOString().slice(0, 19).replace('T', ' ');
 
         const [listingResult] = await promiseConnection.execute(
@@ -34,7 +33,6 @@ const insertListingWithImages = async (newSubmission) => {
             [title, description, dimensionString, datePosted, status, idEmplacement, siren, categoryId, stateId]
         );
 
-        // Récupérer l'ID auto-incrémenté
         const idItem = listingResult.insertId;
         //console.log(`Données insérées dans la table listing avec idItem: ${idItem}`);
 
@@ -53,15 +51,12 @@ const insertListingWithImages = async (newSubmission) => {
 
         //console.log(`Images associées à l'idItem: ${idItem}`);
 
-        // Valider la transaction
         await promiseConnection.commit();
         console.log('Transaction réussie, données insérées avec succès.');
     } catch (error) {
-        // Annuler la transaction en cas d'erreur
         await promiseConnection.rollback();
         console.error('Erreur lors de l\'insertion, transaction annulée :', error);
     } finally {
-        // Fermer la connexion
         await promiseConnection.end();
     }
 };

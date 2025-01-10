@@ -4,6 +4,8 @@ const { getAccountInscriptions, getAccountInfo, getAnnuaireInfo, getAccountInfoB
 const { deleteInscriptions } = require("../account/accountDelete")
 const { updatePassword } = require("../account/accountUpdate")
 const { sendConfirmationEmail, sendMailForgotPassword } = require('../nodemailer/mailer');
+const jwt = require('jsonwebtoken');
+
 
 // Fonction pour enregistrer une entreprise
 const register = async (req, res) => {
@@ -189,6 +191,19 @@ const annuaire = async (req, res) => {
     res.json({result})
 }
 
+const verifyJWT = async (req, res) => { 
+    const token = req.header('Authorization');
+    if (!token) {
+        return res.status(401).json({ error: 'Accès non autorisé' });
+    }
+    try {
+        const decoded = jwt.verify(token, 'mdp');
+        next();
+    } catch (error) {
+        return res.status(401).json({ error: 'Token invalide' });
+    }
+}
+
 
 module.exports = {
     register,
@@ -202,6 +217,7 @@ module.exports = {
     validationAccount,
     deleteInscription, 
     validateInscription,
-    annuaire
+    annuaire,
+    verifyJWT
 };
 

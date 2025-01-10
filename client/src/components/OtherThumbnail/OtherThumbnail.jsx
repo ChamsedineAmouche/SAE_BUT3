@@ -26,15 +26,15 @@ const OtherThumbnail = ({ other, type }) => {
     if (type === "event") {
       const {id_event, status} = other;
       if (status === "Incoming") {
-        navigate(`/details_event_future?id=${id_event}`);
+        navigate(`/details_event_future/${id_event}`);
       }
       else {
-        navigate(`/details_event?id=${id_event}`);
+        navigate(`/details_event/${id_event}`);
       } 
     }
     if (type === "veille") {
       const {id_veille} = other;
-      navigate(`/details_veille?id=${id_veille}`); 
+      navigate(`/details_veille/${id_veille}`); 
     }
   };
 

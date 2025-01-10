@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import eventImage from "../assets/images/circular_economy.png";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -13,11 +13,7 @@ const DetailsEventFuture = () => {
   const [sessionError, setSessionError] = useState(null);
   const [isRegistered, setIsRegistered] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false); // Nouvel état pour vérifier si l'utilisateur est connecté
-
-  // Récupération de l'ID depuis l'URL
-  const location = useLocation();
-  const queryParams = new URLSearchParams(location.search);
-  const eventId = queryParams.get("id");
+  const { eventId } = useParams();
 
   useEffect(() => {
     window.scrollTo(0, 0);

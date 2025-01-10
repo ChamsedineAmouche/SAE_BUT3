@@ -6,11 +6,13 @@ async function pickProductById(idItem, siren, status) {
     try {
         await promiseConnection.beginTransaction();
 
+        const currentDate = new Date().toISOString().slice(0, 19).replace('T', ' ');
         if (status === 'reserved') {
+            const [insertResult] = await promiseConnection.execute(
+                `INSERT INTO transaction (status, date_transaction, id_item, siren) VALUES (?, ?, ?, ?)`, ['waiting', currentDate, idItem, siren]);
             const [updateResult] = await promiseConnection.execute(`UPDATE listing SET status = 'waiting' WHERE id_item = ${idItem}`);
             await promiseConnection.commit();
         } else if (status === 'waiting') {
-            const currentDate = new Date().toISOString().slice(0, 19).replace('T', ' ');
             const [insertResult] = await promiseConnection.execute(
                 `INSERT INTO transaction (status, date_transaction, id_item, siren) VALUES (?, ?, ?, ?)`, ['picked', currentDate, idItem, siren]);
             const [updateResult] = await promiseConnection.execute(`UPDATE listing SET status = 'picked' WHERE id_item = ${idItem}`);

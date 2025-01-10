@@ -3,6 +3,7 @@ import circularEconomyImg from "../assets/images/circular_economy.png";
 import SquareGrid from "../components/SquareGrid/SquareGrid";
 import Carousel from "../components/Carousel/Carousel";
 import DepositThumbnail from "../components/DepositThumbnail/DepositThumbnail";
+import {getAuthHeaders}  from "../utils/jwtAuth";
 
 const Deposit = () => {
   const [searchText, setSearchText] = useState("");
@@ -14,7 +15,7 @@ const Deposit = () => {
     // Fetch des données de l'API
     const fetchCatalogueData = async () => {
       try {
-        const response = await fetch("/catalog");
+        const response = await fetch("/catalog");//{ headers: { 'Authorization': getAuthHeaders } } fait bugger !
         const data = await response.json();
 
         // Extraire les catégories
