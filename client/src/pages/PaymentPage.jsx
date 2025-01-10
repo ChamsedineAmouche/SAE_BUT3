@@ -43,7 +43,7 @@ const PaymentPage = () => {
   useEffect(() => {
     const fetchElearningDetails = async () => {
       try {
-        const response = await fetch(`/elearningPage?idElearning=${id}`);
+        const response = await fetch(`/elearningInfo?courseId=${id}`);
         const data = await response.json();
         if (data.success === "True" && data.eLearning.length > 0) {
           setPrice(data.eLearning[0].price); // Mettre à jour le prix
@@ -150,7 +150,7 @@ const insertCard = async () => {
       didOpen: () => {
         const elearningLink = document.getElementById("elearning-link");
         elearningLink.addEventListener("click", () => {
-          window.location.href = "/acces_elearning";
+          window.location.href = `/acces_elearning?courseId=${id}`;
         });
       },
     }).then((result) => {
