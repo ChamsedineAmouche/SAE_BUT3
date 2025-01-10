@@ -54,7 +54,7 @@ async function getElearningByCategory() {
 }
 async function getElearningInfo(courseId){
     try{
-    const query = `SELECT * FROM elearning_list WHERE  course_id = ${courseId}`;
+    const query = `SELECT * FROM elearning_list WHERE course_id = ${courseId}`;
     result = getResultOfQuery("vue_admin", query)
     return {eLearning : result}
     }
