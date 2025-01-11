@@ -4,6 +4,22 @@ const mysql = require('mysql2');
 const getDbConnection = require("../db_utils/db_connection");
 const FileType = require("file-type");
 
+async function getAllArticles() {
+    try {
+        const query = "SELECT * FROM article";
+        const result = await getResultOfQuery("vue_admin", query);
+  
+        if (result.length === 0) {
+            console.log("Pas d'articles");
+            return { success: true, message: "Pas d'articles", articles : {} };
+        }
+
+        return { success: true, message: "", articles: result };
+    } catch (error) {
+        return { success: false, message: "Erreur interne de vérification" };
+    }
+}
+
 async function insertArticleAdmin(newSubmission, req) {
     try {
         const connection = getDbConnection('vue_admin');
@@ -46,12 +62,15 @@ async function deleteArticleAdmin(articleId, req) {
             try {
                 await promiseConnectionAdmin.beginTransaction();
 
-                const [listingResultAdmin] = await promiseConnectionAdmin.execute(`DELETE FROM event WHERE id_veille = ${articleId}`);
+                const [listingResultAdmin] = await promiseConnectionAdmin.execute(`DELETE FROM article WHERE id_veille = ${articleId}`);
                 await promiseConnectionAdmin.commit();
-                console.log('Transaction réussie, données insérées avec succès.');
+                console.log('Transaction réussie, données supprimées avec succès.');
+                
+                return { success: true, message: "Transaction réussie, données supprimées avec succès." };
             } catch (error) {
                 await promiseConnectionAdmin.rollback();
                 console.error('Erreur lors de l\'insertion, transaction annulée :', error);
+                return { success: false, message: 'Erreur lors de la suppression, transaction annulée :' + error};
             } finally {
                 await promiseConnectionAdmin.end();
             }
@@ -63,4 +82,4 @@ async function deleteArticleAdmin(articleId, req) {
     }
 }
 
-module.exports = {insertArticleAdmin, deleteArticleAdmin}
+module.exports = {insertArticleAdmin, deleteArticleAdmin, getAllArticles}

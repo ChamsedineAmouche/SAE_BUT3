@@ -1,10 +1,10 @@
-const { getAllAccountsInfos } = require("../account/accountFetcher")
+const {getAllAccountsInfos, getAccountInfo} = require("../account/accountFetcher")
 const {getSuscpiciousListing} = require("../object/objectFetcher")
 const {deleteObject} = require("../object/objectDelete")
 const {deleteElearning} = require("../elearning/elearningDelete")
 const {getAllElearning} = require("../elearning/elearningFetcher")
-const {insertEventAdmin, deleteEventAdmin} = require("../admin/eventAdmin");
-const {insertArticleAdmin, deleteArticleAdmin} = require("../admin/articleAdmin");
+const {getAllEvents, insertEventAdmin, deleteEventAdmin} = require("../admin/eventAdmin");
+const {getAllArticles, insertArticleAdmin, deleteArticleAdmin} = require("../admin/articleAdmin");
 
 const getAdminSession = (req, res) => {
     if ((req.session.admin)){
@@ -38,32 +38,44 @@ const allElearning = async (req, res) => {
         const admin = getAdminSession(req)
         if (admin){
         const result = await getAllElearning();
-        if (!result.success) {
-            return res.status(500).json("Error" );
-        }
-        res.json({ users: result.users, inscriptions: result.inscriptions });}
-        else{
-            console.error("Erreur lors de la récupération des utilisateurs :", error);
+            if (!result.success) {
+                return res.status(500).json("Error" );
+            }
+            res.json({ result })
+        } else {
+            console.error("Erreur lors de la récupération des ELearnings :", error);
             res.status(500).json('Pas de session admin en cours');
         }
     } catch (error) {
-        console.error("Erreur lors de la récupération des utilisateurs :", error);
+        console.error("Erreur lors de la récupération des ELearnings :", error);
         res.status(500).json({ error: error.message || 'Erreur interne du serveur' });
     }
 };
 
 const getSusObject = async (req, res) => {
-    try{
+    try {
         const admin = getAdminSession(req)
         if (admin){
-        const result = await getSuscpiciousListing();
-        res.json(result)
-    }
-    else{
-        console.error("Erreur lors de la récupération des depots :", error);
-        res.status(500).json('Pas de session admin en cours');
-    }}
-    catch(error){
+            const result = await getSuscpiciousListing();
+            const deposits = result.result;
+
+            const enrichedDeposits = await Promise.all(
+                deposits.map(async (deposit) => {
+                    const companyInfo = await getAccountInfo(deposit.siren);
+                    const companyName = companyInfo.success && companyInfo.account.length > 0
+                        ? companyInfo.account[0].nom 
+                        : 'Non spécifié';
+
+                    return { ...deposit, company_name: companyName };
+                })
+            );
+
+            res.json({ deposits: enrichedDeposits });
+        } else {
+            console.error("Erreur lors de la récupération des depots :", error);
+            res.status(500).json('Pas de session admin en cours');
+        }
+    } catch(error){
         console.error("Erreur lors de la récupération des depots :", error);
         res.status(500).json('Erreur interne du serveur' );
     }
@@ -136,12 +148,10 @@ const insertArticle = async (req, res) => {
 
 const deleteEvent = async (req, res) => {
     try {
-        const eventId = req.query;
+        const {eventId} = req.query;
         console.log('Nouvelle soumission reçue :');
-
-        await deleteEventAdmin(eventId, req);
-
-        res.status(200).json({ message: 'supprimer cool'});
+        const result = await deleteEventAdmin(eventId, req);
+        res.json(result);
     } catch (error) {
         console.error('Erreur lors du traitement de la soumission :', error);
         res.status(500).json({ error: 'Erreur interne du serveur' });
@@ -150,17 +160,53 @@ const deleteEvent = async (req, res) => {
 
 const deleteArticle = async (req, res) => {
     try {
-        const articleId = req.query;
+        const {articleId} = req.query;
         console.log('Nouvelle soumission reçue :');
-
-        await deleteArticleAdmin(articleId, req);
-
-        res.status(200).json({ message: 'supprimer cool'});
+        const result = await deleteArticleAdmin(articleId, req);
+        res.json(result)
     } catch (error) {
         console.error('Erreur lors du traitement de la soumission :', error);
         res.status(500).json({ error: 'Erreur interne du serveur' });
     }
 };
 
-module.exports = { allUsers, getSusObject, deleteDepot , deleteELearning,allElearning, insertEvent, insertArticle, deleteArticle, deleteEvent }
+const allEvents = async (req, res) => {
+    try {
+        const admin = getAdminSession(req)
+        if (admin){
+        const result = await getAllEvents();
+            if (!result.success) {
+                return res.status(500).json("Error" );
+            }
+            res.json({ result })
+        } else {
+            console.error("Erreur lors de la récupération des evenements :", error);
+            res.status(500).json('Pas de session admin en cours');
+        }
+    } catch (error) {
+        console.error("Erreur lors de la récupération des evenements :", error);
+        res.status(500).json({ error: error.message || 'Erreur interne du serveur' });
+    }
+};
+
+const allArticles = async (req, res) => {
+    try {
+        const admin = getAdminSession(req)
+        if (admin){
+        const result = await getAllArticles();
+            if (!result.success) {
+                return res.status(500).json("Error" );
+            }
+            res.json({ result })
+        } else {
+            console.error("Erreur lors de la récupération des articles :", error);
+            res.status(500).json('Pas de session admin en cours');
+        }
+    } catch (error) {
+        console.error("Erreur lors de la récupération des articles :", error);
+        res.status(500).json({ error: error.message || 'Erreur interne du serveur' });
+    }
+};
+
+module.exports = { allUsers, getSusObject, deleteDepot , deleteELearning,allElearning, insertEvent, insertArticle, deleteArticle, deleteEvent, allEvents, allArticles }
 

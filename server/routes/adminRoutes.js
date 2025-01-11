@@ -9,7 +9,9 @@ const {
     insertEvent, 
     insertArticle, 
     deleteEvent, 
-    deleteArticle
+    deleteArticle,
+    allEvents,
+    allArticles
 } = require('../controllers/adminController');
 
 router.get('/allUsers', allUsers);
@@ -22,5 +24,8 @@ router.get('/insertEventAdmin', insertEvent);
 router.get('/insertArticleAdmin', insertArticle);
 router.get('/deleteEventAdmin', deleteEvent);
 router.get('/deleteArticleAdmin', deleteArticle)
+router.get('/allEvents', allEvents)
+router.get('/allArticles', allArticles)
+
 
 module.exports = router;

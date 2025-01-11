@@ -74,7 +74,7 @@ async function getAccountInfo(siren) {
   
         if (result.length === 0) {
             console.log("Pas d'utilisateurs");
-            return { success: True, message: "Pas d'utilisateurs", account : {} };
+            return { success: true, message: "Pas d'utilisateurs", account : {} };
         }
         return { success: true, message: "", account : result};
     } catch (error) {
