@@ -57,6 +57,11 @@ async function getElearningInfo(courseId){
     elearningInfo = await getResultOfQuery("vue_admin", query)
     const { category } = elearningInfo[0]
 
+async function getAllElearning() {
+    try {
+        const query = `SELECT * FROM elearning_list`;
+        console.log(query)
+        return await getResultOfQuery("vue_admin", query);
     const queryCategory = `SELECT * FROM elearning_list WHERE category = ${category}`;
     otherElearning = await getResultOfQuery("vue_admin", queryCategory)
 
@@ -121,4 +126,4 @@ async function getElearningDetailEmployee(idElearning, password, token, siren) {
 }
 
 
-module.exports = { getElearningBySiren, getElearningCategory, getElearningByCategory, getElearningDetail, getElearningDetailEmployee, getElearningInfo };
+module.exports = { getElearningBySiren, getElearningCategory, getElearningByCategory, getElearningDetail, getElearningDetailEmployee, getElearningInfo, getAllElearning };

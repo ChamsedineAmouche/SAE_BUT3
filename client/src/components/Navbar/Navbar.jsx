@@ -20,6 +20,11 @@ const Navbar = () => {
         });
         if (response.ok) {
           const sessionData = await response.json();
+          if (sessionData.role === "admin") {
+            setIsAdmin(true);
+          } else {
+            setIsAdmin(false);
+          }
           if (sessionData.session){
             if (sessionData.session.siren){
               setUserSession(sessionData.session.siren); 
@@ -30,10 +35,12 @@ const Navbar = () => {
           }
         } else {
           setUserSession(null);
+          setIsAdmin(false);
         }
       } catch (error) {
         console.error("Erreur lors de la vérification de la session :", error);
         setUserSession(null);
+        setIsAdmin(false);
       }
     };
   
@@ -55,7 +62,6 @@ const Navbar = () => {
         setUserSession(null);
         setIsAdmin(false);
         Cookies.remove('jwt',{path:'/'})
-
         navigate("/connexion"); 
 
       } else {
@@ -125,12 +131,23 @@ const Navbar = () => {
 
             {showAccountMenu && (
             <div className="absolute right-0 mt-2 w-48 bg-white text-black rounded-lg shadow-lg">
+              
+              {isAdmin ? (
+              <button 
+                className="block w-full text-left px-4 py-2 hover:bg-gray-200 hover:rounded-t-lg"
+                onClick={() => navigate("/admin")}
+              >
+                Tableau de bord
+              </button>
+              ) : (
               <button 
                 className="block w-full text-left px-4 py-2 hover:bg-gray-200 hover:rounded-t-lg"
                 onClick={() => navigate("/mon_compte")}
               >
                 Voir le profil
               </button>
+              )}
+
               <button 
                 className="block w-full text-left px-4 py-2 hover:bg-gray-200 hover:rounded-b-lg"
                 onClick={handleLogout}

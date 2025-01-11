@@ -180,5 +180,21 @@ async function getAccountPreferences(siren) {
         return { success: false, message: "Erreur interne de vérification" };
     }
 }
-module.exports = { getAccountInscriptions, getAccountInfo, getAnnuaireInfo, getAccountInfoByMail, verifyTokenSiren,getAccountFavorites, getAccountPreferences };
+
+async function getAllAccountsInfos() {
+    try {
+        const queryUsers = `SELECT * FROM company WHERE active = '1'`;
+        const users = await getResultOfQuery("vue_user", queryUsers);
+
+        const queryInscriptions = `SELECT * FROM company WHERE active = '0'`;
+        const inscriptions = await getResultOfQuery("vue_user", queryInscriptions);
+        
+        return { success: true, users: users, inscriptions: inscriptions };
+    } catch (error) {
+        console.error("Erreur lors de la récupération des informations des utilisateurs :", error);
+        return { success: false, message: "Erreur interne de vérification" };
+    }
+}
+
+module.exports = { getAccountInscriptions, getAccountInfo, getAnnuaireInfo, getAccountInfoByMail, verifyTokenSiren,getAccountFavorites, getAccountPreferences, getAllAccountsInfos };
   

@@ -1,17 +1,38 @@
 import React, { useState } from 'react';
 
-const DataTable = ({ columns, data, rowsPerPage }) => {
+const DataTable = ({ columns, columnNames, data, rowsPerPage }) => {
   const [currentPage, setCurrentPage] = useState(1);
+  const [sortColumn, setSortColumn] = useState(null);
+  const [sortOrder, setSortOrder] = useState('asc');
 
-  // Logique pour gérer la pagination
   const indexOfLastRow = currentPage * rowsPerPage;
   const indexOfFirstRow = indexOfLastRow - rowsPerPage;
-  const currentRows = data.slice(indexOfFirstRow, indexOfLastRow);
 
+  const sortedData = [...data].sort((a, b) => {
+    if (sortColumn === null) return 0; // Pas de tri
+
+    const valueA = a[sortColumn];
+    const valueB = b[sortColumn];
+
+    if (valueA < valueB) return sortOrder === 'asc' ? -1 : 1;
+    if (valueA > valueB) return sortOrder === 'asc' ? 1 : -1;
+    return 0;
+  });
+
+  const currentRows = sortedData.slice(indexOfFirstRow, indexOfLastRow);
   const totalPages = Math.ceil(data.length / rowsPerPage);
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
+  };
+
+  const handleSort = (column) => {
+    if (sortColumn === column) {
+      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+    } else {
+      setSortColumn(column);
+      setSortOrder('asc');
+    }
   };
 
   return (
@@ -21,15 +42,29 @@ const DataTable = ({ columns, data, rowsPerPage }) => {
           <thead className="bg-yellowGreen1 text-white">
             <tr>
               {columns.map((column, index) => (
-                <th key={index} className="px-4 py-2 text-left">
-                  {column}
+                <th
+                  key={index}
+                  className="px-4 py-2 text-left cursor-pointer"
+                  onClick={() => handleSort(column)} // Gère le clic pour trier
+                >
+                  <div className="flex items-center">
+                    {columnNames[index]}
+                    {sortColumn === column && (
+                      <span className="ml-2">
+                        {sortOrder === 'asc' ? '▲' : '▼'}
+                      </span>
+                    )}
+                  </div>
                 </th>
               ))}
             </tr>
           </thead>
           <tbody>
             {currentRows.map((row, rowIndex) => (
-              <tr key={rowIndex} className={rowIndex % 2 === 0 ? 'bg-yellowGreen1 bg-opacity-10' : 'bg-white'}>
+              <tr
+                key={rowIndex}
+                className={rowIndex % 2 === 0 ? 'bg-yellowGreen1 bg-opacity-10' : 'bg-white'}
+              >
                 {columns.map((column, colIndex) => (
                   <td key={colIndex} className="px-4 py-2">
                     {row[column]}
