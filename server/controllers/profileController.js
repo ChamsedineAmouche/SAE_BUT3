@@ -5,7 +5,7 @@ const {getTransactiongBySiren} = require("../transactions/transactionFetcher")
 const {getAdressContainerByEmplacement} = require("../stockage/stockageFetcher")
 const { getProductData} = require('../pageproduct/pageProductFetcher')
 const {getObjectTypeLabels, replacePreferenceIdsWithLabels} = require('../object/objectFetcher')
-const {updateUsername, updateMail, updateAdress, updateCity, updatePhone, updateZipcode} = require ("../account/accountUpdate")
+const {updateUsername, updateMail, updateAdress, updateCity, updatePhone, updateZipcode, updateNotif, updateInfo} = require ("../account/accountUpdate")
 
 const getSirenFromRequest = (req) => {
     const { siren } = req.query;
@@ -151,4 +151,78 @@ const updateProfile = async (req, res) => {
     }
 };
 
-module.exports = { profile, profileFavorite, profileListing, profileTransactions, profilePurchases, profileParameters, updateProfile };
+const updateProfileNotif = async (req, res) => {
+    try {
+        const { siren, source } = getSirenFromRequest(req);
+
+        if (source === "session") {
+            const {
+                event,
+                meuble,
+                elearning,
+                forum,
+                article,
+                message,
+            } = req.query;
+            const boolValue = (val) => {
+                if (val === "true") return true;
+                if (val === "false") return false;
+                return null;
+            };
+            await updateNotif(
+                siren,
+                boolValue(meuble),
+                boolValue(event),
+                boolValue(elearning),
+                boolValue(forum),
+                boolValue(article),
+                boolValue(message)
+            );
+            res.status(200).json({ succes : "True", message: "Notification mise à jour avec succès." });
+        } else {
+            res.status(403).json({ succes : "False", error: "Pas de session active." });
+        }
+    } catch (error) {
+        console.error("Erreur lors du traitement des paramètres :", error);
+        res.status(500).json({ succes : "False" });
+    }
+};
+
+const updateProfileInfo= async (req, res) => {
+    try {
+        const { siren, source } = getSirenFromRequest(req);
+
+        if (source === "session") {
+            const {
+                info_pp,
+                info_city,
+                info_email,
+                info_phone,
+                info_adress,
+                info_zipcode,
+            } = req.query;
+            const boolValue = (val) => {
+                if (val === "true") return true;
+                if (val === "false") return false;
+                return null;
+            };
+            await updateInfo(
+                siren,
+                boolValue(info_pp),
+                boolValue(info_city),
+                boolValue(info_email),
+                boolValue(info_phone),
+                boolValue(info_adress),
+                boolValue(info_zipcode)
+            );
+            res.status(200).json({ succes : "True", message: "Info mise à jour avec succès." });
+        } else {
+            res.status(403).json({ succes : "False", error: "Pas de session active." });
+        }
+    } catch (error) {
+        console.error("Erreur lors du traitement des paramètres :", error);
+        res.status(500).json({ succes : "False" });
+    }
+};
+
+module.exports = { profile, profileFavorite, profileListing, profileTransactions, profilePurchases, profileParameters, updateProfile, updateProfileNotif, updateProfileInfo };
