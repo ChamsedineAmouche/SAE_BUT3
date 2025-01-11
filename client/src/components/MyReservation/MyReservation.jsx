@@ -6,23 +6,24 @@ const MyReservation = () => {
   const [reservations, setReservations] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
+  const fetchReservations = async () => {
+    try {
+      const response = await fetch('/profileTransactions');
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      console.log(data);
+      setReservations(data.transactions);
+      setIsLoading(false);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      setIsLoading(false);
+    }
+  };
+
   useEffect(() => {
-    fetch('/profileTransactions')
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return response.json();
-      })
-      .then((data) => {
-        console.log(data);
-        setReservations(data.transactions);
-        setIsLoading(false);
-      })
-      .catch((error) => {
-        console.error('Error fetching data:', error);
-        setIsLoading(false);
-      });
+    fetchReservations();
   }, []);
 
   const handlePickUp = (id) => {
@@ -51,6 +52,9 @@ const MyReservation = () => {
             throw new Error(`HTTP error! status: ${response.status}`);
           }
           Swal.fire('Succès !', 'La récupération a été confirmée.', 'success');
+
+          // Recharger les données après confirmation
+          await fetchReservations();
         } catch (error) {
           console.error("Error:", error);
           Swal.fire("Erreur", "Une erreur est survenue lors de la réservation.", "error");
@@ -73,8 +77,8 @@ const MyReservation = () => {
     } else if (reservation.status === 'reserved') {
       statusElement = (
         <button
-        className="bg-oliveGreen bg-opacity-80 text-white p-2 font-semibold rounded-md hover:bg-opacity-50 transition duration-200"
-        onClick={() => handlePickUp(reservation.idItem)}
+          className="bg-oliveGreen bg-opacity-80 text-white p-2 font-semibold rounded-md hover:bg-opacity-50 transition duration-200"
+          onClick={() => handlePickUp(reservation.idItem)}
         >
           J'ai récupéré l'objet
         </button>
@@ -82,9 +86,9 @@ const MyReservation = () => {
     } else {
       statusElement = <span className="text-gray-500">Inconnu</span>;
     }
-  
+
     return {
-      id: reservation.idItem, 
+      id: reservation.idItem,
       title: reservation.title,
       dateTransaction: new Date(reservation.dateTransaction).toLocaleDateString(),
       address: reservation.address,
@@ -98,7 +102,7 @@ const MyReservation = () => {
       {isLoading ? (
         <p>Chargement en cours...</p>
       ) : (
-        <DataTable columns={columns} columnNames={columnNames}  data={formattedReservations} rowsPerPage={10} />
+        <DataTable columns={columns} columnNames={columnNames} data={formattedReservations} rowsPerPage={10} />
       )}
     </div>
   );

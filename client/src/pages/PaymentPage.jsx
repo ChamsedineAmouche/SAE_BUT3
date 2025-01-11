@@ -1,3 +1,5 @@
+import { faReply } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import Swal from "sweetalert2";
@@ -22,7 +24,8 @@ const PaymentPage = () => {
   const [selectedYear, setSelectedYear] = useState("");
   const [cvc, setCvc] = useState("");
   const [saveCard, setSaveCard] = useState(false);
-  const [price, setPrice] = useState(null); 
+  const [price, setPrice] = useState(null);
+  const [isCardSelected, setIsCardSelected] = useState(false);
 
 
   // Récupérer les cartes via l'API
@@ -67,6 +70,19 @@ const PaymentPage = () => {
     setCardNumber(card.cardNumber); // Masquer les numéros de carte sauf les 4 derniers
     setSelectedMonth(month);
     setSelectedYear(`20${year}`);
+    setIsCardSelected(true);
+  };
+
+  const resetForm = () => {
+    setSelectedCard(null);
+    setFirstName("");
+    setLastName("");
+    setCardName("");
+    setCardNumber("");
+    setSelectedMonth("");
+    setSelectedYear("");
+    setCvc("");
+    setIsCardSelected(false); // Désactiver le mode "carte sélectionnée"
   };
 
 // Insérer la carte via l'API avec les paramètres dans l'URL
@@ -185,116 +201,143 @@ const insertCard = async () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 px-4">
-      <h1 className="text-3xl font-bold text-gray-800 mb-6 mt-12">Paiement</h1>
+    <div className="p-4 h-screen overflow-y-auto">
+      <h1 className="text-3xl font-bold text-gray-800 mb-12 mt-20 w-full text-center">Paiement</h1>
 
-      {/* Liste des cartes avec checkboxes (cercle) alignées horizontalement */}
-      <div className="w-full max-w-md mb-6 flex gap-6 justify-center">
-        {cards.map((card) => (
-          <div key={card.id} className="flex items-center">
-            <input
-              type="checkbox"
-              checked={selectedCard?.id === card.id}
-              onChange={() => handleCardSelect(card)}
-              className="h-6 w-6 border-2 border-gray-300 rounded-full text-green-500 focus:ring-green-500"
-            />
-            <label className="ml-2 text-gray-700">{card.cardName}</label>
+      <div className="flex flex-col lg:flex-row gap-6">
+        <div className="w-full lg:w-1/2 p-6 bg-yellowGreen1 bg-opacity-10 rounded-lg overflow-y-auto h-[62vh] flex flex-col gap-4">
+          {/* Input pour le prénom */}
+          <input
+            type="text"
+            placeholder="Prénom"
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
+            className="w-full p-3 mb-4 border border-gray-300 rounded-md"
+            disabled={isCardSelected} // Désactiver si une carte est sélectionnée
+          />
+
+          <input
+            type="text"
+            placeholder="Nom"
+            value={lastName}
+            onChange={(e) => setLastName(e.target.value)}
+            className="w-full p-3 mb-4 border border-gray-300 rounded-md"
+            disabled={isCardSelected} // Désactiver si une carte est sélectionnée
+          />
+
+          <input
+            type="text"
+            placeholder="Nom de la carte"
+            value={cardName}
+            onChange={(e) => setCardName(e.target.value)}
+            className="w-full p-3 mb-4 border border-gray-300 rounded-md"
+            disabled={isCardSelected} // Désactiver si une carte est sélectionnée
+          />
+
+          <input
+            type="text"
+            placeholder="Numéro de la carte"
+            value={cardNumber}
+            onChange={(e) => setCardNumber(e.target.value)}
+            className="w-full p-3 mb-4 border border-gray-300 rounded-md"
+            disabled={isCardSelected} // Désactiver si une carte est sélectionnée
+          />
+          <div className="w-full flex items-center gap-2 mb-6">
+            <select
+              value={selectedMonth}
+              onChange={(e) => setSelectedMonth(e.target.value)}
+              className="w-1/3 p-3 border border-gray-300 bg-white rounded-md"
+              disabled={isCardSelected} // Désactiver si une carte est sélectionnée
+            >
+              <option value="">Mois</option>
+                {[...Array(12).keys()].map(i => (
+                  <option key={i} value={String(i + 1).padStart(2, "0")}>
+                    {new Date(0, i).toLocaleString('fr-FR', { month: 'long' })}
+                  </option>
+                ))}
+              </select>
+
+              <select
+                value={selectedYear}
+                onChange={(e) => setSelectedYear(e.target.value)}
+                className="w-1/3 p-3 border border-gray-300 bg-white rounded-md"
+                disabled={isCardSelected} // Désactiver si une carte est sélectionnée
+              >
+                <option value="" disabled>
+                  Année
+                </option>
+                {years.map((year) => (
+                  <option key={year} value={year}>
+                    {year}
+                  </option>
+                ))}
+              </select>
+
+              <input
+                type="text"
+                placeholder="CVC"
+                value={cvc}
+                onChange={(e) => setCvc(e.target.value)}
+                className="w-1/3 p-3 border border-gray-300 bg-white rounded-md"
+                // Le champ CVC reste activé même si une carte est sélectionnée
+              />
           </div>
-        ))}
+
+          <div className="w-full flex items-center gap-2 mb-6">
+            {isCardSelected ? (
+              <button
+                onClick={resetForm}
+                className="w-full bg-orange-500 text-white px-6 py-3 text-lg font-semibold rounded-md hover:bg-opacity-90 transition duration-200"
+              >
+                Vider
+              </button>
+            ) : (
+              <>
+                <input
+                  type="checkbox"
+                  checked={saveCard}
+                  onChange={(e) => setSaveCard(e.target.checked)}
+                  className="h-4 w-4 text-green-500 focus:ring-green-500 border-gray-300 rounded"
+                />
+                <label className="text-gray-700">Enregistrer la carte</label>
+              </>
+            )}
+          </div>
+
+          <button
+            onClick={handlePayment}
+              className="w-full bg-oliveGreen text-white px-6 py-3 text-lg font-semibold rounded-md hover:bg-opacity-90 transition duration-200"
+            >
+            Acheter {price ? `(${price} €)` : ""}
+          </button>
+        </div>
+
+        <div className="w-full lg:w-1/2 p-6 bg-yellowGreen1 bg-opacity-10 rounded-lg overflow-y-auto h-[62vh]">
+          <h3 className="text-xl font-semibold text-gray-800 mb-6">Cartes enregistrées</h3>
+          <div className="space-y-4">
+            {cards.length > 0 ? (
+              cards.map((card) => (
+                <div
+                  key={card.id}
+                  className="flex justify-between items-center bg-darkGreen bg-opacity-30 p-4 rounded-lg"
+                >
+                  <span className="text-darkGreen font-semibold text-xl">{card.cardName}</span>
+                  <div className="flex space-x-2">
+                    <button
+                      onClick={() => handleCardSelect(card)}
+                      className="text-white bg-blue p-2 w-10 h-10 rounded-lg text-white text-lg hover:text-red-400"
+                    >
+                      <FontAwesomeIcon icon={faReply} />
+                    </button>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <p>Aucune carte enregistrée</p>
+            )}
+          </div>
+        </div>
       </div>
-
-      {/* Input pour le prénom */}
-      <input
-        type="text"
-        placeholder="Prénom"
-        value={firstName}
-        onChange={(e) => setFirstName(e.target.value)}
-        className="w-full max-w-md p-3 mb-4 border rounded-full text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500"
-      />
-
-      {/* Input pour le nom */}
-      <input
-        type="text"
-        placeholder="Nom"
-        value={lastName}
-        onChange={(e) => setLastName(e.target.value)}
-        className="w-full max-w-md p-3 mb-4 border rounded-full text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500"
-      />
-
-      {/* Input pour le nom de la carte */}
-      <input
-        type="text"
-        placeholder="Nom de la carte"
-        value={cardName}
-        onChange={(e) => setCardName(e.target.value)}
-        className="w-full max-w-md p-3 mb-4 border rounded-full text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500"
-      />
-
-      {/* Input pour le numéro de carte */}
-      <input
-        type="text"
-        placeholder="Numéro de la carte"
-        value={cardNumber}
-        onChange={(e) => setCardNumber(e.target.value)}
-        className="w-full max-w-md p-3 mb-4 border rounded-full text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500"
-      />
-
-      <div className="w-full max-w-md flex items-center gap-4 mb-4">
-        <select
-          value={selectedMonth}
-          onChange={(e) => setSelectedMonth(e.target.value)}
-          className="w-1/3 p-3 border rounded-full text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500"
-        >
-          <option value="" disabled>
-            Mois
-          </option>
-          {months.map((month, index) => (
-            <option key={index + 1} value={(index + 1).toString().padStart(2, "0")}>
-              {month}
-            </option>
-          ))}
-        </select>
-
-        <select
-          value={selectedYear}
-          onChange={(e) => setSelectedYear(e.target.value)}
-          className="w-1/3 p-3 border rounded-full text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500"
-        >
-          <option value="" disabled>
-            Année
-          </option>
-          {years.map((year) => (
-            <option key={year} value={year}>
-              {year}
-            </option>
-          ))}
-        </select>
-
-        <input
-          type="text"
-          placeholder="CVC"
-          value={cvc}
-          onChange={(e) => setCvc(e.target.value)}
-          className="w-1/3 p-3 border rounded-full text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500"
-        />
-      </div>
-
-      <div className="w-full max-w-md flex items-center gap-2 mb-6">
-        <input
-          type="checkbox"
-          checked={saveCard}
-          onChange={(e) => setSaveCard(e.target.checked)}
-          className="h-4 w-4 text-green-500 focus:ring-green-500 border-gray-300 rounded"
-        />
-        <label className="text-gray-700">Enregistrer la carte</label>
-      </div>
-
-      <button
-        onClick={handlePayment}
-        className="bg-[#587208] text-white px-6 py-3 rounded-full shadow-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500"
-      >
-        Acheter {price ? `(${price} €)` : ""}
-      </button>
     </div>
   );
 };
