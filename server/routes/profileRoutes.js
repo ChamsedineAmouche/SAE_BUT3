@@ -7,7 +7,9 @@ const {
     profileTransactions, 
     profilePurchases, 
     profileParameters,
-    updateProfile
+    updateProfile,
+    updateProfileNotif,
+    updateProfileInfo
 } = require('../controllers/profileController');
 
 router.get('/profile',profile)
@@ -17,5 +19,7 @@ router.get('/profileTransactions',profileTransactions)
 router.get('/profilePurchases',profilePurchases)
 router.get('/profileParameters',profileParameters)
 router.get('/updateProfile', updateProfile)
+router.get('/updateProfileNotif', updateProfileNotif)
+router.get('/updateProfileInfo', updateProfileInfo)
 
 module.exports = router;

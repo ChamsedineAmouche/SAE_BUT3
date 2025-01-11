@@ -62,14 +62,11 @@ const Parameters = () => {
     return <p>Erreur lors du chargement des données.</p>;
   }
 
-  const sendUpdatedData = async (field, value) => {
+  const sendUpdatedData = async (type, field, value) => {
     try {
-      const response = await fetch("/updateUserData", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ field, value }),
+      const url = `/update${type}?${field}=${value}`;
+      const response = await fetch(url, {
+        method: "GET",
       });
 
       if (!response.ok) {
@@ -90,8 +87,7 @@ const Parameters = () => {
       [name]: updatedValue,
     }));
 
-    // Envoi de la nouvelle donnée au serveur
-    sendUpdatedData(name, updatedValue);
+    sendUpdatedData("ProfileNotif", name, updatedValue);
   };
 
   const handleUserDataChange = (name) => {
@@ -101,8 +97,7 @@ const Parameters = () => {
       [name]: updatedValue,
     }));
 
-    // Envoi de la nouvelle donnée au serveur
-    sendUpdatedData(name, updatedValue);
+    sendUpdatedData("ProfileInfo", name, updatedValue);
   };
 
   return (
@@ -154,11 +149,11 @@ const Parameters = () => {
           </div>
           <div className="flex flex-col space-y-4">
             {[
-              { key: "email", label: "Email" },
-              { key: "address", label: "Adresse" },
-              { key: "postalCode", label: "Code Postal" },
-              { key: "phoneNumber", label: "Numéro de Téléphone" },
-              { key: "profilePic", label: "Photo de Profil" },
+              { key: "info_email", label: "Email" },
+              { key: "info_adress", label: "Adresse" },
+              { key: "info_zipcode", label: "Code Postal" },
+              { key: "info_phone", label: "Numéro de Téléphone" },
+              { key: "info_pp", label: "Photo de Profil" },
             ].map((data) => (
               <RadioButton
                 key={data.key}
