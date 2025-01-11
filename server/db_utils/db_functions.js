@@ -46,7 +46,7 @@ const insertListingWithImages = async (newSubmission) => {
 
         const { title, description, dimensions, category, state, location, files } = newSubmission;
 
-        console.log('Fichiers reçus (Base64) :', files);
+        //console.log('Fichiers reçus (Base64) :', files);
         const stateIdRequest = await getResultOfQuery('vue_user',
             'SELECT id_condition_type FROM condition_type WHERE condition_type.label = ' + "'" + state + "'");
         const categoryIdRequest = await getResultOfQuery('vue_user',
@@ -71,26 +71,26 @@ const insertListingWithImages = async (newSubmission) => {
 
         // Récupérer l'ID auto-incrémenté
         const idItem = listingResult.insertId;
-        console.log(`Données insérées dans la table listing avec idItem: ${idItem}`);
+        //console.log(`Données insérées dans la table listing avec idItem: ${idItem}`);
 
         // Insérer chaque image dans la table `listing_image`
-        console.log('Type de files:', typeof files);
-        console.log('Contenu de files:', files);
+        //console.log('Type de files:', typeof files);
+        //console.log('Contenu de files:', files);
         for (const base64File of files) {
             const bufferToInsert = Buffer.from(base64File, 'base64');
             const fileType = await FileType.fromBuffer(bufferToInsert);
-            console.log('Taille du buffer inséré :', bufferToInsert.length);
+            //console.log('Taille du buffer inséré :', bufferToInsert.length);
 
             await promiseConnection.execute(
                 `INSERT INTO listing_image (image, id_item, mime_type) VALUES (?, ?, ?)`,
                 [bufferToInsert, idItem, fileType.mime]);
         }
 
-        console.log(`Images associées à l'idItem: ${idItem}`);
+        //console.log(`Images associées à l'idItem: ${idItem}`);
 
         // Valider la transaction
         await promiseConnection.commit();
-        console.log('Transaction réussie, données insérées avec succès.');
+        //console.log('Transaction réussie, données insérées avec succès.');
     } catch (error) {
     // Annuler la transaction en cas d'erreur
         await promiseConnection.rollback();

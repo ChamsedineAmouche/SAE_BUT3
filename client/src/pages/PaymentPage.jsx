@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import Swal from "sweetalert2";
 
 const PaymentPage = () => {
+  const [searchParams] = useSearchParams();
+  const id = searchParams.get("id"); // Récupérer l'id de l'URL
   const currentYear = new Date().getFullYear();
   const years = Array.from({ length: 14 }, (_, i) => currentYear + i);
   const months = [
@@ -19,6 +22,8 @@ const PaymentPage = () => {
   const [selectedYear, setSelectedYear] = useState("");
   const [cvc, setCvc] = useState("");
   const [saveCard, setSaveCard] = useState(false);
+  const [price, setPrice] = useState(null); 
+
 
   // Récupérer les cartes via l'API
   useEffect(() => {
@@ -34,6 +39,22 @@ const PaymentPage = () => {
 
     fetchCards();
   }, []);
+
+  useEffect(() => {
+    const fetchElearningDetails = async () => {
+      try {
+        const response = await fetch(`/elearningInfo?courseId=${id}`);
+        const data = await response.json();
+        if (data.success === "True" && data.eLearning.length > 0) {
+          setPrice(data.eLearning[0].price); // Mettre à jour le prix
+        }
+      } catch (error) {
+        console.error("Erreur lors de la récupération des détails de l'eLearning :", error);
+      }
+    };
+  
+    fetchElearningDetails();
+  }, [id]);
 
   // Mise à jour des champs de formulaire avec les données de la carte sélectionnée
   const handleCardSelect = (card) => {
@@ -129,7 +150,7 @@ const insertCard = async () => {
       didOpen: () => {
         const elearningLink = document.getElementById("elearning-link");
         elearningLink.addEventListener("click", () => {
-          window.location.href = "/acces_elearning";
+          window.location.href = `/acces_elearning?courseId=${id}`;
         });
       },
     }).then((result) => {
@@ -141,6 +162,26 @@ const insertCard = async () => {
       // Si la checkbox est cochée, appeler l'endpoint /insertCard
       await insertCard();
     }
+
+    try {
+      // Appeler l'endpoint pour enregistrer l'achat
+      const response = await fetch(`/elearningInsert?courseId=${id}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+    } catch (error) {
+      Swal.fire({
+        title: "Erreur",
+        text: "Une erreur s'est produite lors du processus de paiement. Veuillez réessayer.",
+        icon: "error",
+        confirmButtonText: "OK",
+        confirmButtonColor: "#d33",
+      });
+      return;
+    }
+    
   };
 
   return (
@@ -252,7 +293,7 @@ const insertCard = async () => {
         onClick={handlePayment}
         className="bg-[#587208] text-white px-6 py-3 rounded-full shadow-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500"
       >
-        Acheter
+        Acheter {price ? `(${price} €)` : ""}
       </button>
     </div>
   );

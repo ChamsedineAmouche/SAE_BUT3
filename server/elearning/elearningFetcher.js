@@ -1,9 +1,9 @@
 const {getResultOfQuery} = require("../db_utils/db_functions");
+const bcrypt = require("bcryptjs");
 
 async function getElearningBySiren(siren) {
     try {
         const query = `SELECT e.*, c.Libelle AS categoryName FROM elearning e JOIN category c ON e.category = c.id WHERE siren =`  + siren;
-        console.log(query)
         return await getResultOfQuery("vue_user", query);
     } catch (error) {
         console.error("Erreur lors de la récupération des données :", error);
@@ -51,16 +51,79 @@ async function getElearningByCategory() {
         console.error("Erreur lors de la récupération des données :", error);
         throw error;}
 }
+async function getElearningInfo(courseId){
+    try{
+    const query = `SELECT * FROM elearning_list WHERE course_id = ${courseId}`;
+    elearningInfo = await getResultOfQuery("vue_admin", query)
+    const { category } = elearningInfo[0]
 
 async function getAllElearning() {
     try {
         const query = `SELECT * FROM elearning_list`;
         console.log(query)
         return await getResultOfQuery("vue_admin", query);
+    const queryCategory = `SELECT * FROM elearning_list WHERE category = ${category}`;
+    otherElearning = await getResultOfQuery("vue_admin", queryCategory)
+
+    return {success : "True", eLearning : elearningInfo, carousel : otherElearning}
+    }
+    catch(error){
+        console.error("Erreur lors de la récupération des données :", error);
+        throw error;
+    }
+
+}
+
+async function getElearningDetail(id_elearning, siren){
+    try {
+        const query = `SELECT * FROM elearning WHERE siren = ${siren} and id_elearning = ${id_elearning}`;
+
+        result = await getResultOfQuery("vue_user", query);
+        console.log(result)
+        if (result.length == 0){
+            return {succes : "False", message : "Pas de eLearning acheté pour cette utilisateur"}
+        }
+
+        return {success : "True",  eLearning : result}
+
     } catch (error) {
         console.error("Erreur lors de la récupération des données :", error);
         throw error;
     }
 }
 
-module.exports = { getElearningBySiren, getElearningCategory, getElearningByCategory, getAllElearning };
+async function getElearningDetailEmployee(idElearning, password, token, siren) {
+    try {
+        const query = `SELECT password, token FROM elearning WHERE id_elearning=${idElearning} AND siren=${siren}`;
+        const result = await getResultOfQuery("vue_user", query);
+
+        // Vérifiez si le résultat est valide
+        if (!result || result.length === 0) {
+            return { success: false, message: "Pas de eLearning acheté pour cet utilisateur" };
+        }
+
+        // Extraire les données correctement
+        const { password: elearningPassword, token: elearningToken } = result[0]; // Utilisez result[0] car SQL retourne un tableau d'objets
+        console.log(elearningPassword, password)
+        // Vérifiez si le token correspond
+        if (elearningToken !== token) {
+            return { success: false, message: "Les tokens ne correspondent pas" };
+        }
+
+        // Comparez le mot de passe
+        const match = await bcrypt.compare(password, elearningPassword);
+        if (!match) {
+            return { success: false, message: "Mot de passe incorrect" };
+        }
+
+        // Récupérer les détails du eLearning
+        return await getElearningDetail(idElearning, siren);
+
+    } catch (error) {
+        console.error("Erreur lors de la récupération des données :", error);
+        throw error;
+    }
+}
+
+
+module.exports = { getElearningBySiren, getElearningCategory, getElearningByCategory, getElearningDetail, getElearningDetailEmployee, getElearningInfo, getAllElearning };

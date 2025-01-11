@@ -24,8 +24,6 @@ const addAnnounce = async (req, res) => {
 const insert = async (req, res) => {
     try {
         const newSubmission = req.body;
-        console.log('Nouvelle soumission reçue :');
-        console.log('regarde :', newSubmission);
 
         await insertNewObject(newSubmission);
 

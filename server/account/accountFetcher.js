@@ -107,7 +107,6 @@ async function getAnnuaireInfo() {
             const numberGiven = await getNumberOfGivenObjects(siren)
             const numberTaken = await getNumberOfTakenObjects(siren)
             const accountInfo = await getAccountInfo(siren);
-            console.log(accountInfo);
             if (accountInfo.success && accountInfo.account.length > 0) {
                 const account = accountInfo.account[0];
                 return { [siren]: { 

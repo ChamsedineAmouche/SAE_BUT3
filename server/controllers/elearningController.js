@@ -1,5 +1,8 @@
-const { getElearningCategory, getElearningByCategory, getElearningBySiren } = require('../elearning/elearningFetcher');
+const { getElearningCategory, getElearningByCategory, getElearningBySiren, getElearningDetail, getElearningDetailEmployee, getElearningInfo } = require('../elearning/elearningFetcher');
 const { addFavorite, deleteFavorite} = require('../elearning/elearningUpdate')
+const { insertElearning } = require('../elearning/elearningInsert')
+const {sendElearningEmail} = require("../nodemailer/mailer")
+const {  getCompanyDataBySiren} = require('../pageproduct/pageProductFetcher')
 
 const getSirenFromRequest = (req) => {
     const { siren } = req.query;
@@ -62,4 +65,56 @@ const deleteElearningFavorite = async (req, res) => {
     }
 };
 
-module.exports = { elearningList, addElearningFavorite, deleteElearningFavorite };
+const elearningPage = async (req, res) => {
+    try{
+        const {siren, source} = getSirenFromRequest(req)
+        if (source === "session") {
+            const { idElearning } = req.query;
+            const result = await getElearningDetail(idElearning, siren)
+            res.json(result)
+        }
+        if (source === "query"){
+            const { idElearning, password, token } = req.query;
+            const result = await getElearningDetailEmployee(idElearning, password, token, siren)
+            res.json(result)        
+        }
+    }
+    catch(error){
+        console.error("Erreur lors de la récupération des infos du elearning:" ,error)
+        res.status(500).json({ error: error.message || "Erreur interne du serveur" });
+    }
+}
+
+const elearningInsert = async (req, res) => {
+    try{
+        const {siren, source} = getSirenFromRequest(req)
+        if (source === "session") {
+            const { courseId } = req.query;
+            const result = await insertElearning(courseId, siren)
+            const { password , token , idElearning } = result
+            console.log("Password processed successfully.")
+            var link = `http://localhost:3000/acces_elearning?courseId=${courseId}&idElearning=${idElearning}&token=${token}&siren=${siren}`
+            const companyData = await getCompanyDataBySiren(siren);
+            await sendElearningEmail(companyData[0].email, link, companyData[0].nom, password)
+        }
+    }
+    catch(error){
+        console.error("Erreur lors de l'insertion de l'elearning:" ,error)
+        res.status(500).json({ error: error.message || "Erreur interne du serveur" });
+    }
+}
+  
+const elearningInfo = async (req, res) => {
+    try{
+    const { courseId } = req.query;
+    const result = await getElearningInfo(courseId)
+    res.json(result)
+}
+    catch(error){
+        console.error("Erreur lors de la récupération des infos du elearning:" ,error)
+        res.status(500).json({ error: error.message || "Erreur interne du serveur" });
+    }
+}
+
+
+module.exports = { elearningList, addElearningFavorite, deleteElearningFavorite, elearningPage, elearningInfo, elearningInsert };

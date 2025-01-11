@@ -72,10 +72,8 @@ const pickProduct = async (req, res) => {
 
                 const query = `SELECT c.email FROM company c JOIN listing_favorites lf ON c.siren = lf.siren WHERE lf.id_item = ${idItem}`;
                 const companyWhoLike = await getResultOfQuery('vue_user', query);
-                console.log(companyWhoLike);
                 for (const key in companyWhoLike[0]) {
                     const email = companyWhoLike[0][key]
-                    console.log(email);
                     sendMailForFavoritesObjects(email, productData.title, companyData[0].nom, idItem);
                 }
             }
