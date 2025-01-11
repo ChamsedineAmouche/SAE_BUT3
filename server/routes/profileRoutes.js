@@ -9,7 +9,8 @@ const {
     profileParameters,
     updateProfile,
     updateProfileNotif,
-    updateProfileInfo
+    updateProfileInfo,
+    profileTransactionSource
 } = require('../controllers/profileController');
 
 router.get('/profile',profile)
@@ -21,5 +22,6 @@ router.get('/profileParameters',profileParameters)
 router.get('/updateProfile', updateProfile)
 router.get('/updateProfileNotif', updateProfileNotif)
 router.get('/updateProfileInfo', updateProfileInfo)
+router.get('/profileTransactionSource', profileTransactionSource)
 
 module.exports = router;

@@ -1,7 +1,7 @@
 const { getAccountInfo, getAccountFavorites, getAccountPreferences } = require("../account/accountFetcher")
 const { getListingBySirenAndStatus } = require("../pageproduct/pageProductFetcher")
 const {getElearningBySiren} = require("../elearning/elearningFetcher")
-const {getTransactiongBySiren} = require("../transactions/transactionFetcher")
+const {getTransactiongBySiren, getTransactionSourceBySiren} = require("../transactions/transactionFetcher")
 const {getAdressContainerByEmplacement} = require("../stockage/stockageFetcher")
 const { getProductData} = require('../pageproduct/pageProductFetcher')
 const {getObjectTypeLabels, replacePreferenceIdsWithLabels} = require('../object/objectFetcher')
@@ -89,12 +89,43 @@ const profileTransactions = async (req, res) => {
                 const { id_item: idItem, date_transaction: dateTransaction, status } = transaction;
 
                 const productData = await getProductData(idItem);
+                const { idEmplacement, title, siren } = productData;
+
+                const companyData = await getAccountInfo(siren)
+                const {nom} = companyData.account[0]
+
+                const containerInfo = await getAdressContainerByEmplacement(idEmplacement);
+                const { adress: address, zipcode } = containerInfo[0];
+
+                return { idItem,title, dateTransaction, status, address, zipcode, nom };
+            })
+        );
+        res.json({ transactions: enrichedTransactions });
+    } catch (error) {
+        console.error('Erreur lors du traitement des transactions :', error);
+        res.status(500).json({ error: error.message || 'Erreur interne du serveur' });
+    }
+};
+
+const profileTransactionSource = async (req, res) => {
+    try {
+        const { siren, source } = getSirenFromRequest(req);
+
+        const transactions = await getTransactionSourceBySiren(siren);
+        const enrichedTransactions = await Promise.all(
+            transactions.map(async (transaction) => {
+                const { id_item: idItem, date_transaction: dateTransaction, status, siren : siren_buyer } = transaction;
+
+                const companyData = await getAccountInfo(siren_buyer)
+                const {nom} = companyData.account[0]
+
+                const productData = await getProductData(idItem);
                 const { idEmplacement, title } = productData;
 
                 const containerInfo = await getAdressContainerByEmplacement(idEmplacement);
                 const { adress: address, zipcode } = containerInfo[0];
 
-                return { idItem,title, dateTransaction, status, address, zipcode };
+                return { idItem,title, dateTransaction, status, address, zipcode , nom};
             })
         );
         res.json({ transactions: enrichedTransactions });
@@ -225,4 +256,4 @@ const updateProfileInfo= async (req, res) => {
     }
 };
 
-module.exports = { profile, profileFavorite, profileListing, profileTransactions, profilePurchases, profileParameters, updateProfile, updateProfileNotif, updateProfileInfo };
+module.exports = { profile, profileFavorite, profileListing, profileTransactions, profilePurchases, profileParameters, updateProfile, updateProfileNotif, updateProfileInfo, profileTransactionSource };

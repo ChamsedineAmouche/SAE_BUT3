@@ -61,8 +61,8 @@ const MyReservation = () => {
     });
   };
 
-  const columns = ['title', 'dateTransaction', 'address', 'status'];
-  const columnNames = ['Titre', 'Date de récupération', 'Adresse', 'Statut'];
+  const columns = ['title', 'dateTransaction', 'address', 'status', 'nom'];
+  const columnNames = ['Titre', 'Date de récupération', 'Adresse', 'Statut', 'Entreprise'];
 
   const formattedReservations = reservations.map((reservation) => {
     let statusElement;
@@ -88,6 +88,7 @@ const MyReservation = () => {
       title: reservation.title,
       dateTransaction: new Date(reservation.dateTransaction).toLocaleDateString(),
       address: reservation.address,
+      nom : reservation.nom,
       status: statusElement, // Statut formaté avec Tailwind
     };
   });
