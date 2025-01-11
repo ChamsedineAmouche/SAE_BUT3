@@ -23,4 +23,14 @@ function replacePreferenceIdsWithLabels(preferences, labels) {
     return updatedPreferences;
 }
 
-module.exports = { getObjectTypeLabels, replacePreferenceIdsWithLabels };
+async function getSuscpiciousListing() {
+    try {
+        const query = "SELECT * FROM listing";
+        const result = await getResultOfQuery("vue_user", query);
+        return {result}
+    } catch (error) {
+        throw new Error("Erreur lors de la récupération des labels des types d'objet");
+    }
+}
+
+module.exports = { getObjectTypeLabels, replacePreferenceIdsWithLabels , getSuscpiciousListing};
