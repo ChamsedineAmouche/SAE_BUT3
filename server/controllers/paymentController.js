@@ -16,7 +16,7 @@ const insertCard = async (req, res) => {
             const { cardName, firstName, lastName, cardNumber, expirationDate, isDefault } = req.query
             console.log(cardName, firstName, lastName, cardNumber, expirationDate, isDefault)
             await insertCardDetails(siren, cardName, firstName, lastName, cardNumber, expirationDate, isDefault)
-            res.status(200);
+            res.status(200).json({ message: "Carte insérée avec succès." });
         }
         else {
             res.status(500).json({ error: 'Erreur interne du serveur' });

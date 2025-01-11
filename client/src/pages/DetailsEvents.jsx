@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import eventImage from "../assets/images/circular_economy.png";
 
 const DetailsEvent = () => {
   const [eventData, setEventData] = useState(null);
@@ -61,7 +60,7 @@ const DetailsEvent = () => {
       {/* Image centrée */}
       <div className="flex justify-center mt-12">
         <img
-          src={eventImage}
+          src="/event_default.jpg"
           alt={eventData.title}
           className="w-3/4 md:w-1/2 lg:w-1/3 rounded-lg shadow-lg"
         />

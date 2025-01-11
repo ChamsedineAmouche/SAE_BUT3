@@ -2,45 +2,143 @@ import React, { useEffect, useState } from "react";
 import Switch from "../Switch/Switch";
 import StaticGrid from "../StaticGrid/StaticGrid";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBuildingColumns, faEdit, faPlusSquare, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
-import { useNavigate } from "react-router-dom";
-import { faApple, faApplePay, faGooglePay, faPaypal } from "@fortawesome/free-brands-svg-icons";
+import { faBuildingColumns, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import ElearningThumbnail from "../ElearningThumbnail/ElearningThumbnail";
+import toast from "react-hot-toast";
 
 const MyPurchase = () => {
-	const navigate = useNavigate();
-	const [selectedOption, setSelectedOption] = useState("E-learning acheté");
-	const [cards, setCards] = useState([]);
-	const [editCard, setEditCard] = useState(null);
-	const [formData, setFormData] = useState({
-	  cardName: "",
-	  holderName: "",
-	  cardNumber: "",
-	  month: "",
-	  year: "",
-	  cvc: ""
-	});
-  const [data, setData] = useState(null)
-  const [isLoading, setIsLoading] = useState(true)
+  const [selectedOption, setSelectedOption] = useState("E-learning acheté");
+  const [cards, setCards] = useState([]);
+  const [formData, setFormData] = useState({
+    cardName: "",
+    lastName: "",
+    firstName: "",
+    cardNumber: "",
+    month: "",
+    year: "",
+    cvc: "",
+  });
+  const [isFormValid, setIsFormValid] = useState(false);
+  const [data, setData] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const fetchCards = async () => {
+    try {
+      const response = await fetch("/getCards");
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+      const cardsData = await response.json();
+      const formattedCards = cardsData.cards.map((card) => {
+        const [month, year] = card.expiryDate.split("/");
+        return {
+          id: card.id,
+          cardName: card.cardName,
+          holderName: `${card.firstName} ${card.lastName}`,
+          cardNumber: card.cardNumber,
+          month,
+          year,
+        };
+      });
+
+      setCards(formattedCards);
+    } catch (error) {
+      console.error("Erreur lors de la récupération des cartes :", error);
+    }
+  };
 
   useEffect(() => {
-    fetch('/profilePurchases')
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+    const fetchPurchases = async () => {
+      try {
+        const response = await fetch("/profilePurchases");
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        const purchasesData = await response.json();
+        setData(purchasesData);
+      } catch (error) {
+        console.error("Erreur lors de la récupération des achats :", error);
+      } finally {
+        setIsLoading(false);
       }
-      return response.json();
-    })
-    .then((data) => {
-      console.log(data)
-      setData(data);
-      setIsLoading(false);
-    })
-    .catch(error => {
-      console.error('Error fetching data:', error);
-      setIsLoading(false);
-    })
+    };
+
+    fetchPurchases();
+    fetchCards();
   }, []);
+
+  useEffect(() => {
+    const isValid =
+      formData.cardName.trim() !== "" &&
+      formData.lastName.trim() !== "" &&
+      formData.firstName.trim() !== "" &&
+      formData.cardNumber.trim().length === 16 &&
+      /^\d+$/.test(formData.cardNumber) &&
+      formData.month.trim() !== "" &&
+      formData.year.trim() !== "" &&
+      formData.cvc.trim().length === 3 &&
+      /^\d+$/.test(formData.cvc);
+    setIsFormValid(isValid);
+  }, [formData]);
+
+  const handleAddCard = async () => {
+    const queryParams = new URLSearchParams({
+      cardName: formData.cardName,
+      firstName: formData.firstName,
+      lastName: formData.lastName,
+      cardNumber: formData.cardNumber,
+      expirationDate: `${formData.month}/${formData.year.slice(-2)}`,
+      isDefault: 0,
+    });
+  
+    try {
+      const response = await fetch(`/insertCard?${queryParams.toString()}`, {
+        method: "GET",
+      });
+  
+      if (response.ok) {
+        toast.success("Carte insérée avec succès.");
+        await fetchCards();
+  
+        setFormData({
+          cardName: "",
+          lastName: "",
+          firstName: "",
+          cardNumber: "",
+          month: "",
+          year: "",
+          cvc: "",
+        });
+      } else {
+        console.error("Erreur lors de l'insertion de la carte");
+        toast.error("Erreur lors de l'insertion de la carte.");
+      }
+    } catch (error) {
+      console.error("Erreur lors de l'insertion de la carte :", error);
+      toast.error("Erreur lors de l'insertion de la carte.");
+    }
+  };
+
+  const handleDeleteCard = async (cardId) => {
+    try {
+      const response = await fetch(`/deleteCard?cardId=${cardId}`, {
+        method: "GET",
+      });
+      
+
+      if (response.ok) {
+        toast.success("Carte supprimée avec succès.");
+        await fetchCards();
+      } else {
+        console.error("Erreur lors de la suppression de la carte");
+        toast.error("Erreur lors de l'insertion de la carte.");
+      }
+    } catch (error) {
+      console.error("Erreur lors de la suppression de la carte :", error);
+      toast.error("Erreur lors de l'insertion de la carte.");
+    }
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({ ...prevData, [name]: value }));
+  };
 
   if (isLoading) {
     return <p>Chargement en cours...</p>;
@@ -51,129 +149,88 @@ const MyPurchase = () => {
   }
 
   const elearningThumbnail = data.purchases.map((elearning) => (
-    <ElearningThumbnail key={`thumbnail-${elearning.id_item}`} elearning={elearning} />
+    <ElearningThumbnail key={`thumbnail-${elearning.id_item}`} elearning={elearning} fromAccount={true} />
   ));
-
-  
-	const handleSwitchChange = (option) => {
-	  setSelectedOption(option);
-	};
-  
-	const handleInputChange = (e) => {
-	  const { name, value } = e.target;
-	  setFormData((prevData) => ({ ...prevData, [name]: value }));
-	};
-  
-	const handleAddCard = () => {
-	  if (editCard === null) {
-		// Ajouter une nouvelle carte
-		setCards((prevCards) => [
-		  ...prevCards,
-		  { ...formData, id: Date.now() } // Ajoute un ID unique pour chaque carte
-		]);
-	  } else {
-		// Modifier une carte existante
-		setCards((prevCards) =>
-		  prevCards.map((card) =>
-			card.id === editCard.id ? { ...formData, id: card.id } : card
-		  )
-		);
-	  }
-  
-	  // Réinitialiser le formulaire après l'ajout ou la modification
-	  setFormData({
-		cardName: "",
-		holderName: "",
-		cardNumber: "",
-		month: "",
-		year: "",
-		cvc: ""
-	  });
-	  setEditCard(null); // Réinitialiser l'état d'édition
-	};
-  
-	const handleDeleteCard = (cardId) => {
-	  setCards((prevCards) => prevCards.filter((card) => card.id !== cardId));
-	};
-  
-	const handleEditCard = (card) => {
-	  setFormData(card);
-	  setEditCard(card);
-	};
 
   return (
     <div className="bg-white w-full">
       <h2 className="text-3xl font-bold text-darkGreen mb-8 text-center">Mes achats</h2>
-      
-      <Switch 
-        option1Title={"E-learning acheté"} 
-        option2Title={"Moyen de paiement"} 
-        selectedDefault={"E-learning acheté"} 
-        onSwitchChange={handleSwitchChange}
+
+      <Switch
+        option1Title={"E-learning acheté"}
+        option2Title={"Moyen de paiement"}
+        selectedDefault={"E-learning acheté"}
+        onSwitchChange={(option) => setSelectedOption(option)}
       />
 
-	{selectedOption === "E-learning acheté" && (
+      {selectedOption === "E-learning acheté" && (
         <div id="E-learning acheté" className="overflow-y-auto h-[70vh]">
-          <StaticGrid items={elearningThumbnail}/>
+          <StaticGrid items={elearningThumbnail} />
         </div>
       )}
 
       {selectedOption === "Moyen de paiement" && (
-        <div id="Moyen de paiement" className="overflow-y-auto h-[70vh] py-4">
+        <div id="Moyen de paiement" className="py-4">
           <h2 className="text-xl font-semibold text-darkGreen mb-8 text-center">Mes cartes bancaires</h2>
 
           <div className="flex flex-col lg:flex-row gap-6">
-            {/* Formulaire d'ajout de carte */}
-            <div className="w-full lg:w-1/2 p-6 bg-yellowGreen1 bg-opacity-10 rounded-lg">
-              <h2 className="text-2xl font-semibold text-gray-800 mb-8">
-                {editCard ? "Modifier une carte bancaire" : "Ajouter une carte bancaire"}
-              </h2>
+            <div className="w-full lg:w-1/2 p-6 bg-yellowGreen1 bg-opacity-10 rounded-lg overflow-y-auto h-[55vh]">
+              <h2 className="text-2xl font-semibold text-gray-800 mb-8">Ajouter une carte bancaire</h2>
               <form>
-                <input 
-                  type="text" 
+                <input
+                  type="text"
                   name="cardName"
                   value={formData.cardName}
                   onChange={handleInputChange}
-                  placeholder="Nom de la carte" 
+                  placeholder="Nom de la carte"
                   className="w-full p-3 mb-4 border border-gray-300 rounded-md"
                 />
-                <input 
-                  type="text" 
-                  name="holderName"
-                  value={formData.holderName}
+                <input
+                  type="text"
+                  name="lastName"
+                  value={formData.lastName}
                   onChange={handleInputChange}
-                  placeholder="Nom du titulaire" 
+                  placeholder="Nom du titulaire"
                   className="w-full p-3 mb-4 border border-gray-300 rounded-md"
                 />
-                <input 
-                  type="text" 
+                <input
+                  type="text"
+                  name="firstName"
+                  value={formData.firstName}
+                  onChange={handleInputChange}
+                  placeholder="Prénom du titulaire"
+                  className="w-full p-3 mb-4 border border-gray-300 rounded-md"
+                />
+                {formData.cardNumber.length !== 16 && (
+                  <p className="text-red">Le numéro de carte doit comporter 16 caractères.</p>
+                )}
+                <input
+                  type="text"
                   name="cardNumber"
                   value={formData.cardNumber}
                   onChange={handleInputChange}
-                  placeholder="Numéro de carte" 
+                  placeholder="Numéro de carte (16 chiffres)"
                   className="w-full p-3 mb-4 border border-gray-300 rounded-md"
                 />
-                
                 <div className="flex space-x-4 mb-4">
-                  <select 
-                    name="month" 
-                    value={formData.month} 
-                    onChange={handleInputChange} 
+                  <select
+                    name="month"
+                    value={formData.month}
+                    onChange={handleInputChange}
                     className="w-1/3 p-3 border border-gray-300 bg-white rounded-md"
                   >
                     <option value="">Mois</option>
-                    {/* Liste des mois */}
-                    {[...Array(12).keys()].map(i => (
+                    {[...Array(12).keys()].map((i) => (
                       <option key={i} value={String(i + 1).padStart(2, "0")}>
-                        {new Date(0, i).toLocaleString('fr-FR', { month: 'long' })}
+                        {new Date(0, i).toLocaleString("fr-FR", { month: "long" })}
                       </option>
                     ))}
                   </select>
 
-                  <select 
-                    name="year" 
-                    value={formData.year} 
-                    onChange={handleInputChange} 
+                  <select
+                    name="year"
+                    value={formData.year}
+                    onChange={handleInputChange}
                     className="w-1/3 p-3 border border-gray-300 bg-white rounded-md"
                   >
                     <option value="">Année</option>
@@ -184,77 +241,59 @@ const MyPurchase = () => {
                     ))}
                   </select>
 
-                  <input 
-                    type="text" 
+                  <input
+                    type="text"
                     name="cvc"
                     value={formData.cvc}
                     onChange={handleInputChange}
-                    placeholder="CVC" 
+                    placeholder="CVC (3 chiffres)"
                     className="w-1/3 p-3 border border-gray-300 rounded-md"
                   />
                 </div>
-                
-                <button 
-                  type="button" 
+
+                <button
+                  type="button"
                   onClick={handleAddCard}
-                  className="w-full bg-oliveGreen text-white px-6 py-3 text-lg font-semibold rounded-md hover:bg-opacity-90 transition duration-200"
+                  disabled={!isFormValid}
+                  className={`w-full px-6 py-3 text-lg font-semibold rounded-md transition duration-200 ${
+                    isFormValid
+                      ? "bg-oliveGreen text-white hover:bg-opacity-90"
+                      : "bg-oliveGreen bg-opacity-80 text-white cursor-not-allowed"
+                  }`}
                 >
-                  {editCard ? "Mettre à jour" : "Sauvegarder"}
+                  Sauvegarder
                 </button>
               </form>
             </div>
-
-            {/* Cartes bancaires enregistrées */}
-            <div className="w-full lg:w-1/2 p-6 bg-yellowGreen1 bg-opacity-10 rounded-lg">
+            <div className="w-full lg:w-1/2 p-6 bg-yellowGreen1 bg-opacity-10 rounded-lg overflow-y-auto h-[55vh]">
               <h3 className="text-xl font-semibold text-gray-800 mb-6">Cartes enregistrées</h3>
               <div className="space-y-4">
-                {cards.length > 0 ? 
-					cards.map((card) => (
-					<div key={card.id} className="flex justify-between items-center bg-darkGreen bg-opacity-30 p-4 rounded-lg">
-						<span className="text-darkGreen font-semibold text-xl">{card.cardName}</span>
-						<div className="flex space-x-2">
-						<button 
-						onClick={() => handleEditCard(card)} 
-						className="text-blue-600 bg-blue p-2 w-10 h-10 rounded-lg text-white text-lg hover:text-blue-400"
-						>
-						<FontAwesomeIcon icon={faEdit} />
-						</button>
-						<button 
-						onClick={() => handleDeleteCard(card.id)} 
-						className="text-red-600 bg-red p-2 w-10 h-10 rounded-lg text-white text-lg hover:text-red-400"
-						>
-						<FontAwesomeIcon icon={faTrashAlt} />
-						</button>
-						</div>
-					</div>
-					))
-					: "Aucune carte enregistrée"
-                }
+                {cards.length > 0 ? (
+                  cards.map((card) => (
+                    <div
+                      key={card.id}
+                      className="flex justify-between items-center bg-darkGreen bg-opacity-30 p-4 rounded-lg"
+                    >
+                      <span className="text-darkGreen font-semibold text-xl">{card.cardName}</span>
+                      <div className="flex space-x-2">
+                        <button
+                          onClick={() => handleDeleteCard(card.id)}
+                          className="text-white bg-red p-2 w-10 h-10 rounded-lg text-white text-lg hover:text-red-400"
+                        >
+                          <FontAwesomeIcon icon={faTrashAlt} />
+                        </button>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <p>Aucune carte enregistrée</p>
+                )}
               </div>
             </div>
           </div>
-
-          <h2 className="text-xl font-semibold text-darkGreen mb-8 text-center mt-5">Mes modes de paiements tiers</h2>
-		  
-		  <div className="flex flex-col lg:flex-row gap-6 items-center justify-center">
-			<div className=" w-32 h-24 rounded-lg shadow-lg flex items-center justify-center text-5xl text-yellowGreen1 cursor-pointer hover:bg-yellowGreen1 hover:bg-opacity-20">
-				<FontAwesomeIcon icon={faPaypal} />
-			</div>
-			<div className=" w-32 h-24 rounded-lg shadow-lg flex items-center justify-center text-5xl text-yellowGreen1 cursor-pointer hover:bg-yellowGreen1 hover:bg-opacity-20">
-				<FontAwesomeIcon icon={faApplePay} />
-			</div>
-			<div className=" w-32 h-24 rounded-lg shadow-lg flex items-center justify-center text-5xl text-yellowGreen1 cursor-pointer hover:bg-yellowGreen1 hover:bg-opacity-20">
-				<FontAwesomeIcon icon={faGooglePay} />
-			</div>
-			<div className=" w-32 h-24 rounded-lg shadow-lg flex items-center justify-center text-5xl text-yellowGreen1 cursor-pointer hover:bg-yellowGreen1 hover:bg-opacity-20">
-				<FontAwesomeIcon icon={faBuildingColumns} />
-			</div>
-		  </div>
-
         </div>
       )}
     </div>
-  );
+  ); 
 };
-
 export default MyPurchase;

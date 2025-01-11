@@ -73,7 +73,7 @@ const DetailsDeposit = () => {
           status: data.product[0].status,
         }));
         setCompanySeller(data.companySeller[0]);
-        setCurrentCompany(data.currentCompany[0]);
+        setCurrentCompany(data.currentCompany[0] ? data.currentCompany[0] : "");
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
