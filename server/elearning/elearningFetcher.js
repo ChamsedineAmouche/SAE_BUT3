@@ -52,4 +52,15 @@ async function getElearningByCategory() {
         throw error;}
 }
 
-module.exports = { getElearningBySiren, getElearningCategory, getElearningByCategory };
+async function getAllElearning() {
+    try {
+        const query = `SELECT * FROM elearning_list`;
+        console.log(query)
+        return await getResultOfQuery("vue_admin", query);
+    } catch (error) {
+        console.error("Erreur lors de la récupération des données :", error);
+        throw error;
+    }
+}
+
+module.exports = { getElearningBySiren, getElearningCategory, getElearningByCategory, getAllElearning };

@@ -11,4 +11,15 @@ async function deleteObjectFavorite(idItem, siren) {
     }
 }
 
-module.exports = { deleteObjectFavorite };
+async function deleteObject(idItem) {
+    try {
+        const query =`DELETE FROM listing WHERE id_item = ${idItem}`;
+        console.log(query)
+        const result = await getResultOfQuery("vue_user", query);
+
+    } catch (error) {
+        throw new Error("Erreur lors de la récupération des labels des types d'objet");
+    }
+}
+
+module.exports = { deleteObjectFavorite , deleteObject};
