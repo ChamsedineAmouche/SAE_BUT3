@@ -10,8 +10,8 @@ const OtherThumbnail = ({ other, type }) => {
     if (!other || !other.id_item) return;
   }, [other]);
 
-  if (!other) {
-    return <div>Non disponible</div>;
+  if (!other || other === "") {
+    return <div>Indisponible</div>;
   }
 
   if (type === "veille") {

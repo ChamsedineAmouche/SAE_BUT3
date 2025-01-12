@@ -72,8 +72,8 @@ const DepositThumbnail = ({ object }) => {
       });
   };
 
-  if (!object) {
-    return <div>Pas d'objet disponible</div>;
+  if (!object ||object === 0) {
+    return <div>Dépot Indisponible</div>;
   }
 
   const { id_item, title, category, state, status } = object;
