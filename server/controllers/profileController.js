@@ -3,7 +3,7 @@ const { getListingBySirenAndStatus } = require("../pageproduct/pageProductFetche
 const {getElearningBySiren} = require("../elearning/elearningFetcher")
 const {getTransactiongBySiren, getTransactionSourceBySiren} = require("../transactions/transactionFetcher")
 const {getAdressContainerByEmplacement} = require("../stockage/stockageFetcher")
-const { getProductData} = require('../pageproduct/pageProductFetcher')
+const { getProductData, getStatusForReservation} = require('../pageproduct/pageProductFetcher')
 const {getObjectTypeLabels, replacePreferenceIdsWithLabels} = require('../object/objectFetcher')
 const {updateUsername, updateMail, updateAdress, updateCity, updatePhone, updateZipcode, updateNotif, updateInfo} = require ("../account/accountUpdate")
 
@@ -56,8 +56,8 @@ const profileListing = async (req, res) => {
     try {
         const { siren, source } = getSirenFromRequest(req);
 
-        const activeListing = await getListingBySirenAndStatus(siren, 'active');
-        const draftListing = await getListingBySirenAndStatus(siren, 'draft');
+        const activeListing = await getListingBySirenAndStatus(siren, "('active', 'waiting', 'reserved', 'picked')");
+        const draftListing = await getListingBySirenAndStatus(siren, "('draft')");
         res.json({
             active: activeListing,
             draft: draftListing,
@@ -89,15 +89,16 @@ const profileTransactions = async (req, res) => {
                 const { id_item: idItem, date_transaction: dateTransaction, status } = transaction;
 
                 const productData = await getProductData(idItem);
-                const { idEmplacement, title, siren } = productData;
+                const { idEmplacement, title, siren: productSiren } = productData;
 
-                const companyData = await getAccountInfo(siren)
-                const {nom} = companyData.account[0]
+                const companyData = await getAccountInfo(productSiren);
+                const { nom } = companyData.account[0];
 
                 const containerInfo = await getAdressContainerByEmplacement(idEmplacement);
                 const { adress: address, zipcode } = containerInfo[0];
 
-                return { idItem,title, dateTransaction, status, address, zipcode, nom };
+
+                return { idItem, title, dateTransaction, status, address, zipcode, nom };
             })
         );
         res.json({ transactions: enrichedTransactions });
@@ -120,12 +121,15 @@ const profileTransactionSource = async (req, res) => {
                 const {nom} = companyData.account[0]
 
                 const productData = await getProductData(idItem);
-                const { idEmplacement, title } = productData;
+                const { idEmplacement, title, siren: productSiren } = productData;
 
                 const containerInfo = await getAdressContainerByEmplacement(idEmplacement);
                 const { adress: address, zipcode } = containerInfo[0];
 
-                return { idItem,title, dateTransaction, status, address, zipcode , nom};
+                const statusVerif = await getStatusForReservation(idItem, status, productSiren);
+                console.log(statusVerif);
+
+                return { idItem,title, dateTransaction, statusVerif, address, zipcode , nom};
             })
         );
         res.json({ transactions: enrichedTransactions });

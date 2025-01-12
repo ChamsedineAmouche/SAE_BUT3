@@ -157,7 +157,8 @@ async function getProductData(id) {
 //Renvoie tout les depots et ses infos a partir d'un statut et d'un siren
 async function getListingBySirenAndStatus(siren, status){
     try{
-        const query = `SELECT id_item FROM listing WHERE siren = ${siren} and status = '${status}'`;
+        const query = `SELECT id_item FROM listing WHERE siren = ${siren} and status IN ${status}`;
+        
         console.log(query)
         const listingItems = await getResultOfQuery('vue_user', query)
         console.log(listingItems)
@@ -176,4 +177,43 @@ async function getListingBySirenAndStatus(siren, status){
     }
 }
 
-module.exports = { getDataForProductPageById, getProductData, getListingBySirenAndStatus, getCompanyDataBySiren };
+async function getStatusForReservation(id, status, siren) {
+    console.log(status)
+    if (status === "waiting") {
+        const query = `
+            SELECT t.status, t.siren
+            FROM transaction t
+            JOIN (
+                SELECT id_item, MAX(date_transaction) AS max_date
+                FROM transaction
+                WHERE id_item = ${id}
+                GROUP BY id_item
+            ) latest ON t.id_item = latest.id_item AND t.date_transaction = latest.max_date
+            WHERE t.id_item = ${id};
+        `;
+
+        try {
+            const result = await getResultOfQuery('vue_user', query);
+
+            if (result.length > 0) {
+                const latestTransaction = result[0];
+                const latestSiren = latestTransaction.siren;
+
+                if (latestSiren === siren) {
+                    return "waiting";
+                } else {
+                    return "reserved";
+                }
+            } else {
+                return status;
+            }
+        } catch (error) {
+            console.error("Erreur lors de l'exécution de la requête :", error);
+            throw error;
+        }
+    } else {
+        return status;
+    }
+}
+
+module.exports = { getDataForProductPageById, getProductData, getListingBySirenAndStatus, getCompanyDataBySiren, getStatusForReservation };

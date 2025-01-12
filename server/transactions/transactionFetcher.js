@@ -13,7 +13,9 @@ async function getTransactiongBySiren(siren) {
             FROM transaction
             GROUP BY id_item
         ) latest ON t.id_item = latest.id_item AND t.date_transaction = latest.max_date
-         WHERE t.siren = ${siren};`;
+        JOIN listing l ON t.id_item = l.id_item 
+         WHERE t.siren = ${siren}
+         AND t.siren != l.siren;`;
         return await getResultOfQuery("vue_user", query);
     } catch (error) {
         console.error("Erreur lors de la récupération des données :", error);
