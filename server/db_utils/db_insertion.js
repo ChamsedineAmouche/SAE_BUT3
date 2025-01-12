@@ -3,14 +3,19 @@ const {getResultOfQuery} = require('./db_functions')
 const FileType = require("file-type");
 const {getCapacityRemaining, getDataOfTheEvent, getNumberOfParticipants} = require("../event/utils_event");
 
-const insertListingWithImages = async (newSubmission) => {
+const insertListingWithImages = async (newSubmission, siren) => {
     const connection = getDbConnection('vue_user');
     const promiseConnection = connection.promise();
     try {
         await promiseConnection.beginTransaction();
 
         const { title, description, dimensions, category, state, location, files } = newSubmission;
-
+        const address = location.split(',')[0].trim();
+        const idContainerResult = await getResultOfQuery('vue_user',
+            'SELECT id_Container FROM container WHERE adress = ' + "'" + address + "'");
+        const idContainer = idContainerResult[0].id_Container;
+        const idEmplacementResult = await getResultOfQuery('vue_user',
+            `SELECT id_emplacement FROM emplacement WHERE id_Container = ${idContainer} AND available = 1 LIMIT 1`);
         //console.log('Fichiers reçus (Base64) :', files);
         const stateIdRequest = await getResultOfQuery('vue_user',
             'SELECT id_condition_type FROM condition_type WHERE condition_type.label = ' + "'" + state + "'");
@@ -21,8 +26,8 @@ const insertListingWithImages = async (newSubmission) => {
         const stateId = stateIdRequest[0].id_condition_type;
         const categoryId = categoryIdRequest[0].id_object_type;
         const status = "active";
-        const idEmplacement = 7;
-        const siren = "18770918300235";
+        const idEmplacement = idEmplacementResult[0].id_emplacement;
+        console.log("emplacement id: " + idEmplacement);
 
         const datePosted = new Date().toISOString().slice(0, 19).replace('T', ' ');
 
@@ -33,12 +38,10 @@ const insertListingWithImages = async (newSubmission) => {
             [title, description, dimensionString, datePosted, status, idEmplacement, siren, categoryId, stateId]
         );
 
-        const idItem = listingResult.insertId;
-        //console.log(`Données insérées dans la table listing avec idItem: ${idItem}`);
+        const [updateResult] = await promiseConnection.execute(
+            `UPDATE emplacement SET available = 0 WHERE id_emplacement = ?`, [idEmplacement]);
 
-        // Insérer chaque image dans la table `listing_image`
-        //console.log('Type de files:', typeof files);
-       // console.log('Contenu de files:', files);
+        const idItem = listingResult.insertId;
         for (const base64File of files) {
             const bufferToInsert = Buffer.from(base64File, 'base64');
             const fileType = await FileType.fromBuffer(bufferToInsert);
@@ -53,6 +56,7 @@ const insertListingWithImages = async (newSubmission) => {
 
         await promiseConnection.commit();
         console.log('Transaction réussie, données insérées avec succès.');
+        return idItem;
     } catch (error) {
         await promiseConnection.rollback();
         console.error('Erreur lors de l\'insertion, transaction annulée :', error);

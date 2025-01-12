@@ -35,9 +35,10 @@ async function getStatesForObjects() {
     }
 }
 
-async function insertNewObject(newSubmission) {
+async function insertNewObject(newSubmission, siren) {
     try {
-        await insertListingWithImages(newSubmission);
+        const idItem = await insertListingWithImages(newSubmission, siren);
+        return idItem
     } catch (error) {
         console.error('Erreur lors de la récupération des données :', error);
     }

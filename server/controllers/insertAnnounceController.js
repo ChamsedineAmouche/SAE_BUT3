@@ -24,11 +24,15 @@ const addAnnounce = async (req, res) => {
 const insert = async (req, res) => {
     try {
         const newSubmission = req.body;
-
-        await insertNewObject(newSubmission);
-
+        const siren = req.session.user.siren;
+        let idItem = "";
+        if (siren) {
+            idItem = await insertNewObject(newSubmission, siren);
+        } else {
+            throw new Error("Vous n'etes pas connecté");
+        }
         // Si besoin, sauvegarde des fichiers et des données dans une base ou un fichier
-        res.status(200).json({ message: 'Soumission reçue avec succès : ' + newSubmission});
+        res.status(200).json(idItem);
     } catch (error) {
         console.error('Erreur lors du traitement de la soumission :', error);
         res.status(500).json({ error: 'Erreur interne du serveur' });
