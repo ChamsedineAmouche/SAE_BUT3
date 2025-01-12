@@ -1,5 +1,6 @@
 const { getDataForEventPage } = require('../event/eventPageFetcher')
 const {insertNewInscriptionForEvent} = require("../db_utils/db_insertion");
+const {deleteInscription} = require("../event/eventDelete")
 
 const getEventPageData = async (req, res) => {
     try {
@@ -27,4 +28,18 @@ const inscriptionEvent = async (req, res) => {
     }
 };
 
-module.exports = { getEventPageData, inscriptionEvent }
+const desinscriptionEvent = async (req, res) => {
+    try {
+        const {eventId, siren} = req.query;
+
+        await deleteInscription(eventId, siren);
+
+        // Si besoin, sauvegarde des fichiers et des données dans une base ou un fichier
+        res.status(200).json({ message: 'Soumission reçue avec succès'});
+    } catch (error) {
+        console.error('Erreur lors du traitement de la soumission :', error);
+        res.status(500).json({ error: 'Erreur interne du serveur' });
+    }
+};
+
+module.exports = { getEventPageData, inscriptionEvent, desinscriptionEvent }

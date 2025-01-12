@@ -50,14 +50,14 @@ L'équipe GreenCircle.`;
 const sendMailForReservation = (toEmail, itemName, companyName, itemId, status ) => {
     let subject = '';
     let firstText = '';
-    if (status === 'reserved') {
+    if (status === 'active') {
         subject = 'Objet réservé';
         firstText = `Vous avez bien réservé un(e) ${itemName}.`;
     } else {
         subject = 'Objet récupéré';
         firstText = `Vous avez bien récupéré un(e) ${itemName}.`;
     }
-    const url = `http://localhost:3000/product?id=${itemId}`;
+    const url = `http://localhost:3000/depot/${itemId}`;
     const text = `Bonjour ${companyName},
     
 ${firstText}
@@ -74,14 +74,14 @@ L'équipe GreenCircle.`;
 const sendMailForReservationOurObject = (toEmail, itemName, companyName, itemId, status) => {
     let subject = '';
     let firstText = '';
-    if (status === 'reserved') {
+    if (status === 'active') {
         subject = 'Objet réservé';
-        firstText = `Vous avez bien réservé un(e) ${itemName}.`;
+        firstText = `Votre objet ${itemName} a été réservé.`;
     } else {
         subject = 'Objet récupéré';
-        firstText = `Vous avez bien récupéré un(e) ${itemName}.`;
+        firstText = `Votre objet ${itemName} a été récupéré.`;
     }
-    const url = `http://localhost:3000/product?id=${itemId}`;
+    const url = `http://localhost:3000/depot/${itemId}`;
     const text = `Bonjour ${companyName},
     
 ${firstText}

@@ -386,7 +386,7 @@ INSERT INTO vue_user.container (adress, city, zipcode, capacity) VALUES
 	('2 Avenue Clement Ader', 'Serris', '77700', 5),
 	('1 BD RUE IRENE JOLIOT CURIE', 'Bailly-Romainvilliers', '77700', 5),
 	('1 AVENUE JOHANNES GUTENBERG', 'Serris', '77700', 5),
-	('2 Avenue Clement Ader', 'Serris', '77700', 5),
+	('3 Avenue Clement Ader', 'Serris', '77700', 5),
 	('4 avenue Christian Doppler', 'Serris', '77700', 5),
 	('2 avenue Christian Doppler', 'Serris', '77700', 5);
 
@@ -415,7 +415,18 @@ INSERT INTO vue_user.emplacement (available,dimension,id_Container) VALUES
 	 (1,NULL,5),
 	 (1,NULL,5),
 	 (1,NULL,5),
-	 (1,NULL,5);
+	 (1,NULL,5),
+     (1,NULL,6),
+	 (1,NULL,6),
+	 (1,NULL,6),
+	 (1,NULL,6),
+	 (1,NULL,6),
+     (1,NULL,7),
+	 (1,NULL,7),
+	 (1,NULL,7),
+	 (1,NULL,7),
+	 (1,NULL,7);
+     
 
 INSERT INTO vue_user.event (event_id,title,description,event_date,location,capacity,status) VALUES
 	(1,'Réunion avec les acteurs Green Circle','Réunion avec les acteurs de Green Circle pour comprendre l''organisation et les tenants et aboutissant de l''application ','2025-02-01 15:15:01','Online',10,'Incoming'),

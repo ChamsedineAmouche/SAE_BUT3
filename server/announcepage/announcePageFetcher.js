@@ -17,7 +17,7 @@ async function getLocalisationOfStockage() {
     try {
         const result =
             await getResultOfQuery('vue_user',
-                'SELECT adress, city, zipcode, capacity FROM container');
+                ' SELECT c.adress,  c.city, c.zipcode, c.capacity FROM container c JOIN emplacement e ON e.id_Container = c.id_Container WHERE e.available = 1 AND c.capacity > 0 GROUP BY c.id_Container;');
         const containerAvailable = result.filter(container => container.capacity > 0);
         return containerAvailable;
     } catch (error) {

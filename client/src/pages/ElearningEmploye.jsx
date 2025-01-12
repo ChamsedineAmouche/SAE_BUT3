@@ -66,12 +66,19 @@ const ElearningEmploye = () => {
       {/* Titre dynamique */}
       <h1 className="text-3xl font-bold text-gray-800 mb-6 mt-12">{title}</h1>
 
-      {/* Image */}
-      <img
-        src={productImage}
-        alt={title}
-        className="w-1/2 max-w-sm rounded-lg shadow-md mb-6 mt-6"
-      />
+      {/* Vidéo YouTube */}
+      <div className="w-full max-w-2xl aspect-video mb-6 mt-6">
+        <iframe
+          width="100%"
+          height="100%"
+          src="https://www.youtube-nocookie.com/embed/evjGT35-4LU"
+          title="YouTube Video"
+          frameBorder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+          className="rounded-lg shadow-md"
+        ></iframe>
+      </div>
 
       {/* Pavé de texte dynamique */}
       <div className="max-w-3xl text-gray-700 text-justify leading-relaxed">

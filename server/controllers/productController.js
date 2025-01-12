@@ -3,6 +3,15 @@ const {reserveProductInDataBase} = require('../reserveProduct/productReserver')
 const {sendMailForReservation, sendMailForReservationOurObject, sendMailForFavoritesObjects} = require("../nodemailer/mailer");
 const {pickProductById} = require("../pickProduct/productPicker");
 const {getResultOfQuery} = require("../db_utils/db_functions");
+const {deleteObject} = require("../object/objectDelete")
+
+const getSirenFromRequest = (req) => {
+    const { siren } = req.query;
+    if (siren) return { siren, source: "query" };
+    if (req.session && req.session.user) return { siren: req.session.user.siren, source: "session" };
+    throw new Error("No siren provided in query or session.");
+};
+
 
 const product = async (req, res) => {
     try {
@@ -86,5 +95,22 @@ const pickProduct = async (req, res) => {
     }
 };
 
+const deleteDepotUser = async (req, res) => {
+    try{
+        const { siren, source } = getSirenFromRequest(req);
+        if (source === "session") {
+        const {idItem} = req.query
+        const result = await deleteObject(idItem);
+        res.json(result)
+    }
+    else{
+        console.error("Erreur lors de la récupération des depots :", error);
+        res.status(500).json('Pas de session user en cours');
+    }}
+    catch(error){
+        console.error("Erreur lors de la récupération des depots :", error);
+        res.status(500).json('Erreur interne du serveur' );
+    }
+}
 
-module.exports = { product, reserveProduct, pickProduct };
+module.exports = { product, reserveProduct, pickProduct, deleteDepotUser };
