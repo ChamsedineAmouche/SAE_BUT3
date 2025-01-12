@@ -9,7 +9,10 @@ const SquareGrid = ({ items }) => {
     return formattedLabel;
   });
 
-  console.log(categorieImages);
+  if (!items || items.length <= 0) {
+    return <div>Aucun réultat</div>
+  }
+
   return (
     <div className="flex flex-wrap gap-5 justify-center mt-16">
       {items.map((item, index) => (

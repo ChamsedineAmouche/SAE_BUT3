@@ -3,19 +3,22 @@ import circularEconomyImg from "../assets/images/circular_economy.png";
 import SquareGrid from "../components/SquareGrid/SquareGrid";
 import Carousel from "../components/Carousel/Carousel";
 import ElearningThumbnail from "../components/ElearningThumbnail/ElearningThumbnail";
-import {getAuthHeaders}  from "../utils/jwtAuth";
+import { getAuthHeaders } from "../utils/jwtAuth";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
 
 const Elearning = () => {
   const [searchText, setSearchText] = useState("");
   const [categories, setCategories] = useState([]);
   const [elearningsByCategory, setElearningsByCategory] = useState({});
+  const [filteredElearningsByCategory, setFilteredElearningsByCategory] = useState({});
   const carouselRefs = useRef([]);
 
   useEffect(() => {
     // Fetch des données de l'API
     const fetchElearningData = async () => {
       try {
-        const response = await fetch("/elearningList");//{ headers: { 'Authorization': getAuthHeaders } } fait bugger !
+        const response = await fetch("/elearningList"); // { headers: { 'Authorization': getAuthHeaders } } fait bugger !
         const data = await response.json();
         console.log(data);
 
@@ -35,6 +38,7 @@ const Elearning = () => {
 
         setCategories(categories);
         setElearningsByCategory(groupedElearnings);
+        setFilteredElearningsByCategory(groupedElearnings); // Initialiser les formations filtrées avec toutes les formations
       } catch (error) {
         console.error("Erreur lors du fetch des données :", error);
       }
@@ -43,10 +47,27 @@ const Elearning = () => {
     fetchElearningData();
   }, []);
 
-  const handleChange = (event) => {
-    setSearchText(event.target.value);
+  // Fonction pour filtrer les formations en fonction du texte de recherche
+  const filterElearnings = (searchText) => {
+    const filtered = {};
+    Object.keys(elearningsByCategory).forEach((category) => {
+      filtered[category] = elearningsByCategory[category].filter(
+        (elearning) =>
+          elearning.title.toLowerCase().includes(searchText.toLowerCase()) || // Recherche par titre de formation
+          category.toLowerCase().includes(searchText.toLowerCase()) // Recherche par catégorie
+      );
+    });
+    setFilteredElearningsByCategory(filtered);
   };
 
+  // Gérer le changement de texte dans la barre de recherche
+  const handleChange = (event) => {
+    const text = event.target.value;
+    setSearchText(text);
+    filterElearnings(text); // Filtrer les formations en temps réel
+  };
+
+  // Gérer le clic sur une catégorie
   const handleCategoryClick = (index) => {
     carouselRefs.current[index].scrollIntoView({
       behavior: "smooth",
@@ -78,20 +99,7 @@ const Elearning = () => {
             placeholder="Rechercher une formation"
             className="bg-white text-black px-4 py-2 rounded-full focus:outline-none w-full"
           />
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-6 w-6 text-gray-400 mr-3"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M21 21l-4.35-4.35M8 11a4 4 0 118 0 4 4 0 01-8 0z"
-            />
-          </svg>
+          <FontAwesomeIcon icon={faSearch} className="h-6 w-6 text- mr-3" />
         </div>
       </div>
 
@@ -110,17 +118,21 @@ const Elearning = () => {
           key={category.id_category}
           ref={(el) => (carouselRefs.current[index] = el)}
         >
-          <Carousel
-            items={
-              elearningsByCategory[category.label]?.map((elearning) => (
+          {filteredElearningsByCategory[category.label]?.length === 0 ? (
+            <div className="text-center mt-8 text-gray-500">
+              Aucun résultat trouvé pour "{searchText}" dans la catégorie {category.label}.
+            </div>
+          ) : (
+            <Carousel
+              items={filteredElearningsByCategory[category.label]?.map((elearning) => (
                 <ElearningThumbnail
                   key={`thumbnail-${elearning.course_id}`}
                   elearning={elearning}
                 />
-              )) || []
-            }
-            title={`Formations dans la catégorie : ${category.label}`}
-          />
+              ))}
+              title={`Formations dans la catégorie : ${category.label}`}
+            />
+          )}
         </div>
       ))}
     </div>

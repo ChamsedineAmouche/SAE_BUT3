@@ -3,23 +3,26 @@ import circularEconomyImg from "../assets/images/circular_economy.png";
 import SquareGrid from "../components/SquareGrid/SquareGrid";
 import Carousel from "../components/Carousel/Carousel";
 import DepositThumbnail from "../components/DepositThumbnail/DepositThumbnail";
-import {getAuthHeaders}  from "../utils/jwtAuth";
+import { getAuthHeaders } from "../utils/jwtAuth";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
 
 const Deposit = () => {
   const [searchText, setSearchText] = useState("");
   const [categories, setCategories] = useState([]);
   const [objectsByCategory, setObjectsByCategory] = useState({});
+  const [filteredObjectsByCategory, setFilteredObjectsByCategory] = useState({});
   const carouselRefs = useRef([]);
 
   useEffect(() => {
     // Fetch des données de l'API
     const fetchCatalogueData = async () => {
       try {
-        const response = await fetch("/catalog");//{ headers: { 'Authorization': getAuthHeaders } } fait bugger !
+        const response = await fetch("/catalog"); // { headers: { 'Authorization': getAuthHeaders } } fait bugger !
         const data = await response.json();
 
         // Extraire les catégories
-        const categories = data.objectTypes.map(type => ({
+        const categories = data.objectTypes.map((type) => ({
           label: type.label,
           id_object_type: type.id_object_type,
         }));
@@ -34,6 +37,7 @@ const Deposit = () => {
 
         setCategories(categories);
         setObjectsByCategory(groupedObjects);
+        setFilteredObjectsByCategory(groupedObjects); // Initialiser les objets filtrés avec tous les objets
       } catch (error) {
         console.error("Erreur lors du fetch des données :", error);
       }
@@ -42,10 +46,27 @@ const Deposit = () => {
     fetchCatalogueData();
   }, []);
 
-  const handleChange = (event) => {
-    setSearchText(event.target.value);
+  // Fonction pour filtrer les objets en fonction du texte de recherche
+  const filterObjects = (searchText) => {
+    const filtered = {};
+    Object.keys(objectsByCategory).forEach((category) => {
+      filtered[category] = objectsByCategory[category].filter(
+        (obj) =>
+          obj.title.toLowerCase().includes(searchText.toLowerCase()) || // Recherche par nom d'objet
+          category.toLowerCase().includes(searchText.toLowerCase()) // Recherche par catégorie
+      );
+    });
+    setFilteredObjectsByCategory(filtered);
   };
 
+  // Gérer le changement de texte dans la barre de recherche
+  const handleChange = (event) => {
+    const text = event.target.value;
+    setSearchText(text);
+    filterObjects(text); // Filtrer les objets en temps réel
+  };
+
+  // Gérer le clic sur une catégorie
   const handleCategoryClick = (index) => {
     carouselRefs.current[index].scrollIntoView({
       behavior: "smooth",
@@ -72,20 +93,7 @@ const Deposit = () => {
             placeholder="Rechercher un objet"
             className="bg-white text-black px-4 py-2 rounded-full focus:outline-none w-full"
           />
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-6 w-6 text-gray-400 mr-3"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M21 21l-4.35-4.35M8 11a4 4 0 118 0 4 4 0 01-8 0z"
-            />
-          </svg>
+          <FontAwesomeIcon icon={faSearch} className="h-6 w-6 text- mr-3"/>
         </div>
       </div>
       <SquareGrid
@@ -100,12 +108,18 @@ const Deposit = () => {
           key={category.id_object_type}
           ref={(el) => (carouselRefs.current[index] = el)}
         >
-          <Carousel
-            items={objectsByCategory[category.label]?.map((obj) => (
-              <DepositThumbnail key={`thumbnail-${obj.id_item}`} object={obj} />
-            )) || []}
-            title={`Objets dans la catégorie : ${category.label}`}
-          />
+          {filteredObjectsByCategory[category.label]?.length === 0 ? (
+            <div className="text-center mt-8 text-gray-500">
+              Aucun résultat trouvé pour "{searchText}" dans la catégorie {category.label}.
+            </div>
+          ) : (
+            <Carousel
+              items={filteredObjectsByCategory[category.label]?.map((obj) => (
+                <DepositThumbnail key={`thumbnail-${obj.id_item}`} object={obj} />
+              ))}
+              title={`Objets dans la catégorie : ${category.label}`}
+            />
+          )}
         </div>
       ))}
     </div>

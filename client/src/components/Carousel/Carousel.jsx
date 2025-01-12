@@ -1,9 +1,13 @@
 import React, { useState } from "react";
 
 const Carousel = ({ items, title }) => {
-  const itemsPerPage = 5; // Nombre de cartes visibles par page
-  const totalPages = Math.ceil(items.length / itemsPerPage); // Calcul du nombre de pages
+  const itemsPerPage = 5; 
+  const totalPages = Math.ceil(items.length / itemsPerPage);
   const [currentPage, setCurrentPage] = useState(0);
+
+  if (!items || items.length <= 0) {
+    return <div/>
+  }
 
   const handlePrev = () => {
     setCurrentPage((prev) => (prev === 0 ? totalPages - 1 : prev - 1));

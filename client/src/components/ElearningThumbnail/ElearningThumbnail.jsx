@@ -28,8 +28,8 @@ const ElearningThumbnail = ({ elearning, fromAccount }) => {
       });
   }, [elearning]);
 
-  if (!elearning) {
-    return <div>Pas d'e-learning disponible</div>;
+  if (!elearning ||elearning === "") {
+    return <div>E-learning indisponible</div>;
   }
 
   const { course_id, title, price, categoryName } = elearning;

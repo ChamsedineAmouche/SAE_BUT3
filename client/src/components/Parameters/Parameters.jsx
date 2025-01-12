@@ -12,11 +12,12 @@ const Parameters = () => {
     response: false,
   });
   const [userData, setUserData] = useState({
-    email: false,
-    address: false,
-    postalCode: false,
-    phoneNumber: false,
-    profilePic: false,
+    info_email: false,
+    info_adress: false,
+    info_zipcode: false,
+    info_city: false,
+    info_phone: false,
+    info_pp: false,
   });
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -41,11 +42,12 @@ const Parameters = () => {
           response: data.preferencesData[0].notif.forum,
         });
         setUserData({
-          email: data.preferencesData[0].info.info_email,
-          address: data.preferencesData[0].info.info_adress,
-          postalCode: data.preferencesData[0].info.info_zipcode,
-          phoneNumber: data.preferencesData[0].info.info_phone,
-          profilePic: data.preferencesData[0].info.info_pp,
+          info_email: data.preferencesData[0].info.info_email,
+          info_adress: data.preferencesData[0].info.info_adress,
+          info_zipcode: data.preferencesData[0].info.info_zipcode,
+          info_city: data.preferencesData[0].info.info_city,
+          info_phone: data.preferencesData[0].info.info_phone,
+          info_pp: data.preferencesData[0].info.info_pp,
         });
       })
       .catch((error) => {
@@ -152,6 +154,7 @@ const Parameters = () => {
               { key: "info_email", label: "Email" },
               { key: "info_adress", label: "Adresse" },
               { key: "info_zipcode", label: "Code Postal" },
+              { key: "info_city", label: "Ville" },
               { key: "info_phone", label: "Numéro de Téléphone" },
               { key: "info_pp", label: "Photo de Profil" },
             ].map((data) => (
