@@ -9,6 +9,13 @@ const EventsAdmin = () => {
     const [selectedOption, setSelectedOption] = useState("Liste des évènements");
     const [allEvents, setAllEvents] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    // Form
+    const [title, setTitle] = useState('');
+    const [description, setDescription] = useState('');
+    const [date, setDate] = useState('');
+    const [location, setLocation] = useState('');
+    const [capacity, setCapacity] = useState('');
+    const [errors, setErrors] = useState({});
 
     useEffect(() => {
         fetch('/allEvents')
@@ -122,6 +129,67 @@ const EventsAdmin = () => {
         }
     }
 
+    const isFormValid = () => {
+        return (
+            title.trim() !== '' &&
+            description.trim() !== '' &&
+            location.trim() !== '' &&
+            date.trim() !== '' &&
+            capacity.trim() !== ''
+        );
+    };
+
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+
+        const newSubmission = {
+            title,
+            description,
+            event_date: date,
+            location,
+            capacity
+        };
+
+        try {
+            const response = await fetch('/insertEvent', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(newSubmission),
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP Error! Status: ${response.status}`);
+            }
+
+            const result = await response.json();
+
+            console.log("Réponse du serveur :", result);
+
+            if (result.success === undefined) {
+                console.error("Réponse inattendue du serveur. Vérifiez l'API :", result);
+            }
+
+            console.log(result);
+
+            if (result.success) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Succès',
+                    text: result.message,
+                }).then(() => window.location.reload());
+            } else {
+                throw new Error(result.message);
+            }
+        } catch (error) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Erreur',
+                text: 'Erreur lors de la soumission. Veuillez réessayer.',
+            });
+            console.error('Erreur lors de la soumission :', error);
+        }
+    };
+
     return (
         <div className="bg-white w-full">
         <h2 className="text-3xl font-bold text-darkGreen mb-8 text-center">Évènements</h2>
@@ -145,11 +213,90 @@ const EventsAdmin = () => {
 
         {selectedOption === "Créer un évènement" && (
             <div id="Créer un évènement" className="overflow-y-auto h-[70vh]">
-                {isLoading ? (
-                    <p>Chargement en cours...</p>
-                ) : (
-                    <p>Créer</p> // Mettre ici le formulaire
-                )}
+                <form
+                        className="flex flex-col lg:flex-row gap-6"
+                        onSubmit={handleSubmit}
+                    >                 
+                        <div className="w-full lg:w-1/2 p-6 bg-yellowGreen1 bg-opacity-10 rounded-lg">
+                            {/* Titre */}
+                            <div>
+                                <label className="block text-lg font-medium text-darkGreen">
+                                    Titre
+                                </label>
+                                <input
+                                    type="text"
+                                    value={title}
+                                    onChange={(e) => setTitle(e.target.value)}
+                                    placeholder="Titre de l'évènement"
+                                    className="mt-1 block w-full px-4 py-2 border rounded-md shadow-sm focus:ring-oliveGreen focus:border-oliveGreen"
+                                />
+                            </div>
+
+                            {/* Description */}
+                            <div>
+                                <label className="block text-lg font-medium text-darkGreen">
+                                    Description
+                                </label>
+                                <textarea
+                                    value={description}
+                                    onChange={(e) => setDescription(e.target.value)}
+                                    placeholder="Description de l'évènement"
+                                    className="mt-1 block w-full h-32 px-4 py-2 border rounded-md shadow-sm focus:ring-oliveGreen focus:border-oliveGreen"
+                                />
+                            </div>
+
+                            {/* Date */}
+                            <div>
+                                <label className="block text-lg font-medium text-darkGreen">
+                                    Date
+                                </label>
+                                <input
+                                    type="date"
+                                    value={date}
+                                    onChange={(e) => setDate(e.target.value)}
+                                    className="mt-2 block w-full text-darkGreen border border-oliveGreen bg-white rounded-md shadow-sm"
+                                />
+                            </div>
+
+                            {/* Lieu */}
+                            <div>
+                                <label className="block text-lg font-medium text-darkGreen">
+                                    Lieu
+                                </label>
+                                <input
+                                    type="text"
+                                    value={location}
+                                    onChange={(e) => setLocation(e.target.value)}
+                                    placeholder="Lieu de l'évènement"
+                                    className="mt-1 block w-full px-4 py-2 border rounded-md shadow-sm focus:ring-oliveGreen focus:border-oliveGreen"
+                                />
+                            </div>
+
+                            {/* Capacité */}
+                            <div>
+                                <label className="block text-lg font-medium text-darkGreen">
+                                    Capacité
+                                </label>
+                                <input
+                                    type="number"
+                                    value={capacity}
+                                    onChange={(e) => setCapacity(e.target.value)}
+                                    placeholder="Capacité maximale"
+                                    className="mt-1 block w-full px-4 py-2 border rounded-md shadow-sm focus:ring-oliveGreen focus:border-oliveGreen"
+                                />
+                            </div>
+
+                            {/* Bouton de soumission */}
+                            <button
+                                type="submit"
+                                className={`w-full bg-oliveGreen text-white px-6 py-3 text-lg font-semibold rounded-md hover:bg-opacity-90 transition duration-200
+                                    ${isFormValid() ? 'hover:bg-yellowGreen1' : 'opacity-50 cursor-not-allowed'}`}
+                                        disabled={!isFormValid()}
+                            >
+                                Publier
+                            </button>
+                        </div>   
+                    </form>
             </div>
         )}
         </div>

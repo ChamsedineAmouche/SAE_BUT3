@@ -32,27 +32,30 @@ async function insertEventAdmin(newSubmission, req) {
                 await promiseConnection.beginTransaction();
                 await promiseConnectionAdmin.beginTransaction();
 
-                const { event_id, title, description, event_date, location, capacity, status } = newSubmission;
+                const { title, description, event_date, location, capacity } = newSubmission;
 
                 const [listingResult] = await promiseConnection.execute(
                     `INSERT INTO event 
-       (event_id, title, description, event_date, location, capacity, status) 
-       VALUES (?, ?, ?, ?, ?, ?, ?)`,
-                    [event_id, title, description, event_date, location, capacity, status]
+       (title, description, event_date, location, capacity, status) 
+       VALUES (?, ?, ?, ?, ?, ?)`,
+                    [title, description, event_date, location, capacity, 'Incoming']
                 );
                 const [listingResultAdmin] = await promiseConnectionAdmin.execute(
                     `INSERT INTO event 
-       (id_event, title, description, event_date, location, capacity, status, admin_id) 
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-                    [event_id, title, description, event_date, location, capacity, status, admin]
+       (title, description, event_date, location, capacity, status, admin_id) 
+       VALUES (?, ?, ?, ?, ?, ?, ?)`,
+                    [title, description, event_date, location, capacity, 'Incoming', admin.id]
                 );
                 await promiseConnection.commit();
                 await promiseConnectionAdmin.commit();
                 console.log('Transaction réussie, données insérées avec succès.');
+
+                return { success: true, message: 'Événement ajouté avec succès.' };
             } catch (error) {
                 await promiseConnection.rollback();
                 await promiseConnectionAdmin.rollback();
                 console.error('Erreur lors de l\'insertion, transaction annulée :', error);
+                return { success: false, message: 'Erreur lors de l\'insertion.' };
             } finally {
                 await promiseConnection.end();
                 await promiseConnectionAdmin.end();
@@ -62,6 +65,7 @@ async function insertEventAdmin(newSubmission, req) {
         }
     } catch (error) {
         console.error('Erreur lors de la récupération des données :', error);
+        return { success: false, message: 'Erreur serveur.' };
     }
 }
 
