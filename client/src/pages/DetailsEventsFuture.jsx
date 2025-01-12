@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import eventImage from "../assets/images/circular_economy.png";
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import toast from "react-hot-toast";
+import Swal from "sweetalert2";
 
 const DetailsEventFuture = () => {
   const [eventData, setEventData] = useState(null);
@@ -58,7 +57,7 @@ const DetailsEventFuture = () => {
     }
   }, [eventId]);
 
-  const handleInscription = async () => {
+  const handleInscription = async (whatToDo) => {
     try {
       const sessionResponse = await fetch("/getSession");
       if (!sessionResponse.ok) {
@@ -72,10 +71,15 @@ const DetailsEventFuture = () => {
       }
 
       if (!isRegistered) {
-        const inscriptionResponse = await fetch(
-          `/inscriptionEvent?eventId=${eventId}&siren=${siren}`,
-          { method: "GET" }
-        );
+        const inscriptionResponse = whatToDo === "subscribe" 
+          ? await fetch(
+            `/inscriptionEvent?eventId=${eventId}&siren=${siren}`,
+            { method: "GET" }
+          )
+          : await fetch(
+            `/desinscriptionEvent?eventId=${eventId}&siren=${siren}`,
+            { method: "GET" }
+          );
 
         if (!inscriptionResponse.ok) {
           throw new Error("Erreur lors de l'inscription à l'événement.");
@@ -88,7 +92,11 @@ const DetailsEventFuture = () => {
 
         toast.success("Réussi ! Vous êtes inscrit à un nouvel événement !");
       } else {
-        alert("Vous êtes déjà inscrit à cet événement.");
+        Swal.fire({
+          icon: 'info',
+          title: 'Déjà inscrit',
+          text: 'Vous êtes déjà inscrit à cet événement.',
+        });
       }
     } catch (err) {
       setSessionError(err.message);
@@ -109,19 +117,13 @@ const DetailsEventFuture = () => {
 
   return (
     <div className="details-event pt-24 px-6 md:px-12 lg:px-24">
-      <div className="text-left">
-        <p className="text-lg font-medium text-gray-700">
-          {`Événement/à venir/${eventData.title}`}
-        </p>
-      </div>
-
       <div className="text-center mt-12">
         <h1 className="text-4xl font-bold text-darkGreen">{eventData.title}</h1>
       </div>
 
       <div className="flex justify-center mt-12">
         <img
-          src={eventImage}
+          src="/event_default.jpg"
           alt={eventData.title}
           className="w-3/4 md:w-1/2 lg:w-1/3 rounded-lg shadow-lg"
         />
@@ -141,9 +143,9 @@ const DetailsEventFuture = () => {
 
       <div className="flex justify-center mt-12 mb-8">
         <div
-          className="flex items-center justify-center bg-[#587208] text-white rounded-lg w-3/4 md:w-1/2 lg:w-1/3 p-4 shadow-lg"
+          className="flex items-center justify-center bg-yellowGreen1 text-white rounded-lg w-3/4 md:w-1/2 lg:w-1/3 p-4 shadow-lg"
         >
-          <div className="flex items-center justify-center bg-white text-[#587208] font-bold rounded-full w-16 h-16 mr-4">
+          <div className="flex items-center justify-center bg-white text-yellowGreen1 font-bold rounded-full w-16 h-16 mr-4">
             <span className="text-sm md:text-base lg:text-lg">{numberOfParticipants}</span>
           </div>
           <div className="text-lg font-semibold">participants</div>
@@ -154,11 +156,16 @@ const DetailsEventFuture = () => {
       <div className="flex justify-center mb-8">
         {isLoggedIn ? (
           isRegistered ? (
-            <div className="text-lg text-green-600 font-semibold">Vous êtes inscrit !</div>
+            <button
+              className="bg-red text-white text-lg font-semibold rounded-lg px-6 py-3 shadow-lg hover:bg-opacity-80 transition duration-200"
+              onClick={handleInscription('unsubscribe')}
+            >
+              Se désinscrire (places restantes : {capacityRemaining})
+            </button>
           ) : capacityRemaining > 0 ? (
             <button
-              className="bg-[#587208] text-white text-lg font-semibold rounded-full px-6 py-3 shadow-lg hover:bg-[#466205] transition duration-200"
-              onClick={handleInscription}
+              className="bg-yellowGreen1 text-white text-lg font-semibold rounded-lg px-6 py-3 shadow-lg hover:bg-[#466205] transition duration-200"
+              onClick={handleInscription('subscribe')}
             >
               Inscription (places restantes : {capacityRemaining})
             </button>
@@ -178,9 +185,6 @@ const DetailsEventFuture = () => {
         <div className="text-center mt-6 text-red-500">{sessionError}</div>
       )}
 
-      <div className="mb-12"></div>
-
-      <ToastContainer />
     </div>
   );
 };

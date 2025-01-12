@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart as faHeartEmpty } from "@fortawesome/free-regular-svg-icons";
 import { faHeart as faHeartSolid } from "@fortawesome/free-solid-svg-icons";
 
-const ElearningThumbnail = ({ elearning }) => {
+const ElearningThumbnail = ({ elearning, fromAccount }) => {
   const navigate = useNavigate(); // Hook pour navigation
   const [favorite, setFavorite] = useState(false); // État local pour le favori
 
@@ -35,7 +35,11 @@ const ElearningThumbnail = ({ elearning }) => {
   const { course_id, title, price, categoryName } = elearning;
 
   const handleClick = () => {
-    navigate(`/details_elearning/${course_id}`);
+    if (fromAccount) {
+      navigate(`/elearning_employe?id=${course_id}`);
+    } else {
+      navigate(`/details_elearning/${course_id}`);
+    }
   };
 
   const handleFavoriteClick = (e) => {

@@ -111,4 +111,68 @@ async function updatePhone(siren, phone){
     }
 }
 
-module.exports = { updatePassword, updateUsername, updateMail, updateAdress, updateCity, updatePhone, updateZipcode};
+const updateNotif = async (siren, meuble = null, event = null, elearning = null, forum = null, article = null, message = null) => {
+    try {
+        const query = `SELECT notif FROM preference WHERE siren = '${siren}'`;
+        const result = await getResultOfQuery("vue_user", query);
+
+        if (!result || result.length === 0) {
+            throw new Error(`Aucune préférence trouvée pour le siren : ${siren}`);
+        }
+        const currentNotif = result[0].notif;
+
+        const updatedNotif = { ...currentNotif };
+
+        if (meuble !== null) updatedNotif.meuble = meuble;
+        if (event !== null) updatedNotif.event = event;
+        if (elearning !== null) updatedNotif.elearning = elearning;
+        if (forum !== null) updatedNotif.forum = forum;
+        if (article !== null) updatedNotif.article = article;
+        if (message !== null) updatedNotif.message = message;
+
+        const updateQuery = `
+            UPDATE preference
+            SET notif = '${JSON.stringify(updatedNotif)}'
+            WHERE siren = '${siren}'
+        `;
+        await getResultOfQuery("vue_user", updateQuery);
+
+    } catch (error) {
+        console.error("Erreur lors de la mise à jour des notifications :", error);
+        throw error;
+    }
+};
+
+const updateInfo = async (siren, info_pp = null, info_city = null, info_email = null, info_phone = null, info_adress = null, info_zipcode = null) => {
+    try {
+        const query = `SELECT info FROM preference WHERE siren = '${siren}'`;
+        const result = await getResultOfQuery("vue_user", query);
+
+        if (!result || result.length === 0) {
+            throw new Error(`Aucune préférence trouvée pour le siren : ${siren}`);
+        }
+        const currentInfo = result[0].info;
+
+        const updatedInfo = { ...currentInfo };
+
+        if (info_pp !== null) updatedInfo.info_pp = info_pp;
+        if (info_city !== null) updatedInfo.info_city = info_city;
+        if (info_email !== null) updatedInfo.info_email = info_email;
+        if (info_phone !== null) updatedInfo.info_phone = info_phone;
+        if (info_adress !== null) updatedInfo.info_adress = info_adress;
+        if (info_zipcode !== null) updatedInfo.info_zipcode = info_zipcode;
+
+        const updateQuery = `
+            UPDATE preference
+            SET info = '${JSON.stringify(updatedInfo)}'
+            WHERE siren = '${siren}'
+        `;
+        await getResultOfQuery("vue_user", updateQuery);
+
+    } catch (error) {
+        console.error("Erreur lors de la mise à jour des notifications :", error);
+        throw error;
+    }
+};
+
+module.exports = { updatePassword, updateUsername, updateMail, updateAdress, updateCity, updatePhone, updateZipcode, updateNotif, updateInfo};

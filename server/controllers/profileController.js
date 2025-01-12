@@ -1,11 +1,11 @@
 const { getAccountInfo, getAccountFavorites, getAccountPreferences } = require("../account/accountFetcher")
 const { getListingBySirenAndStatus } = require("../pageproduct/pageProductFetcher")
 const {getElearningBySiren} = require("../elearning/elearningFetcher")
-const {getTransactiongBySiren} = require("../transactions/transactionFetcher")
+const {getTransactiongBySiren, getTransactionSourceBySiren} = require("../transactions/transactionFetcher")
 const {getAdressContainerByEmplacement} = require("../stockage/stockageFetcher")
-const { getProductData} = require('../pageproduct/pageProductFetcher')
+const { getProductData, getStatusForReservation} = require('../pageproduct/pageProductFetcher')
 const {getObjectTypeLabels, replacePreferenceIdsWithLabels} = require('../object/objectFetcher')
-const {updateUsername, updateMail, updateAdress, updateCity, updatePhone, updateZipcode} = require ("../account/accountUpdate")
+const {updateUsername, updateMail, updateAdress, updateCity, updatePhone, updateZipcode, updateNotif, updateInfo} = require ("../account/accountUpdate")
 
 const getSirenFromRequest = (req) => {
     const { siren } = req.query;
@@ -56,8 +56,8 @@ const profileListing = async (req, res) => {
     try {
         const { siren, source } = getSirenFromRequest(req);
 
-        const activeListing = await getListingBySirenAndStatus(siren, 'active');
-        const draftListing = await getListingBySirenAndStatus(siren, 'draft');
+        const activeListing = await getListingBySirenAndStatus(siren, "('active', 'waiting', 'reserved', 'picked')");
+        const draftListing = await getListingBySirenAndStatus(siren, "('draft')");
         res.json({
             active: activeListing,
             draft: draftListing,
@@ -89,12 +89,47 @@ const profileTransactions = async (req, res) => {
                 const { id_item: idItem, date_transaction: dateTransaction, status } = transaction;
 
                 const productData = await getProductData(idItem);
-                const { idEmplacement, title } = productData;
+                const { idEmplacement, title, siren: productSiren } = productData;
+
+                const companyData = await getAccountInfo(productSiren);
+                const { nom } = companyData.account[0];
 
                 const containerInfo = await getAdressContainerByEmplacement(idEmplacement);
                 const { adress: address, zipcode } = containerInfo[0];
 
-                return { idItem,title, dateTransaction, status, address, zipcode };
+
+                return { idItem, title, dateTransaction, status, address, zipcode, nom };
+            })
+        );
+        res.json({ transactions: enrichedTransactions });
+    } catch (error) {
+        console.error('Erreur lors du traitement des transactions :', error);
+        res.status(500).json({ error: error.message || 'Erreur interne du serveur' });
+    }
+};
+
+const profileTransactionSource = async (req, res) => {
+    try {
+        const { siren, source } = getSirenFromRequest(req);
+
+        const transactions = await getTransactionSourceBySiren(siren);
+        const enrichedTransactions = await Promise.all(
+            transactions.map(async (transaction) => {
+                const { id_item: idItem, date_transaction: dateTransaction, status, siren : siren_buyer } = transaction;
+
+                const companyData = await getAccountInfo(siren_buyer)
+                const {nom} = companyData.account[0]
+
+                const productData = await getProductData(idItem);
+                const { idEmplacement, title, siren: productSiren } = productData;
+
+                const containerInfo = await getAdressContainerByEmplacement(idEmplacement);
+                const { adress: address, zipcode } = containerInfo[0];
+
+                const statusVerif = await getStatusForReservation(idItem, status, productSiren);
+                console.log(statusVerif);
+
+                return { idItem,title, dateTransaction, statusVerif, address, zipcode , nom};
             })
         );
         res.json({ transactions: enrichedTransactions });
@@ -151,4 +186,78 @@ const updateProfile = async (req, res) => {
     }
 };
 
-module.exports = { profile, profileFavorite, profileListing, profileTransactions, profilePurchases, profileParameters, updateProfile };
+const updateProfileNotif = async (req, res) => {
+    try {
+        const { siren, source } = getSirenFromRequest(req);
+
+        if (source === "session") {
+            const {
+                event,
+                meuble,
+                elearning,
+                forum,
+                article,
+                message,
+            } = req.query;
+            const boolValue = (val) => {
+                if (val === "true") return true;
+                if (val === "false") return false;
+                return null;
+            };
+            await updateNotif(
+                siren,
+                boolValue(meuble),
+                boolValue(event),
+                boolValue(elearning),
+                boolValue(forum),
+                boolValue(article),
+                boolValue(message)
+            );
+            res.status(200).json({ succes : "True", message: "Notification mise à jour avec succès." });
+        } else {
+            res.status(403).json({ succes : "False", error: "Pas de session active." });
+        }
+    } catch (error) {
+        console.error("Erreur lors du traitement des paramètres :", error);
+        res.status(500).json({ succes : "False" });
+    }
+};
+
+const updateProfileInfo= async (req, res) => {
+    try {
+        const { siren, source } = getSirenFromRequest(req);
+
+        if (source === "session") {
+            const {
+                info_pp,
+                info_city,
+                info_email,
+                info_phone,
+                info_adress,
+                info_zipcode,
+            } = req.query;
+            const boolValue = (val) => {
+                if (val === "true") return true;
+                if (val === "false") return false;
+                return null;
+            };
+            await updateInfo(
+                siren,
+                boolValue(info_pp),
+                boolValue(info_city),
+                boolValue(info_email),
+                boolValue(info_phone),
+                boolValue(info_adress),
+                boolValue(info_zipcode)
+            );
+            res.status(200).json({ succes : "True", message: "Info mise à jour avec succès." });
+        } else {
+            res.status(403).json({ succes : "False", error: "Pas de session active." });
+        }
+    } catch (error) {
+        console.error("Erreur lors du traitement des paramètres :", error);
+        res.status(500).json({ succes : "False" });
+    }
+};
+
+module.exports = { profile, profileFavorite, profileListing, profileTransactions, profilePurchases, profileParameters, updateProfile, updateProfileNotif, updateProfileInfo, profileTransactionSource };
