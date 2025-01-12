@@ -3,6 +3,7 @@ import Switch from "../Switch/Switch";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faEdit, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import DataTable from '../DataTable/DataTable';
+import Swal from "sweetalert2";
 
 const Users = () => {
     const [selectedOption, setSelectedOption] = useState("Liste des utilisateurs");
@@ -40,13 +41,7 @@ const Users = () => {
         action: (
             <div className="flex space-x-2">
                 <button
-                    //onClick={() => }
-                    className="text-blue-600 bg-blue p-2 w-10 h-10 rounded-lg text-white text-lg hover:text-blue-400"
-                >
-                    <FontAwesomeIcon icon={faEdit} />
-                </button>
-                <button
-                    //onClick={() => }
+                    onClick={() => handleDeletionUser(user.siren)}
                     className="text-red-600 bg-red p-2 w-10 h-10 rounded-lg text-white text-lg hover:text-red-400"
                 >
                     <FontAwesomeIcon icon={faTrashAlt} />
@@ -63,13 +58,13 @@ const Users = () => {
         action: (
             <div className="flex space-x-2">
                 <button
-                    //onClick={() => }
+                    onClick={() => handleValidationInscription(inscription.siren)}
                     className="text-green-600 bg-green-500 p-2 w-10 h-10 rounded-lg text-white text-lg hover:text-green-400"
                 >
                     <FontAwesomeIcon icon={faCheck} />
                 </button>
                 <button
-                    //onClick={() => }
+                    onClick={() => handleDeletionUser(inscription.siren)}
                     className="text-red-600 bg-red p-2 w-10 h-10 rounded-lg text-white text-lg hover:text-red-400"
                 >
                     <FontAwesomeIcon icon={faTrashAlt} />
@@ -80,7 +75,144 @@ const Users = () => {
 
     const handleSwitchChange = (option) => {
         setSelectedOption(option);
-      };
+    };
+
+    const handleDeletionUser = async (siren) => {
+        const confirmDeletion = await Swal.fire({
+            title: 'Êtes-vous sûr de vouloir supprimer cette inscription ?',
+            text: "Cette action est irréversible.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Oui, supprimer',
+            cancelButtonText: 'Annuler',
+        });
+    
+        if (confirmDeletion.isConfirmed) {
+            try {
+                const response = await fetch('/deleteInscription', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ siren }),
+                });
+    
+                if (!response.ok) {
+                    throw new Error(`Erreur HTTP ! Status : ${response.status}`);
+                }
+    
+                const result = await response.json();
+                if (result.success) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Succès',
+                        text: 'Inscription supprimée avec succès !',
+                        confirmButtonColor: '#3085d6',
+                    });
+    
+                    setAllInscriptions((prevInscriptions) =>
+                        prevInscriptions.filter((inscription) => inscription.siren !== siren)
+                    );
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Erreur',
+                        text: result.message || 'Une erreur est survenue.',
+                        confirmButtonColor: '#d33',
+                    });
+                }
+            } catch (error) {
+                console.error('Erreur lors de la suppression de l\'inscription :', error);
+    
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Erreur',
+                    text: 'Erreur interne. Veuillez réessayer.',
+                    confirmButtonColor: '#d33',
+                });
+            }
+        } else {
+            Swal.fire({
+                icon: 'info',
+                title: 'Annulé',
+                text: 'La suppression a été annulée.',
+                confirmButtonColor: '#3085d6',
+            });
+        }
+    };
+
+    const handleValidationInscription = async (siren) => {
+        const confirmValidation = await Swal.fire({
+            title: 'Êtes-vous sûr de vouloir valider cette inscription ?',
+            text: "L'utilisateur sera ajouté à la liste des utilisateurs.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Oui, valider',
+            cancelButtonText: 'Annuler',
+        });
+    
+        if (confirmValidation.isConfirmed) {
+            try {
+                const response = await fetch('/validateInscription', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ siren }),
+                });
+    
+                if (!response.ok) {
+                    throw new Error(`Erreur HTTP ! Status : ${response.status}`);
+                }
+    
+                const result = await response.json();
+                if (result.success) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Succès',
+                        text: 'Inscription validée avec succès !',
+                        confirmButtonColor: '#3085d6',
+                    });
+    
+                    const validatedInscription = allInscriptions.find(
+                        (inscription) => inscription.siren === siren
+                    );
+    
+                    setAllUsers((prevUsers) => [...prevUsers, validatedInscription]);
+    
+                    setAllInscriptions((prevInscriptions) =>
+                        prevInscriptions.filter((inscription) => inscription.siren !== siren)
+                    );
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Erreur',
+                        text: result.message || 'Une erreur est survenue.',
+                        confirmButtonColor: '#d33',
+                    });
+                }
+            } catch (error) {
+                console.error('Erreur lors de la validation de l\'inscription :', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Erreur',
+                    text: 'Erreur interne. Veuillez réessayer.',
+                    confirmButtonColor: '#d33',
+                });
+            }
+        } else {
+            Swal.fire({
+                icon: 'info',
+                title: 'Annulé',
+                text: 'La validation a été annulée.',
+                confirmButtonColor: '#3085d6',
+            });
+        }
+    };
 
     return (
         <div className="bg-white w-full">

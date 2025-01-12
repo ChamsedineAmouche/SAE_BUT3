@@ -72,7 +72,9 @@ async function getElearningInfo(courseId){
 async function getAllElearning() {
     try {
         const query = `SELECT * FROM elearning_list`;
-        return await getResultOfQuery("vue_admin", query);
+        const result = await getResultOfQuery("vue_admin", query);
+
+        return ( {success: true, elearnings: result });
     } catch (error) {
         console.error("Erreur lors de la récupération des données :", error);
         throw error;

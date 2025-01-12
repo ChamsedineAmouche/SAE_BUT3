@@ -13,10 +13,17 @@ async function deleteObjectFavorite(idItem, siren) {
 
 async function deleteObject(idItem) {
     try {
-        const query =`DELETE FROM listing WHERE id_item = ${idItem}`;
-        console.log(query)
-        const result = await getResultOfQuery("vue_user", query);
+        const deleteImagesQuery = `DELETE FROM listing_image WHERE id_item = ${idItem}`;
+        await getResultOfQuery("vue_user", deleteImagesQuery);
 
+        const deleteObjectquery =`DELETE FROM listing WHERE id_item = ${idItem}`;
+        const result = await getResultOfQuery("vue_user", deleteObjectquery);
+
+        if (result.length === 0) {
+            return { success: false };
+        }
+
+        return { success: true };
     } catch (error) {
         throw new Error("Erreur lors de la récupération des labels des types d'objet");
     }
