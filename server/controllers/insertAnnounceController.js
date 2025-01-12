@@ -24,9 +24,12 @@ const addAnnounce = async (req, res) => {
 const insert = async (req, res) => {
     try {
         const newSubmission = req.body;
-
-        await insertNewObject(newSubmission);
-
+        const siren = req.session.user.siren;
+        if (siren) {
+            await insertNewObject(newSubmission, siren);
+        } else {
+            throw new Error("Vous n'etes pas connecté");
+        }
         // Si besoin, sauvegarde des fichiers et des données dans une base ou un fichier
         res.status(200).json({ message: 'Soumission reçue avec succès : ' + newSubmission});
     } catch (error) {

@@ -35,9 +35,9 @@ async function getStatesForObjects() {
     }
 }
 
-async function insertNewObject(newSubmission) {
+async function insertNewObject(newSubmission, siren) {
     try {
-        await insertListingWithImages(newSubmission);
+        await insertListingWithImages(newSubmission, siren);
     } catch (error) {
         console.error('Erreur lors de la récupération des données :', error);
     }

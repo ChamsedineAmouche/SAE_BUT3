@@ -3,7 +3,7 @@ const {getResultOfQuery} = require('./db_functions')
 const FileType = require("file-type");
 const {getCapacityRemaining, getDataOfTheEvent, getNumberOfParticipants} = require("../event/utils_event");
 
-const insertListingWithImages = async (newSubmission) => {
+const insertListingWithImages = async (newSubmission, siren) => {
     const connection = getDbConnection('vue_user');
     const promiseConnection = connection.promise();
     try {
@@ -22,7 +22,6 @@ const insertListingWithImages = async (newSubmission) => {
         const categoryId = categoryIdRequest[0].id_object_type;
         const status = "active";
         const idEmplacement = 7;
-        const siren = "18770918300235";
 
         const datePosted = new Date().toISOString().slice(0, 19).replace('T', ' ');
 
