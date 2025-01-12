@@ -56,6 +56,7 @@ const insertListingWithImages = async (newSubmission, siren) => {
 
         await promiseConnection.commit();
         console.log('Transaction réussie, données insérées avec succès.');
+        return idItem;
     } catch (error) {
         await promiseConnection.rollback();
         console.error('Erreur lors de l\'insertion, transaction annulée :', error);
