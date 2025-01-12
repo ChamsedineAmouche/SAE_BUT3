@@ -11,7 +11,8 @@ const {
     deleteEvent, 
     deleteArticle,
     allEvents,
-    allArticles
+    allArticles,
+    elearningCategories
 } = require('../controllers/adminController');
 
 router.get('/allUsers', allUsers);
@@ -20,12 +21,13 @@ router.get('/deleteDepot', deleteDepot)
 router.get('/deleteELearning', deleteELearning)
 router.get('/allElearning', allElearning)
 
-router.get('/insertEventAdmin', insertEvent);
-router.get('/insertArticleAdmin', insertArticle);
+router.post('/insertEvent', insertEvent);
+router.post('/insertArticle', insertArticle);
 router.get('/deleteEventAdmin', deleteEvent);
 router.get('/deleteArticleAdmin', deleteArticle)
 router.get('/allEvents', allEvents)
 router.get('/allArticles', allArticles)
+router.get('/elearningCategories', elearningCategories)
 
 
 module.exports = router;

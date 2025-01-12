@@ -2,13 +2,12 @@ const {getAllAccountsInfos, getAccountInfo} = require("../account/accountFetcher
 const {getSuscpiciousListing} = require("../object/objectFetcher")
 const {deleteObject} = require("../object/objectDelete")
 const {deleteElearning} = require("../elearning/elearningDelete")
-const {getAllElearning} = require("../elearning/elearningFetcher")
+const {getAllElearning, getElearningCategory} = require("../elearning/elearningFetcher")
 const {getAllEvents, insertEventAdmin, deleteEventAdmin} = require("../admin/eventAdmin");
 const {getAllArticles, insertArticleAdmin, deleteArticleAdmin} = require("../admin/articleAdmin");
 
 const getAdminSession = (req, res) => {
     if ((req.session.admin)){
-        console.log("test")
         return 1
     };
     throw new Error("No siren provided in query or session.");
@@ -136,13 +135,16 @@ const insertArticle = async (req, res) => {
         const newSubmission = req.body;
         console.log('Nouvelle soumission reçue :');
 
-        await insertArticleAdmin(newSubmission, req);
+        const result = await insertArticleAdmin(newSubmission, req);
 
-        // Si besoin, sauvegarde des fichiers et des données dans une base ou un fichier
-        res.status(200).json({ message: 'Soumission reçue avec succès : ' + newSubmission});
+        if (result.success) {
+            res.status(200).json({ success: true, message: result.message });
+        } else {
+            res.status(500).json({ success: false, message: result.message });
+        }
     } catch (error) {
         console.error('Erreur lors du traitement de la soumission :', error);
-        res.status(500).json({ error: 'Erreur interne du serveur' });
+        res.status(500).json({ success: false, message: 'Erreur interne du serveur.' });
     }
 };
 
@@ -208,5 +210,16 @@ const allArticles = async (req, res) => {
     }
 };
 
-module.exports = { allUsers, getSusObject, deleteDepot , deleteELearning,allElearning, insertEvent, insertArticle, deleteArticle, deleteEvent, allEvents, allArticles }
+const elearningCategories = async (req, res) => {
+    try {
+        const category = await getElearningCategory();
+        
+        res.json({ category });
+    } catch (error) {
+        console.error('Erreur lors de la récupération des données pour /api :', error);
+        res.status(500).json({ error: 'Erreur serveur lors de la récupération des données.' });
+    }
+};
+
+module.exports = { allUsers, getSusObject, deleteDepot , deleteELearning,allElearning, insertEvent, insertArticle, deleteArticle, deleteEvent, allEvents, allArticles, elearningCategories }
 

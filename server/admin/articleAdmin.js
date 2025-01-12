@@ -29,19 +29,21 @@ async function insertArticleAdmin(newSubmission, req) {
             try {
                 await promiseConnection.beginTransaction();
 
-                const { id_veille, title, article_date, author, content, category } = newSubmission;
+                const { title, article_date, author, content, category } = newSubmission;
 
                 const [listingResult] = await promiseConnection.execute(
                     `INSERT INTO article 
-       (id_veille, title, article_date, author, content, image, category, admin_id) 
+       (title, article_date, author, content, image, category, admin_id) 
        VALUES (?, ?, ?, ?, ?, ?, ?)`,
-                    [id_veille, title, article_date, author, content, null, category, admin]
+                    [title, article_date, author, content, null, category, admin.id]
                 );
                 await promiseConnection.commit();
                 console.log('Transaction réussie, données insérées avec succès.');
+                return { success: true, message: 'Données insérées avec succès.' };
             } catch (error) {
                 await promiseConnection.rollback();
                 console.error('Erreur lors de l\'insertion, transaction annulée :', error);
+                return { success: false, message: 'Erreur lors de l\'insertion.' };
             } finally {
                 await promiseConnection.end();
             }
@@ -50,6 +52,7 @@ async function insertArticleAdmin(newSubmission, req) {
         }
     } catch (error) {
         console.error('Erreur lors de la récupération des données :', error);
+        return { success: false, message: 'Erreur interne du serveur.' };
     }
 }
 
