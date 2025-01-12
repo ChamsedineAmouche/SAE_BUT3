@@ -20,9 +20,9 @@ router.post('/connexion', loginUser);
 router.post('/connexion_admin', loginAdmin);
 router.get('/getSession', getSession);
 router.get('/destroySession', destroySession);
-router.post('/oubli_mot_de_passe', forgotPassword);
+router.post('/forgotPassword', forgotPassword);
 router.get('/verifyToken', verifyToken);
-router.post('/reinitialisation_mot_de_passe', resetPassword);
+router.post('/resetPassword', resetPassword);
 router.get('/inscription_validation', validationAccount)
 router.post('/deleteInscription',deleteInscription)
 router.post('/validateInscription',validateInscription)
