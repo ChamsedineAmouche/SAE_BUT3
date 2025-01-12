@@ -74,7 +74,7 @@ async function getAccountInfo(siren) {
   
         if (result.length === 0) {
             console.log("Pas d'utilisateurs");
-            return { success: True, message: "Pas d'utilisateurs", account : {} };
+            return { success: true, message: "Pas d'utilisateurs", account : {} };
         }
         return { success: true, message: "", account : result};
     } catch (error) {
@@ -107,7 +107,6 @@ async function getAnnuaireInfo() {
             const numberGiven = await getNumberOfGivenObjects(siren)
             const numberTaken = await getNumberOfTakenObjects(siren)
             const accountInfo = await getAccountInfo(siren);
-            console.log(accountInfo);
             if (accountInfo.success && accountInfo.account.length > 0) {
                 const account = accountInfo.account[0];
                 return { [siren]: { 
@@ -160,7 +159,7 @@ async function getAccountFavorites(siren) {
         const depots = await Promise.all(
             depotFav.map(async (depot) => {
                 const productData = await getProductData(depot.id_item);
-                return { ...depot, productData };
+                return { ... productData };
             })
         );
 
@@ -181,5 +180,21 @@ async function getAccountPreferences(siren) {
         return { success: false, message: "Erreur interne de vérification" };
     }
 }
-module.exports = { getAccountInscriptions, getAccountInfo, getAnnuaireInfo, getAccountInfoByMail, verifyTokenSiren,getAccountFavorites, getAccountPreferences };
+
+async function getAllAccountsInfos() {
+    try {
+        const queryUsers = `SELECT * FROM company WHERE active = '1'`;
+        const users = await getResultOfQuery("vue_user", queryUsers);
+
+        const queryInscriptions = `SELECT * FROM company WHERE active = '0'`;
+        const inscriptions = await getResultOfQuery("vue_user", queryInscriptions);
+        
+        return { success: true, users: users, inscriptions: inscriptions };
+    } catch (error) {
+        console.error("Erreur lors de la récupération des informations des utilisateurs :", error);
+        return { success: false, message: "Erreur interne de vérification" };
+    }
+}
+
+module.exports = { getAccountInscriptions, getAccountInfo, getAnnuaireInfo, getAccountInfoByMail, verifyTokenSiren,getAccountFavorites, getAccountPreferences, getAllAccountsInfos };
   

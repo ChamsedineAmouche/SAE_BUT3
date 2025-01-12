@@ -8,7 +8,7 @@ USE vue_user;
 
 -- Création des tables pour le schéma vue_user
 CREATE TABLE company (
-   siren CHAR(14),
+   siren CHAR(14) NOT NULL,
    nom VARCHAR(50) NOT NULL,
    email VARCHAR(75) NOT NULL,
    password VARCHAR(75) NOT NULL,
@@ -67,7 +67,7 @@ CREATE TABLE elearning (
 );
 
 CREATE TABLE event (
-   event_id INT,
+   event_id INT AUTO_INCREMENT,
    title VARCHAR(50) NOT NULL,
    description TEXT NOT NULL,
    event_date DATETIME NOT NULL,
@@ -192,7 +192,7 @@ CREATE TABLE article (
 );
 
 CREATE TABLE elearning_list (
-   course_id INT,
+   course_id INT AUTO_INCREMENT,
    title VARCHAR(75),
    description TEXT NOT NULL,
    price VARCHAR(50),
@@ -213,4 +213,27 @@ CREATE TABLE event (
    admin_id INT NOT NULL,
    PRIMARY KEY(id_event),
    FOREIGN KEY(admin_id) REFERENCES admin(admin_id)
+);
+
+DROP DATABASE IF EXISTS payment_data;
+
+-- Création des bases de données
+CREATE DATABASE payment_data;
+
+-- Utilisation de la base de données bank_data
+USE payment_data;
+
+-- Création des tables pour le schéma bank_data
+CREATE TABLE payment_cards (
+    id SERIAL PRIMARY KEY,
+    card_name VARCHAR(100) NOT NULL,      
+    card_holder_first_name VARCHAR(50),  
+    card_holder_last_name VARCHAR(50),   
+    encrypted_card_number VARCHAR(255), 
+    expiration_date VARCHAR(5) NOT NULL,     
+    siren CHAR(14),                
+    is_default BOOLEAN DEFAULT FALSE,   
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    encryption_key VARCHAR(255) 
 );

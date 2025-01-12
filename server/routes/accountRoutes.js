@@ -15,15 +15,15 @@ const {
     annuaire
 } = require('../controllers/accountController');
 
-router.post('/register', register);
-router.post('/login', loginUser);
-router.post('/loginAdmin', loginAdmin);
+router.post('/inscription', register);
+router.post('/connexion', loginUser);
+router.post('/connexion_admin', loginAdmin);
 router.get('/getSession', getSession);
 router.get('/destroySession', destroySession);
 router.post('/forgotPassword', forgotPassword);
 router.get('/verifyToken', verifyToken);
 router.post('/resetPassword', resetPassword);
-router.get('/validationAccount', validationAccount)
+router.get('/inscription_validation', validationAccount)
 router.post('/deleteInscription',deleteInscription)
 router.post('/validateInscription',validateInscription)
 router.get('/annuaire',annuaire)

@@ -5,7 +5,6 @@ async function getDataForProductPageById(id, currentSiren) {
     const productData = await getProductDataById(id);
     const productWithSameCat = await getAllProductDataWithSameCategories(productData[0].id_object_type, id);
     const company = await getCompanyDataBySiren(productData[0].siren);
-    const localisation = await getLocalisationOfObject(productData[0].id_emplacement);
     let currentCompany = "";
     if (currentSiren !== "") {
         currentCompany = await getCompanyDataBySiren(currentSiren);
@@ -15,14 +14,32 @@ async function getDataForProductPageById(id, currentSiren) {
         "product" : productData,
         "recommandation" : productWithSameCat,
         "companySeller" : company,
-        "currentCompany" : currentCompany,
-        "localisation" : localisation
+        "currentCompany" : currentCompany
     };
 }
 
 async function getProductDataById(id) {
     try {
-        const query = `SELECT * FROM listing WHERE id_item = ` + id;
+        console.log(id);
+        const query = `
+            SELECT l.*, 
+                   ct.label AS state, 
+                   ot.label AS category,
+                   c.adress, 
+                   c.city, 
+                   c.zipcode,
+                   COALESCE(lf.count, 0) AS nbLikes
+            FROM listing l
+            LEFT JOIN (
+                SELECT id_item, COUNT(*) AS count
+                FROM listing_favorites
+                GROUP BY id_item
+            ) lf ON l.id_item = lf.id_item
+            JOIN condition_type ct ON l.id_condition_type = ct.id_condition_type
+            JOIN object_type ot ON l.id_object_type = ot.id_object_type
+            JOIN emplacement e ON l.id_emplacement = e.id_emplacement
+            JOIN container c ON e.id_Container = c.id_Container
+            WHERE l.id_item = ` + id;
         return await getResultOfQuery("vue_user", query);
     } catch (error) {
         console.error("Erreur lors de la récupération des données du produit :", error);
@@ -32,8 +49,38 @@ async function getProductDataById(id) {
 
 async function getAllProductDataWithSameCategories(categorieId, id) {
     try {
-        const query = `SELECT * FROM listing WHERE id_object_type = ` + categorieId + ` AND id_item != ` + id;
-        return await getResultOfQuery("vue_user", query);
+        const query = `SELECT l.*, COALESCE(lf.count, 0) AS nbLikes
+        FROM listing l
+        LEFT JOIN (
+            SELECT id_item, COUNT(*) AS count
+            FROM listing_favorites
+            GROUP BY id_item
+        ) lf ON l.id_item = lf.id_item
+           WHERE id_object_type = '${categorieId}' AND l.status = "active" AND l.id_item != ` + id;
+        const productsData = await getResultOfQuery("vue_user", query);
+        const formattedProducts = await Promise.all(
+            productsData.map(async (product) => {
+                const {
+                    id_item,
+                    id_object_type : idObjectType,
+                    id_condition_type : idConditionType,
+                    title,
+                    status,
+                    nbLikes
+                } = product;
+                const state = await getConditionByID(idConditionType);
+                const category = await getCategoryByID(idObjectType);
+                return {
+                    id_item,
+                    title,
+                    status,
+                    state,
+                    category,
+                    nbLikes
+                };
+            })
+        );
+        return formattedProducts;
     } catch (error) {
         console.error("Erreur lors de la récupération des données des produit associes:", error);
         throw error;
@@ -46,21 +93,6 @@ async function getCompanyDataBySiren(siren) {
         return await getResultOfQuery("vue_user", query);
     } catch (error) {
         console.error("Erreur lors de la récupération des données de l'entreprise :", error);
-        throw error;
-    }
-}
-
-async function getLocalisationOfObject(idEmplacement) {
-    try {
-        console.log(idEmplacement)
-        const firstQuery = `SELECT id_Container FROM emplacement WHERE id_emplacement = ` + idEmplacement;
-        const result = await getResultOfQuery("vue_user", firstQuery);
-        console.log(result[0].id_Container);
-
-        const lastQuery = `SELECT * FROM container WHERE id_Container = ` + result[0].id_Container;
-        return await getResultOfQuery("vue_user", lastQuery);
-    } catch (error) {
-        console.error("Erreur lors de la récupération des données de la localisation :", error);
         throw error;
     }
 }
@@ -89,8 +121,10 @@ async function getConditionByID(idCondition) {
 
 async function getProductData(id) {
     try {
-        const productData = await getProductDataById(id);
+        const query = `SELECT * FROM listing WHERE id_item = ${id}`
+        const productData = await getResultOfQuery('vue_user', query);
         const {
+            id_item,
             id_object_type: idObjectType,
             id_condition_type: idConditionType,
             title,
@@ -103,7 +137,8 @@ async function getProductData(id) {
         const condition = await getConditionByID(idConditionType);
         const category = await getCategoryByID(idObjectType);
         return {
-            name: title,
+            id_item,
+            title,
             description,
             dimension,
             date: datePosted,
@@ -121,14 +156,15 @@ async function getProductData(id) {
 //Renvoie tout les depots et ses infos a partir d'un statut et d'un siren
 async function getListingBySirenAndStatus(siren, status){
     try{
-        const query = `SELECT id_item FROM listing WHERE siren = ${siren} and status = '${status}'`;
+        const query = `SELECT id_item FROM listing WHERE siren = ${siren} and status IN ${status}`;
+        
         console.log(query)
         const listingItems = await getResultOfQuery('vue_user', query)
         console.log(listingItems)
         const depots = await Promise.all(
             listingItems.map(async (depot) => {
                 const productData = await getProductData(depot.id_item);
-                return { ...depot, productData };
+                return { ...productData };
             })
         );
 
@@ -140,4 +176,43 @@ async function getListingBySirenAndStatus(siren, status){
     }
 }
 
-module.exports = { getDataForProductPageById, getProductData, getListingBySirenAndStatus };
+async function getStatusForReservation(id, status, siren) {
+    console.log(status)
+    if (status === "waiting") {
+        const query = `
+            SELECT t.status, t.siren
+            FROM transaction t
+            JOIN (
+                SELECT id_item, MAX(date_transaction) AS max_date
+                FROM transaction
+                WHERE id_item = ${id}
+                GROUP BY id_item
+            ) latest ON t.id_item = latest.id_item AND t.date_transaction = latest.max_date
+            WHERE t.id_item = ${id};
+        `;
+
+        try {
+            const result = await getResultOfQuery('vue_user', query);
+
+            if (result.length > 0) {
+                const latestTransaction = result[0];
+                const latestSiren = latestTransaction.siren;
+
+                if (latestSiren === siren) {
+                    return "waiting";
+                } else {
+                    return "reserved";
+                }
+            } else {
+                return status;
+            }
+        } catch (error) {
+            console.error("Erreur lors de l'exécution de la requête :", error);
+            throw error;
+        }
+    } else {
+        return status;
+    }
+}
+
+module.exports = { getDataForProductPageById, getProductData, getListingBySirenAndStatus, getCompanyDataBySiren, getStatusForReservation };

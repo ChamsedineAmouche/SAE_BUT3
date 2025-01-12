@@ -1,4 +1,5 @@
-const {getResultOfQuery, insertListingWithImages} = require('../db_utils/db_functions');
+const {getResultOfQuery} = require('../db_utils/db_functions');
+const {insertListingWithImages} = require('../db_utils/db_insertion')
 
 const mysql = require('mysql2');
 
@@ -6,7 +7,6 @@ async function getCategoriesForObjects() {
     try {
         const result =
             await getResultOfQuery('vue_user', 'SELECT label FROM object_type');
-        console.log('Résultats de la requête :', result);
         return result;
     } catch (error) {
         console.error('Erreur lors de la récupération des données :', error);
@@ -17,9 +17,8 @@ async function getLocalisationOfStockage() {
     try {
         const result =
             await getResultOfQuery('vue_user',
-                'SELECT adress, city, zipcode, capacity FROM container');
+                ' SELECT c.adress,  c.city, c.zipcode, c.capacity FROM container c JOIN emplacement e ON e.id_Container = c.id_Container WHERE e.available = 1 AND c.capacity > 0 GROUP BY c.id_Container;');
         const containerAvailable = result.filter(container => container.capacity > 0);
-        console.log('Résultats de la requête :', result);
         return containerAvailable;
     } catch (error) {
         console.error('Erreur lors de la récupération des données :', error);
@@ -30,16 +29,16 @@ async function getStatesForObjects() {
     try {
         const result =
             await getResultOfQuery('vue_user', 'SELECT label FROM condition_type');
-        console.log('Résultats de la requête :', result);
         return result;
     } catch (error) {
         console.error('Erreur lors de la récupération des données :', error);
     }
 }
 
-async function insertNewObject(newSubmission) {
+async function insertNewObject(newSubmission, siren) {
     try {
-        await insertListingWithImages(newSubmission);
+        const idItem = await insertListingWithImages(newSubmission, siren);
+        return idItem
     } catch (error) {
         console.error('Erreur lors de la récupération des données :', error);
     }

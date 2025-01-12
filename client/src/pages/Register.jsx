@@ -27,7 +27,7 @@ const Register = () => {
     console.log("Sending form data:", formData);  
   
     try {
-      const response = await fetch("/register", {
+      const response = await fetch("/inscription", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -52,15 +52,15 @@ const Register = () => {
     <div className="register-page">
       {/* Section Formulaire */}
       <div className="flex justify-center items-center h-screen bg-gray-100">
-        <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-lg">
+        <div className="w-full max-w-4xl bg-white p-8 rounded-lg shadow-lg">
           <h2 className="text-3xl font-semibold text-darkGreen text-center mb-8">
             Inscription
           </h2>
 
           {/* Formulaire d'inscription */}
           <form onSubmit={handleSubmit} className="space-y-4">
-            {/* SIREN */}
-            <div className="form-group">
+              {/* SIREN */}
+              <div className="form-group">
               <label htmlFor="siren" className="block text-lg text-darkGreen">
                 SIREN
               </label>
@@ -73,135 +73,144 @@ const Register = () => {
                 className="w-full p-3 border border-gray-300 rounded-md"
                 required
               />
-            </div>
+              </div>
 
-            {/* Nom */}
-            <div className="form-group">
-              <label htmlFor="nom" className="block text-lg text-darkGreen">
-                Nom
-              </label>
-              <input
-                type="text"
-                id="nom"
-                name="nom"
-                value={formData.nom}
-                onChange={handleChange}
-                className="w-full p-3 border border-gray-300 rounded-md"
-                required
-              />
-            </div>
+              <div className="flex space-x-6">
+                <div className="w-full space-y-4">
+                  {/* Nom */}
+                  <div className="form-group">
+                    <label htmlFor="nom" className="block text-lg text-darkGreen">
+                      Nom
+                    </label>
+                    <input
+                      type="text"
+                      id="nom"
+                      name="nom"
+                      value={formData.nom}
+                      onChange={handleChange}
+                      className="w-full p-3 border border-gray-300 rounded-md"
+                      required
+                    />
+                  </div>
 
-            {/* Email */}
-            <div className="form-group">
-              <label htmlFor="email" className="block text-lg text-darkGreen">
-                Email
-              </label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                className="w-full p-3 border border-gray-300 rounded-md"
-                required
-              />
-            </div>
+                  {/* Email */}
+                  <div className="form-group">
+                    <label htmlFor="email" className="block text-lg text-darkGreen">
+                      Email
+                    </label>
+                    <input
+                      type="email"
+                      id="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      className="w-full p-3 border border-gray-300 rounded-md"
+                      required
+                    />
+                  </div>
 
-            {/* Mot de passe */}
-            <div className="form-group">
-              <label htmlFor="password" className="block text-lg text-darkGreen">
-                Mot de passe
-              </label>
-              <input
-                type="password"
-                id="password"
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                className="w-full p-3 border border-gray-300 rounded-md"
-                required
-              />
-            </div>
+                  {/* Mot de passe */}
+                  <div className="form-group">
+                    <label htmlFor="password" className="block text-lg text-darkGreen">
+                      Mot de passe
+                    </label>
+                    <input
+                      type="password"
+                      id="password"
+                      name="password"
+                      value={formData.password}
+                      onChange={handleChange}
+                      className="w-full p-3 border border-gray-300 rounded-md"
+                      required
+                    />
+                  </div>
 
-              {/* Confirmer Mot de passe */}
-              <div className="form-group">
-              <label htmlFor="confirmPassword" className="block text-lg text-darkGreen">
-                Mot de passe
-              </label>
-              <input
-                type="password"
-                id="confirmPassword"
-                name="confirmPassword"
-                value={formData.confirmPassword}
-                onChange={handleChange}
-                className="w-full p-3 border border-gray-300 rounded-md"
-                required
-              />
-            </div>
+                    {/* Confirmer Mot de passe */}
+                    <div className="form-group">
+                    <label htmlFor="confirmPassword" className="block text-lg text-darkGreen">
+                      Confirmez le mot de passe
+                    </label>
+                    <input
+                      type="password"
+                      id="confirmPassword"
+                      name="confirmPassword"
+                      value={formData.confirmPassword}
+                      onChange={handleChange}
+                      className="w-full p-3 border border-gray-300 rounded-md"
+                      required
+                    />
+                  </div>
+                </div>
+                
+                <div className="w-full space-y-4">
+                  {/* Adresse */}
+                <div className="form-group">
+                  <label htmlFor="adress" className="block text-lg text-darkGreen">
+                    Adresse
+                  </label>
+                  <input
+                    type="text"
+                    id="adress"
+                    name="adress"
+                    value={formData.adress}
+                    onChange={handleChange}
+                    className="w-full p-3 border border-gray-300 rounded-md"
+                    required
+                  />
+                </div>
 
-            {/* Adresse */}
-            <div className="form-group">
-              <label htmlFor="adress" className="block text-lg text-darkGreen">
-                Adresse
-              </label>
-              <input
-                type="text"
-                id="adress"
-                name="adress"
-                value={formData.adress}
-                onChange={handleChange}
-                className="w-full p-3 border border-gray-300 rounded-md"
-                required
-              />
-            </div>
+                {/* Code Postal */}
+                <div className="form-group">
+                  <label htmlFor="zipcode" className="block text-lg text-darkGreen">
+                    Code Postal
+                  </label>
+                  <input
+                    type="text"
+                    id="zipcode"
+                    name="zipcode"
+                    value={formData.zipcode}
+                    onChange={handleChange}
+                    className="w-full p-3 border border-gray-300 rounded-md"
+                    required
+                  />
+                </div>
 
-            {/* Code Postal */}
-            <div className="form-group">
-              <label htmlFor="zipcode" className="block text-lg text-darkGreen">
-                Code Postal
-              </label>
-              <input
-                type="text"
-                id="zipcode"
-                name="zipcode"
-                value={formData.zipcode}
-                onChange={handleChange}
-                className="w-full p-3 border border-gray-300 rounded-md"
-                required
-              />
-            </div>
+                {/* Ville */}
+                <div className="form-group">
+                  <label htmlFor="city" className="block text-lg text-darkGreen">
+                    Ville
+                  </label>
+                  <input
+                    type="text"
+                    id="city"
+                    name="city"
+                    value={formData.city}
+                    onChange={handleChange}
+                    className="w-full p-3 border border-gray-300 rounded-md"
+                    required
+                  />
+                </div>
 
-            {/* Ville */}
-            <div className="form-group">
-              <label htmlFor="city" className="block text-lg text-darkGreen">
-                Ville
-              </label>
-              <input
-                type="text"
-                id="city"
-                name="city"
-                value={formData.city}
-                onChange={handleChange}
-                className="w-full p-3 border border-gray-300 rounded-md"
-                required
-              />
-            </div>
-
-            {/* Téléphone */}
-            <div className="form-group">
-              <label htmlFor="phone" className="block text-lg text-darkGreen">
-                Téléphone
-              </label>
-              <input
-                type="text"
-                id="phone"
-                name="phone"
-                value={formData.phone}
-                onChange={handleChange}
-                className="w-full p-3 border border-gray-300 rounded-md"
-                required
-              />
-            </div>
+                {/* Téléphone */}
+                <div className="form-group">
+                  <label htmlFor="phone" className="block text-lg text-darkGreen">
+                    Téléphone
+                  </label>
+                  <input
+                    type="text"
+                    id="phone"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleChange}
+                    className="w-full p-3 border border-gray-300 rounded-md"
+                    required
+                  />
+                </div>
+                </div>
+              </div>
+              
+              
+            
 
             {/* Affichage des erreurs */}
             {errorMessage && <div className="text-red-500 text-center mt-2">{errorMessage}</div>}
@@ -210,7 +219,7 @@ const Register = () => {
             <div className="flex justify-center mt-6">
               <button
                 type="submit"
-                className="bg-darkGreen text-white px-6 py-3 text-lg font-semibold rounded-md hover:bg-opacity-80 transition duration-200"
+                className="bg-oliveGreen text-white px-6 py-3 text-lg font-semibold rounded-md hover:bg-opacity-90 transition duration-200"
               >
                 S'inscrire
               </button>

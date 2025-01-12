@@ -51,8 +51,8 @@
 
 /* Style des cartes */
 .slick-slide > div {
-    height: 20rem; /* Hauteur fixe des cartes */
-    width: 20rem;
+    height: 20vh; /* Hauteur fixe des cartes */
+    width: 20vh;
     display: flex;
     align-items: center;
     justify-content: center;

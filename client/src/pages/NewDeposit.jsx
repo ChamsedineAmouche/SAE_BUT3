@@ -2,8 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import LocalisationSwal from '../components/LocalisationSwal/LocalisationSwal';
+import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
+import Cookies from 'js-cookie';
+import { getAuthHeaders } from '../utils/jwtAuth';
 
 const NewDeposit = () => {
+  const navigate = useNavigate();
   const [title, setTitle] = useState('');
   const [dimensions, setDimensions] = useState({ longueur: '', largeur: '', hauteur: '' });
   const [description, setDescription] = useState('');
@@ -18,36 +24,58 @@ const NewDeposit = () => {
 
   const handleFileChange = (event) => {
     const filesRecup = Array.from(event.target.files);
-    console.log('Fichiers sélectionnés :', filesRecup); // Vérifie ici
-    setSelectedFiles(filesRecup);
+    //Filtre pour garder que les images
+    const imageFiles = filesRecup.filter((file) => {
+      if (!file.type.startsWith("image/")) {
+        alert(`Fichier non autorisé : ${file.name}! Seules les images sont autorisées !!`);
+        return false;
+      }
+      return true;
+    });
+    console.log('Fichiers sélectionnés :', imageFiles);
+    setSelectedFiles(imageFiles);
   };
+
 
   const readFileAsBase64 = (file) => {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
-
       reader.onload = () => {
-        const base64Data = reader.result.split(',')[1]; // Supprimer le préfixe "data:"
+        const base64Data = reader.result.split(',')[1];
         resolve(base64Data);
       };
-
       reader.onerror = (error) => {
-        console.error(`Erreur lors de la lecture du fichier ${file.name} :`, error);
         reject(error);
       };
-
-      reader.readAsDataURL(file); // Lire le fichier en Base64
+      reader.readAsDataURL(file);
     });
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const base64Files = await Promise.all(
-        selectedFiles.map((file) => readFileAsBase64(file))
-    );
+    // Validation des champs
+    let formErrors = {};
 
-    console.log('binaryFiles :', base64Files);
+    if (title.trim() === '') formErrors.title = 'Le titre est requis';
+    if (dimensions.longueur.trim() === '') formErrors.longueur = 'La longueur est requise';
+    if (dimensions.largeur.trim() === '') formErrors.largeur = 'La largeur est requise';
+    if (dimensions.hauteur.trim() === '') formErrors.hauteur = 'La hauteur est requise';
+    if (description.trim() === '') formErrors.description = 'La description est requise';
+    if (category.trim() === '') formErrors.category = 'La catégorie est requise';
+    if (state.trim() === '') formErrors.state = 'L\'état est requis';
+    if (location.trim() === '') formErrors.location = 'La localisation est requise';
+    if (selectedFiles.length === 0) formErrors.files = 'Au moins une photo est requise';
+
+    if (Object.keys(formErrors).length > 0) {
+      setErrors(formErrors);
+      toast.error("Veuillez remplir tous les champs obligatoires.");
+      return; // Empêche l'envoi si des erreurs existent
+    }
+
+    const base64Files = await Promise.all(
+      selectedFiles.map((file) => readFileAsBase64(file))
+    );
 
     const newSubmission = {
       title,
@@ -56,44 +84,57 @@ const NewDeposit = () => {
       category,
       state,
       location,
-      files : base64Files
+      files: base64Files
     };
 
     try {
-      // Envoi des données au backend
-      const response = await fetch('http://localhost:5001/insert', {
+      const response = await fetch('/insert', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(newSubmission), // Conversion en JSON pour le backend
+        headers: { 'Content-Type': 'application/json', ...getAuthHeaders() },
+        body: JSON.stringify(newSubmission),
       });
-
-      if (!response.ok) {
+      console.log(response)
+      if (!response.status==401) {
+        toast.error("Connectez vous pour déposer une annonce")
+        navigate("/login");
+      }
+      else if(!response.ok){
         throw new Error(`Erreur HTTP: ${response.status}`);
       }
 
-      const result = await response.json(); // Résultat renvoyé par le serveur
-      console.log('Données envoyées avec succès :', newSubmission);
-
-      // Mettre à jour le tableau local des soumissions
+      const res = await response.json();
       setSubmissions([...submissions, newSubmission]);
+      Swal.fire({
+        icon: 'success',
+        title: 'Succès',
+        text: 'Annonce publiée avec succès !',
+        showCancelButton: true,
+        confirmButtonText: 'Voir',
+        cancelButtonText: 'Fermer',
+        customClass: {
+          confirmButton: "px-4 py-2 bg-oliveGreen text-white rounded-md shadow hover:bg-yellowGreen1 mx-2",
+          cancelButton: "px-4 py-2 border bg-white border-oliveGreen text-oliveGreen rounded-md shadow hover:bg-oliveGreen hover:bg-opacity-20 mx-2",
+        },
+      }).then((result) => {
+        if (result.isConfirmed) {
+          navigate(`/depot/${res.idItem}`);
+        } else {
+          navigate('/');
+        }
+      });
     } catch (error) {
-      console.error('Erreur lors de l\'envoi des données :', error);
+      toast.error("Erreur lors de la publication de l'annonce, veuillez réessayer.");
     }
 
-    // Réinitialise le formulaire
+    // Réinitialisation du formulaire après envoi
     setTitle('');
-    setDimensions({longueur: '', largeur: '', hauteur: ''});
+    setDimensions({ longueur: '', largeur: '', hauteur: '' });
     setDescription('');
     setCategory('');
     setState('');
     setLocation('');
     setSelectedFiles([]);
-  };
-
-  const handleSaveDraft = () => {
-    console.log('Draft saved');
+    setErrors({});
   };
 
   const isFormValid = () => {
@@ -111,31 +152,33 @@ const NewDeposit = () => {
   };
 
   useEffect(() => {
-    fetch('/addAnnounce')
-      .then(response => {
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return response.json();
-      })
-      .then(data => {
-        setData(data);
-        setIsLoading(false);
-      })
-      .catch(error => {
-        console.error('Error fetching data:', error);
-        setIsLoading(false);
-      });
+    const authToken = Cookies.get('jwt');
+    if (!authToken) {
+      toast.error("Connectez vous pour déposer une annonce")
+      navigate("/login");
+      return; 
+    }
+  
+    fetch('/addAnnounce', { headers: getAuthHeaders() })
+    .then((response) => {
+      if (!response.status==401) {
+        toast.error("Connectez vous pour déposer une annonce")
+        navigate("/login");
+      }
+      return response.json();
+    })
+    .then((data) => {
+      setData(data);
+      setIsLoading(false);
+    })
+    .catch((error) => {
+      console.log(error)
+      setIsLoading(false);
+      toast.error('Erreur lors du chargement des données');
+    });
+
   }, []);
-
-  if (isLoading) {
-    return <p>Chargement en cours...</p>;
-  }
-
-  if (!data) {
-    return <p>Erreur lors du chargement des données.</p>;
-  }
-
+  if (isLoading) return <p>Chargement...</p>;
 
   return (
     <div className="max-w-5xl mx-auto px-12 py-24">
@@ -145,7 +188,6 @@ const NewDeposit = () => {
         <div className="border p-4 border-2 rounded-lg border-yellowGreen1 bg-yellowGreen1 bg-opacity-20">
           <label className="block text-m font-medium pb-2 text-darkGreen">Ajoute jusqu'à 5 photos :</label>
           <div className="border p-4 border-yellowGreen1 rounded-lg border-dashed flex flex-col items-center justify-center">
-            {/* Conteneur personnalisé pour masquer le texte */}
             <label className="cursor-pointer text-center">
               <span className="block text-m text-darkGreen my-4 py-2 px-4 rounded-md border border-yellowGreen1 bg-yellowGreen1 bg-opacity-20 hover:bg-opacity-50">
                 <FontAwesomeIcon icon={faPlus} className='pr-2' />
@@ -158,8 +200,6 @@ const NewDeposit = () => {
                 onChange={handleFileChange}
               />
             </label>
-
-            {/* Liste des fichiers sélectionnés */}
             {selectedFiles.length > 0 && (
               <ul className="mt-4 text-sm text-gray-600">
                 {selectedFiles.map((file, index) => (
@@ -170,11 +210,10 @@ const NewDeposit = () => {
               </ul>
             )}
           </div>
-
         </div>
 
+        {/* Form Inputs */}
         <div className="border p-4 border-2 rounded-lg border-yellowGreen1 bg-yellowGreen1 bg-opacity-20">
-          {/* Title */}
           <div>
             <label className="block text-m font-medium pb-2 text-darkGreen">Titre</label>
             <input
@@ -182,11 +221,9 @@ const NewDeposit = () => {
               placeholder="ex : Table"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="mt-2 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-oliveGreen focus:border-oliveGreen"
+              className={`mt-2 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-oliveGreen focus:border-oliveGreen ${errors.title ? 'border-red-500' : ''}`}
             />
           </div>
-
-          <span className="block w-full border-b border-darkGreen my-4"></span>
 
           {/* Dimensions */}
           <div>
@@ -201,13 +238,11 @@ const NewDeposit = () => {
                   onChange={(e) =>
                     setDimensions({ ...dimensions, [placeholder.toLowerCase()]: e.target.value })
                   }
-                  className="block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-oliveGreen focus:border-oliveGreen"
+                  className={`block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-oliveGreen focus:border-oliveGreen ${errors[placeholder.toLowerCase()] ? 'border-red-500' : ''}`}
                 />
               ))}
             </div>
           </div>
-
-          <span className="block w-full border-b border-darkGreen my-4"></span>
 
           {/* Description */}
           <div>
@@ -216,19 +251,19 @@ const NewDeposit = () => {
               placeholder="ex : Très bon état, peu servi"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              className="mt-2 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-oliveGreen focus:border-oliveGreen"
-            ></textarea>
+              className={`mt-2 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-oliveGreen focus:border-oliveGreen ${errors.description ? 'border-red-500' : ''}`}
+            />
           </div>
         </div>
 
+        {/* Category, State, Location */}
         <div className="border p-4 border-2 rounded-lg border-yellowGreen1 bg-yellowGreen1 bg-opacity-20">
-          {/* Category */}
           <div>
             <label className="block text-m font-medium pb-2 text-darkGreen">Catégorie</label>
             <select
               value={category}
               onChange={(e) => setCategory(e.target.value)}
-              className="mt-2 block w-full px-3 py-2 border rounded-md shadow-sm bg-white focus:outline-none focus:ring-oliveGreen focus:border-oliveGreen"
+              className={`mt-2 block w-full px-3 py-2 border rounded-md shadow-sm bg-white focus:outline-none focus:ring-oliveGreen focus:border-oliveGreen ${errors.category ? 'border-red-500' : ''}`}
             >
               <option value="">Choisir une catégorie</option>
               {data.categoriesForObjects.map((category, index) => (
@@ -239,15 +274,13 @@ const NewDeposit = () => {
             </select>
           </div>
 
-          <span className="block w-full border-b border-darkGreen my-4"></span>
-
           {/* State */}
           <div>
             <label className="block text-m font-medium pb-2 text-darkGreen">État</label>
             <select
               value={state}
               onChange={(e) => setState(e.target.value)}
-              className="mt-2 block w-full px-3 py-2 border rounded-md shadow-sm bg-white focus:outline-none focus:ring-oliveGreen focus:border-oliveGreen"
+              className={`mt-2 block w-full px-3 py-2 border rounded-md shadow-sm bg-white focus:outline-none focus:ring-oliveGreen focus:border-oliveGreen ${errors.state ? 'border-red-500' : ''}`}
             >
               <option value="">Choisir un état</option>
               {data.statesForObjects.map((state, index) => (
@@ -259,17 +292,16 @@ const NewDeposit = () => {
           </div>
         </div>
 
+        {/* Location */}
         <div className="border p-4 border-2 rounded-lg border-yellowGreen1 bg-yellowGreen1 bg-opacity-20">
-          {/* Location */}
-          <div className='flex items-center'>
-            <label className="block text-m font-medium text-darkGreen pr-32 ">Localisation</label>
+          <div className="flex items-center">
+            <label className="block text-m font-medium text-darkGreen pr-32">Localisation</label>
             <input
               type="text"
               placeholder="Aucun emplacement choisi"
-              id='location'
               value={location}
               onChange={(e) => setLocation(e.target.value)}
-              className="mt-2 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-oliveGreen focus:border-oliveGreen mx-2"
+              className={`mt-2 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-oliveGreen focus:border-oliveGreen mx-2 ${errors.location ? 'border-red-500' : ''}`}
               readOnly
             />
             <LocalisationSwal locations={data.containerAvailable} onLocationSelect={(selectedLocation) => setLocation(selectedLocation)} />
@@ -288,7 +320,7 @@ const NewDeposit = () => {
           <button
             type="button"
             className="px-4 py-2 text-oliveGreen border border-oliveGreen rounded-md shadow hover:bg-gray-100 mx-2"
-            onClick={handleSaveDraft}
+            onClick={() => console.log('Draft saved')}
           >
             Sauvegarder le brouillon
           </button>

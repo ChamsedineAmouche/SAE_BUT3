@@ -20,7 +20,7 @@ const LoginAdmin = () => {
     console.log("Sending login data:", formData);  
 
     try {
-      const response = await fetch("/loginAdmin", {
+      const response = await fetch("/connexion_admin", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

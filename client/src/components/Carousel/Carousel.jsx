@@ -1,9 +1,13 @@
 import React, { useState } from "react";
 
 const Carousel = ({ items, title }) => {
-  const itemsPerPage = 5; // Nombre de cartes visibles par page
-  const totalPages = Math.ceil(items.length / itemsPerPage); // Calcul du nombre de pages
+  const itemsPerPage = 5; 
+  const totalPages = Math.ceil(items.length / itemsPerPage);
   const [currentPage, setCurrentPage] = useState(0);
+
+  if (!items || items.length <= 0) {
+    return <div/>
+  }
 
   const handlePrev = () => {
     setCurrentPage((prev) => (prev === 0 ? totalPages - 1 : prev - 1));
@@ -33,10 +37,10 @@ const Carousel = ({ items, title }) => {
           {items.map((item, index) => (
             <div
               key={index}
-              className="flex-none w-full md:w-1/5 px-4"
+              className="flex-none w-full px-4"
               style={{ flexBasis: `${100 / itemsPerPage}%` }}
             >
-              <div className="bg-gray-200 rounded-lg shadow-xs flex items-center justify-center w-80 h-48 md:h-80">
+              <div className="bg-gray-200 rounded-lg shadow-xs flex items-center justify-center w-80 h-80 ">
                 {item}
               </div>
             </div>

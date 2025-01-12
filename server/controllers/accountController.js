@@ -4,6 +4,8 @@ const { getAccountInscriptions, getAccountInfo, getAnnuaireInfo, getAccountInfoB
 const { deleteInscriptions } = require("../account/accountDelete")
 const { updatePassword } = require("../account/accountUpdate")
 const { sendConfirmationEmail, sendMailForgotPassword } = require('../nodemailer/mailer');
+const jwt = require('jsonwebtoken');
+
 
 // Fonction pour enregistrer une entreprise
 const register = async (req, res) => {
@@ -23,7 +25,7 @@ const loginUser = async (req, res) => {
 
     if (result.success) {
         req.session.user = { siren: result.siren };
-        console.log("Session after login:", req.session.user);
+        //console.log("Session after login:", req.session.user);
         res.status(201).json(result); 
     } else {
         res.status(500).json(result); 
@@ -37,7 +39,7 @@ const loginAdmin = async (req, res) => {
 
     if (result.success) {
         req.session.admin = { id: result.admin };
-        console.log("Session after login:", req.session.admin);
+        //console.log("Session after login:", req.session.admin);
         res.status(201).json(result); 
     } else {
         res.status(500).json(result); 
@@ -189,6 +191,19 @@ const annuaire = async (req, res) => {
     res.json({result})
 }
 
+const verifyJWT = async (req, res) => { 
+    const token = req.header('Authorization');
+    if (!token) {
+        return res.status(401).json({ error: 'Accès non autorisé' });
+    }
+    try {
+        const decoded = jwt.verify(token, 'mdp');
+        next();
+    } catch (error) {
+        return res.status(401).json({ error: 'Token invalide' });
+    }
+}
+
 
 module.exports = {
     register,
@@ -202,6 +217,7 @@ module.exports = {
     validationAccount,
     deleteInscription, 
     validateInscription,
-    annuaire
+    annuaire,
+    verifyJWT
 };
 
