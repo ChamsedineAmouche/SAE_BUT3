@@ -12,7 +12,8 @@ const {
     deleteArticle,
     allEvents,
     allArticles,
-    elearningCategories
+    elearningCategories,
+    insertElearning
 } = require('../controllers/adminController');
 
 router.get('/allUsers', allUsers);
@@ -28,6 +29,7 @@ router.get('/deleteArticleAdmin', deleteArticle)
 router.get('/allEvents', allEvents)
 router.get('/allArticles', allArticles)
 router.get('/elearningCategories', elearningCategories)
+router.post('/insertElearning', insertElearning)
 
 
 module.exports = router;

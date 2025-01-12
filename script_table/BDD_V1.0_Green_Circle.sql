@@ -192,7 +192,7 @@ CREATE TABLE article (
 );
 
 CREATE TABLE elearning_list (
-   course_id INT,
+   course_id INT AUTO_INCREMENT,
    title VARCHAR(75),
    description TEXT NOT NULL,
    price VARCHAR(50),

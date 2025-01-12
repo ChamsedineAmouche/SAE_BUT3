@@ -3,8 +3,9 @@ const {getSuscpiciousListing} = require("../object/objectFetcher")
 const {deleteObject} = require("../object/objectDelete")
 const {deleteElearning} = require("../elearning/elearningDelete")
 const {getAllElearning, getElearningCategory} = require("../elearning/elearningFetcher")
-const {getAllEvents, insertEventAdmin, deleteEventAdmin} = require("../admin/eventAdmin");
-const {getAllArticles, insertArticleAdmin, deleteArticleAdmin} = require("../admin/articleAdmin");
+const {getAllEvents, insertEventAdmin, deleteEventAdmin} = require("../admin/eventAdmin")
+const {getAllArticles, insertArticleAdmin, deleteArticleAdmin} = require("../admin/articleAdmin")
+const {insertElearningAdmin} = require("../admin/elearningAdmin")
 
 const getAdminSession = (req, res) => {
     if ((req.session.admin)){
@@ -225,5 +226,23 @@ const elearningCategories = async (req, res) => {
     }
 };
 
-module.exports = { allUsers, getSusObject, deleteDepot , deleteELearning,allElearning, insertEvent, insertArticle, deleteArticle, deleteEvent, allEvents, allArticles, elearningCategories }
+const insertElearning = async (req, res) => {
+    try {
+        const newSubmission = req.body;
+        console.log('Nouvelle soumission reçue :');
+
+        const result = await insertElearningAdmin(newSubmission, req);
+
+        if (result.success) {
+            res.status(200).json({ success: true, message: result.message });
+        } else {
+            res.status(500).json({ success: false, message: result.message });
+        } 
+    } catch (error) {
+        console.error('Erreur lors du traitement de la soumission :', error);
+        res.status(500).json({ success: false, message: 'Erreur interne du serveur.' });
+    }
+}
+
+module.exports = { allUsers, getSusObject, deleteDepot , deleteELearning,allElearning, insertEvent, insertArticle, deleteArticle, deleteEvent, allEvents, allArticles, elearningCategories, insertElearning }
 
