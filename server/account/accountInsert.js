@@ -23,6 +23,24 @@ async function validateSiren(siren) {
     }
 }
 
+async function validateMail(email) {
+
+    const query = `SELECT COUNT(*) as count FROM company WHERE email = '${email}'`;
+    
+    try {
+        const result = await getResultOfQuery("vue_user", query);
+
+        if (result[0].count > 0) {
+            return { valid: false, message: "Un compte avec ce mail existe déjà." };
+        }
+
+        return { valid: true };
+    } catch (error) {
+        console.error("Erreur lors de la validation du mail :", error);
+        return { valid: false, message: "Erreur lors de la validation du mail." };
+    }
+}
+
 async function validatePassword(password) {
     if (password.length < 10) {
         return { valid: false, message: "Le mot de passe doit comporter au moins 10 caractères." };
@@ -60,7 +78,12 @@ async function registerCompany(siren, nom, email, password,confirmPassword, adre
         if (!sirenValidation.valid) {
             return { success: false, message: sirenValidation.message };
         }
-        
+
+        const emailValidation = await validateMail(email);
+        if (!emailValidation.valid) {
+            return { success: false, message: emailValidation.message };
+        }
+
         if (!(password == confirmPassword)){
             return { success: false, message: "Les mots de passes ne correspondent pas" };
         }
@@ -75,6 +98,9 @@ async function registerCompany(siren, nom, email, password,confirmPassword, adre
 
         const query = `INSERT INTO company (siren, nom, email, password, adress, zipcode, city, phone, token) VALUES ('${siren}', '${nom}', '${email}', '${hashedPassword}', '${adress}','${zipcode}', '${city}', '${phone}', '${token}')`;
         const result = await getResultOfQuery("vue_user", query);
+
+        const queryPref = `INSERT INTO preference (preference, notif, info, siren) VALUES ('{"1": true, "2": true, "3": true, "4": true, "5": true, "6": true, "7": true}','{"event": true, "forum": true, "meuble": true, "article": true, "message": true, "elearning": true}','{"info_pp": true, "info_city": true, "info_email": true, "info_phone": true, "info_adress": true, "info_zipcode": true}', '${siren}')`;
+        const resultPref = await getResultOfQuery("vue_user", queryPref);
 
         return { success: true, message: "Votre compte a été créé avec succès, un mail de confirmation vous sera envoyé quand un admin aura accepté votre demande." };
     } catch (error) {

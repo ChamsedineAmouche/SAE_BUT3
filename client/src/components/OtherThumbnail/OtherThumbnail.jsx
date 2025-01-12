@@ -20,7 +20,7 @@ const OtherThumbnail = ({ other, type }) => {
     image = "/event_default.jpg";
   }
 
-  const { title } = other;
+  const { title, category } = other;
 
   const handleClick = () => {
     if (type === "event") {
@@ -58,6 +58,7 @@ const OtherThumbnail = ({ other, type }) => {
         <h3 className="text-2xl font-bold text-darkGreen mb-2 line-clamp-2">
           {title}
         </h3>
+        <p className="text-m font-semibold text-darkGreen">{category}</p>
       </div>
     </div>
   );

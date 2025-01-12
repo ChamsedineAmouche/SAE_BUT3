@@ -16,8 +16,11 @@ async function deleteObject(idItem) {
         const deleteImagesQuery = `DELETE FROM listing_image WHERE id_item = ${idItem}`;
         await getResultOfQuery("vue_user", deleteImagesQuery);
 
+        const deleteTransactionQuery = `DELETE FROM transaction WHERE id_item = ${idItem}`;
+        await getResultOfQuery("vue_user", deleteTransactionQuery);
+
         const deleteObjectquery =`DELETE FROM listing WHERE id_item = ${idItem}`;
-        const result = await getResultOfQuery("vue_user", deleteObjectquery);
+        await getResultOfQuery("vue_user", deleteObjectquery);
 
         if (result.length === 0) {
             return { success: false };

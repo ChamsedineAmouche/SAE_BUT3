@@ -102,7 +102,7 @@ const NewDeposit = () => {
         throw new Error(`Erreur HTTP: ${response.status}`);
       }
 
-      const result = await response.json();
+      const res = await response.json();
       setSubmissions([...submissions, newSubmission]);
       Swal.fire({
         icon: 'success',
@@ -117,7 +117,7 @@ const NewDeposit = () => {
         },
       }).then((result) => {
         if (result.isConfirmed) {
-          navigate(`/depot/${result.id_item}`);
+          navigate(`/depot/${res.idItem}`);
         } else {
           navigate('/');
         }

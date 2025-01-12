@@ -31,7 +31,9 @@ const insert = async (req, res) => {
         } else {
             throw new Error("Vous n'etes pas connecté");
         }
-        // Si besoin, sauvegarde des fichiers et des données dans une base ou un fichier
+        idItem = {
+            "idItem" : idItem
+        }
         res.status(200).json(idItem);
     } catch (error) {
         console.error('Erreur lors du traitement de la soumission :', error);

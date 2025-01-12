@@ -65,43 +65,39 @@ const DetailsEventFuture = () => {
       }
       const sessionData = await sessionResponse.json();
       const siren = sessionData.session?.siren;
-
+  
       if (!siren) {
         throw new Error("SIREN introuvable dans la session.");
       }
-
-      if (!isRegistered) {
-        const inscriptionResponse = whatToDo === "subscribe" 
-          ? await fetch(
-            `/inscriptionEvent?eventId=${eventId}&siren=${siren}`,
-            { method: "GET" }
-          )
-          : await fetch(
-            `/desinscriptionEvent?eventId=${eventId}&siren=${siren}`,
-            { method: "GET" }
-          );
-
-        if (!inscriptionResponse.ok) {
-          throw new Error("Erreur lors de l'inscription à l'événement.");
-        }
-
-        const updatedData = await inscriptionResponse.json();
-        setCapacityRemaining(updatedData.capacityRemaining);
-        setNumberOfParticipants((prev) => prev + 1);
+  
+      const inscriptionResponse = await fetch(
+        whatToDo === "subscribe"
+          ? `/inscriptionEvent?eventId=${eventId}&siren=${siren}`
+          : `/desinscriptionEvent?eventId=${eventId}&siren=${siren}`,
+        { method: "GET" }
+      );
+  
+      if (!inscriptionResponse.ok) {
+        throw new Error("Erreur lors de l'opération.");
+      }
+  
+      const updatedData = await inscriptionResponse.json();
+      setCapacityRemaining(updatedData.capacityRemaining); // Mise à jour après l'inscription/désinscription
+      setNumberOfParticipants(updatedData.numberOfParticipants || 0);
+  
+      if (whatToDo === "subscribe") {
         setIsRegistered(true);
-
-        toast.success("Réussi ! Vous êtes inscrit à un nouvel événement !");
+        toast.success("Inscription réussie !");
       } else {
-        Swal.fire({
-          icon: 'info',
-          title: 'Déjà inscrit',
-          text: 'Vous êtes déjà inscrit à cet événement.',
-        });
+        setIsRegistered(false);
+        toast.success("Désinscription réussie !");
       }
     } catch (err) {
       setSessionError(err.message);
     }
   };
+  
+
 
   if (loading) {
     return <div className="text-center mt-24">Chargement des détails de l'événement...</div>;
@@ -158,14 +154,14 @@ const DetailsEventFuture = () => {
           isRegistered ? (
             <button
               className="bg-red text-white text-lg font-semibold rounded-lg px-6 py-3 shadow-lg hover:bg-opacity-80 transition duration-200"
-              onClick={handleInscription('unsubscribe')}
+              onClick={() => handleInscription("unsubscribe")}
             >
               Se désinscrire (places restantes : {capacityRemaining})
             </button>
           ) : capacityRemaining > 0 ? (
             <button
               className="bg-yellowGreen1 text-white text-lg font-semibold rounded-lg px-6 py-3 shadow-lg hover:bg-[#466205] transition duration-200"
-              onClick={handleInscription('subscribe')}
+              onClick={() => handleInscription("subscribe")}
             >
               Inscription (places restantes : {capacityRemaining})
             </button>

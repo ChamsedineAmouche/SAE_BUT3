@@ -7,7 +7,7 @@ const {
     insert
 } = require('../controllers/insertAnnounceController');
 
-router.get('/addAnnounce',verifyToken,addAnnounce)
+router.get('/addAnnounce',addAnnounce)
 router.post('/insert',verifyToken, insert)
 
 module.exports = router;

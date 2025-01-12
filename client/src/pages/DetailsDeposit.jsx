@@ -10,6 +10,7 @@ import Zoom from 'react-medium-image-zoom';
 import 'react-medium-image-zoom/dist/styles.css';
 import {getAuthHeaders}  from "../utils/jwtAuth";
 import ReservationSwal from "../components/ReservationSwal/ReservationSwal";
+import toast from 'react-hot-toast'; // Import de react-hot-toast
 
 const DetailsDeposit = () => {
   const { id } = useParams();
@@ -181,6 +182,41 @@ const DetailsDeposit = () => {
     });
   };
 
+  const handleDelete = () => {
+    // Confirmation de suppression avec SweetAlert
+    Swal.fire({
+      title: "Êtes-vous sûr de vouloir supprimer ce dépôt ?",
+      text: "Cette action est irréversible.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Supprimer",
+      cancelButtonText: "Annuler",
+      customClass: {
+        confirmButton: "bg-red-500 text-white",
+        cancelButton: "bg-gray-300 text-black",
+      },
+    }).then((result) => {
+      if (result.isConfirmed) {
+        fetch(`/deleteDepotUser?idItem=${id}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Erreur lors de la suppression");
+            }
+            toast.success("Dépôt supprimé avec succès !");
+            navigate("/"); 
+          })
+          .catch((error) => {
+            console.error("Erreur de suppression:", error);
+            toast.error("Une erreur est survenue lors de la suppression.");
+          });
+      }
+    });
+  };
 
   return (
     <div className="h-screen mt-24 px-10 overflow-y-auto">
@@ -271,7 +307,7 @@ const DetailsDeposit = () => {
                     </button>
                     <button
                       className="bg-red text-white px-6 py-3 text-lg font-semibold rounded-md hover:bg-opacity-90 transition duration-200 h-14"
-                      onClick={() => console.log("Supprimer l'annonce")}
+                      onClick={handleDelete}
                     >
                       <FontAwesomeIcon icon={faTrash} className="mr-2" />
                       Supprimer
