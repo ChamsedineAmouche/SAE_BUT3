@@ -67,7 +67,7 @@ CREATE TABLE elearning (
 );
 
 CREATE TABLE event (
-   event_id INT,
+   event_id INT AUTO_INCREMENT,
    title VARCHAR(50) NOT NULL,
    description TEXT NOT NULL,
    event_date DATETIME NOT NULL,
