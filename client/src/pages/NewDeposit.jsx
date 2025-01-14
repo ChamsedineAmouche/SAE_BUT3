@@ -213,7 +213,7 @@ const NewDeposit = () => {
         </div>
 
         {/* Form Inputs */}
-        <div className="border p-4 border-2 rounded-lg border-yellowGreen1 bg-yellowGreen1 bg-opacity-20">
+        <div className="border p-4 border-2 rounded-lg border-yellowGreen1 bg-yellowGreen1 bg-opacity-20 space-y-4">
           <div>
             <label className="block text-m font-medium pb-2 text-darkGreen">Titre</label>
             <input
@@ -256,8 +256,8 @@ const NewDeposit = () => {
           </div>
         </div>
 
-        {/* Category, State, Location */}
-        <div className="border p-4 border-2 rounded-lg border-yellowGreen1 bg-yellowGreen1 bg-opacity-20">
+        {/* Category, State */}
+        <div className="border p-4 border-2 rounded-lg border-yellowGreen1 bg-yellowGreen1 bg-opacity-20  space-y-4">
           <div>
             <label className="block text-m font-medium pb-2 text-darkGreen">Catégorie</label>
             <select

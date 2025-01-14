@@ -340,7 +340,7 @@ const DetailsDeposit = () => {
                       year: 'numeric',
                       month: 'long',
                       day: 'numeric'
-                    })}
+                    })} par {companySeller.nom}
                   </p>
                   </div>
                   </div>
