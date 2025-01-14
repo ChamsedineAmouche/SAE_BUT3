@@ -70,8 +70,10 @@ const DepositsAdmin = () => {
             text: "Cette action est irréversible.",
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#3085d6',
+            customClass: {
+                confirmButton: 'bg-oliveGreen text-white px-6 py-3 text-lg font-semibold rounded-md hover:bg-opacity-90 transition duration-200',
+                cancelButton: 'bg-red text-white px-6 py-3 text-lg font-semibold rounded-md hover:bg-opacity-90 transition duration-200',
+            },
             confirmButtonText: 'Oui, supprimer',
             cancelButtonText: 'Annuler',
         });
@@ -96,7 +98,9 @@ const DepositsAdmin = () => {
                         icon: 'success',
                         title: 'Succès',
                         text: 'Le dépôt a été supprimé avec succès !',
-                        confirmButtonColor: '#3085d6',
+                        customClass: {
+                            confirmButton: 'bg-oliveGreen text-white px-6 py-3 text-lg font-semibold rounded-md hover:bg-opacity-90 transition duration-200',
+                        },
                     });
     
                     setDeposits((prevDeposits) =>
@@ -107,7 +111,9 @@ const DepositsAdmin = () => {
                         icon: 'error',
                         title: 'Erreur',
                         text: result.message || 'Une erreur est survenue.',
-                        confirmButtonColor: '#d33',
+                        customClass: {
+                            confirmButton: 'bg-oliveGreen text-white px-6 py-3 text-lg font-semibold rounded-md hover:bg-opacity-90 transition duration-200',
+                        },
                     });
                 }
             } catch (error) {
@@ -117,7 +123,9 @@ const DepositsAdmin = () => {
                     icon: 'error',
                     title: 'Erreur',
                     text: 'Erreur interne. Veuillez réessayer.',
-                    confirmButtonColor: '#d33',
+                    customClass : {
+                        confirmButton: 'bg-oliveGreen text-white px-6 py-3 text-lg font-semibold rounded-md hover:bg-opacity-90 transition duration-200',
+                    },
                 });
             }
         } else {
@@ -125,7 +133,9 @@ const DepositsAdmin = () => {
                 icon: 'info',
                 title: 'Annulé',
                 text: 'La suppression a été annulée.',
-                confirmButtonColor: '#3085d6',
+                customClass: {
+                    confirmButton: 'bg-oliveGreen text-white px-6 py-3 text-lg font-semibold rounded-md hover:bg-opacity-90 transition duration-200',
+                },
             });
         }
     }

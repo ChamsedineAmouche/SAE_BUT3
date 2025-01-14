@@ -69,8 +69,10 @@ const EventsAdmin = () => {
             text: "Cette action est irréversible.",
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#3085d6',
+            customClass: {
+                confirmButton: 'bg-oliveGreen text-white px-6 py-3 text-lg font-semibold rounded-md hover:bg-opacity-90 transition duration-200',
+                cancelButton: 'bg-red text-white px-6 py-3 text-lg font-semibold rounded-md hover:bg-opacity-90 transition duration-200',
+            },
             confirmButtonText: 'Oui, supprimer',
             cancelButtonText: 'Annuler',
         });
@@ -95,7 +97,9 @@ const EventsAdmin = () => {
                         icon: 'success',
                         title: 'Succès',
                         text: 'L\'évènement a été supprimé avec succès !',
-                        confirmButtonColor: '#3085d6',
+                        customClass: {
+                            confirmButton: 'bg-oliveGreen text-white px-6 py-3 text-lg font-semibold rounded-md hover:bg-opacity-90 transition duration-200',
+                        },
                     });
     
                     setAllEvents((prevEvents) =>
@@ -106,7 +110,9 @@ const EventsAdmin = () => {
                         icon: 'error',
                         title: 'Erreur',
                         text: result.message || 'Une erreur est survenue.',
-                        confirmButtonColor: '#d33',
+                        customClass: {
+                            confirmButton: 'bg-oliveGreen text-white px-6 py-3 text-lg font-semibold rounded-md hover:bg-opacity-90 transition duration-200',
+                        },
                     });
                 }
             } catch (error) {
@@ -116,7 +122,9 @@ const EventsAdmin = () => {
                     icon: 'error',
                     title: 'Erreur',
                     text: 'Erreur interne. Veuillez réessayer.',
-                    confirmButtonColor: '#d33',
+                    customClass: {
+                        confirmButton: 'bg-oliveGreen text-white px-6 py-3 text-lg font-semibold rounded-md hover:bg-opacity-90 transition duration-200',
+                    },
                 });
             }
         } else {
@@ -124,7 +132,9 @@ const EventsAdmin = () => {
                 icon: 'info',
                 title: 'Annulé',
                 text: 'La suppression a été annulée.',
-                confirmButtonColor: '#3085d6',
+                customClass: {
+                    confirmButton: 'bg-oliveGreen text-white px-6 py-3 text-lg font-semibold rounded-md hover:bg-opacity-90 transition duration-200',
+                },
             });
         }
     }
@@ -176,6 +186,9 @@ const EventsAdmin = () => {
                     icon: 'success',
                     title: 'Succès',
                     text: result.message,
+                    customClass: {
+                        confirmButton: 'bg-oliveGreen text-white px-6 py-3 text-lg font-semibold rounded-md hover:bg-opacity-90 transition duration-200',
+                    },
                 }).then(() => window.location.reload());
             } else {
                 throw new Error(result.message);
@@ -185,6 +198,9 @@ const EventsAdmin = () => {
                 icon: 'error',
                 title: 'Erreur',
                 text: 'Erreur lors de la soumission. Veuillez réessayer.',
+                customClass: {
+                    confirmButton: 'bg-oliveGreen text-white px-6 py-3 text-lg font-semibold rounded-md hover:bg-opacity-90 transition duration-200',
+                },
             });
             console.error('Erreur lors de la soumission :', error);
         }

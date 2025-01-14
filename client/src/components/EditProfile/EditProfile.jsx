@@ -177,9 +177,9 @@ const MyFavorite = () => {
           </div>
         </div>
 
-        {/* Numéro de SIREN */}
+        {/* Numéro de SIRET */}
         <div>
-          <label className="block text-gray-700 font-medium mb-2">Numéro de SIREN</label>
+          <label className="block text-gray-700 font-medium mb-2">Numéro de SIRET</label>
           <div className="relative">
             <input
               type="text"
