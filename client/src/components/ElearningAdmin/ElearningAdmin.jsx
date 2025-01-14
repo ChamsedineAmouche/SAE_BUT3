@@ -80,10 +80,12 @@ const ElearningAdmin = () => {
             text: "Cette action est irréversible.",
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#3085d6',
             confirmButtonText: 'Oui, supprimer',
             cancelButtonText: 'Annuler',
+            customClass: {
+                confirmButton: 'bg-oliveGreen text-white px-6 py-3 text-lg font-semibold rounded-md hover:bg-opacity-90 transition duration-200',
+                cancelButton: 'bg-red text-white px-6 py-3 text-lg font-semibold rounded-md hover:bg-opacity-90 transition duration-200',
+            },
         });
         
         if (confirmDeletion.isConfirmed) {
@@ -106,7 +108,9 @@ const ElearningAdmin = () => {
                         icon: 'success',
                         title: 'Succès',
                         text: 'Le e-learning a été supprimé avec succès !',
-                        confirmButtonColor: '#3085d6',
+                        customClass: {
+                            confirmButton: 'bg-oliveGreen text-white px-6 py-3 text-lg font-semibold rounded-md hover:bg-opacity-90 transition duration-200',
+                        },
                     });
     
                     setAllElearnings((prevElearnings) =>
@@ -117,7 +121,9 @@ const ElearningAdmin = () => {
                         icon: 'error',
                         title: 'Erreur',
                         text: result.message || 'Une erreur est survenue.',
-                        confirmButtonColor: '#d33',
+                        customClass: {
+                            confirmButton: 'bg-oliveGreen text-white px-6 py-3 text-lg font-semibold rounded-md hover:bg-opacity-90 transition duration-200',
+                        },
                     });
                 }
             } catch (error) {
@@ -127,7 +133,9 @@ const ElearningAdmin = () => {
                     icon: 'error',
                     title: 'Erreur',
                     text: 'Erreur interne. Veuillez réessayer.',
-                    confirmButtonColor: '#d33',
+                    customClass: {
+                        confirmButton: 'bg-oliveGreen text-white px-6 py-3 text-lg font-semibold rounded-md hover:bg-opacity-90 transition duration-200',
+                    },
                 });
             }
         } else {
@@ -135,7 +143,9 @@ const ElearningAdmin = () => {
                 icon: 'info',
                 title: 'Annulé',
                 text: 'La suppression a été annulée.',
-                confirmButtonColor: '#3085d6',
+                customClass: {
+                    confirmButton: 'bg-oliveGreen text-white px-6 py-3 text-lg font-semibold rounded-md hover:bg-opacity-90 transition duration-200',
+                },
             });
         }
     }
@@ -157,6 +167,9 @@ const ElearningAdmin = () => {
                 icon: 'error',
                 title: 'Erreur',
                 text: 'Veuillez remplir tous les champs obligatoires.',
+                customClass: {
+                    confirmButton: 'bg-oliveGreen text-white px-6 py-3 text-lg font-semibold rounded-md hover:bg-opacity-90 transition duration-200',
+                },
             });
             return;
         }
@@ -195,6 +208,9 @@ const ElearningAdmin = () => {
                 icon: 'error',
                 title: 'Erreur',
                 text: 'Erreur lors de la soumission. Veuillez réessayer.',
+                customClass: {
+                    confirmButton: 'bg-oliveGreen text-white px-6 py-3 text-lg font-semibold rounded-md hover:bg-opacity-90 transition duration-200',
+                },
             });
             console.error('Erreur lors de la soumission :', error);
         }

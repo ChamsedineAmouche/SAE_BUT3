@@ -30,10 +30,11 @@ const Users = () => {
         });
     }, []);
 
-    const columns = ['nom', 'email', 'phone', 'address', 'action'];
-    const columnNames = ['Nom', 'Mail', 'Téléphone', 'Adresse', 'Action'];
+    const columns = ['siren', 'nom', 'email', 'phone', 'address', 'action'];
+    const columnNames = ['SIRET', 'Nom', 'Mail', 'Téléphone', 'Adresse', 'Action'];
 
     const formattedUsers = allUsers.map((user) => ({
+        siren: user.siren,
         nom: user.nom,
         email: user.email,
         phone: user.phone,
@@ -51,6 +52,7 @@ const Users = () => {
     }));
 
     const formattedInscriptions = allInscriptions.map((inscription) => ({
+        siren: inscription.siren,
         nom: inscription.nom,
         email: inscription.email,
         phone: inscription.phone,
@@ -83,8 +85,10 @@ const Users = () => {
             text: "Cette action est irréversible.",
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#3085d6',
+            customClass: {
+                confirmButton: 'bg-oliveGreen text-white px-6 py-3 text-lg font-semibold rounded-md hover:bg-opacity-90 transition duration-200',
+                cancelButton: 'bg-red text-white px-6 py-3 text-lg font-semibold rounded-md hover:bg-opacity-90 transition duration-200',
+            },
             confirmButtonText: 'Oui, supprimer',
             cancelButtonText: 'Annuler',
         });
@@ -109,7 +113,9 @@ const Users = () => {
                         icon: 'success',
                         title: 'Succès',
                         text: 'Inscription supprimée avec succès !',
-                        confirmButtonColor: '#3085d6',
+                        customClass: {
+                            confirmButton: 'bg-oliveGreen text-white px-6 py-3 text-lg font-semibold rounded-md hover:bg-opacity-90 transition duration-200',
+                        },
                     });
     
                     setAllInscriptions((prevInscriptions) =>
@@ -120,7 +126,9 @@ const Users = () => {
                         icon: 'error',
                         title: 'Erreur',
                         text: result.message || 'Une erreur est survenue.',
-                        confirmButtonColor: '#d33',
+                        customClass: {
+                            confirmButton: 'bg-oliveGreen text-white px-6 py-3 text-lg font-semibold rounded-md hover:bg-opacity-90 transition duration-200',
+                        },
                     });
                 }
             } catch (error) {
@@ -130,7 +138,9 @@ const Users = () => {
                     icon: 'error',
                     title: 'Erreur',
                     text: 'Erreur interne. Veuillez réessayer.',
-                    confirmButtonColor: '#d33',
+                    customClass: {
+                        confirmButton: 'bg-oliveGreen text-white px-6 py-3 text-lg font-semibold rounded-md hover:bg-opacity-90 transition duration-200',
+                    },
                 });
             }
         } else {
@@ -138,7 +148,9 @@ const Users = () => {
                 icon: 'info',
                 title: 'Annulé',
                 text: 'La suppression a été annulée.',
-                confirmButtonColor: '#3085d6',
+                customClass: {
+                    confirmButton: 'bg-oliveGreen text-white px-6 py-3 text-lg font-semibold rounded-md hover:bg-opacity-90 transition duration-200',
+                },
             });
         }
     };
@@ -149,8 +161,10 @@ const Users = () => {
             text: "L'utilisateur sera ajouté à la liste des utilisateurs.",
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
+            customClass: {
+                confirmButton: 'bg-oliveGreen text-white px-6 py-3 text-lg font-semibold rounded-md hover:bg-opacity-90 transition duration-200',
+                cancelButton: 'bg-red text-white px-6 py-3 text-lg font-semibold rounded-md hover:bg-opacity-90 transition duration-200',
+            },
             confirmButtonText: 'Oui, valider',
             cancelButtonText: 'Annuler',
         });
@@ -175,7 +189,9 @@ const Users = () => {
                         icon: 'success',
                         title: 'Succès',
                         text: 'Inscription validée avec succès !',
-                        confirmButtonColor: '#3085d6',
+                        customClass: {
+                            confirmButton: 'bg-oliveGreen text-white px-6 py-3 text-lg font-semibold rounded-md hover:bg-opacity-90 transition duration-200',
+                        },
                     });
     
                     const validatedInscription = allInscriptions.find(
@@ -192,7 +208,9 @@ const Users = () => {
                         icon: 'error',
                         title: 'Erreur',
                         text: result.message || 'Une erreur est survenue.',
-                        confirmButtonColor: '#d33',
+                        customClass: {
+                            confirmButton: 'bg-oliveGreen text-white px-6 py-3 text-lg font-semibold rounded-md hover:bg-opacity-90 transition duration-200',
+                        },
                     });
                 }
             } catch (error) {
@@ -201,7 +219,9 @@ const Users = () => {
                     icon: 'error',
                     title: 'Erreur',
                     text: 'Erreur interne. Veuillez réessayer.',
-                    confirmButtonColor: '#d33',
+                    customClass: {
+                        confirmButton: 'bg-oliveGreen text-white px-6 py-3 text-lg font-semibold rounded-md hover:bg-opacity-90 transition duration-200',
+                    },
                 });
             }
         } else {
@@ -209,7 +229,9 @@ const Users = () => {
                 icon: 'info',
                 title: 'Annulé',
                 text: 'La validation a été annulée.',
-                confirmButtonColor: '#3085d6',
+                customClass: {
+                    confirmButton: 'bg-oliveGreen text-white px-6 py-3 text-lg font-semibold rounded-md hover:bg-opacity-90 transition duration-200',
+                },
             });
         }
     };

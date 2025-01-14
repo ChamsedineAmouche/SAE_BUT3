@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom"; 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircleInfo } from "@fortawesome/free-solid-svg-icons";
+import Swal from "sweetalert2";
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -48,6 +51,25 @@ const Register = () => {
     }
   };
 
+  const handleHelpSiren = () => {
+    Swal.fire({
+      title: "Où trouver le numéro de SIRET de mon entreprise ?",
+      html: `
+        <p>Le numéro SIRET est un identifiant unique de 14 chiffres attribué à chaque entreprise en France. Vous pouvez le trouver sur les documents officiels de l'entreprise, 
+        tels que les factures, les fiches de paie, ou les documents d'enregistrement de l'entreprise.</p>
+        <br>
+        <p>Vous pouvez aussi le trouver sur le site <a href="https://www.infogreffe.fr/" class target="_blank" class="text-oliveGreen">Infogreffe</a> en cherchant le nom de votre entreprise.</p>
+        <img src="/siret.png" alt="Où trouver le numéro de SIRET de mon entreprise ?" class="w-full mx-auto mt-4" />
+      `,
+      icon: "info",
+      confirmButtonText: "OK",
+      width: "50rem",
+      customClass: {
+        confirmButton: "bg-oliveGreen text-white px-6 py-3 text-lg font-semibold rounded-md hover:bg-opacity-90 transition duration-200",
+      },
+    });
+  }
+
   return (
     <div className="register-page">
       {/* Section Formulaire */}
@@ -59,10 +81,16 @@ const Register = () => {
 
           {/* Formulaire d'inscription */}
           <form onSubmit={handleSubmit} className="space-y-4">
-              {/* SIREN */}
+              {/* SIRET */}
               <div className="form-group">
               <label htmlFor="siren" className="block text-lg text-darkGreen">
-                SIREN
+                SIRET 
+                <span className="text-red" title="Champs obligatoire">*</span>
+                <FontAwesomeIcon 
+                  icon={faCircleInfo} 
+                  className="text-darkGreen px-2 cursor-pointer"
+                  onClick={() => handleHelpSiren()}
+                />
               </label>
               <input
                 type="text"
@@ -80,7 +108,7 @@ const Register = () => {
                   {/* Nom */}
                   <div className="form-group">
                     <label htmlFor="nom" className="block text-lg text-darkGreen">
-                      Nom
+                      Nom <span className="text-red" title="Champs obligatoire">*</span>
                     </label>
                     <input
                       type="text"
@@ -96,7 +124,7 @@ const Register = () => {
                   {/* Email */}
                   <div className="form-group">
                     <label htmlFor="email" className="block text-lg text-darkGreen">
-                      Email
+                      Email <span className="text-red" title="Champs obligatoire">*</span>
                     </label>
                     <input
                       type="email"
@@ -112,7 +140,7 @@ const Register = () => {
                   {/* Mot de passe */}
                   <div className="form-group">
                     <label htmlFor="password" className="block text-lg text-darkGreen">
-                      Mot de passe
+                      Mot de passe <span className="text-red" title="Champs obligatoire">*</span>
                     </label>
                     <input
                       type="password"
@@ -128,7 +156,7 @@ const Register = () => {
                     {/* Confirmer Mot de passe */}
                     <div className="form-group">
                     <label htmlFor="confirmPassword" className="block text-lg text-darkGreen">
-                      Confirmez le mot de passe
+                      Confirmez le mot de passe <span className="text-red" title="Champs obligatoire">*</span>
                     </label>
                     <input
                       type="password"
@@ -146,7 +174,7 @@ const Register = () => {
                   {/* Adresse */}
                 <div className="form-group">
                   <label htmlFor="adress" className="block text-lg text-darkGreen">
-                    Adresse
+                    Adresse <span className="text-red" title="Champs obligatoire">*</span>
                   </label>
                   <input
                     type="text"
@@ -162,7 +190,7 @@ const Register = () => {
                 {/* Code Postal */}
                 <div className="form-group">
                   <label htmlFor="zipcode" className="block text-lg text-darkGreen">
-                    Code Postal
+                    Code Postal <span className="text-red" title="Champs obligatoire">*</span>
                   </label>
                   <input
                     type="text"
@@ -178,7 +206,7 @@ const Register = () => {
                 {/* Ville */}
                 <div className="form-group">
                   <label htmlFor="city" className="block text-lg text-darkGreen">
-                    Ville
+                    Ville <span className="text-red" title="Champs obligatoire">*</span>
                   </label>
                   <input
                     type="text"
@@ -194,7 +222,7 @@ const Register = () => {
                 {/* Téléphone */}
                 <div className="form-group">
                   <label htmlFor="phone" className="block text-lg text-darkGreen">
-                    Téléphone
+                    Téléphone <span className="text-red" title="Champs obligatoire">*</span>
                   </label>
                   <input
                     type="text"
@@ -213,7 +241,7 @@ const Register = () => {
             
 
             {/* Affichage des erreurs */}
-            {errorMessage && <div className="text-red-500 text-center mt-2">{errorMessage}</div>}
+            {errorMessage && <div className="text-red text-center mt-2">{errorMessage}</div>}
 
             {/* Bouton de soumission */}
             <div className="flex justify-center mt-6">
