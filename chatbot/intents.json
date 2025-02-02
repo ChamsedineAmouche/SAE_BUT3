@@ -1,0 +1,39 @@
+{
+    "intents" : [
+        {
+            "tag" : "greeting",
+            "patterns" : [
+                "Bonjour",
+                "Salut",
+                "Salutations",
+                "Yo",
+                "Plop",
+                "Hey",
+                "Hello"
+            ],
+            "responses" : [
+                "Bonjour"
+            ]
+        },
+        {
+            "tag" : "elearning",
+            "patterns" :[
+
+            ],
+            "responses": [
+
+            ]
+        },
+        {
+            "tag" : "elearning_payment",
+            "patterns" :[
+                
+            ],
+            "responses": [
+
+            ]
+        }
+    ]
+
+
+}
