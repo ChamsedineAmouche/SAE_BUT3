@@ -27,6 +27,10 @@ import ElearningAccess from "./pages/ElearningAcces.jsx";
 import ElearningEmploye from "./pages/ElearningEmploye.jsx";
 import PrivateRoute from "./components/PrivateRoute/PrivateRoute.jsx"
 import Admin from "./pages/Admin.jsx";
+import Forum from "./pages/Forum.jsx";
+import Annuaire from "./pages/Annuaire.jsx";
+import Salons from "./pages/Salons.jsx";
+import DetailsForum from "./pages/DetailsForum.jsx";
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -131,6 +135,30 @@ const App = () => {
             } 
           />
           <Route 
+            path="/forum" 
+            element={
+              <ProtectedRoute isAuthenticated={isAuthenticated}>
+                <Forum />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/annuaire" 
+            element={
+              <ProtectedRoute isAuthenticated={isAuthenticated}>
+                <Annuaire />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/salons" 
+            element={
+              <ProtectedRoute isAuthenticated={isAuthenticated}>
+                <Salons />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
             path="/test" 
             element={
               <ProtectedRoute isAuthenticated={isAuthenticated}>
@@ -183,6 +211,14 @@ const App = () => {
             element={
               <ProtectedRoute isAuthenticated={isAuthenticated}>
                 <DetailsElearning />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/details_forum/:id" 
+            element={
+              <ProtectedRoute isAuthenticated={isAuthenticated}>
+                <DetailsForum />
               </ProtectedRoute>
             } 
           />

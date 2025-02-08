@@ -104,7 +104,7 @@ const Navbar = () => {
           <a href="/evenement" className="hover:text-darkGreen text-xl">
             Événement
           </a>
-          <a href="/" className="hover:text-darkGreen text-xl">
+          <a href="/forum" className="hover:text-darkGreen text-xl">
             Forum
           </a>
         </div>
