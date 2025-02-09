@@ -1,90 +1,134 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import circularEconomyImg from "../assets/images/circular_economy.png";
 import SquareGrid from "../components/SquareGrid/SquareGrid";
 import Carousel from "../components/Carousel/Carousel";
 import ElearningThumbnail from "../components/ElearningThumbnail/ElearningThumbnail";
-import { getAuthHeaders } from "../utils/jwtAuth";
+import StaticGrid from "../components/StaticGrid/StaticGrid";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 
-const Elearning = () => {
+function normalize(str) {
+  return str
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase();
+}
+
+export default function Elearning() {
+  // Recherche & filtres
   const [searchText, setSearchText] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedSort, setSelectedSort] = useState("");
+
+  // Catégories / E-learnings
   const [categories, setCategories] = useState([]);
   const [elearningsByCategory, setElearningsByCategory] = useState({});
-  const [filteredElearningsByCategory, setFilteredElearningsByCategory] = useState({});
-  const carouselRefs = useRef([]);
+  const [allElearnings, setAllElearnings] = useState([]);
+
+  // Pour savoir si on est en "mode recherche" ou non
+  const [isSearchActive, setIsSearchActive] = useState(false);
+
+  // Récupération des paramètres d'URL
+  const [searchParams] = useSearchParams();
+  const paramSearchText = searchParams.get("searchText") || "";
+  const paramCategory = searchParams.get("category") || "";
+  const paramSort = searchParams.get("sort") || "";
 
   useEffect(() => {
-    // Fetch des données de l'API
-    const fetchElearningData = async () => {
-      try {
-        const response = await fetch("/elearningList"); // { headers: { 'Authorization': getAuthHeaders } } fait bugger !
-        const data = await response.json();
-        console.log(data);
-
-        // Extraire les catégories
-        const categories = data.categories.map((category) => ({
-          label: category.Libelle,
-          id_category: category.id,
-        }));
-
-        // Grouper les e-learnings par catégorie
-        const groupedElearnings = categories.reduce((acc, category) => {
-          acc[category.label] = data.eLearnings
-            .filter((elearning) => elearning.id_category === category.id_category)
-            .flatMap((elearning) => elearning.elearning_info);
-          return acc;
-        }, {});
-
-        setCategories(categories);
-        setElearningsByCategory(groupedElearnings);
-        setFilteredElearningsByCategory(groupedElearnings); // Initialiser les formations filtrées avec toutes les formations
-      } catch (error) {
-        console.error("Erreur lors du fetch des données :", error);
-      }
-    };
-
     fetchElearningData();
   }, []);
 
-  // Fonction pour filtrer les formations en fonction du texte de recherche
-  const filterElearnings = (searchText) => {
-    const filtered = {};
-    Object.keys(elearningsByCategory).forEach((category) => {
-      filtered[category] = elearningsByCategory[category].filter(
-        (elearning) =>
-          elearning.title.toLowerCase().includes(searchText.toLowerCase()) || // Recherche par titre de formation
-          category.toLowerCase().includes(searchText.toLowerCase()) // Recherche par catégorie
-      );
-    });
-    setFilteredElearningsByCategory(filtered);
-  };
+  async function fetchElearningData() {
+    try {
+      const res = await fetch("/elearningList");
+      const data = await res.json();
 
-  // Gérer le changement de texte dans la barre de recherche
-  const handleChange = (event) => {
-    const text = event.target.value;
-    setSearchText(text);
-    filterElearnings(text); // Filtrer les formations en temps réel
-  };
+      const catList = data.categories.map((c) => ({
+        label: c.Libelle,
+        id_category: c.id,
+      }));
 
-  // Gérer le clic sur une catégorie
-  const handleCategoryClick = (index) => {
-    carouselRefs.current[index].scrollIntoView({
-      behavior: "smooth",
-      block: "start",
+      const grouped = {};
+      const flatList = [];
+      catList.forEach((cat) => {
+        const found = data.eLearnings.find(
+          (elem) => elem.id_category === cat.id_category
+        );
+        grouped[cat.label] = found ? found.elearning_info : [];
+        flatList.push(...(grouped[cat.label] || []));
+      });
+
+      setCategories(catList);
+      setElearningsByCategory(grouped);
+      setAllElearnings(flatList);
+    } catch (err) {
+      console.error("Erreur lors du fetch e-learning:", err);
+    }
+  }
+
+  // Si on a des paramètres dans l'URL, on les applique aux states
+  useEffect(() => {
+    if (paramSearchText || paramCategory || paramSort) {
+      setIsSearchActive(true);
+      setSearchText(paramSearchText);
+      setSelectedCategory(paramCategory);
+      setSelectedSort(paramSort);
+    }
+  }, [paramSearchText, paramCategory, paramSort]);
+
+  // Tri et filtres
+  function applyFilters(list) {
+    let result = [...list];
+
+    if (selectedCategory) {
+      // Adapte si nécessaire (parfois .categoryName, parfois .categoryLabel, etc.)
+      result = result.filter((el) => el.categoryName === selectedCategory);
+    }
+
+    if (selectedSort === "title_asc") {
+      result.sort((a, b) => a.title.localeCompare(b.title));
+    } else if (selectedSort === "title_desc") {
+      result.sort((a, b) => b.title.localeCompare(a.title));
+    } else if (selectedSort === "price_asc") {
+      result.sort((a, b) => parseFloat(a.price) - parseFloat(b.price));
+    } else if (selectedSort === "price_desc") {
+      result.sort((a, b) => parseFloat(b.price) - parseFloat(a.price));
+    }
+    return result;
+  }
+
+  // Filtrage par recherche texte
+  function getSearchResults(txt) {
+    const norm = normalize(txt);
+    const filtered = allElearnings.filter((el) => {
+      const t = normalize(el.title);
+      const c = normalize(el.categoryName || "");
+      return t.includes(norm) || c.includes(norm);
     });
-  };
+    return applyFilters(filtered);
+  }
+
+  const searchResults = isSearchActive ? getSearchResults(searchText) : [];
+
+  // Gestion du champ local
+  function handleSearchChange(e) {
+    const val = e.target.value;
+    setSearchText(val);
+    if (!val.trim()) {
+      setIsSearchActive(false);
+    } else {
+      setIsSearchActive(true);
+    }
+  }
 
   return (
-    <div className="catalogue relative">
-      {/* Image décorative */}
+    <div className="relative">
       <img
         src={circularEconomyImg}
         alt="Circular Economy"
         className="absolute top-1 right-1 w-1/5 h-auto"
       />
-
-      {/* Titre principal */}
       <h1 className="text-4xl font-poppins max-w-[51%] pt-[150px] pl-[60px]">
         Bienvenue sur la page e-learning, explorez nos formations et développez vos compétences !
       </h1>
@@ -95,48 +139,89 @@ const Elearning = () => {
           <input
             type="text"
             value={searchText}
-            onChange={handleChange}
+            onChange={handleSearchChange}
             placeholder="Rechercher une formation"
             className="bg-white text-black px-4 py-2 rounded-full focus:outline-none w-full"
           />
-          <FontAwesomeIcon icon={faSearch} className="h-6 w-6 text- mr-3" />
+          <FontAwesomeIcon icon={faSearch} className="h-6 w-6 mr-3" />
         </div>
       </div>
 
-      {/* SquareGrid avec les catégories */}
-      <SquareGrid
-        items={categories.map((category, index) => ({
-          label: category.label,
-          onClick: () => handleCategoryClick(index),
-        }))}
-      />
+      {/* Mode "recherche active" */}
+      {isSearchActive ? (
+        <div className="p-8">
+          <div className="flex gap-4 mb-4 justify-center">
+            <button
+              onClick={() => {
+                setSearchText("");
+                setSelectedCategory("");
+                setSelectedSort("");
+                setIsSearchActive(false);
+              }}
+              className="bg-blue-500 text-white px-4 py-2 rounded-full"
+            >
+              Retour
+            </button>
 
-      {/* Carrousels pour chaque catégorie */}
-      {categories.map((category, index) => (
-        <div
-          className="p-8"
-          key={category.id_category}
-          ref={(el) => (carouselRefs.current[index] = el)}
-        >
-          {filteredElearningsByCategory[category.label]?.length === 0 ? (
-            <div className="text-center mt-8 text-gray-500">
-              Aucun résultat trouvé pour "{searchText}" dans la catégorie {category.label}.
+            <select
+              value={selectedCategory}
+              onChange={(e) => setSelectedCategory(e.target.value)}
+              className="px-3 py-2 border rounded-md bg-white focus:outline-none"
+            >
+              <option value="">Toutes les catégories</option>
+              {categories.map((cat) => (
+                <option key={cat.id_category} value={cat.label}>
+                  {cat.label}
+                </option>
+              ))}
+            </select>
+
+            <select
+              value={selectedSort}
+              onChange={(e) => setSelectedSort(e.target.value)}
+              className="px-3 py-2 border rounded-md bg-white focus:outline-none"
+            >
+              <option value="">Trier par</option>
+              <option value="title_asc">Nom (A-Z)</option>
+              <option value="title_desc">Nom (Z-A)</option>
+              <option value="price_asc">Prix (croissant)</option>
+              <option value="price_desc">Prix (décroissant)</option>
+            </select>
+          </div>
+
+          {searchResults.length === 0 ? (
+            <div className="text-center text-gray-500 mt-4">
+              Aucun résultat pour « {searchText} »
             </div>
           ) : (
-            <Carousel
-              items={filteredElearningsByCategory[category.label]?.map((elearning) => (
-                <ElearningThumbnail
-                  key={`thumbnail-${elearning.course_id}`}
-                  elearning={elearning}
-                />
+            <StaticGrid
+              items={searchResults.map((el) => (
+                <ElearningThumbnail key={el.course_id} elearning={el} />
               ))}
-              title={`Formations dans la catégorie : ${category.label}`}
             />
           )}
         </div>
-      ))}
+      ) : (
+        // Mode normal (pas de recherche active)
+        <div className="p-8">
+          <SquareGrid
+            items={categories.map((cat) => ({
+              label: cat.label,
+              onClick: () => {},
+            }))}
+          />
+          {categories.map((cat) => (
+            <div key={cat.id_category} className="mt-10">
+              <h2 className="text-xl mb-4">{cat.label}</h2>
+              <Carousel
+                items={elearningsByCategory[cat.label]?.map((el) => (
+                  <ElearningThumbnail key={el.course_id} elearning={el} />
+                ))}
+              />
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
-};
-
-export default Elearning;
+}
