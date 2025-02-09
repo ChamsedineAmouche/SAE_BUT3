@@ -29,6 +29,7 @@ const Footer = () => {
             <li><a href="/cgv" className="hover:underline">Conditions générales de vente</a></li>
             <li><a href="/confidentialite" className="hover:underline">Politique de confidentialité</a></li>
             <li><a href="/mentions-legales" className="hover:underline">Mentions légales</a></li>
+            <li><a href="/annuaire" className="hover:underline">Annuaire des entreprises</a></li>
           </ul>
         </div>
 

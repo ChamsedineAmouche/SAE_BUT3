@@ -1,46 +1,88 @@
-import React, { useState } from "react";
-import ForumMessages from "../components/ForumMessages/ForumMessages"; // Assurez-vous que le composant ForumMessages existe et est bien importé.
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import ForumMessages from "../components/ForumMessages/ForumMessages";
+import { getAuthHeaders } from '../utils/jwtAuth'; 
 
 const DetailsForum = () => {
+  const { id } = useParams(); 
+  const discussionId = id.replace("id:", ""); 
+
+  const [discussionTitle, setDiscussionTitle] = useState("");
+  const [creationDate, setCreationDate] = useState("");
+  const [messages, setMessages] = useState([]);
   const [messageText, setMessageText] = useState("");
-  const [messages, setMessages] = useState([
-    {
-      companyName: "GreenTech",
-      date: "2024-02-03",
-      text: "Nous avons mis en place des solutions durables pour réduire les déchets.",
-    },
-    {
-      companyName: "EcoSolutions",
-      date: "2024-02-02",
-      text: "La transition énergétique est en marche chez nous, rejoignez-nous !",
-    },
-  ]);
+
+  const fetchDiscussionDetails = async () => {
+    try {
+      const response = await fetch(`/discussion?id=${discussionId}`);
+      const data = await response.json();
+
+      if (data.discussionInfos.length > 0) {
+        setDiscussionTitle(data.discussionInfos[0].discussion_title);
+        setCreationDate(new Date(data.discussionInfos[0].discussion_date).toISOString().split("T")[0]);
+      }
+
+      if (data.message) {
+        const formattedMessages = data.message.map((msg) => ({
+          companyName: msg.company_name,
+          date: new Date(msg.message_date).toISOString().split("T")[0],
+          text: msg.message_content,
+        }));
+        setMessages(formattedMessages);
+      }
+    } catch (error) {
+      console.error("Erreur lors de la récupération de la discussion :", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchDiscussionDetails();
+  }, [discussionId]);
 
   // Fonction pour envoyer un message
-  const handleSendMessage = () => {
+  const handleSendMessage = async () => {
     if (messageText.trim()) {
-      const newMessage = {
-        companyName: "Votre Entreprise", // Remplacer par le nom de l'entreprise de l'utilisateur
-        date: new Date().toISOString().split("T")[0], // Date actuelle au format YYYY-MM-DD
-        text: messageText,
+      const newSubmission = {
+        message: messageText,
       };
-      setMessages([newMessage, ...messages]); // Ajoute le message en haut de la liste
-      setMessageText(""); // Réinitialiser le champ de texte après l'envoi
+
+      try {
+        // Envoi du message
+        const response = await fetch(`/insertMessage?discussionId=${discussionId}`, {
+          method: 'POST',
+          headers: { 
+            'Content-Type': 'application/json', 
+            ...getAuthHeaders() 
+          },
+          body: JSON.stringify(newSubmission), // Envoi du message
+        });
+
+        if (!response.ok) throw new Error("Erreur lors de l'envoi du message");
+
+        // Rafraîchissement des messages après envoi
+        fetchDiscussionDetails(); // Récupère les messages mis à jour
+        setMessageText(""); // Réinitialise le champ de texte après l'envoi
+
+        // Message envoyé avec succès
+        console.log("Message envoyé avec succès");
+      } catch (error) {
+        console.error("Erreur lors de l'envoi du message :", error);
+      }
     }
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 p-10 flex flex-col mt-10"> {/* Marge ajoutée ici */}
+    <div className="min-h-screen bg-gray-100 p-10 flex flex-col mt-10">
       {/* Titre du forum */}
       <h1 className="text-4xl font-bold text-center text-gray-800 mb-6">
-        Nom du sujet
+        {discussionTitle || "Chargement..."}
       </h1>
 
       {/* ForumMessages */}
       <ForumMessages
-        creationDate="2024-02-03" // Exemple de date de création
+        creationDate={creationDate}
         messages={messages}
-        messagesPerPage={3} // Limité à 3 messages par page
+        messagesPerPage={20}
       />
 
       {/* Formulaire pour envoyer un message */}
@@ -54,7 +96,7 @@ const DetailsForum = () => {
         <div className="mt-4 flex justify-center w-full">
           <button
             onClick={handleSendMessage}
-            className="px-6 py-3 bg-green-500 text-white text-lg font-semibold rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500"
+            className="px-6 py-3 bg-[#587208] text-white text-lg font-semibold rounded-lg hover:bg-[#465a06] focus:outline-none focus:ring-2 focus:ring-green-500"
           >
             Envoyer
           </button>

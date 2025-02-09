@@ -151,29 +151,12 @@ export default function Navbar() {
 
         {/* Menu central */}
         <div className="hidden md:flex flex-1 justify-center space-x-6">
-<<<<<<< HEAD
-          <a href="/depot" className="hover:text-darkGreen text-xl">
-            Dépôt
-          </a>
-          <a href="/elearning" className="hover:text-darkGreen text-xl">
-            E-learning
-          </a>
-          <a href="/veille" className="hover:text-darkGreen text-xl">
-            Veille
-          </a>
-          <a href="/evenement" className="hover:text-darkGreen text-xl">
-            Événement
-          </a>
-          <a href="/forum" className="hover:text-darkGreen text-xl">
-            Forum
-          </a>
-=======
+
           <a href="/depot" className="hover:text-darkGreen text-xl">Dépôt</a>
           <a href="/elearning" className="hover:text-darkGreen text-xl">E-learning</a>
           <a href="/veille" className="hover:text-darkGreen text-xl">Veille</a>
           <a href="/evenement" className="hover:text-darkGreen text-xl">Événement</a>
-          <a href="/" className="hover:text-darkGreen text-xl">Forum</a>
->>>>>>> bcd777a (recherche avancée sur tout le site pour les elearning et les dépots)
+          <a href="/forum" className="hover:text-darkGreen text-xl">Forum</a>
         </div>
 
         {/* Actions droites */}

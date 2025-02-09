@@ -51,7 +51,7 @@ const getDiscussion = async (req, res) => {
         res.status(500).json(err);
     }
 };
-
+ 
 const insertDiscussion = async (req, res) => {
     const connection = getDbConnection('vue_user');
     const promiseConnection = connection.promise();
@@ -63,18 +63,18 @@ const insertDiscussion = async (req, res) => {
             throw new Error("Vous n'êtes pas connecté");
         }
 
-        const datePosted = new Date().toISOString().slice(0, 19).replace('T', ' ');
+        const datePosted = new Date().toISOString().slice(0, 10);
 
         await promiseConnection.beginTransaction();
 
         const [discussionResult] = await promiseConnection.execute(
             `INSERT INTO discussion (title, siren, date_creation) 
-             VALUES (?, ?, ${datePosted})`, [title, siren]);
+             VALUES (?, ?, ?)`, [title, siren, datePosted]);
 
         const discussionId = discussionResult.insertId;
 
         await promiseConnection.execute(`INSERT INTO message (discussion_id, siren, message, date_of_message) 
-             VALUES (?, ?, ?, ${datePosted})`, [discussionId, siren, message]);
+             VALUES (?, ?, ?, ?)`, [discussionId, siren, message, datePosted]);
 
         await promiseConnection.commit();
 
@@ -103,13 +103,13 @@ const insertMessage = async (req, res) => {
             throw new Error("Vous n'êtes pas connecté");
         }
 
-        const datePosted = new Date().toISOString().slice(0, 19).replace('T', ' ');
+        const datePosted = new Date().toISOString().slice(0, 10);
 
         await promiseConnection.beginTransaction();
 
         const [result] = await promiseConnection.execute(
             `INSERT INTO message (discussion_id, siren, message, date_of_message) 
-             VALUES (?, ?, ?, ${datePosted})`, [discussionId, siren, message]);
+             VALUES (?, ?, ?, ?)`, [discussionId, siren, message, datePosted]);
 
         await promiseConnection.commit();
 
