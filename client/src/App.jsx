@@ -29,7 +29,6 @@ import PrivateRoute from "./components/PrivateRoute/PrivateRoute.jsx"
 import Admin from "./pages/Admin.jsx";
 import Forum from "./pages/Forum.jsx";
 import Annuaire from "./pages/Annuaire.jsx";
-import Salons from "./pages/Salons.jsx";
 import DetailsForum from "./pages/DetailsForum.jsx";
 
 const App = () => {
@@ -147,14 +146,6 @@ const App = () => {
             element={
               <ProtectedRoute isAuthenticated={isAuthenticated}>
                 <Annuaire />
-              </ProtectedRoute>
-            } 
-          />
-          <Route 
-            path="/salons" 
-            element={
-              <ProtectedRoute isAuthenticated={isAuthenticated}>
-                <Salons />
               </ProtectedRoute>
             } 
           />

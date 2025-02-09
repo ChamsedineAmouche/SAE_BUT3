@@ -1,24 +1,48 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
-import DataTable from "../components/DataTable/DataTable"; // Import du composant DataTable
+import DataTable from "../components/DataTable/DataTable";
 
 const Annuaire = () => {
   const [searchTerm, setSearchTerm] = useState("");
+  const [companies, setCompanies] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  // Fetch des données de l'annuaire
+  useEffect(() => {
+    const fetchAnnuaire = async () => {
+      try {
+        const response = await fetch("/annuaire");
+        const data = await response.json();
+
+        if (data.result?.success && data.result.annuaire) {
+          // Convertir l'objet annuaire en tableau d'objets
+          const formattedData = Object.values(data.result.annuaire).map((company) => ({
+            entreprise: company.name,
+            email: company.mail,
+            dateAdhesion: company.adhésion,
+            objetsDonnés: company.numberGiven,
+            objetsRecupérés: company.numberTaken,
+          }));
+
+          setCompanies(formattedData);
+        }
+      } catch (error) {
+        console.error("Erreur lors de la récupération de l'annuaire :", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAnnuaire();
+  }, []);
 
   // Colonnes du tableau
-  const columns = ["entreprise", "email", "dateAdhesion", "objetsDonnés", "objetsRecupérés", "eLearnings"];
-  const columnNames = ["Entreprise", "Mail de contact", "Date d'adhésion", "Objets donnés", "Objets récupérés", "E-learnings acquis"];
+  const columns = ["entreprise", "email", "dateAdhesion", "objetsDonnés", "objetsRecupérés"];
+  const columnNames = ["Entreprise", "Mail de contact", "Date d'adhésion", "Objets donnés", "Objets récupérés"];
 
-  // Données fictives pour exemple
-  const data = [
-    { entreprise: "GreenTech", email: "contact@greentech.com", dateAdhesion: "2023-05-10", objetsDonnés: 120, objetsRecupérés: 90, eLearnings: 5 },
-    { entreprise: "EcoSolutions", email: "info@ecosolutions.com", dateAdhesion: "2024-01-15", objetsDonnés: 200, objetsRecupérés: 150, eLearnings: 7 },
-    { entreprise: "SustainableCo", email: "support@sustainableco.com", dateAdhesion: "2022-11-23", objetsDonnés: 80, objetsRecupérés: 65, eLearnings: 3 },
-  ];
-
-  // Filtrage des données selon la barre de recherche
-  const filteredData = data.filter((item) =>
+  // Filtrage des entreprises en fonction du champ de recherche
+  const filteredData = companies.filter((item) =>
     item.entreprise.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -51,7 +75,11 @@ const Annuaire = () => {
 
         {/* Tableau des entreprises partenaires */}
         <div className="mt-10">
-          <DataTable columns={columns} columnNames={columnNames} data={filteredData} rowsPerPage={5} />
+          {loading ? (
+            <p className="text-center text-gray-500">Chargement des entreprises...</p>
+          ) : (
+            <DataTable columns={columns} columnNames={columnNames} data={filteredData} rowsPerPage={5} />
+          )}
         </div>
       </div>
     </div>

@@ -11,4 +11,4 @@ router.get('/discussion', getDiscussion)
 router.post('/insertDiscussion', verifyToken, insertDiscussion)
 router.post('/insertMessage', verifyToken, insertMessage)
 
-module.exports = router;
+module.exports = router; 
