@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import LocalisationSwal from '../components/LocalisationSwal/LocalisationSwal';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
@@ -17,25 +17,130 @@ const NewDeposit = () => {
   const [state, setState] = useState('');
   const [location, setLocation] = useState('');
   const [selectedFiles, setSelectedFiles] = useState([]);
+  const [previewUrls, setPreviewUrls] = useState([]);
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [submissions, setSubmissions] = useState([]);
   const [errors, setErrors] = useState({});
 
+  // Limite de la taille d'une image
+  const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2mo
+
+  const dragItem = useRef();
+
   const handleFileChange = (event) => {
     const filesRecup = Array.from(event.target.files);
-    //Filtre pour garder que les images
-    const imageFiles = filesRecup.filter((file) => {
+
+    const validFiles = filesRecup.filter((file) => {
       if (!file.type.startsWith("image/")) {
-        alert(`Fichier non autorisé : ${file.name}! Seules les images sont autorisées !!`);
+        Swal.fire({
+          icon: 'error',
+          title: 'Fichier non autorisé !',
+          text: `Le fichier "${file.name}" n'est pas valide. Seules les images sont autorisées !`,
+          showCancelButton: false,
+          confirmButtonText: 'OK',
+        });
+        return false;
+      } 
+      if (file.size > MAX_FILE_SIZE) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Fichier trop volumineux !',
+          text: `Le fichier "${file.name}" dépasse la taille maximale autorisée de 2 Mo.`,
+          showCancelButton: false,
+          confirmButtonText: 'OK',
+        });
         return false;
       }
       return true;
     });
-    console.log('Fichiers sélectionnés :', imageFiles);
-    setSelectedFiles(imageFiles);
+
+    const nonDuplicateFiles = validFiles.filter((file) =>
+      !selectedFiles.some(
+        (existingFile) =>
+          existingFile.name === file.name &&
+          existingFile.size === file.size &&
+          existingFile.lastModified === file.lastModified
+      )
+    );
+
+    if (nonDuplicateFiles.length < validFiles.length) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Image(s) déjà ajoutée(s)',
+        text: 'Certaines images ont déjà été ajoutées et ne seront pas ajoutées à nouveau.',
+        showCancelButton: false,
+        confirmButtonText: 'OK',
+      });
+    }
+
+    const uniqueNewFiles = nonDuplicateFiles.filter(
+      (file, index, self) =>
+        index === self.findIndex(
+          (f) =>
+            f.name === file.name &&
+            f.size === file.size &&
+            f.lastModified === file.lastModified
+        )
+    );
+
+    if (uniqueNewFiles.length < nonDuplicateFiles.length) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Images en double dans la sélection',
+        text: 'Certaines images sélectionnées sont en double et seront ajoutées une seule fois.',
+        showCancelButton: false,
+        confirmButtonText: 'OK',
+      });
+    }
+
+    if (selectedFiles.length + uniqueNewFiles.length > 5) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Limite d\'images dépassée',
+        text: `Vous pouvez ajouter jusqu'à 5 images uniquement. Vous avez déjà sélectionné ${selectedFiles.length} image(s).`,
+        showCancelButton: false,
+        confirmButtonText: 'OK',
+      });
+      return;
+    }
+
+    setSelectedFiles((prevFiles) => [...prevFiles, ...uniqueNewFiles]);
   };
 
+  useEffect(() => {
+    const newPreviewUrls = selectedFiles.map(file => URL.createObjectURL(file));
+    setPreviewUrls(newPreviewUrls);
+
+    return () => {
+      newPreviewUrls.forEach(url => URL.revokeObjectURL(url));
+    };
+  }, [selectedFiles]);
+
+  const handleRemoveImage = (indexToRemove) => {
+    setSelectedFiles((prevFiles) =>
+      prevFiles.filter((_, index) => index !== indexToRemove)
+    );
+  };
+
+  const handleDragStart = (e, index) => {
+    dragItem.current = index;
+  };
+
+  const handleDragOver = (e, index) => {
+    e.preventDefault();
+  };
+
+  const handleDrop = (e, dropIndex) => {
+    e.preventDefault();
+    const dragIndex = dragItem.current;
+    if (dragIndex === undefined || dragIndex === dropIndex) return;
+
+    const updatedFiles = [...selectedFiles];
+    const [draggedItem] = updatedFiles.splice(dragIndex, 1);
+    updatedFiles.splice(dropIndex, 0, draggedItem);
+    setSelectedFiles(updatedFiles);
+  };
 
   const readFileAsBase64 = (file) => {
     return new Promise((resolve, reject) => {
@@ -93,12 +198,11 @@ const NewDeposit = () => {
         headers: { 'Content-Type': 'application/json', ...getAuthHeaders() },
         body: JSON.stringify(newSubmission),
       });
-      console.log(response)
-      if (!response.status==401) {
-        toast.error("Connectez vous pour déposer une annonce")
+      console.log(response);
+      if (response.status === 401) {
+        toast.error("Connectez vous pour déposer une annonce");
         navigate("/login");
-      }
-      else if(!response.ok){
+      } else if (!response.ok) {
         throw new Error(`Erreur HTTP: ${response.status}`);
       }
 
@@ -154,30 +258,30 @@ const NewDeposit = () => {
   useEffect(() => {
     const authToken = Cookies.get('jwt');
     if (!authToken) {
-      toast.error("Connectez vous pour déposer une annonce")
+      toast.error("Connectez vous pour déposer une annonce");
       navigate("/login");
       return; 
     }
   
     fetch('/addAnnounce', { headers: getAuthHeaders() })
-    .then((response) => {
-      if (!response.status==401) {
-        toast.error("Connectez vous pour déposer une annonce")
-        navigate("/login");
-      }
-      return response.json();
-    })
-    .then((data) => {
-      setData(data);
-      setIsLoading(false);
-    })
-    .catch((error) => {
-      console.log(error)
-      setIsLoading(false);
-      toast.error('Erreur lors du chargement des données');
-    });
-
+      .then((response) => {
+        if (response.status === 401) {
+          toast.error("Connectez vous pour déposer une annonce");
+          navigate("/login");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setData(data);
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        setIsLoading(false);
+        toast.error('Erreur lors du chargement des données');
+      });
   }, []);
+
   if (isLoading) return <p>Chargement...</p>;
 
   return (
@@ -186,7 +290,9 @@ const NewDeposit = () => {
       <form className="space-y-6" onSubmit={handleSubmit}>
         {/* Photo Upload */}
         <div className="border p-4 border-2 rounded-lg border-yellowGreen1 bg-yellowGreen1 bg-opacity-20">
-          <label className="block text-m font-medium pb-2 text-darkGreen">Ajoute jusqu'à 5 photos :</label>
+          <label className="block text-m font-medium pb-2 text-darkGreen">
+            Ajoute jusqu'à 5 photos :
+          </label>
           <div className="border p-4 border-yellowGreen1 rounded-lg border-dashed flex flex-col items-center justify-center">
             <label className="cursor-pointer text-center">
               <span className="block text-m text-darkGreen my-4 py-2 px-4 rounded-md border border-yellowGreen1 bg-yellowGreen1 bg-opacity-20 hover:bg-opacity-50">
@@ -195,19 +301,39 @@ const NewDeposit = () => {
               </span>
               <input
                 type="file"
+                accept=".png, .jpg, .jpeg"
                 multiple
                 className="hidden"
                 onChange={handleFileChange}
               />
             </label>
-            {selectedFiles.length > 0 && (
-              <ul className="mt-4 text-sm text-gray-600">
-                {selectedFiles.map((file, index) => (
-                  <li key={index} className="truncate">
-                    {file.name}
-                  </li>
+            {/* Affichage des aperçus avec icône de suppression et possibilité de réorganiser par glisser-déposer */}
+            {previewUrls.length > 0 && (
+              <div className="mt-4 grid grid-cols-5 gap-4">
+                {previewUrls.map((url, index) => (
+                  <div
+                    key={index}
+                    className="relative"
+                    draggable
+                    onDragStart={(e) => handleDragStart(e, index)}
+                    onDragOver={(e) => handleDragOver(e, index)}
+                    onDrop={(e) => handleDrop(e, index)}
+                  >
+                    <img
+                      src={url}
+                      alt={`Aperçu ${index}`}
+                      className="object-cover h-32 w-32 rounded-md"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveImage(index)}
+                      className="absolute top-1 right-1 p-1"
+                    >
+                      <FontAwesomeIcon icon={faTrash} className="text-red hover:text-red/50" />
+                    </button>
+                  </div>
                 ))}
-              </ul>
+              </div>
             )}
           </div>
         </div>
