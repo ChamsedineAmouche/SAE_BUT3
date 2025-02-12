@@ -15,6 +15,15 @@ const Forum = () => {
   const [searchTerm, setSearchTerm] = useState(""); // État de la recherche
   const MySwal = withReactContent(Swal);
 
+  const formatDate = (isoDate) => {
+    return new Date(isoDate).toLocaleString("fr-FR", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit"
+    }).replace(",", ""); // Supprime la virgule entre la date et l'heure
+  };
+  
+
   // Fonction pour récupérer les discussions
   const fetchDiscussions = async () => {
     setLoading(true);
@@ -23,7 +32,6 @@ const Forum = () => {
       const data = await response.json();
 
       if (data.allDiscussions) {
-        // Trier toutes les discussions par date décroissante
         const sortedDiscussions = data.allDiscussions.sort(
           (a, b) => new Date(b.date_creation) - new Date(a.date_creation)
         );
@@ -52,6 +60,7 @@ const Forum = () => {
   // Ajouter un bouton pour accéder aux détails de chaque discussion
   const enhancedDiscussions = filteredDiscussions.map((discussion) => ({
     ...discussion,
+    date_creation: formatDate(discussion.date_creation),
     access: (
       <button
         onClick={() => navigate(`/details_forum/id:${discussion.id}`)}
@@ -103,7 +112,7 @@ const Forum = () => {
         if (!response.ok) throw new Error("Erreur lors de la création");
 
         Swal.fire("Succès", "Discussion créée avec succès", "success");
-        fetchDiscussions(); // Rafraîchir la liste
+        fetchDiscussions(); 
       } catch (error) {
         Swal.fire("Erreur", "Impossible de créer la discussion", "error");
         console.error("Erreur lors de la création :", error);
