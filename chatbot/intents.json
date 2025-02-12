@@ -1,36 +1,248 @@
 {
     "intents" : [
         {
-            "tag" : "greeting",
-            "patterns" : [
+            "tag": "salutations",
+            "patterns": [
                 "Bonjour",
                 "Salut",
                 "Salutations",
                 "Yo",
                 "Plop",
                 "Hey",
-                "Hello"
+                "Hello",
+                "Coucou",
+                "Bonsoir",
+                "Bien le bonjour",
+                "Holà",
+                "Hi",
+                "Yop",
+                "Re",
+                "Rebonjour",
+                "Re coucou",
+                "Bon matin",
+                "Bonne journée",
+                "Salut toi",
+                "Hello Greeny",
+                "Salut Greeny"
             ],
-            "responses" : [
-                "Bonjour"
+            "responses": [
+                "Bonjour, je suis Greeny, le chatbot de Green Circle, en quoi puis-je vous aider ?",
+                "Salut ! Comment puis-je vous aider aujourd'hui ?",
+                "Hey ! Que puis-je faire pour vous ?",
+                "Holà ! Comment ça va ?",
+                "Coucou ! Besoin d'un coup de main ?",
+                "Bien le bonjour ! Que puis-je faire pour vous ?",
+                "Yo ! Je suis là pour vous aider.",
+                "Hello ! Que puis-je faire pour vous aujourd'hui ?",
+                "Rebonjour ! Toujours besoin d’aide ?",
+                "Salut ! Comment se passe votre journée ?",
+                "Plop ! Une question ? Je suis là pour ça.",
+                "Bonne journée à vous aussi ! En quoi puis-je vous être utile ?",
+                "Hello, tout va bien ?",
+                "Bienvenue ! Dites-moi comment je peux vous aider.",
+                "Yo yo ! Je suis Greeny, que puis-je faire pour vous ?",
+                "Salut à vous ! Que puis-je vous apporter comme info ?",
+                "Bonjour et bienvenue ! Que puis-je faire pour vous ?",
+                "Hey, ravi de vous voir ici ! Comment puis-je vous assister ?",
+                "Holà ! Que puis-je faire pour vous aujourd’hui ?"
+            ]
+        }, 
+        {
+            "tag": "nouvelles",
+            "patterns": [
+                "Comment ça va ?",
+                "Ça va ?",
+                "Comment vas-tu ?",
+                "Tu vas bien ?",
+                "Quoi de neuf ?",
+                "Ça roule ?",
+                "Comment ça se passe ?"
+            ],
+            "responses": [
+                "Je vais bien, merci ! Et toi ?",
+                "Ça va super !",
+                "Je suis en pleine forme !",
+                "Tout roule, merci ! Et toi ?",
+                "Rien de nouveau, mais tout va bien !"
             ]
         },
         {
-            "tag" : "elearning",
-            "patterns" :[
-
+            "tag": "remerciements",
+            "patterns": [
+                "Merci Greeny !",
+                "Merci beaucoup !",
+                "Merci pour ton aide !",
+                "Merci bien !",
+                "Je te remercie !",
+                "Merci infiniment !",
+                "Merci pour tout !"
             ],
             "responses": [
-
+                "Avec plaisir ! 😊",
+                "Je suis là pour t'aider !",
+                "N'hésite pas si tu as d'autres questions !",
+                "De rien, ravi d'avoir pu t'aider !",
+                "Merci à toi ! 🌱",
+                "C'est toujours un plaisir d'aider !",
+                "À ton service !"
+            ]
+        },
+        {
+            "tag": "excuses",
+            "patterns": [
+                "Désolé !",
+                "Pardon !",
+                "Je suis désolé si j’ai fait une erreur.",
+                "Excuse-moi !",
+                "Toutes mes excuses !"
+            ],
+            "responses": [
+                "Pas de souci, tout va bien ! 😊",
+                "Ne t'inquiète pas, ça arrive !",
+                "Aucun problème, on continue !",
+                "Tout est OK, pas besoin de t'excuser !",
+                "Pas de souci, je suis là pour ça !"
+            ]
+        },
+        {
+            "tag": "au_revoir",
+            "patterns": [
+                "Au revoir !",
+                "À bientôt !",
+                "Bonne journée !",
+                "Bonne soirée !",
+                "À plus tard !",
+                "À la prochaine !",
+                "Bye !",
+                "Salut !"
+            ],
+            "responses": [
+                "À bientôt, prends soin de toi ! 😊",
+                "Passe une excellente journée !",
+                "Bonne soirée et à la prochaine !",
+                "À plus tard, n’hésite pas à revenir !",
+                "Bye bye !"
+            ]
+        },
+        {
+            "tag": "elearning",
+            "patterns": [
+                "Qu'est-ce que l'e-learning ?",
+                "C'est quoi l'e-learning ?",
+                "Comment fonctionne l'e-learning ?",
+                "Quelles sont les plateformes e-learning ?",
+                "Quels sont les avantages de l'e-learning ?",
+                "Pourquoi utiliser l'e-learning ?"
+            ],
+            "responses": [
+                "L'e-learning est un mode d'apprentissage en ligne qui permet d'acquérir des compétences à distance via des plateformes dédiées.",
+                "Les plateformes d'e-learning offrent des cours en ligne sur divers sujets, de la gestion aux technologies, en passant par les langues.",
+                "L'e-learning permet un apprentissage flexible, où vous pouvez apprendre à votre propre rythme et selon vos disponibilités.",
+                "Les avantages de l'e-learning incluent la flexibilité, l'accessibilité, et la possibilité d'apprendre à son propre rythme, tout en ayant accès à une variété de ressources en ligne.",
+                "Utiliser l'e-learning, c'est avoir accès à un apprentissage plus pratique, flexible et souvent plus abordable que les formations en présentiel."
             ]
         },
         {
             "tag" : "elearning_payment",
             "patterns" :[
-                
+                "Comment régler un paiement pour un e-learning ?",
+                "Comment payer pour un cours en ligne ?",
+                "Quels modes de paiement sont acceptés pour les e-learnings ?",
+                "Comment effectuer un paiement pour accéder à un cours en ligne ?",
+                "Quelles sont les options de paiement pour les formations e-learning ?"
             ],
             "responses": [
+                "Pour régler un e-learning, vous pouvez généralement payer via carte bancaire, PayPal, ou d'autres plateformes de paiement en ligne sécurisées.",
+                "Vous pouvez payer un cours en ligne en utilisant une carte de crédit, un virement bancaire ou un service comme PayPal selon la plateforme choisie.",
+                "Les plateformes e-learning acceptent généralement des paiements via carte de crédit, carte bancaire, et parfois PayPal ou d'autres méthodes selon votre localisation.",
+                "Le paiement pour un e-learning se fait généralement via une interface sécurisée, où vous choisissez le mode de paiement (carte bancaire, PayPal, etc.) et confirmez votre transaction.",
+                "Il existe plusieurs options de paiement pour les formations en ligne : carte bancaire, PayPal, et parfois d'autres moyens de paiement comme le virement bancaire ou des services tiers."
+            ]
+        },
+        {
+            "tag" : "green_circle",
+            "patterns" :[
+                "Qu'est-ce que Green Circle ?",
+                "Pouvez-vous m'expliquer le concept de Green Circle ?",
+                "C'est quoi Green Circle ?",
+                "Quel est le but de Green Circle ?",
+                "Que fait Green Circle ?",
+                "Comment fonctionne Green Circle ?",
+                "Pourquoi Green Circle est-il important ?",
+                "Quels sont les objectifs de Green Circle ?"
+            ],
+            "responses": [
+                "Green Circle est une plateforme dédiée à la promotion de l'économie circulaire, permettant de réduire le gaspillage et de favoriser la réutilisation des objets.",
+                "Le concept de Green Circle repose sur l'idée d'une économie circulaire, où les objets sont récupérés, recyclés, et réutilisés afin de réduire l'impact environnemental.",
+                "Green Circle est une initiative qui vise à encourager les entreprises et les particuliers à adopter des pratiques écologiques en recyclant et en réutilisant des objets.",
+                "Le but de Green Circle est de créer un cercle vertueux où les objets sont recyclés et réutilisés pour limiter les déchets et préserver les ressources naturelles.",
+                "Green Circle soutient l'économie circulaire en facilitant la collecte et la réutilisation des objets usagés afin de prolonger leur cycle de vie.",
+                "Green Circle fonctionne en mettant en relation des personnes et des entreprises pour favoriser le recyclage, la réutilisation et la réduction des déchets.",
+                "Green Circle aide à la réduction des déchets en créant des opportunités de réutilisation des objets et en sensibilisant le public à l'importance du recyclage.",
+                "Les objectifs de Green Circle incluent la réduction des déchets, l'encouragement du recyclage et la promotion d'une économie plus durable et respectueuse de l'environnement."
+            ]
+        },
+        {
+            "tag" : "depot_objets",
+            "patterns" :[
+                "Comment déposer des objets ?",
+                "Où puis-je déposer mes objets ?",
+                "Comment fonctionne le dépôt d'objets ?",
+                "Que faire si je veux déposer un objet ?",
+                "Où déposer mes objets inutilisés ?",
+                "Quels types d'objets puis-je déposer ?",
+                "Y a-t-il un endroit pour déposer des objets ?",
+                "Comment participer au dépôt d'objets ?"
+            ],
+            "responses": [
+                "Pour déposer vos objets, vous pouvez vous rendre dans l'un des containeur de stockage affiliés à notre programme Green Circle.",
+                "Le dépôt d'objets peut se faire dans des points de collecte désignés près de chez vous. Vous pouvez consulter notre carte interactive pour trouver un dépôt à proximité.",
+                "Si vous souhaitez déposer un objet, vous pouvez vous rendre à un centre de collecte Green Circle ou organiser un rendez-vous pour la collecte à domicile.",
+                "Les objets inutilisés peuvent être déposés dans des centres de dépôt spécifiques, qui s'assureront qu'ils soient recyclés ou réutilisés dans un cadre circulaire.",
+                "Vous pouvez déposer une large gamme d'objets, y compris des meubles, des appareils électroniques, des vêtements, et des livres. Vérifiez les types d'objets acceptés dans le centre de dépôt près de chez vous."
+            ]
+        },
+        {
+            "tag" : "recuperer_objet",
+            "patterns" :[
+                "Comment récupérer un objet ?",
+                "Où puis-je récupérer un objet ?",
+                "Comment fonctionne la récupération d'objets ?",
+                "Que faire si je veux récupérer un objet ?",
+                "Où récupérer des objets ?"
+            ],
+            "responses": [
+                "Pour récupérer un objet, vous pouvez vous rendre dans l'un des centres de stockage affiliés à notre programme Green Circle après l'avoir réservé au préalable.",
+                "La récupération d'objets se fait dans des points de collecte désignés. Vous pouvez consulter notre carte interactive pour trouver un centre de récupération près de chez vous après avoir reservé l'objet demandé.",
+                "Si vous souhaitez récupérer un objet, vous pouvez vous rendre à un centre de récupération Green Circle ou organiser un rendez-vous pour le récuperer.",
+                "Les objets récupérés peuvent être obtenus dans des containers spécifiques qui soutiennent la réutilisation dans un cadre circulaire."
+            ]
+        },        
+        {
+            "tag" : "green_circle",
+            "patterns" :[
+                
+             ],
+            "responses": [
 
+            ]
+        },
+        {
+            "tag" : "la_grande_borne",
+            "patterns" :[
+                "Bite sur l'épaule"
+            ],
+            "responses": [
+                "Grigny-la-Grande-Borne, une bite sur l'épaule\n3 cadavres, sol, quartier mahbol\nFace à l'horreur, nous sommes\nNous sommes, des tueurs\nGénéral de guerre et casquette à l'envers\nLes pecs en l'air, le bras à Schwarzennegger\nTu gazes on t'monte en l'air pour des billets, (ttt)-verts\nJe suis un braqueur, fuck le procureur !\nFuck le procureur ! Fuck ? Le procureur"
+            ]
+        },
+        {
+            "tag" : "oasis_pub",
+            "patterns" : [
+                "Oasis pub"
+            ],
+            "responses": [
+                "D'amour et d'eau fraiche ! EXCITTTTTTIIIIIIIIINNNGGGGGGG tulululum."
             ]
         }
     ]

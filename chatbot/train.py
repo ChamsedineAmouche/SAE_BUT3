@@ -55,9 +55,27 @@ class ChatDataSet(Dataset) :
 
 batch_size = 8
 dataset = ChatDataSet()
-train_loader = DataLoader(dataset=dataset, batch_size=batch_size, shuffle = True, num_workers = 2)
+train_loader = DataLoader(dataset=dataset, batch_size=batch_size, shuffle = True)
 
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 model = NeuralNet(input_size=len(x_train[0]), hidden_size=8, num_classes=len(tags))
 
-print(len(x_train[0]), len(all_words))
-print(len(tags), tags)
+criterion = nn.CrossEntropyLoss()
+optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
+
+for epoch in range(1000) : 
+    for (words, labels) in train_loader : 
+        words = words.to(device)
+        labels.to(device, torch.int64)
+
+        outputs = model(words)
+        loss = criterion(outputs, labels)
+
+        optimizer.zero_grad()
+        loss.backward()
+        optimizer.step()
+
+    if (epoch + 1) % 100 == 0 : 
+        print(f'epoch : {epoch+1}/1000 loss={loss.item():.4f}')
+
+print(f'final loss : loss={loss.item():.4f}')
