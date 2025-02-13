@@ -30,14 +30,6 @@ app.use(session({
     cookie: { secure: false },
 }));
 
-const pythonScript = path.join(__dirname, '../chatbot/test.py'); // Chemin vers test.py
-const param = 'Hello from Node.js'; // Argument à envoyer
-
-const process = spawn('python3', [pythonScript, param]);
-
-process.stdout.on('data', (data) => {
-    console.log(`Sortie de test.py : ${data.toString().trim()}`);
-});
 
 loadRoutes(app, './routes');
 

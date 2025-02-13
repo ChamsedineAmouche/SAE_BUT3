@@ -4,10 +4,13 @@ import torch
 from model import NeuralNet
 from nltk_utils import bag_of_words, tokenize
 import sys
+import os
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
-with open ('intents.json', 'r') as f :
+with open(os.path.join(BASE_DIR, 'intents.json'), 'r') as f:
     intents = json.load(f)
 
 FILE = 'data.pth'
