@@ -251,13 +251,14 @@
                 "lieu evenement",
                 "evenement organisation",
                 "organiser evenement",
-                "organisation evenement"
+                "organisation evenement",
+                "m'inscrire évenement",
+                "inscription evenement"
             ],
             "responses": [
-                "Green Circle organise régulièrement des événements liés à l'écologie, au recyclage et à la gestion durable des ressources. Consultez notre page d'événements pour connaître les prochaines dates.",
-                "Pour connaître les événements à venir, vous pouvez consulter notre calendrier sur le site Green Circle ou vous inscrire à notre newsletter pour recevoir des notifications des prochains événements.",
-                "Vous pouvez participer aux événements de Green Circle en vous inscrivant directement sur notre site web. Les événements sont ouverts à tous ceux qui souhaitent en apprendre davantage sur l'environnement et les pratiques durables.",
-                "Les événements de Green Circle se déroulent à différents endroits, principalement dans des lieux accessibles à tous. Vous pouvez consulter notre site pour obtenir les informations détaillées sur les lieux de chaque événement.",
+                "Green Circle organise régulièrement des événements liés à l'écologie, au recyclage et à la gestion durable des ressources. Consultez notre page d'événements pour connaître les prochaines dates et vous y inscrire.",
+                "Vous pouvez participer aux événements de Green Circle en vous inscrivant directement sur notre site web. Les événements sont ouverts à tous ceux qui souhaitent en apprendre davantage sur l'environnement et les pratiques durables. Vous pouvez vous y inscrire dans la partie 'Evenement' du site !",
+                "Les événements de Green Circle se déroulent à différents endroits, principalement dans des lieux accessibles à tous. Vous pouvez consulter notre site pour obtenir les informations détaillées sur les lieux de chaque événement et vous y inscrire.",
                 "Oui, vous pouvez vous inscrire à un événement Green Circle directement via notre site web ou en envoyant un e-mail à notre équipe d'organisation. Nous serons ravis de vous compter parmi les participants.",
                 "Lors de nos événements, vous pourrez participer à des ateliers, des conférences, des sessions de questions-réponses, et des activités pratiques axées sur la durabilité et l'économie circulaire. C'est une excellente occasion d'apprendre et de vous engager activement.",
                 "Pour être informé des événements à venir, n'oubliez pas de vous abonner à notre newsletter ou de suivre Green Circle sur nos réseaux sociaux où nous publions régulièrement des informations sur les événements."
@@ -313,6 +314,15 @@
             ],
             "responses": [
                 "D'amour et d'eau fraiche  EXCITTTTTTIIIIIIIIINNNGGGGGGG tulululum."
+            ]
+        },
+        {
+            "tag" : "daron_chems",
+            "patterns" :[
+                "Sors moi un freestyle mémorable"
+            ],
+            "responses": [
+                "Ceci n'est pas pessimiste mais juste réaliste \n Y'a des faits commis quelques part, il y a ton nom sur la liste \n Il y a des droits qu'on donne et ceux qu'on distribue \nL'hypocrisie en est évident je sais que tu l'as vu\nOn te difère mais entre dur, mentalité ALGERIENNE"
             ]
         }
     ]
