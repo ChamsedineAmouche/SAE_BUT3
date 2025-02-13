@@ -42,15 +42,31 @@ const ChatBot = ({ isPopup = false }) => {
         {messages.map((msg, index) => (
           <div
             key={index}
-            className={`mb-2 p-3 rounded-2xl max-w-xs ${
-              msg.sender === "Vous" ? "bg-yellowGreen1 text-white ml-auto" : "bg-gray-200 text-gray-800"
+            className={`mb-2 flex items-center ${
+              msg.sender === "Vous" ? "justify-end" : "justify-start"
             }`}
           >
-            <strong>{msg.sender}:</strong> {msg.text}
+            {msg.sender === "Greeny" && (
+              <img
+                src="/greeny.png"
+                alt="Greeny"
+                className="w-8 h-8 rounded-full mr-2"
+              />
+            )}
+            <div
+              className={`p-3 rounded-2xl max-w-xs ${
+                msg.sender === "Vous" ? "bg-yellowGreen1 text-white ml-auto" : "bg-gray-200 text-gray-800"
+              }`}
+            >
+              <strong>{msg.sender}:</strong> {msg.text}
+            </div>
           </div>
         ))}
         {loading && (
-          <div className="text-gray-500 italic">Greeny écrit...</div>
+          <div className="flex items-center text-gray-500 italic">
+            <img src="/greeny.png" alt="Greeny" className="w-6 h-6 rounded-full mr-2" />
+            Greeny écrit...
+          </div>
         )}
       </div>
 
