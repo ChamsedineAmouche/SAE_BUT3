@@ -11,19 +11,14 @@
                 "Hey",
                 "Hello",
                 "Coucou",
-                "Bonsoir",
-                "Bien le bonjour",
                 "Holà",
                 "Hi",
                 "Yop",
                 "Re",
                 "Rebonjour",
-                "Re coucou",
                 "Bon matin",
                 "Bonne journée",
-                "Salut toi",
-                "Hello Greeny",
-                "Salut Greeny"
+                "Salut toi"
             ],
             "responses": [
                 "Bonjour, je suis Greeny, le chatbot de Green Circle, en quoi puis-je vous aider ?",
@@ -217,14 +212,83 @@
                 "Si vous souhaitez récupérer un objet, vous pouvez vous rendre à un centre de récupération Green Circle ou organiser un rendez-vous pour le récuperer.",
                 "Les objets récupérés peuvent être obtenus dans des containers spécifiques qui soutiennent la réutilisation dans un cadre circulaire."
             ]
-        },        
+        },     
         {
-            "tag" : "green_circle",
+            "tag" : "veille_articles",
             "patterns" :[
-                
-             ],
+                "Quels sont les derniers articles sur la veille ?",
+                "Comment accéder aux articles de veille ?",
+                "Où puis-je lire les derniers articles de veille ?",
+                "Quelles sont les nouvelles veilles disponibles ?",
+                "Comment suivre les articles de veille ?",
+                "Y a-t-il des articles récents sur la veille ?",
+                "Que puis-je apprendre des articles de veille ?",
+                "Quels sont les sujets des articles de veille ?"
+            ],
             "responses": [
-
+                "Les derniers articles de veille sont disponibles sur notre site Green Circle, où vous pouvez suivre les tendances et les mises à jour récentes sur l'actualité du recyclage, de l'économie circulaire et plus encore.",
+                "Pour accéder aux articles de veille, vous pouvez visiter notre page dédiée à la veille écologique ou vous inscrire à notre newsletter pour recevoir les mises à jour directement dans votre boîte mail.",
+                "Les articles de veille couvrent une variété de sujets relatifs à l'environnement, à la gestion des ressources et aux pratiques durables. Vous pouvez consulter notre site pour les derniers articles en date.",
+                "Vous pouvez suivre les articles de veille sur notre plateforme en ligne, où nous publions régulièrement des contenus sur les nouvelles tendances, les technologies vertes, et les bonnes pratiques pour un avenir durable.",
+                "Nos articles de veille sont régulièrement mis à jour avec des informations pertinentes. Abonnez-vous à notre blog pour ne rien manquer des nouvelles parutions.",
+                "Les articles récents portent sur des sujets tels que l'impact environnemental de la consommation, les initiatives de recyclage innovantes, et les stratégies de réduction des déchets. Explorez-les pour en savoir plus.",
+                "Suivre les articles de veille vous permet de rester informé des dernières recherches et innovations dans le domaine de l'écologie et de la gestion durable des ressources. Vous pouvez consulter nos articles à tout moment sur notre site.",
+                "Les sujets des articles de veille varient, mais incluent souvent des sujets sur la gestion des déchets, la réutilisation des matériaux, les nouveaux projets de Green Circle, et d'autres initiatives environnementales."
+            ]
+        },
+        {
+            "tag" : "evenements",
+            "patterns" :[
+                "Quels événements sont organisés par Green Circle ?",
+                "Y a-t-il des événements à venir ?",
+                "Comment participer aux événements de Green Circle ?",
+                "Où se dérouleront les événements de Green Circle ?",
+                "Puis-je m'inscrire à un événement Green Circle ?",
+                "Quelles sont les activités prévues lors des événements ?",
+                "Comment être informé des événements à venir ?"
+            ],
+            "responses": [
+                "Green Circle organise régulièrement des événements liés à l'écologie, au recyclage et à la gestion durable des ressources. Consultez notre page d'événements pour connaître les prochaines dates.",
+                "Pour connaître les événements à venir, vous pouvez consulter notre calendrier sur le site Green Circle ou vous inscrire à notre newsletter pour recevoir des notifications des prochains événements.",
+                "Vous pouvez participer aux événements de Green Circle en vous inscrivant directement sur notre site web. Les événements sont ouverts à tous ceux qui souhaitent en apprendre davantage sur l'environnement et les pratiques durables.",
+                "Les événements de Green Circle se déroulent à différents endroits, principalement dans des lieux accessibles à tous. Vous pouvez consulter notre site pour obtenir les informations détaillées sur les lieux de chaque événement.",
+                "Oui, vous pouvez vous inscrire à un événement Green Circle directement via notre site web ou en envoyant un e-mail à notre équipe d'organisation. Nous serons ravis de vous compter parmi les participants.",
+                "Lors de nos événements, vous pourrez participer à des ateliers, des conférences, des sessions de questions-réponses, et des activités pratiques axées sur la durabilité et l'économie circulaire. C'est une excellente occasion d'apprendre et de vous engager activement.",
+                "Pour être informé des événements à venir, n'oubliez pas de vous abonner à notre newsletter ou de suivre Green Circle sur nos réseaux sociaux où nous publions régulièrement des informations sur les événements."
+            ]
+        },             
+        {
+            "tag" : "politique_stockage_cartes_bancaires",
+            "patterns" :[
+                "Comment Green Circle stocke-t-il les informations de ma carte bancaire ?",
+                "Où sont stockées mes données bancaires ?",
+                "Est-ce que mes informations bancaires sont sécurisées ?",
+                "Quelles mesures Green Circle prend-il pour protéger mes informations de carte bancaire ?"
+            ],
+            "responses": [
+                "Chez Green Circle, nous stockons vos informations bancaires conformément aux normes européennes de protection des données (telles que le RGPD) et aux normes de sécurité de l'industrie (comme la norme PCI-DSS). Vos données sont traitées de manière sécurisée pour garantir leur confidentialité et leur intégrité.",
+                "Nous ne stockons pas directement les informations sensibles de votre carte bancaire. Ces informations sont gérées par des prestataires de services de paiement tiers de confiance, qui respectent les réglementations européennes strictes en matière de sécurité des données.",
+                "Oui, toutes les informations bancaires sont cryptées et sécurisées selon les normes européennes et les exigences de la norme PCI-DSS, assurant ainsi la protection de vos données contre tout accès non autorisé.",
+                "Green Circle utilise des prestataires de paiement externes certifiés qui respectent les normes européennes de sécurité des données pour protéger vos informations bancaires. Ces prestataires sont responsables de la gestion sécurisée de vos données de carte bancaire."
+            ]
+        },           
+        {
+            "tag" : "politique_stockage_donnees_rgpd",
+            "patterns" :[
+                "Comment Green Circle stocke-t-il mes données personnelles ?",
+                "Quelles données Green Circle collecte-t-il sur moi ?",
+                "Comment mes données personnelles sont-elles protégées ?",
+                "Quels types de données personnelles Green Circle conserve-t-il ?",
+                "Est-ce que mes données personnelles sont partagées avec des tiers ?",
+                "Combien de temps mes données sont-elles conservées ?",
+                "Est-ce que Green Circle respecte le RGPD ?"            ],
+            "responses": [
+                "Chez Green Circle, nous stockons et traitons vos données personnelles conformément au **Règlement Général sur la Protection des Données (RGPD)**. Vos informations sont protégées et utilisées uniquement dans le cadre des services que vous avez demandés.",
+                "Nous collectons uniquement les données personnelles nécessaires pour fournir nos services, telles que votre nom, adresse e-mail, et informations de paiement. Nous nous assurons que ces informations sont utilisées de manière sécurisée et légale.",
+                "Toutes vos données personnelles sont stockées en toute sécurité, avec des mesures techniques et organisationnelles adaptées pour empêcher tout accès non autorisé, toute divulgation, modification ou destruction de vos données.",
+                "Les types de données que nous collectons incluent vos informations de contact, votre historique de transactions, et d'autres informations que vous nous fournissez lors de votre utilisation de nos services. Ces données sont conservées uniquement pendant la durée nécessaire à leur utilisation légitime.",
+                "Vos données sont conservées aussi longtemps que nécessaire pour répondre à vos demandes ou pour respecter nos obligations légales. Une fois ce délai écoulé, nous nous engageons à supprimer ou anonymiser vos données conformément aux principes du RGPD.",
+                "Oui, Green Circle respecte le RGPD et s'assure que vos droits sont protégés, notamment votre droit d'accès, de rectification, de suppression et de portabilité de vos données personnelles."    
             ]
         },
         {
