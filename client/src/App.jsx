@@ -30,6 +30,7 @@ import Admin from "./pages/Admin.jsx";
 import Forum from "./pages/Forum.jsx";
 import Annuaire from "./pages/Annuaire.jsx";
 import DetailsForum from "./pages/DetailsForum.jsx";
+import PrivacyPolicy from "./pages/PrivacyPolicy.jsx"
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -81,6 +82,7 @@ const App = () => {
           <Route path="/inscription_validation" element={<InscriptionValidation />} />
           <Route path="/oubli_mot_de_passe" element={<ForgotPassword />} />
           <Route path="/reinitialisation_mot_de_passe" element={<ResetPassword />} />
+          <Route path="/politique_confidentialite" element={<PrivacyPolicy />} />
 
         {/* Route avec le Layout global */}
         <Route path="/" element={<Layout />}>
