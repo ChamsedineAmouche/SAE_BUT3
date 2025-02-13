@@ -44,13 +44,12 @@
         {
             "tag": "nouvelles",
             "patterns": [
-                "Comment ça va ",
                 "Ça va ",
-                "Comment vas-tu ",
+                "vas-tu ",
                 "Tu vas bien ",
-                "Quoi de neuf ",
+                "de neuf ",
                 "Ça roule ",
-                "Comment ça se passe "
+                "ça se passe "
             ],
             "responses": [
                 "Je vais bien, merci  Et toi ",
@@ -86,7 +85,6 @@
             "patterns": [
                 "Désolé ",
                 "Pardon ",
-                "Je suis désolé si j’ai fait une erreur.",
                 "Excuse-moi ",
                 "Toutes mes excuses "
             ],
@@ -124,8 +122,8 @@
                 "l'elearning ",
                 "quoi l'elearning ",
                 "fonctionne l'elearning ",
-                "les plateformes elearning ",
-                "les avantages de l'elearning ",
+                "plateformes elearning ",
+                "avantages de l'elearning ",
                 "utiliser l'elearning ",
                 "elearning"
             ],
@@ -140,8 +138,7 @@
         {
             "tag" : "elearning_payment",
             "patterns" :[
-                "paiement pour un elearning ",
-                "payer pour un cours en ligne ",
+                "payer pour cours en ligne ",
                 "modes de paiement pour elearnings ",
                 "effectuer paiement accéder cours en ligne ",
                 "effectuer paiement elearning ",
@@ -235,12 +232,21 @@
         {
             "tag" : "evenements",
             "patterns" :[
-                "événements organisés Green Circle ",
-                "événements à venir ",
-                "participer événements Green Circle ",
-                "déroulement événements Green Circle ",
-                "inscrire événement Green Circle ",
-                "activités prévues événements "
+                "événements organisés",
+                "événements à venir",
+                "participer événements",
+                "déroulement événements",
+                "inscrire événement ",
+                "activités prévues événements ",
+                "participer evenement",
+                "evenement",
+                "inscription evenement",
+                "s'inscrire à un évenement",
+                "inscrit evenement",
+                "lieu evenement",
+                "evenement organisation",
+                "organiser evenement",
+                "organisation evenement"
             ],
             "responses": [
                 "Green Circle organise régulièrement des événements liés à l'écologie, au recyclage et à la gestion durable des ressources. Consultez notre page d'événements pour connaître les prochaines dates.",
