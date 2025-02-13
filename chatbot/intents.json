@@ -20,31 +20,31 @@
                 "Salut toi"
             ],
             "responses": [
-                "Bonjour, je suis Greeny, le chatbot de Green Circle, en quoi puis-je vous aider ",
-                "Salut  Comment puis-je vous aider aujourd'hui ",
-                "Hey  Que puis-je faire pour vous ",
-                "Holà  Comment ça va ",
-                "Coucou  Besoin d'un coup de main ",
-                "Bien le bonjour  Que puis-je faire pour vous ",
-                "Yo  Je suis là pour vous aider.",
-                "Hello  Que puis-je faire pour vous aujourd'hui ",
-                "Rebonjour  Toujours besoin d’aide ",
-                "Salut  Comment se passe votre journée ",
-                "Plop  Une question  Je suis là pour ça.",
-                "Bonne journée à vous aussi  En quoi puis-je vous être utile ",
-                "Hello, tout va bien ",
-                "Bienvenue  Dites-moi comment je peux vous aider.",
-                "Yo yo  Je suis Greeny, que puis-je faire pour vous ",
-                "Salut à vous  Que puis-je vous apporter comme info ",
-                "Bonjour et bienvenue  Que puis-je faire pour vous ",
-                "Hey, ravi de vous voir ici  Comment puis-je vous assister ",
-                "Holà  Que puis-je faire pour vous aujourd’hui "
+                "Bonjour, je suis Greeny, le chatbot de Green Circle, en quoi puis-je vous aider ?",
+                "Salut ! Comment puis-je vous aider aujourd'hui ?",
+                "Hey ! Que puis-je faire pour vous ",
+                "Holà ! Comment ça va ?",
+                "Coucou !  Besoin d'un coup de main ?",
+                "Bien le bonjour ! Que puis-je faire pour vous ?",
+                "Yo ! Je suis là pour vous aider.",
+                "Hello ! Que puis-je faire pour vous aujourd'hui ? ",
+                "Rebonjour ! Toujours besoin d’aide ?",
+                "Salut ! Comment se passe votre journée ?",
+                "Plop ! Une question  Je suis là pour ça.",
+                "Bonne journée à vous aussi ! En quoi puis-je vous être utile ?",
+                "Hello, tout va bien ?",
+                "Bienvenue ! Dites-moi comment je peux vous aider.",
+                "Yo yo ! Je suis Greeny, que puis-je faire pour vous ?",
+                "Salut à vous ! Que puis-je vous apporter comme info ?",
+                "Bonjour et bienvenue ! Que puis-je faire pour vous ?",
+                "Hey, ravi de vous voir ici ! Comment puis-je vous assister ?",
+                "Holà ! Que puis-je faire pour vous aujourd’hui ?"
             ]
         }, 
         {
             "tag": "nouvelles",
             "patterns": [
-                "Ça va ",
+                "Ça va",
                 "vas-tu ",
                 "Tu vas bien ",
                 "de neuf ",
@@ -52,11 +52,11 @@
                 "ça se passe "
             ],
             "responses": [
-                "Je vais bien, merci  Et toi ",
-                "Ça va super ",
-                "Je suis en pleine forme ",
-                "Tout roule, merci  Et toi ",
-                "Rien de nouveau, mais tout va bien "
+                "Je vais bien, merci ! Et toi ?",
+                "Ça va super 😊",
+                "Je suis en pleine forme, j'espère que tout vas pour le mieux pour toi !",
+                "Tout roule, merci ! Et toi?",
+                "Rien de nouveau, mais tout va bien !"
             ]
         },
         {
@@ -72,12 +72,12 @@
             ],
             "responses": [
                 "Avec plaisir  😊",
-                "Je suis là pour t'aider ",
-                "N'hésite pas si tu as d'autres questions ",
-                "De rien, ravi d'avoir pu t'aider ",
+                "Je suis là pour t'aider 😊 ",
+                "N'hésite pas si tu as d'autres questions !",
+                "De rien, ravi d'avoir pu t'aider ! ",
                 "Merci à toi  🌱",
-                "C'est toujours un plaisir d'aider ",
-                "À ton service "
+                "C'est toujours un plaisir d'aider 😊",
+                "À ton service 😊"
             ]
         },
         {
@@ -91,9 +91,9 @@
             "responses": [
                 "Pas de souci, tout va bien  😊",
                 "Ne t'inquiète pas, ça arrive ",
-                "Aucun problème, on continue ",
-                "Tout est OK, pas besoin de t'excuser ",
-                "Pas de souci, je suis là pour ça "
+                "Aucun problème, on continue ?",
+                "Tout est OK, pas besoin de t'excuser 😊",
+                "Pas de souci, je suis là pour ça 😊"
             ]
         },
         {
@@ -105,15 +105,14 @@
                 "Bonne soirée ",
                 "À plus tard ",
                 "À la prochaine ",
-                "Bye ",
-                "Salut "
+                "Bye "
             ],
             "responses": [
                 "À bientôt, prends soin de toi  😊",
-                "Passe une excellente journée ",
-                "Bonne soirée et à la prochaine ",
-                "À plus tard, n’hésite pas à revenir ",
-                "Bye bye "
+                "Passe une excellente journée !",
+                "Bonne soirée et à la prochaine 😊",
+                "À plus tard, n’hésite pas à revenir 😊",
+                "Bye bye ! 😊"
             ]
         },
         {
@@ -125,7 +124,10 @@
                 "plateformes elearning ",
                 "avantages de l'elearning ",
                 "utiliser l'elearning ",
-                "elearning"
+                "elearning",
+                "aide elearning",
+                "comprends elearning",
+                "comprendre elearning"
             ],
             "responses": [
                 "L'e-learning est un mode d'apprentissage en ligne qui permet d'acquérir des compétences à distance via des plateformes dédiées.",
