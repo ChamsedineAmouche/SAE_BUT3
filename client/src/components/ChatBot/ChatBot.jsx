@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 
-const ChatBot = ({ isPopup = false }) => {
-  const [messages, setMessages] = useState([]);
+const ChatBot = ({ isPopup = false, welcomeMessage = "<br /> Bonjour ! Comment puis-je vous aider ? <br /> Vous pouvez me poser des questions sur : <br /> - Les elearnings et les paiements <br /> - Le concept de Green Circle <br /> - Les dépots et récuperations d'objets <br /> - Les veilles <br /> - Vos informations personnelles ou bancaires <br /><br /> Vous pouvez aussi me demander comment je vais ! " }) => {
+  const [messages, setMessages] = useState([
+    { sender: "Greeny", text: welcomeMessage }
+  ]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false); // Loader pour l'attente de réponse
 
@@ -54,12 +56,11 @@ const ChatBot = ({ isPopup = false }) => {
               />
             )}
             <div
-              className={`p-3 rounded-2xl max-w-xs ${
+            className={`p-3 rounded-2xl max-w-xs ${
                 msg.sender === "Vous" ? "bg-yellowGreen1 text-white ml-auto" : "bg-gray-200 text-gray-800"
-              }`}
-            >
-              <strong>{msg.sender}:</strong> {msg.text}
-            </div>
+            }`}
+            dangerouslySetInnerHTML={{ __html: `<strong>${msg.sender}:</strong> ${msg.text}` }}
+            ></div>
           </div>
         ))}
         {loading && (
