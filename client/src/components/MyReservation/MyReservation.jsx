@@ -127,9 +127,9 @@ const MyReservation = () => {
     let statusElement;
     if (reservation.statusVerif === 'picked') {
       statusElement = <span className="text-oliveGreen font-semibold">Donné</span>;
-    } else if (reservation.statusVerif === 'waiting') {
-      statusElement = <span className="text-orange-500 font-semibold">En attente</span>;
     } else if (reservation.statusVerif === 'reserved') {
+      statusElement = <span className="text-orange-500 font-semibold">En attente</span>;
+    } else if (reservation.statusVerif === 'waiting') {
       statusElement = (
         <button
           className="bg-oliveGreen bg-opacity-80 text-white p-2 font-semibold rounded-md hover:bg-opacity-50 transition duration-200"
