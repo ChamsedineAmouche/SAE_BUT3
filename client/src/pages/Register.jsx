@@ -17,6 +17,7 @@ const Register = () => {
     phone: "",
   });
   const [errorMessage, setErrorMessage] = useState("");
+  const [acceptPolicy, setAcceptPolicy] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -27,6 +28,12 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
   
+    if (!acceptPolicy) {
+      setErrorMessage("Vous devez accepter la politique de confidentialité pour vous inscrire.");
+      return;
+    }
+
+
     console.log("Sending form data:", formData);  
   
     try {
@@ -168,6 +175,21 @@ const Register = () => {
                       required
                     />
                   </div>
+
+                  <div className="form-group flex items-center">
+              <input
+                type="checkbox"
+                id="acceptPolicy"
+                name="acceptPolicy"
+                checked={acceptPolicy}
+                onChange={(e) => setAcceptPolicy(e.target.checked)}
+                className="mr-2"
+                required
+              />
+              <label htmlFor="acceptPolicy" className="text-lg text-darkGreen">
+                J'accepte la <a href="/politique_confidentialite" className="text-blue-500 underline">politique de confidentialité</a>
+              </label>
+            </div>
                 </div>
                 
                 <div className="w-full space-y-4">
@@ -234,6 +256,8 @@ const Register = () => {
                     required
                   />
                 </div>
+
+
                 </div>
               </div>
               
