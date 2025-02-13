@@ -121,12 +121,13 @@
         {
             "tag": "elearning",
             "patterns": [
-                "Qu'est-ce que l'elearning ",
-                "C'est quoi l'elearning ",
-                "Comment fonctionne l'elearning ",
-                "Quelles sont les plateformes elearning ",
-                "Quels sont les avantages de l'elearning ",
-                "Pourquoi utiliser l'elearning "
+                "l'elearning ",
+                "quoi l'elearning ",
+                "fonctionne l'elearning ",
+                "les plateformes elearning ",
+                "les avantages de l'elearning ",
+                "utiliser l'elearning ",
+                "elearning"
             ],
             "responses": [
                 "L'e-learning est un mode d'apprentissage en ligne qui permet d'acquérir des compétences à distance via des plateformes dédiées.",
@@ -144,7 +145,9 @@
                 "modes de paiement pour elearnings ",
                 "effectuer paiement accéder cours en ligne ",
                 "effectuer paiement elearning ",
-                "Quelles sont les options de paiement pour les formations elearning "
+                "options paiement formations elearning ",
+                "payer elearning",
+                "paiement elearning"
             ],
             "responses": [
                 "Pour régler un e-learning, vous pouvez généralement payer via carte bancaire, PayPal, ou d'autres plateformes de paiement en ligne sécurisées.",
