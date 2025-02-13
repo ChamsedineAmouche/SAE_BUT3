@@ -198,14 +198,31 @@
                 "fonctionne la récupération d'objets ",
                 "récupérer un objet ",
                 "Où récupérer des objets ",
-                "objets"
+                "objets",
+                "depôts",
+                "depots",
+                "déposer dépots ",
+                "fonctionne dépôt ",
+                "fonctionnement dépôt",
+                "déposer un objet ",
+                "realiser un dépot",
+                "types de dépots à déposer ",
+                "participer au dépôt",
+                "récupération dépot ",
+                "récupérer dépot ",
+                "récupérer un dépot ",
+                "Où récupérer des dépots ",
+                "dépots",
+                "faire dépot",
+                "déposer",
+                "dépose"
             ],
             "responses": [
                 "Pour déposer vos objets, vous pouvez vous rendre dans l'un des containeur de stockage affiliés à notre programme Green Circle.\n Pour récupérer un objet, vous pouvez vous rendre dans l'un des centres de stockage affiliés à notre programme Green Circle après l'avoir réservé au préalable.",
                 "Le dépôt d'objets peut se faire dans des points de collecte désignés près de chez vous. Vous pouvez consulter notre carte interactive pour trouver un dépôt à proximité.\n La récupération d'objets se fait dans des points de collecte désignés. Vous pouvez consulter notre carte interactive pour trouver un centre de récupération près de chez vous après avoir reservé l'objet demandé.",
-                "Si vous souhaitez déposer un objet, vous pouvez vous rendre à un centre de collecte Green Circle ou organiser un rendez-vous pour la collecte à domicile.",
+                "Si vous souhaitez déposer un objet, vous pouvez vous rendre à un centre de collecte Green Circle ou organiser un rendez-vous pour la collecte à domicile. Vous pouvez consulter notre carte interactive pour trouver un centre de récupération près de chez vous après avoir reservé l'objet demandé.",
                 "Les objets inutilisés peuvent être déposés dans des centres de dépôt spécifiques, qui s'assureront qu'ils soient recyclés ou réutilisés dans un cadre circulaire. \n Si vous souhaitez récupérer un objet, vous pouvez vous rendre à un centre de récupération Green Circle ou organiser un rendez-vous pour le récuperer",
-                "Vous pouvez déposer une large gamme d'objets, y compris des meubles, des appareils électroniques, des vêtements, et des livres. Vérifiez les types d'objets acceptés dans le centre de dépôt près de chez vous.\n Les objets récupérés peuvent être obtenus dans des containers spécifiques qui soutiennent la réutilisation dans un cadre circulaire."
+                "Vous pouvez déposer une large gamme d'objets, y compris des meubles, des appareils électroniques, des vêtements, et des livres. Vérifiez les types d'objets acceptés dans le centre de dépôt près de chez vous.\n Les objets récupérés peuvent être obtenus dans des containers spécifiques qui soutiennent la réutilisation dans un cadre circulaire.\n Vous pouvez consulter notre carte interactive pour trouver un centre de récupération près de chez vous après avoir reservé l'objet demandé"
             ]
         },   
         {
