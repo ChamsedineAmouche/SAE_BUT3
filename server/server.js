@@ -4,8 +4,6 @@ const crypto = require('crypto');
 const cors = require('cors');
 const RateLimit = require('express-rate-limit');
 const loadRoutes = require('./utils/loadRoutes'); 
-const { spawn } = require('child_process');
-const path = require('path');
 
 const app = express();
 const PORT = 5001;
@@ -29,7 +27,6 @@ app.use(session({
     saveUninitialized: true,
     cookie: { secure: false },
 }));
-
 
 loadRoutes(app, './routes');
 
