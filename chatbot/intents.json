@@ -141,12 +141,15 @@
             "tag" : "elearning_payment",
             "patterns" :[
                 "payer pour cours en ligne ",
-                "modes de paiement pour elearnings ",
+                "modes paiement elearnings ",
+                "modes paiement elearning ",
                 "effectuer paiement accéder cours en ligne ",
                 "effectuer paiement elearning ",
                 "options paiement formations elearning ",
                 "payer elearning",
-                "paiement elearning"
+                "paiement elearning",
+                "paiement",
+                "payer"
             ],
             "responses": [
                 "Pour régler un e-learning, vous pouvez généralement payer via carte bancaire, PayPal, ou d'autres plateformes de paiement en ligne sécurisées.",
@@ -208,15 +211,15 @@
         {
             "tag" : "veille_articles",
             "patterns" :[
-                "articles sur la veille",
-                "lire des articles",
-                "accéder aux articles de veille ",
-                "lire les derniers articles de veille ",
+                "articles veille",
+                "lire articles",
+                "accéder articles veille ",
+                "lire derniers articles veille ",
                 "nouvelles veilles disponibles ",
-                "articles de veille ",
+                "articles veille ",
                 "articles récents veille ",
                 "apprendre articles veille ",
-                "sujets des articles de veille ",
+                "sujets articles veille ",
                 "articles",
                 "veilles"
             ],
@@ -235,7 +238,7 @@
             "tag" : "evenements",
             "patterns" :[
                 "événements organisés",
-                "événements à venir",
+                "événements venir",
                 "participer événements",
                 "déroulement événements",
                 "inscrire événement ",

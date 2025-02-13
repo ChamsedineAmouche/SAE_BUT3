@@ -44,7 +44,7 @@ if len(sys.argv) > 1:
 
     probs = torch.softmax(output, dim=1)
     prob = probs[0][predicted.item()]
-    if prob.item() > 0.75:
+    if prob.item() > 0.2:
         for intent in intents['intents']:
             if tag == intent["tag"]:
                 print(f"{random.choice(intent['responses'])}")

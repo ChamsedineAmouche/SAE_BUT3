@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 
-const ChatBot = ({ isPopup = false }) => {
-  const [messages, setMessages] = useState([]);
+const ChatBot = ({ isPopup = false, welcomeMessage = "Bonjour ! Comment puis-je vous aider aujourd’hui ?" }) => {
+  const [messages, setMessages] = useState([
+    { sender: "Greeny", text: welcomeMessage }
+  ]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false); // Loader pour l'attente de réponse
 
