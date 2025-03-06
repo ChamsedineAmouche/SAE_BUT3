@@ -105,7 +105,7 @@ const Forum = () => {
       try {
         const response = await fetch("/insertDiscussion", {
           method: "POST",
-          headers: { "Content-Type": "application/json", ...getAuthHeaders() },
+          headers: { "Content-Type": "application/json"},
           body: JSON.stringify(newSubmission),
         });
 

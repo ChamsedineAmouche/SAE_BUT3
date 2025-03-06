@@ -17,9 +17,8 @@ const ForumMessages = ({ creationDate, messagesPerPage, messages }) => {
     setCurrentPage(pageNumber);
   };
 
-  // Fonction pour gérer le signalement d'un message
-  const handleReportMessage = (message) => {
-    Swal.fire({
+  const handleReportMessage = async (message) => {
+    const { value: reason } = await Swal.fire({
       title: "Signalement",
       text: `Signaler le message de ${message.companyName}`,
       input: "text",
@@ -35,13 +34,23 @@ const ForumMessages = ({ creationDate, messagesPerPage, messages }) => {
         }
         return reason;
       },
-    }).then((result) => {
-      if (result.isConfirmed) {
-        console.log(`Message signalé : ${message.text}, Raison : ${result.value}`);
-        Swal.fire("Signalement envoyé", "Votre signalement a bien été pris en compte.", "success");
-      }
     });
+  
+    if (reason) {
+      try {
+        console.log(message);
+        const response = await fetch(`/reportMessage?messageId=${message.id}`);
+  
+        if (!response.ok) throw new Error("Erreur lors de l'envoi du signalement");
+  
+        Swal.fire("Signalement envoyé", "Votre signalement a bien été pris en compte.", "success");
+      } catch (error) {
+        Swal.fire("Erreur", "Impossible d'envoyer le signalement.", "error");
+        console.error("Erreur lors du signalement :", error);
+      }
+    }
   };
+  
 
   return (
     <div className="bg-white p-6 rounded-lg shadow-lg">
