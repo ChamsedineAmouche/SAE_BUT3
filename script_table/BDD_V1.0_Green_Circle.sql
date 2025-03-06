@@ -189,9 +189,30 @@ CREATE TABLE message (
                          siren CHAR(14) NOT NULL,
                          message TEXT NOT NULL,
                          date_of_message DATE NOT NULL,
+                         status VARCHAR(10) NOT NULL,
                          FOREIGN KEY(discussion_id) REFERENCES discussion(id) ON DELETE CASCADE,
                          FOREIGN KEY(siren) REFERENCES company(siren) ON DELETE CASCADE
 );
+
+CREATE TABLE chat (
+                        id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                        firstSiren VARCHAR(20) NOT NULL,
+                        secondSiren VARCHAR(20) NOT NULL,
+                        dateCreation DATETIME NOT NULL,
+                        FOREIGN KEY (firstSiren) REFERENCES company(siren) ON DELETE CASCADE,
+                        FOREIGN KEY (secondSiren) REFERENCES company(siren) ON DELETE CASCADE
+);
+
+CREATE TABLE chat_message (
+                        id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                        chatId INT NOT NULL,
+                        siren VARCHAR(20) NOT NULL,
+                        message VARCHAR(200) NOT NULL,
+                        dateMessage DATETIME NOT NULL,
+                        FOREIGN KEY (siren) REFERENCES company(siren) ON DELETE CASCADE,
+                        FOREIGN KEY (chatId) REFERENCES chat(id) ON DELETE CASCADE
+);
+
 
 DROP DATABASE IF EXISTS vue_admin;
 CREATE DATABASE vue_admin;
