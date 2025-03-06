@@ -35,9 +35,11 @@ const getDiscussion = async (req, res) => {
             )
         const result = await getResultOfQuery('vue_user',
             `SELECT
+                 m.id AS id,
                  c.nom AS company_name,
                  m.date_of_message AS message_date,
-                 m.message AS message_content
+                 m.message AS message_content,
+                 m.status AS status
              FROM message m
              JOIN discussion d ON m.discussion_id = d.id
              JOIN company c ON m.siren = c.siren
@@ -72,9 +74,10 @@ const insertDiscussion = async (req, res) => {
              VALUES (?, ?, ?)`, [title, siren, datePosted]);
 
         const discussionId = discussionResult.insertId;
+        const messageStatus = "OK";
 
-        await promiseConnection.execute(`INSERT INTO message (discussion_id, siren, message, date_of_message) 
-             VALUES (?, ?, ?, ?)`, [discussionId, siren, message, datePosted]);
+        await promiseConnection.execute(`INSERT INTO message (discussion_id, siren, message, date_of_message, status) 
+             VALUES (?, ?, ?, ?, ?)`, [discussionId, siren, message, datePosted, messageStatus]);
 
         await promiseConnection.commit();
 
@@ -104,12 +107,13 @@ const insertMessage = async (req, res) => {
         }
 
         const datePosted = new Date().toISOString().slice(0, 10);
+        const messageStatus = "OK";
 
         await promiseConnection.beginTransaction();
 
         const [result] = await promiseConnection.execute(
-            `INSERT INTO message (discussion_id, siren, message, date_of_message) 
-             VALUES (?, ?, ?, ?)`, [discussionId, siren, message, datePosted]);
+            `INSERT INTO message (discussion_id, siren, message, date_of_message, status) 
+             VALUES (?, ?, ?, ?, ?)`, [discussionId, siren, message, datePosted, messageStatus]);
 
         await promiseConnection.commit();
 
@@ -123,4 +127,55 @@ const insertMessage = async (req, res) => {
     }
 };
 
-module.exports = { getAllDiscussions, getDiscussion, insertDiscussion, insertMessage };
+const reportMessage = async (req, res) => {
+    const connection = getDbConnection('vue_user');
+    const promiseConnection = connection.promise();
+    try {
+        const { messageId } = req.query;
+
+        const messageStatus = "REPORTED";
+
+        await promiseConnection.beginTransaction();
+
+        const [result] = await promiseConnection.execute(
+            `UPDATE message SET status = ? WHERE id = ?`,
+            [messageStatus, messageId]
+        );
+
+        await promiseConnection.commit();
+
+        res.status(200).json({ message: "Message ajouté avec succès", messageId: result.insertId });
+    } catch (error) {
+        await promiseConnection.rollback();
+        console.error("Erreur lors de l'insertion du message :", error);
+        res.status(500).json({ error: "Erreur interne du serveur" });
+    } finally {
+        await promiseConnection.end();
+    }
+};
+
+const validateMessage = async (req, res) => {
+    const connection = getDbConnection('vue_user');
+    const promiseConnection = connection.promise();
+    try {
+        const { messageId, messageStatus } = req.query;
+
+        await promiseConnection.beginTransaction();
+
+        const [result] = await promiseConnection.execute(
+            `UPDATE message SET status = ? WHERE id = ?`,
+            [messageStatus, messageId]);
+
+        await promiseConnection.commit();
+
+        res.status(200).json({ message: "Message ajouté avec succès", messageId: result.insertId });
+    } catch (error) {
+        await promiseConnection.rollback();
+        console.error("Erreur lors de l'insertion du message :", error);
+        res.status(500).json({ error: "Erreur interne du serveur" });
+    } finally {
+        await promiseConnection.end();
+    }
+};
+
+module.exports = { getAllDiscussions, getDiscussion, insertDiscussion, insertMessage, reportMessage, validateMessage };
