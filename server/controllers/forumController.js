@@ -154,6 +154,19 @@ const reportMessage = async (req, res) => {
     }
 };
 
+const getReportedMessage = async (req, res) => {
+    try {
+        const result = await getResultOfQuery('vue_user',
+            `SELECT * FROM message WHERE status = 'REPORTED'`);
+        res.json({
+            "messages" : result
+        });
+    } catch (error) {
+        console.error("Erreur lors de la recuperation des messages :", error);
+        res.status(500).json({ error: "Erreur interne du serveur" });
+    }
+};
+
 const validateMessage = async (req, res) => {
     const connection = getDbConnection('vue_user');
     const promiseConnection = connection.promise();
@@ -178,4 +191,4 @@ const validateMessage = async (req, res) => {
     }
 };
 
-module.exports = { getAllDiscussions, getDiscussion, insertDiscussion, insertMessage, reportMessage, validateMessage };
+module.exports = { getAllDiscussions, getDiscussion, insertDiscussion, insertMessage, reportMessage, validateMessage, getReportedMessage };
