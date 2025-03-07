@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import ForumMessages from "../components/ForumMessages/ForumMessages";
-import { getAuthHeaders } from '../utils/jwtAuth'; 
 
 const DetailsForum = () => {
   const { id } = useParams(); 
@@ -24,6 +23,7 @@ const DetailsForum = () => {
 
       if (data.message) {
         const formattedMessages = data.message.map((msg) => ({
+          id : msg.id,
           companyName: msg.company_name,
           date: new Date(msg.message_date).toISOString().split("T")[0],
           text: msg.message_content,
@@ -52,7 +52,6 @@ const DetailsForum = () => {
           method: 'POST',
           headers: { 
             'Content-Type': 'application/json', 
-            ...getAuthHeaders() 
           },
           body: JSON.stringify(newSubmission), // Envoi du message
         });

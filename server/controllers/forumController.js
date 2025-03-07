@@ -43,7 +43,7 @@ const getDiscussion = async (req, res) => {
              FROM message m
              JOIN discussion d ON m.discussion_id = d.id
              JOIN company c ON m.siren = c.siren
-             WHERE d.id = ${id}
+             WHERE d.id = ${id} AND m.status != "KO"
              ORDER BY m.date_of_message ASC`);
         res.json({
             "discussionInfos" : global,
