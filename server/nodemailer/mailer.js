@@ -1,5 +1,6 @@
 const nodemailer = require('nodemailer');
-
+const {insertNewNotif} =  require('../notif/notif')
+const {getAccountInfoByMail} = require('../account/accountFetcher')
 const transporter = nodemailer.createTransport({
     service: 'gmail', 
     auth: {
@@ -27,7 +28,7 @@ Votre compte associé au SIREN ${siren} a été validé avec succès. Vous pouve
 
 Cordialement,
 L'équipe GreenCircle.`;
-
+    insertNewNotif(siren, 'Bienvenue sur Green Circle !')
     return sendMail(toEmail, subject, text);
 };
 
@@ -43,11 +44,10 @@ S'il ne s'agit pas de vous contactez au plus vite les équipes de Green Circle.
 
 Cordialement,
 L'équipe GreenCircle.`;
-
     return sendMail(toEmail, subject, text);
 };
 
-const sendMailForReservation = (toEmail, itemName, companyName, itemId, status ) => {
+const sendMailForReservation = async (toEmail, itemName, companyName, itemId, status ) => {
     let subject = '';
     let firstText = '';
     if (status === 'active') {
@@ -67,11 +67,13 @@ S'il ne s'agit pas de vous contactez au plus vite les équipes de Green Circle.
 
 Cordialement,
 L'équipe GreenCircle.`;
-
+    const result = await getAccountInfoByMail(toEmail);
+    const { siren } = result.account[0];
+    insertNewNotif(siren, firstText)
     return sendMail(toEmail, subject, text);
 };
 
-const sendMailForReservationOurObject = (toEmail, itemName, companyName, itemId, status) => {
+const sendMailForReservationOurObject = async (toEmail, itemName, companyName, itemId, status) => {
     let subject = '';
     let firstText = '';
     if (status === 'active') {
@@ -90,10 +92,13 @@ Cliquez sur le lien suivant pour consulter l'objet : ${url}
 Cordialement,
 L'équipe GreenCircle.`;
 
+    const result = await getAccountInfoByMail(toEmail);
+    const { siren } = result.account[0];
+    insertNewNotif(siren, firstText)
     return sendMail(toEmail, subject, text);
 };
 
-const sendMailForFavoritesObjects = (toEmail, itemName, companyName, itemId) => {
+const sendMailForFavoritesObjects = async (toEmail, itemName, companyName, itemId) => {
     const subject = `Un objet a été récupéré`;
     const url = `http://localhost:3000/product?id=${itemId}`;
     const urlCatalog = `http://localhost:3000/catalog`;
@@ -107,11 +112,13 @@ Cliquez sur le lien suivant pour consulter le catalog : ${urlCatalog}
 
 Cordialement,
 L'équipe GreenCircle.`;
-
+    const result = await getAccountInfoByMail(toEmail);
+    const { siren } = result.account[0];
+    insertNewNotif(siren, firstText)
     return sendMail(toEmail, subject, text);
 };
 
-const sendElearningEmail = (toEmail, link, companyName, password) => {
+const sendElearningEmail = async (toEmail, link, companyName, password) => {
     const subject = 'Validation de votre paeiment';
     const text = `Bonjour ${companyName},
 
@@ -119,7 +126,9 @@ const sendElearningEmail = (toEmail, link, companyName, password) => {
 
     Cordialement,
     L'équipe GreenCircle.`;
-
+    const result = await getAccountInfoByMail(toEmail);
+    const { siren } = result.account[0];
+    insertNewNotif(siren, 'Paiement eLearning Validé.')
     return sendMail(toEmail, subject, text);
 };
 

@@ -216,6 +216,15 @@ CREATE TABLE chat_message (
 );
 
 
+CREATE TABLE notif (
+                        id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                        siren CHAR(14) NOT NULL,
+                        message VARCHAR(100) NOT NULL,
+                        is_read BOOLEAN DEFAULT FALSE,
+                        FOREIGN KEY (siren) REFERENCES company(siren) ON DELETE CASCADE
+);
+
+
 DROP DATABASE IF EXISTS vue_admin;
 CREATE DATABASE vue_admin;
 USE vue_admin;
