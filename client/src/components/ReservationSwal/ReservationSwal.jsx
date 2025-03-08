@@ -3,7 +3,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import Swal from "sweetalert2";
 
-const ReservationSwal = ({ id }) => {
+const ReservationSwal = ({ id, isAdmin }) => {
+
   const handleReservation = () => {
     Swal.fire({
       title: "Confirmer la réservation",
@@ -42,13 +43,15 @@ const ReservationSwal = ({ id }) => {
   };
 
   return (
-      <button 
-        onClick={handleReservation}
-        className="bg-oliveGreen text-white px-6 py-3 text-lg font-semibold rounded-md hover:bg-opacity-90 transition duration-200 h-14"
-      >
-        <FontAwesomeIcon icon={faTicket} className="mr-2 text-xl"/>
-        Réserver
-      </button>
+    <button
+      onClick={handleReservation}
+      disabled={isAdmin}
+      className={`bg-oliveGreen text-white px-6 py-3 text-lg font-semibold rounded-md transition duration-200 h-14 
+          ${isAdmin ? "opacity-50 cursor-not-allowed" : "hover:bg-opacity-90"}`}
+    >
+      <FontAwesomeIcon icon={faTicket} className="mr-2 text-xl" />
+      Réserver
+    </button>
   );
 };
 

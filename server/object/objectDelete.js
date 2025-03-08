@@ -14,21 +14,23 @@ async function deleteObjectFavorite(idItem, siren) {
 async function deleteObject(idItem) {
     try {
         const deleteImagesQuery = `DELETE FROM listing_image WHERE id_item = ${idItem}`;
-        await getResultOfQuery("vue_user", deleteImagesQuery);
+        const deleteImagesResult = await getResultOfQuery("vue_user", deleteImagesQuery);
 
         const deleteTransactionQuery = `DELETE FROM transaction WHERE id_item = ${idItem}`;
-        await getResultOfQuery("vue_user", deleteTransactionQuery);
+        const deleteTransactionResult = await getResultOfQuery("vue_user", deleteTransactionQuery);
 
-        const deleteObjectquery =`DELETE FROM listing WHERE id_item = ${idItem}`;
-        await getResultOfQuery("vue_user", deleteObjectquery);
+        const deleteObjectQuery = `DELETE FROM listing WHERE id_item = ${idItem}`;
+        const deleteObjectResult = await getResultOfQuery("vue_user", deleteObjectQuery);
 
-        if (result.length === 0) {
+        // Vérifie si un objet a été supprimé
+        if (deleteObjectResult.affectedRows === 0) {
             return { success: false };
         }
 
         return { success: true };
     } catch (error) {
-        throw new Error("Erreur lors de la récupération des labels des types d'objet");
+        console.error("❌ Erreur lors de la suppression :", error);
+        throw new Error("Erreur lors de la suppression de l'objet");
     }
 }
 

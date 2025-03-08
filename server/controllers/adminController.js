@@ -7,6 +7,7 @@ const {getAllEvents, insertEventAdmin, deleteEventAdmin} = require("../admin/eve
 const {getAllArticles, insertArticleAdmin, deleteArticleAdmin} = require("../admin/articleAdmin")
 const {insertElearningAdmin} = require("../admin/elearningAdmin")
 const getDbConnection = require("../db_utils/db_connection");
+const { validateObject } = require("../object/objectValidation");
 
 const getAdminSession = (req, res) => {
     if ((req.session.admin)){
@@ -245,30 +246,36 @@ const insertElearning = async (req, res) => {
     }
 }
 
-const validateObject = async (req, res) => {
-    const connection = getDbConnection('vue_user');
-    const promiseConnection = connection.promise();
+const validateDepot = async (req, res) => {
     try {
+        console.log("📩 Requête reçue sur /validateDepot avec idItem :", req.query.idItem);
+
+        const admin = getAdminSession(req);
+        if (!admin) {
+            return res.status(403).json({ error: "Pas de session admin en cours" });
+        }
+
         const { idItem } = req.query;
-        const validation = "true";
 
-        await promiseConnection.beginTransaction();
+        if (!idItem) {
+            return res.status(400).json({ error: "ID de l'objet requis" });
+        }
 
-        const [result] = await promiseConnection.execute(
-            `UPDATE listing SET valid = ? WHERE id_item = ?`,
-            [validation, idItem]);
+        const result = await validateObject(idItem);
 
-        await promiseConnection.commit();
+        if (!result) {
+            console.error("❌ Erreur lors de la validation SQL");
+            return res.status(500).json({ error: "Erreur lors de la validation de l'objet" });
+        }
+        
+        console.log("✅ Objet validé avec succès !");
+        res.status(200).json({ success: true, message: "Objet validé avec succès" });
 
-        res.status(200).json({ message: "Objet ajouté avec succes", messageId: result.insertId });
     } catch (error) {
-        await promiseConnection.rollback();
-        console.error("Erreur lors de l'insertion du message :", error);
+        console.error("Erreur lors de la validation de l'objet :", error);
         res.status(500).json({ error: "Erreur interne du serveur" });
-    } finally {
-        await promiseConnection.end();
     }
 };
 
-module.exports = { allUsers, getSusObject, deleteDepot , deleteELearning,allElearning, insertEvent, insertArticle, deleteArticle, deleteEvent, allEvents, allArticles, elearningCategories, insertElearning, validateObject }
+module.exports = { allUsers, getSusObject, deleteDepot , deleteELearning,allElearning, insertEvent, insertArticle, deleteArticle, deleteEvent, allEvents, allArticles, elearningCategories, insertElearning, validateDepot }
 

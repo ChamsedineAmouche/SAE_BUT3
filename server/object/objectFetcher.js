@@ -25,7 +25,7 @@ function replacePreferenceIdsWithLabels(preferences, labels) {
 
 async function getSuscpiciousListing() {
     try {
-        const query = "SELECT * FROM listing";
+        const query = "SELECT * FROM listing ORDER BY id_item DESC";
         const result = await getResultOfQuery("vue_user", query);
         return {result}
     } catch (error) {
