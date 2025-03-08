@@ -55,11 +55,11 @@ function NotificationModal({ onClose }) {
             {notifications.map(notification => (
               <li
                 key={notification.id}
-                className="bg-green-100 text-green-900 text-lg px-4 py-3 rounded-lg shadow-md flex justify-between items-center"
+                className="bg-darkGreen text-white text-lg px-4 py-3 rounded-lg shadow-md flex justify-between items-center"
               >
                 <span>{notification.message}</span>
                 <button
-                  className="bg-green-500 text-white px-3 py-1 rounded-lg hover:bg-green-700 flex items-center"
+                  className="bg-oliveGreen text-white px-3 py-1 rounded-lg hover:bg-green-700 flex items-center"
                   onClick={() => markAsRead(notification.id)}
                 >
                   <FontAwesomeIcon icon={faCheck} className="mr-2" />
