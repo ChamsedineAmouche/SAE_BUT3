@@ -55,7 +55,7 @@ function NotificationModal({ onClose }) {
             {notifications.map(notification => (
               <li
                 key={notification.id}
-                className="bg-darkGreen text-white text-lg px-4 py-3 rounded-lg shadow-md flex justify-between items-center"
+                className="bg-darkGreen/25 text-white text-lg px-4 py-3 rounded-lg shadow-md flex justify-between items-center"
               >
                 <span>{notification.message}</span>
                 <button
