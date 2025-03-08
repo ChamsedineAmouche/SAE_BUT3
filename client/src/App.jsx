@@ -30,6 +30,7 @@ import Admin from "./pages/Admin.jsx";
 import Forum from "./pages/Forum.jsx";
 import Annuaire from "./pages/Annuaire.jsx";
 import DetailsForum from "./pages/DetailsForum.jsx";
+import Chat from "./pages/Chat.jsx";
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -229,6 +230,16 @@ const App = () => {
               </ProtectedRoute>
             } 
           />
+
+          <Route 
+            path="/chat" 
+            element={
+              <ProtectedRoute isAuthenticated={isAuthenticated}>
+                <Chat />
+              </ProtectedRoute>
+            } 
+          />
+
           <Route 
             path="/acces_elearning" 
             element={

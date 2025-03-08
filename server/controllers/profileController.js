@@ -115,7 +115,7 @@ const profileTransactionSource = async (req, res) => {
         const transactions = await getTransactionSourceBySiren(siren);
         const enrichedTransactions = await Promise.all(
             transactions.map(async (transaction) => {
-                const { id_item: idItem, date_transaction: dateTransaction, status, siren : siren_buyer } = transaction;
+                const { id_item: idItem, date_transaction: dateTransaction, status: statusVerif, siren : siren_buyer } = transaction;
 
                 const companyData = await getAccountInfo(siren_buyer)
                 const {nom} = companyData.account[0]
@@ -125,9 +125,6 @@ const profileTransactionSource = async (req, res) => {
 
                 const containerInfo = await getAdressContainerByEmplacement(idEmplacement);
                 const { adress: address, zipcode } = containerInfo[0];
-
-                const statusVerif = await getStatusForReservation(idItem, status, productSiren);
-                console.log(statusVerif);
 
                 return { idItem,title, dateTransaction, statusVerif, address, zipcode , nom};
             })

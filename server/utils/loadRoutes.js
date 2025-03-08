@@ -8,7 +8,7 @@ module.exports = (app, routesDir) => {
             const route = require(path.join(absolutePath, file));
             if (typeof route === 'function') {
                 app.use(route);
-                console.log(`Route loaded: ${file}`);
+                //console.log(`Route loaded: ${file}`);
             } else {
                 console.error(`Invalid route file: ${file}. Ensure it exports a middleware function.`);
             }

@@ -16,6 +16,7 @@ import MyDeposit from "../components/MyDeposit/MyDeposit";
 import MyPurchase from "../components/MyPurchase/MyPurchase"
 import MyReservation from "../components/MyReservation/MyReservation";
 import Parameters from "../components/Parameters/Parameters";
+import ChatBot from "../components/ChatBot/ChatBot"
 
 const Account = () => {
   const menuItems = [
@@ -25,7 +26,7 @@ const Account = () => {
     { id: 4, label: "Mes achats", icon: faShoppingCart, component: <MyPurchase /> },
     { id: 5, label: "Mes réservations", icon: faCalendarCheck, component: <MyReservation /> },
     { id: 6, label: "Paramètres", icon: faCog, component: <Parameters/> },
-    { id: 7, label: "Aide", icon: faQuestionCircle, component: <div>Contenu pour Aide</div> },
+    { id: 7, label: "Aide", icon: faQuestionCircle, component: <ChatBot/> },
   ];
 
   // Initialiser l'état avec le premier élément actif
