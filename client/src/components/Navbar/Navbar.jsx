@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBell, faEnvelope, faSearch, faSquarePlus } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
+import NotificationModal from "../Notif/NotificationModal.jsx"
 import Cookies from "js-cookie";
 
 export default function Navbar() {
@@ -10,6 +11,8 @@ export default function Navbar() {
   const [isAdmin, setIsAdmin] = useState(false);
   const [showAccountMenu, setShowAccountMenu] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [unreadNotifs, setUnreadNotifs] = useState(0);
+  const [showNotificationModal, setShowNotificationModal] = useState(false); 
 
   // ----- Dépôt -----
   const [depositSearchText, setDepositSearchText] = useState("");
@@ -31,6 +34,7 @@ export default function Navbar() {
     checkSession();
     fetchDepositData();
     fetchElearningData();
+    fetchUnreadNotifications(); 
   }, []);
 
   async function checkSession() {
@@ -136,6 +140,28 @@ export default function Navbar() {
     }
   }
 
+  async function fetchUnreadNotifications() {
+    try {
+      const response = await fetch("/getNotifs");
+      if (response.ok) {
+        const data = await response.json();
+        console.log("Données des notifications:", data); // Vérifiez ce qui est renvoyé
+        setUnreadNotifs(data.notRead.length);
+      }
+    } catch (error) {
+      console.error("Erreur lors de la récupération des notifications:", error);
+    }
+  }
+  
+  useEffect(() => {
+    console.log("Nombre de notifications non lues:", unreadNotifs);
+  }, [unreadNotifs]);
+
+  const handleNotificationClick = () => {
+    setShowNotificationModal(true); 
+  };
+
+
   return (
     <nav className="bg-oliveGreen text-white fixed top-0 left-0 w-full z-20 shadow-xl">
       <div className="flex items-center justify-between py-3 px-4">
@@ -164,8 +190,16 @@ export default function Navbar() {
           <button onClick={() => navigate("/nouveau_depot")} className="relative">
             <FontAwesomeIcon icon={faSquarePlus} className="text-2xl hover:text-darkGreen" />
           </button>
-          <button className="relative">
-            <FontAwesomeIcon icon={faBell} className="text-2xl hover:text-darkGreen" />
+          <button className="relative" onClick={handleNotificationClick}>
+              <FontAwesomeIcon icon={faBell} className="text-2xl hover:text-darkGreen" />
+              {unreadNotifs > 0 && (
+                <div
+                  className="absolute bottom-5 left-3 text-white rounded-full w-3 h-3 flex items-center justify-center text-xs"
+                  style={{ zIndex: 100, backgroundColor: '#f87171' }} 
+                >
+                  {unreadNotifs}
+                </div>
+              )}
           </button>
           <button onClick={() => navigate("/chat")} className="relative">
             <FontAwesomeIcon icon={faEnvelope} className="text-2xl hover:text-darkGreen" />
@@ -209,6 +243,7 @@ export default function Navbar() {
           </div>
         </div>
       </div>
+      {showNotificationModal && <NotificationModal onClose={() => setShowNotificationModal(false)} />}
 
       {/* Overlay de recherche (accordéon) */}
       {isSearchOpen && (
@@ -350,6 +385,7 @@ export default function Navbar() {
             </div>
           </div>
         </div>
+        
       )}
     </nav>
   );
