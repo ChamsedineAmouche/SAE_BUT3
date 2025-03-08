@@ -11,13 +11,25 @@ const getAllDiscussionsOfCompany = async (req, res) => {
         }
 
         const result = await getResultOfQuery('vue_user',
-            `SELECT id, firstSiren, secondSiren, dateCreation, idItem
-             FROM chat
-             WHERE firstSiren = ${currentSiren} OR secondSiren = ${currentSiren}
-             ORDER BY dateCreation DESC`);
+            `SELECT 
+                c.id, 
+                c.firstSiren, 
+                c.secondSiren, 
+                c.dateCreation, 
+                c.idItem,
+                c1.nom AS firstCompanyName, 
+                c2.nom AS secondCompanyName  
+             FROM chat c
+             LEFT JOIN company c1 ON c.firstSiren = c1.siren
+             LEFT JOIN company c2 ON c.secondSiren = c2.siren
+             WHERE c.firstSiren = ${currentSiren} OR c.secondSiren = ${currentSiren}
+             ORDER BY c.dateCreation DESC`
+        );
+        
         res.json({
-            "allDiscussionsOfCompany" : result
+            "allDiscussionsOfCompany": result
         });
+        
     } catch (err) {
         res.status(500).json(err);
     }
@@ -34,15 +46,27 @@ const getSpecificDiscussions = async (req, res) => {
         }
 
         const result = await getResultOfQuery('vue_user',
-            `SELECT id, firstSiren, secondSiren, dateCreation, idItem
+            `SELECT 
+                chat.id, 
+                chat.firstSiren, 
+                chat.secondSiren, 
+                chat.dateCreation, 
+                chat.idItem,
+                company1.nom AS firstCompanyName,  
+                company2.nom AS secondCompanyName  
              FROM chat
-             WHERE (firstSiren = ${currentSiren} AND secondSiren = ${siren})
-             OR (firstSiren = ${siren} AND secondSiren = ${currentSiren})
-             AND (idItem = ${idItem})
-             ORDER BY dateCreation DESC`);
+             LEFT JOIN company company1 ON chat.firstSiren = company1.siren
+             LEFT JOIN company company2 ON chat.secondSiren = company2.siren
+             WHERE 
+                ((chat.firstSiren = ${currentSiren} AND chat.secondSiren = ${siren}) 
+                OR (chat.firstSiren = ${siren} AND chat.secondSiren = ${currentSiren}))
+                AND (chat.idItem = ${idItem})
+             ORDER BY chat.dateCreation DESC`
+        );
+        
         res.json({
-            "specificDiscussion" : result
-        });
+            "specificDiscussion": result
+        });        
     } catch (err) {
         res.status(500).json(err);
     }
@@ -55,7 +79,7 @@ const getChat = async (req, res) => {
         const result = await getResultOfQuery('vue_user',
             `SELECT siren, message, dateMessage
              FROM chat_message
-             WHERE chat_id = ${id}
+             WHERE chatId = ${id}
              ORDER BY dateMessage ASC;`);
         res.json({
             "message" : result
@@ -115,7 +139,7 @@ const insertChat = async (req, res) => {
         await promiseConnection.beginTransaction();
 
         const [result] = await promiseConnection.execute(
-            `INSERT INTO chat_message (chat_id, siren, message, dateMessage)
+            `INSERT INTO chat_message (chatId, siren, message, dateMessage)
              VALUES (?, ?, ?, ?)`, [discussionId, siren, message, datePosted]);
 
         await promiseConnection.commit();

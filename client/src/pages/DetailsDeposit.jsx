@@ -137,8 +137,7 @@ const DetailsDeposit = () => {
   const handleContactSeller = () => {
     Swal.fire({
       title: "Contacter le donneur",
-      html:`
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+      html: `
         <h2 class="text-lg font-bold text-darkGreen">Envoyer un message au donneur</h2>
         <textarea id="swal-input3" class="mt-2 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-oliveGreen focus:border-oliveGreen" placeholder="Votre message"></textarea>
         <br>
@@ -159,9 +158,9 @@ const DetailsDeposit = () => {
       cancelButtonText: "Annuler",
       customClass: {
         confirmButton: "px-4 py-2 bg-oliveGreen text-white rounded-md shadow hover:bg-yellowGreen1 mx-2",
-        cancelButton: "px-4 py-2 border bg-white border-redd text-red rounded-md shadow hover:bg-rose-100 mx-2",
+        cancelButton: "px-4 py-2 border bg-white border-red text-red rounded-md shadow hover:bg-rose-100 mx-2",
       },
-      preConfirm: () => {
+      preConfirm: async () => {
         const message = document.getElementById("swal-input3").value;
   
         if (!message) {
@@ -169,18 +168,67 @@ const DetailsDeposit = () => {
           return false;
         }
   
-        return {message };
+        try {
+          // 1️⃣ Vérifier si la discussion existe déjà
+          const discussionResponse = await fetch(`/specificDiscussion?siren=${companySeller.siren}&idItem=${itemsData.id_item}`, {
+            method: "GET",
+            credentials: "include",
+          });
+  
+          if (!discussionResponse.ok) throw new Error("Problème lors de la récupération de la discussion");
+  
+          const discussionData = await discussionResponse.json();
+          let discussionId;
+  
+          if (discussionData.specificDiscussion.length > 0) {
+            // 🔹 Si la discussion existe, on récupère son ID
+            discussionId = discussionData.specificDiscussion[0].id;
+          } else {
+            // 🔹 Sinon, on crée une nouvelle discussion
+            const createDiscussionResponse = await fetch(`/insertCompanyDiscussion?siren=${companySeller.siren}&idItem=${itemsData.id_item}`, {
+              method: "GET",
+              credentials: "include",
+            });
+  
+            if (!createDiscussionResponse.ok) throw new Error("Problème lors de la création de la discussion");
+  
+            // 🔹 Après création, on récupère la discussion
+            const newDiscussionResponse = await fetch(`/specificDiscussion?siren=${companySeller.siren}&idItem=${itemsData.id_item}`, {
+              method: "GET",
+              credentials: "include",
+            });
+  
+            if (!newDiscussionResponse.ok) throw new Error("Problème lors de la récupération de la nouvelle discussion");
+  
+            const newDiscussionData = await newDiscussionResponse.json();
+            discussionId = newDiscussionData.specificDiscussion[0].id;
+          }
+  
+          // 3️⃣ Insérer le message dans la discussion trouvée/créée
+          const chatResponse = await fetch(`/insertChat?discussionId=${discussionId}`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+            body: JSON.stringify({ message }),
+          });
+  
+          if (!chatResponse.ok) throw new Error("Problème lors de l'envoi du message");
+  
+          return true;
+        } catch (error) {
+          console.error("Erreur lors de l'insertion du chat :", error);
+          Swal.showValidationMessage("Une erreur est survenue. Veuillez réessayer.");
+          return false;
+        }
       },
     }).then((result) => {
       if (result.isConfirmed) {
-        Swal.fire(
-          "Message envoyé !",
-          "Le vendeur a été notifié de votre message.",
-          "success"
-        );
+        Swal.fire("Message envoyé !", "Le vendeur a été notifié de votre message.", "success");
       }
     });
   };
+  
+  
 
   const handleDelete = () => {
     // Confirmation de suppression avec SweetAlert
