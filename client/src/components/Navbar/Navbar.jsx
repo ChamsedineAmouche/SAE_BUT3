@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBell, faSearch, faSquarePlus } from "@fortawesome/free-solid-svg-icons";
+import { faBell, faEnvelope, faSearch, faSquarePlus } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 
@@ -166,6 +166,9 @@ export default function Navbar() {
           </button>
           <button className="relative">
             <FontAwesomeIcon icon={faBell} className="text-2xl hover:text-darkGreen" />
+          </button>
+          <button onClick={() => navigate("/chat")} className="relative">
+            <FontAwesomeIcon icon={faEnvelope} className="text-2xl hover:text-darkGreen" />
           </button>
           <button onClick={() => setIsSearchOpen(true)} className="relative">
             <FontAwesomeIcon icon={faSearch} className="text-2xl hover:text-darkGreen" />
