@@ -56,6 +56,7 @@ async function getDataForHomePage(){
             JOIN condition_type ct ON l.id_condition_type = ct.id_condition_type 
             JOIN object_type ot ON l.id_object_type = ot.id_object_type 
             WHERE l.status = "active"
+            AND l.valid = "true"
             ORDER BY l.date_posted DESC;
             `);
         const event = await getResultOfQuery('vue_admin','SELECT * FROM event');

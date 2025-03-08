@@ -14,6 +14,7 @@ async function getDataForCatalogPage() {
                 GROUP BY id_item
             ) lf ON l.id_item = lf.id_item
             WHERE l.status = "active"
+            AND l.valid = "true"
             ORDER BY l.date_posted DESC;
             `);
         const allOfObjectStateForFilters =
