@@ -199,8 +199,10 @@ CREATE TABLE chat (
                         firstSiren VARCHAR(20) NOT NULL,
                         secondSiren VARCHAR(20) NOT NULL,
                         dateCreation DATETIME NOT NULL,
+                        idItem INT NOT NULL,
                         FOREIGN KEY (firstSiren) REFERENCES company(siren) ON DELETE CASCADE,
-                        FOREIGN KEY (secondSiren) REFERENCES company(siren) ON DELETE CASCADE
+                        FOREIGN KEY (secondSiren) REFERENCES company(siren) ON DELETE CASCADE,
+                        FOREIGN KEY (idItem) REFERENCES listing(id_item) ON DELETE CASCADE
 );
 
 CREATE TABLE chat_message (

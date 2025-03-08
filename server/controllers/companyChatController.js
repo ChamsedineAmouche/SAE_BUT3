@@ -11,7 +11,7 @@ const getAllDiscussionsOfCompany = async (req, res) => {
         }
 
         const result = await getResultOfQuery('vue_user',
-            `SELECT id, firstSiren, secondSiren, dateCreation
+            `SELECT id, firstSiren, secondSiren, dateCreation, idItem
              FROM chat
              WHERE firstSiren = ${currentSiren} OR secondSiren = ${currentSiren}
              ORDER BY dateCreation DESC`);
@@ -27,17 +27,18 @@ const getSpecificDiscussions = async (req, res) => {
     console.log("Endpoint '/specificDiscussion' was called");
     try {
         const currentSiren = req.session.user.siren;
-        const { siren } = req.query;
+        const { siren, idItem } = req.query;
 
         if (!currentSiren) {
             throw new Error("Vous n'êtes pas connecté");
         }
 
         const result = await getResultOfQuery('vue_user',
-            `SELECT id, firstSiren, secondSiren, dateCreation
+            `SELECT id, firstSiren, secondSiren, dateCreation, idItem
              FROM chat
              WHERE (firstSiren = ${currentSiren} AND secondSiren = ${siren})
              OR (firstSiren = ${siren} AND secondSiren = ${currentSiren})
+             AND (idItem = ${idItem})
              ORDER BY dateCreation DESC`);
         res.json({
             "specificDiscussion" : result
@@ -69,7 +70,7 @@ const insertCompanyDiscussion = async (req, res) => {
     const promiseConnection = connection.promise();
     try {
         const currentSiren = req.session.user.siren;
-        const { siren } = req.query;
+        const { siren, idItem } = req.query;
 
         if (!currentSiren) {
             throw new Error("Vous n'êtes pas connecté");
@@ -80,8 +81,8 @@ const insertCompanyDiscussion = async (req, res) => {
         await promiseConnection.beginTransaction();
 
         const [discussionResult] = await promiseConnection.execute(
-            `INSERT INTO chat (firstSiren, secondSiren, dateCreation)
-             VALUES (?, ?, ?)`, [currentSiren, siren, datePosted]);
+            `INSERT INTO chat (firstSiren, secondSiren, dateCreation, idItem)
+             VALUES (?, ?, ?, ?)`, [currentSiren, siren, datePosted, idItem]);
 
         await promiseConnection.commit();
 
