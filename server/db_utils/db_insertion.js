@@ -27,15 +27,16 @@ const insertListingWithImages = async (newSubmission, siren) => {
         const categoryId = categoryIdRequest[0].id_object_type;
         const status = "active";
         const idEmplacement = idEmplacementResult[0].id_emplacement;
+        const valid = "false";
         console.log("emplacement id: " + idEmplacement);
 
         const datePosted = new Date().toISOString().slice(0, 19).replace('T', ' ');
 
         const [listingResult] = await promiseConnection.execute(
             `INSERT INTO listing 
-       (title, description, dimension, date_posted, status, id_emplacement, siren, id_object_type, id_condition_type) 
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-            [title, description, dimensionString, datePosted, status, idEmplacement, siren, categoryId, stateId]
+       (title, description, dimension, date_posted, status, id_emplacement, siren, id_object_type, id_condition_type, valid) 
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+            [title, description, dimensionString, datePosted, status, idEmplacement, siren, categoryId, stateId, valid]
         );
 
         const [updateResult] = await promiseConnection.execute(

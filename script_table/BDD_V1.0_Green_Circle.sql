@@ -134,6 +134,7 @@ CREATE TABLE listing (
                          siren CHAR(14) NOT NULL,
                          id_object_type INT NOT NULL,
                          id_condition_type INT NOT NULL,
+                         valid VARCHAR(10) NOT NULL,
                          PRIMARY KEY(id_item),
                          FOREIGN KEY(id_emplacement) REFERENCES emplacement(id_emplacement),
                          FOREIGN KEY(siren) REFERENCES company(siren),
