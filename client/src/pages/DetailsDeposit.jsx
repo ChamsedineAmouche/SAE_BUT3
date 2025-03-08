@@ -11,6 +11,7 @@ import 'react-medium-image-zoom/dist/styles.css';
 import { getAuthHeaders } from "../utils/jwtAuth";
 import ReservationSwal from "../components/ReservationSwal/ReservationSwal";
 import toast from 'react-hot-toast'; // Import de react-hot-toast
+import { faCheck, faTimes } from "@fortawesome/free-solid-svg-icons";
 
 const DetailsDeposit = () => {
   const { id } = useParams();
@@ -31,6 +32,7 @@ const DetailsDeposit = () => {
     dimensions: null,
     datePosted: null,
     likes: null,
+    valid: null,
   });
   const [data, setData] = useState(null);
   const [dataImg, setDataImg] = useState(null);
@@ -52,7 +54,7 @@ const DetailsDeposit = () => {
           headers: { "Content-Type": "application/json" },
           credentials: "include",
         });
-  
+
         if (response.ok) {
           const sessionData = await response.json();
           setIsAdmin(sessionData.role === "admin");
@@ -64,9 +66,9 @@ const DetailsDeposit = () => {
         setIsAdmin(false);
       }
     };
-  
+
     fetchSession(); // Appelle la fonction async
-  
+
   }, []);
 
   useEffect(() => {
@@ -98,6 +100,7 @@ const DetailsDeposit = () => {
           datePosted: data.product[0].date_posted,
           likes: data.product[0].nbLikes,
           status: data.product[0].status,
+          valid: data.product[0].valid,
         }));
         setCompanySeller(data.companySeller[0]);
         setCurrentCompany(data.currentCompany[0] ? data.currentCompany[0] : "");
@@ -244,6 +247,93 @@ const DetailsDeposit = () => {
     });
   };
 
+  const handleValidate = async () => {
+    Swal.fire({
+      title: "Êtes-vous sûr de vouloir valider ce dépôt ?",
+      text: "Cette action est irréversible.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Valider",
+      cancelButtonText: "Annuler",
+      customClass: {
+        confirmButton: "bg-green-500 text-white",
+        cancelButton: "bg-gray-300 text-black",
+      },
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          console.log(`🚀 Envoi de la requête GET pour valider l'objet ID: ${id}`);
+
+          const response = await fetch(`/validateDepot?idItem=${id}`, { // ✅ Ajout de l'ID dans l'URL
+            method: "GET",  // ✅ On garde GET comme tu veux
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+
+          console.log("🛠️ Réponse reçue :", response);
+
+          if (response.ok) {
+            toast.success("Dépôt validé avec succès !");
+            setItemsData((prevState) => ({
+              ...prevState,
+              valid: "true", // ✅ Met à jour localement pour masquer le bouton après validation
+            }));
+          } else {
+            const errorData = await response.json();
+            console.error("❌ Erreur renvoyée par l'API :", errorData);
+            throw new Error(errorData.error || "Erreur lors de la validation");
+          }
+        } catch (error) {
+          console.error("❌ Erreur validation:", error);
+          toast.error("Une erreur est survenue lors de la validation.");
+        }
+      }
+    });
+  };
+
+  const handleCancel = async () => {
+    Swal.fire({
+      title: "Êtes-vous sûr de vouloir refuser ce dépôt ?",
+      text: "Cette action est irréversible.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Refuser",
+      cancelButtonText: "Annuler",
+      customClass: {
+        confirmButton: "bg-red-500 text-white",
+        cancelButton: "bg-gray-300 text-black",
+      },
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          console.log(`🚀 Envoi de la requête GET pour supprimer l'objet ID: ${id}`);
+
+          const response = await fetch(`/deleteDepot?idItem=${id}`, {  // ✅ Envoi en GET
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+
+          console.log("🛠️ Réponse reçue :", response);
+
+          if (response.ok) {
+            toast.success("Dépôt refusé avec succès !");
+            navigate("/"); // ✅ Redirige l'utilisateur après suppression
+          } else {
+            const errorData = await response.json();
+            console.error("❌ Erreur renvoyée par l'API :", errorData);
+            throw new Error(errorData.error || "Erreur lors du refus");
+          }
+        } catch (error) {
+          console.error("❌ Erreur suppression:", error);
+          toast.error("Une erreur est survenue lors du refus.");
+        }
+      }
+    });
+  };
+
   return (
     <div className="h-screen mt-24 px-10 overflow-y-auto">
       {/* Section top */}
@@ -257,6 +347,24 @@ const DetailsDeposit = () => {
         {itemsData.status === "picked" && (
           <div className="bg-oliveGreen bg-opacity-60 px-6 py-3 text-lg font-semibold rounded-md text-white">
             Donné
+          </div>
+        )}
+        {isAdmin && itemsData.valid === "false" && (
+          <div className="flex flex-col w-1/2 space-y-4">
+            <button
+              className="bg-oliveGreen text-white px-6 py-3 text-lg font-semibold rounded-md hover:bg-green-700 transition duration-200"
+              onClick={handleValidate}
+            >
+              <FontAwesomeIcon icon={faCheck} />
+              <span> Valider l'objet</span>
+            </button>
+            <button
+              className="bg-red text-white px-6 py-3 text-lg font-semibold rounded-md hover:bg-red-700 transition duration-200"
+              onClick={handleCancel}
+            >
+              <FontAwesomeIcon icon={faTimes} />
+              <span> Refuser l'objet</span>
+            </button>
           </div>
         )}
         <div className="flex items-center justify-end space-x-2 border p-3 rounded-lg">

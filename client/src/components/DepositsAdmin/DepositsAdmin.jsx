@@ -28,8 +28,8 @@ const DepositsAdmin = () => {
         });
     }, []);
     
-    const columns = ['title', 'date_posted', 'company', 'action'];
-    const columnNames = ['Nom objet', 'Date de mise en ligne', 'Entreprise', 'Action'];
+    const columns = ['title', 'date_posted', 'company', 'statut', 'action'];
+    const columnNames = ['Nom objet', 'Date de mise en ligne', 'Entreprise', 'Statut', 'Action'];
 
     const formattedDepositsAdmin = deposits.map((deposit) => {
         const date = new Date(deposit.date_posted);
@@ -39,6 +39,7 @@ const DepositsAdmin = () => {
             title: deposit.title,
             date_posted: formattedDate,
             company: deposit.company_name,
+            statut: deposit.valid === 'false' ? 'En file d\'attente' : 'Validé',
             action: deposit.status === 'picked' ? (
                 <span className="text-green-600 font-bold">Récupéré</span>
             ) : (
