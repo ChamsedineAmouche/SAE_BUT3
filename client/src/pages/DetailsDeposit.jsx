@@ -147,6 +147,13 @@ const DetailsDeposit = () => {
     };
   }, [itemsData.images]);
 
+  useEffect(() => {
+    if (!isLoading && itemsData.valid === "false" && !isAdmin) {
+      toast.error("Ce dépôt n'est pas encore validé !");
+      navigate("/depot"); // 🔄 Redirige l'utilisateur
+    }
+  }, [isLoading, itemsData.valid, isAdmin, navigate]);
+
   if (isLoading) {
     return <p>Chargement en cours...</p>;
   }
