@@ -13,7 +13,7 @@ const {
     allEvents,
     allArticles,
     elearningCategories,
-    insertElearning
+    insertElearning, validateObject
 } = require('../controllers/adminController');
 
 router.get('/allUsers', allUsers);
@@ -30,6 +30,7 @@ router.get('/allEvents', allEvents)
 router.get('/allArticles', allArticles)
 router.get('/elearningCategories', elearningCategories)
 router.post('/insertElearning', insertElearning)
+router.get('/validateObject', validateObject)
 
 
 module.exports = router;

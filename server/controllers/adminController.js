@@ -6,6 +6,7 @@ const {getAllElearning, getElearningCategory} = require("../elearning/elearningF
 const {getAllEvents, insertEventAdmin, deleteEventAdmin} = require("../admin/eventAdmin")
 const {getAllArticles, insertArticleAdmin, deleteArticleAdmin} = require("../admin/articleAdmin")
 const {insertElearningAdmin} = require("../admin/elearningAdmin")
+const getDbConnection = require("../db_utils/db_connection");
 
 const getAdminSession = (req, res) => {
     if ((req.session.admin)){
@@ -244,5 +245,30 @@ const insertElearning = async (req, res) => {
     }
 }
 
-module.exports = { allUsers, getSusObject, deleteDepot , deleteELearning,allElearning, insertEvent, insertArticle, deleteArticle, deleteEvent, allEvents, allArticles, elearningCategories, insertElearning }
+const validateObject = async (req, res) => {
+    const connection = getDbConnection('vue_user');
+    const promiseConnection = connection.promise();
+    try {
+        const { idItem } = req.query;
+        const validation = "true";
+
+        await promiseConnection.beginTransaction();
+
+        const [result] = await promiseConnection.execute(
+            `UPDATE listing SET valid = ? WHERE id_item = ?`,
+            [validation, idItem]);
+
+        await promiseConnection.commit();
+
+        res.status(200).json({ message: "Objet ajouté avec succes", messageId: result.insertId });
+    } catch (error) {
+        await promiseConnection.rollback();
+        console.error("Erreur lors de l'insertion du message :", error);
+        res.status(500).json({ error: "Erreur interne du serveur" });
+    } finally {
+        await promiseConnection.end();
+    }
+};
+
+module.exports = { allUsers, getSusObject, deleteDepot , deleteELearning,allElearning, insertEvent, insertArticle, deleteArticle, deleteEvent, allEvents, allArticles, elearningCategories, insertElearning, validateObject }
 
