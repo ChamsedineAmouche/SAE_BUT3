@@ -277,5 +277,46 @@ const validateDepot = async (req, res) => {
     }
 };
 
-module.exports = { allUsers, getSusObject, deleteDepot , deleteELearning,allElearning, insertEvent, insertArticle, deleteArticle, deleteEvent, allEvents, allArticles, elearningCategories, insertElearning, validateDepot }
+const deleteMessage = async (req, res) => {
+    const connection = getDbConnection('vue_user');
+    const promiseConnection = connection.promise();
+    
+    try {
+        const { messageId } = req.query;
+
+        const admin = getAdminSession(req);
+        if (!admin) {
+            return res.status(403).json({ error: "Pas de session admin en cours" });
+        }
+
+        if (!messageId) {
+            return res.status(400).json({ error: "ID du message requis" });
+        }
+
+        await promiseConnection.beginTransaction();
+
+        // Suppression du message
+        const [result] = await promiseConnection.execute(
+            `DELETE FROM message WHERE id = ?`,
+            [messageId]
+        );
+
+        await promiseConnection.commit();
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ error: "Message non trouvé ou déjà supprimé" });
+        }
+
+        res.status(200).json({ success: true, message: "Message supprimé avec succès" });
+
+    } catch (error) {
+        await promiseConnection.rollback();
+        console.error("❌ Erreur lors de la suppression du message :", error);
+        res.status(500).json({ error: "Erreur interne du serveur" });
+    } finally {
+        await promiseConnection.end();
+    }
+};
+
+module.exports = { allUsers, getSusObject, deleteDepot , deleteELearning,allElearning, insertEvent, insertArticle, deleteArticle, deleteEvent, allEvents, allArticles, elearningCategories, insertElearning, validateDepot, deleteMessage }
 
