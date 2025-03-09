@@ -35,14 +35,21 @@ const ForumMessages = ({ creationDate, messagesPerPage, messages }) => {
         return reason;
       },
     });
-  
+
     if (reason) {
       try {
         console.log(message);
-        const response = await fetch(`/reportMessage?messageId=${message.id}`);
-  
+        const encodedReason = encodeURIComponent(reason);
+
+        const response = await fetch(`/reportMessage?messageId=${message.id}&reason=${encodedReason}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
         if (!response.ok) throw new Error("Erreur lors de l'envoi du signalement");
-  
+
         Swal.fire("Signalement envoyé", "Votre signalement a bien été pris en compte.", "success");
       } catch (error) {
         Swal.fire("Erreur", "Impossible d'envoyer le signalement.", "error");
@@ -50,7 +57,7 @@ const ForumMessages = ({ creationDate, messagesPerPage, messages }) => {
       }
     }
   };
-  
+
 
   return (
     <div className="bg-white p-6 rounded-lg shadow-lg">
@@ -101,9 +108,8 @@ const ForumMessages = ({ creationDate, messagesPerPage, messages }) => {
             <li>
               <button
                 onClick={() => handlePageChange(currentPage - 1)}
-                className={`px-4 py-2 border text-darkGreen border-gray-300 rounded-l-lg ${
-                  currentPage === 1 ? "bg-gray-200" : "hover:bg-gray-300"
-                }`}
+                className={`px-4 py-2 border text-darkGreen border-gray-300 rounded-l-lg ${currentPage === 1 ? "bg-gray-200" : "hover:bg-gray-300"
+                  }`}
                 disabled={currentPage === 1}
               >
                 Précédent
@@ -115,9 +121,8 @@ const ForumMessages = ({ creationDate, messagesPerPage, messages }) => {
               <li key={i + 1}>
                 <button
                   onClick={() => handlePageChange(i + 1)}
-                  className={`px-4 py-2 border text-darkGreen border-gray-300 ${
-                    i + 1 === currentPage ? "bg-gray-400 text-white" : "hover:bg-gray-300"
-                  }`}
+                  className={`px-4 py-2 border text-darkGreen border-gray-300 ${i + 1 === currentPage ? "bg-gray-400 text-white" : "hover:bg-gray-300"
+                    }`}
                 >
                   {i + 1}
                 </button>
@@ -128,9 +133,8 @@ const ForumMessages = ({ creationDate, messagesPerPage, messages }) => {
             <li>
               <button
                 onClick={() => handlePageChange(currentPage + 1)}
-                className={`px-4 py-2 border text-darkGreen border-gray-300 rounded-r-lg ${
-                  currentPage === totalPages ? "bg-gray-200" : "hover:bg-gray-300"
-                }`}
+                className={`px-4 py-2 border text-darkGreen border-gray-300 rounded-r-lg ${currentPage === totalPages ? "bg-gray-200" : "hover:bg-gray-300"
+                  }`}
                 disabled={currentPage === totalPages}
               >
                 Suivant

@@ -191,6 +191,7 @@ CREATE TABLE message (
                          message TEXT NOT NULL,
                          date_of_message DATE NOT NULL,
                          status VARCHAR(10) NOT NULL,
+                         reason VARCHAR(255),
                          FOREIGN KEY(discussion_id) REFERENCES discussion(id) ON DELETE CASCADE,
                          FOREIGN KEY(siren) REFERENCES company(siren) ON DELETE CASCADE
 );

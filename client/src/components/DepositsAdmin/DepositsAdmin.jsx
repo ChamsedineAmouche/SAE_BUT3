@@ -144,7 +144,7 @@ const DepositsAdmin = () => {
     return (
         <div className="bg-white w-full">
             <h2 className="text-3xl font-bold text-darkGreen mb-8 text-center">Dépôts</h2>
-            <p className="text font-bold text-darkGreen mb-8 text-center">gestion des annonces considérées suspectes</p>
+            <p className="text font-bold text-darkGreen mb-8 text-center">gestion des annonces</p>
 
             <div id="Dépôts" className="overflow-y-auto h-[70vh]">
                 {isLoading ? (
