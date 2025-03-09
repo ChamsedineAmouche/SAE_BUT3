@@ -134,6 +134,7 @@ CREATE TABLE listing (
                          siren CHAR(14) NOT NULL,
                          id_object_type INT NOT NULL,
                          id_condition_type INT NOT NULL,
+                         valid VARCHAR(10) NOT NULL DEFAULT 'false',
                          PRIMARY KEY(id_item),
                          FOREIGN KEY(id_emplacement) REFERENCES emplacement(id_emplacement),
                          FOREIGN KEY(siren) REFERENCES company(siren),
@@ -190,6 +191,7 @@ CREATE TABLE message (
                          message TEXT NOT NULL,
                          date_of_message DATE NOT NULL,
                          status VARCHAR(10) NOT NULL,
+                         reason VARCHAR(255),
                          FOREIGN KEY(discussion_id) REFERENCES discussion(id) ON DELETE CASCADE,
                          FOREIGN KEY(siren) REFERENCES company(siren) ON DELETE CASCADE
 );
@@ -213,6 +215,15 @@ CREATE TABLE chat_message (
                         dateMessage DATETIME NOT NULL,
                         FOREIGN KEY (siren) REFERENCES company(siren) ON DELETE CASCADE,
                         FOREIGN KEY (chatId) REFERENCES chat(id) ON DELETE CASCADE
+);
+
+
+CREATE TABLE notif (
+                        id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                        siren CHAR(14) NOT NULL,
+                        message VARCHAR(100) NOT NULL,
+                        is_read BOOLEAN DEFAULT FALSE,
+                        FOREIGN KEY (siren) REFERENCES company(siren) ON DELETE CASCADE
 );
 
 

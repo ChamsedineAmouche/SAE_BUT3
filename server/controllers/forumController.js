@@ -131,23 +131,27 @@ const reportMessage = async (req, res) => {
     const connection = getDbConnection('vue_user');
     const promiseConnection = connection.promise();
     try {
-        const { messageId } = req.query;
+        const { messageId, reason } = req.query;
+
+        if (!messageId || !reason) {
+            return res.status(400).json({ error: "ID du message et raison requis" });
+        }
 
         const messageStatus = "REPORTED";
 
         await promiseConnection.beginTransaction();
 
         const [result] = await promiseConnection.execute(
-            `UPDATE message SET status = ? WHERE id = ?`,
-            [messageStatus, messageId]
+            `UPDATE message SET status = ?, reason = ? WHERE id = ?`,
+            [messageStatus, reason, messageId]
         );
 
         await promiseConnection.commit();
 
-        res.status(200).json({ message: "Message ajouté avec succès", messageId: result.insertId });
+        res.status(200).json({ message: "Message signalé avec succès", messageId: result.insertId });
     } catch (error) {
         await promiseConnection.rollback();
-        console.error("Erreur lors de l'insertion du message :", error);
+        console.error("Erreur lors de lu signalement du message :", error);
         res.status(500).json({ error: "Erreur interne du serveur" });
     } finally {
         await promiseConnection.end();

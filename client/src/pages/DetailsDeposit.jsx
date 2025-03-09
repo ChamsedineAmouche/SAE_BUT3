@@ -8,9 +8,10 @@ import Map from "../components/Map/Map";
 import Swal from "sweetalert2";
 import Zoom from 'react-medium-image-zoom';
 import 'react-medium-image-zoom/dist/styles.css';
-import {getAuthHeaders}  from "../utils/jwtAuth";
+import { getAuthHeaders } from "../utils/jwtAuth";
 import ReservationSwal from "../components/ReservationSwal/ReservationSwal";
 import toast from 'react-hot-toast'; // Import de react-hot-toast
+import { faCheck, faTimes } from "@fortawesome/free-solid-svg-icons";
 
 const DetailsDeposit = () => {
   const { id } = useParams();
@@ -31,6 +32,7 @@ const DetailsDeposit = () => {
     dimensions: null,
     datePosted: null,
     likes: null,
+    valid: null,
   });
   const [data, setData] = useState(null);
   const [dataImg, setDataImg] = useState(null);
@@ -38,19 +40,45 @@ const DetailsDeposit = () => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [companySeller, setCompanySeller] = useState(null);
   const [currentCompany, setCurrentCompany] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   const handleImageClick = (image) => {
     setSelectedImage(image);
   };
 
   useEffect(() => {
+    const fetchSession = async () => {
+      try {
+        const response = await fetch("/getSession", {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+        });
+
+        if (response.ok) {
+          const sessionData = await response.json();
+          setIsAdmin(sessionData.role === "admin");
+        } else {
+          setIsAdmin(false);
+        }
+      } catch (error) {
+        console.error("Erreur session:", error);
+        setIsAdmin(false);
+      }
+    };
+
+    fetchSession(); // Appelle la fonction async
+
+  }, []);
+
+  useEffect(() => {
     fetch(`/product?id=${id}`) //{ headers: { 'Authorization': getAuthHeaders } }
       .then((response) => {
-        if (!response.status==401) {
+        if (!response.status == 401) {
           //toast.error("Connectez vous")
           navigate("/login");
         }
-        else if(!response.ok){
+        else if (!response.ok) {
           throw new Error(`Erreur HTTP: ${response.status}`);
         }
         return response.json();
@@ -72,6 +100,7 @@ const DetailsDeposit = () => {
           datePosted: data.product[0].date_posted,
           likes: data.product[0].nbLikes,
           status: data.product[0].status,
+          valid: data.product[0].valid,
         }));
         setCompanySeller(data.companySeller[0]);
         setCurrentCompany(data.currentCompany[0] ? data.currentCompany[0] : "");
@@ -118,6 +147,13 @@ const DetailsDeposit = () => {
     };
   }, [itemsData.images]);
 
+  useEffect(() => {
+    if (!isLoading && itemsData.valid === "false" && !isAdmin) {
+      toast.error("Ce dépôt n'est pas encore validé !");
+      navigate("/depot"); // 🔄 Redirige l'utilisateur
+    }
+  }, [isLoading, itemsData.valid, isAdmin, navigate]);
+
   if (isLoading) {
     return <p>Chargement en cours...</p>;
   }
@@ -138,6 +174,7 @@ const DetailsDeposit = () => {
     Swal.fire({
       title: "Contacter le donneur",
       html: `
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
         <h2 class="text-lg font-bold text-darkGreen">Envoyer un message au donneur</h2>
         <textarea id="swal-input3" class="mt-2 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-oliveGreen focus:border-oliveGreen" placeholder="Votre message"></textarea>
         <br>
@@ -162,12 +199,10 @@ const DetailsDeposit = () => {
       },
       preConfirm: async () => {
         const message = document.getElementById("swal-input3").value;
-  
+
         if (!message) {
           Swal.showValidationMessage("Veuillez remplir tous les champs");
           return false;
-        }
-  
         try {
           // 1️⃣ Vérifier si la discussion existe déjà
           const discussionResponse = await fetch(`/specificDiscussion?siren=${companySeller.siren}&idItem=${itemsData.id_item}`, {
@@ -256,7 +291,7 @@ const DetailsDeposit = () => {
               throw new Error("Erreur lors de la suppression");
             }
             toast.success("Dépôt supprimé avec succès !");
-            navigate("/"); 
+            navigate("/");
           })
           .catch((error) => {
             console.error("Erreur de suppression:", error);
@@ -266,29 +301,134 @@ const DetailsDeposit = () => {
     });
   };
 
+  const handleValidate = async () => {
+    Swal.fire({
+      title: "Êtes-vous sûr de vouloir valider ce dépôt ?",
+      text: "Cette action est irréversible.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Valider",
+      cancelButtonText: "Annuler",
+      customClass: {
+        confirmButton: "bg-green-500 text-white",
+        cancelButton: "bg-gray-300 text-black",
+      },
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          console.log(`🚀 Envoi de la requête GET pour valider l'objet ID: ${id}`);
+
+          const response = await fetch(`/validateDepot?idItem=${id}`, { // ✅ Ajout de l'ID dans l'URL
+            method: "GET",  // ✅ On garde GET comme tu veux
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+
+          console.log("🛠️ Réponse reçue :", response);
+
+          if (response.ok) {
+            toast.success("Dépôt validé avec succès !");
+            setItemsData((prevState) => ({
+              ...prevState,
+              valid: "true", // ✅ Met à jour localement pour masquer le bouton après validation
+            }));
+          } else {
+            const errorData = await response.json();
+            console.error("❌ Erreur renvoyée par l'API :", errorData);
+            throw new Error(errorData.error || "Erreur lors de la validation");
+          }
+        } catch (error) {
+          console.error("❌ Erreur validation:", error);
+          toast.error("Une erreur est survenue lors de la validation.");
+        }
+      }
+    });
+  };
+
+  const handleCancel = async () => {
+    Swal.fire({
+      title: "Êtes-vous sûr de vouloir refuser ce dépôt ?",
+      text: "Cette action est irréversible.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Refuser",
+      cancelButtonText: "Annuler",
+      customClass: {
+        confirmButton: "bg-red-500 text-white",
+        cancelButton: "bg-gray-300 text-black",
+      },
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          console.log(`🚀 Envoi de la requête GET pour supprimer l'objet ID: ${id}`);
+
+          const response = await fetch(`/deleteDepot?idItem=${id}`, {  // ✅ Envoi en GET
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+
+          console.log("🛠️ Réponse reçue :", response);
+
+          if (response.ok) {
+            toast.success("Dépôt refusé avec succès !");
+            navigate("/"); // ✅ Redirige l'utilisateur après suppression
+          } else {
+            const errorData = await response.json();
+            console.error("❌ Erreur renvoyée par l'API :", errorData);
+            throw new Error(errorData.error || "Erreur lors du refus");
+          }
+        } catch (error) {
+          console.error("❌ Erreur suppression:", error);
+          toast.error("Une erreur est survenue lors du refus.");
+        }
+      }
+    });
+  };
+
   return (
     <div className="h-screen mt-24 px-10 overflow-y-auto">
       {/* Section top */}
       <div className="px-12 flex justify-end space-x-6">
         {itemsData.status === "reserved" &&
-        (
-          <div className="bg-oliveGreen bg-opacity-60 px-6 py-3 text-lg font-semibold rounded-md text-white">
-            Réservé
-          </div>
-        )}
+          (
+            <div className="bg-oliveGreen bg-opacity-60 px-6 py-3 text-lg font-semibold rounded-md text-white">
+              Réservé
+            </div>
+          )}
         {itemsData.status === "picked" && (
           <div className="bg-oliveGreen bg-opacity-60 px-6 py-3 text-lg font-semibold rounded-md text-white">
             Donné
           </div>
         )}
-        <div className="flex items-center justify-end space-x-2 border p-3 rounded-lg">
+        {isAdmin && itemsData.valid === "false" && (
+          <div className="flex flex-col w-1/2 space-y-4">
             <button
-              className="text-lightGreen hover:text-red transition duration-200"
+              className="bg-oliveGreen text-white px-6 py-3 text-lg font-semibold rounded-md hover:bg-green-700 transition duration-200"
+              onClick={handleValidate}
             >
-              <FontAwesomeIcon icon={faHeart} className="text-xl" />
+              <FontAwesomeIcon icon={faCheck} />
+              <span> Valider l'objet</span>
             </button>
-            <span className="text-lightGreen">{itemsData.likes} favoris</span>
+            <button
+              className="bg-red text-white px-6 py-3 text-lg font-semibold rounded-md hover:bg-red-700 transition duration-200"
+              onClick={handleCancel}
+            >
+              <FontAwesomeIcon icon={faTimes} />
+              <span> Refuser l'objet</span>
+            </button>
           </div>
+        )}
+        <div className="flex items-center justify-end space-x-2 border p-3 rounded-lg">
+          <button
+            className="text-lightGreen hover:text-red transition duration-200"
+          >
+            <FontAwesomeIcon icon={faHeart} className="text-xl" />
+          </button>
+          <span className="text-lightGreen">{itemsData.likes} favoris</span>
+        </div>
       </div>
 
       {/* Section principale */}
@@ -317,12 +457,12 @@ const DetailsDeposit = () => {
           <div className="relative flex items-center justify-center w-full">
             {selectedImage && (
               <Zoom>
-              <img
-                src={selectedImage}
-                alt={itemsData.title}
-                className="w-full h-full object-cover rounded-lg"
-              />
-            </Zoom>
+                <img
+                  src={selectedImage}
+                  alt={itemsData.title}
+                  className="w-full h-full object-cover rounded-lg"
+                />
+              </Zoom>
             )}
           </div>
         </div>
@@ -338,41 +478,44 @@ const DetailsDeposit = () => {
               </div>
             )}
           </div>
-          
+
           <div className="flex flex-col">
             <div className="flex w-full space-x-4">
               {/* Première colonne (boutons) */}
-              
-              {companySeller.siren === currentCompany.siren 
+
+              {companySeller.siren === currentCompany.siren
                 ? (<div className="flex flex-col w-1/2 space-y-4">
-                    <p className="text-2xl font-semibold text-darkGreen">{itemsData.category}</p>
-                    <button
-                      className="bg-blue text-white px-6 py-3 text-lg font-semibold rounded-md hover:bg-opacity-90 transition duration-200 h-14"
-                      onClick={() => navigate('/nouveau_depot')}
-                    >
-                      <FontAwesomeIcon icon={faEdit} className="mr-2" />
-                      Modifier
-                    </button>
-                    <button
-                      className="bg-red text-white px-6 py-3 text-lg font-semibold rounded-md hover:bg-opacity-90 transition duration-200 h-14"
-                      onClick={handleDelete}
-                    >
-                      <FontAwesomeIcon icon={faTrash} className="mr-2" />
-                      Supprimer
-                    </button>
-                  </div>)
+                  <p className="text-2xl font-semibold text-darkGreen">{itemsData.category}</p>
+                  <button
+                    className="bg-blue text-white px-6 py-3 text-lg font-semibold rounded-md hover:bg-opacity-90 transition duration-200 h-14"
+                    onClick={() => navigate('/nouveau_depot')}
+                  >
+                    <FontAwesomeIcon icon={faEdit} className="mr-2" />
+                    Modifier
+                  </button>
+                  <button
+                    className="bg-red text-white px-6 py-3 text-lg font-semibold rounded-md hover:bg-opacity-90 transition duration-200 h-14"
+                    onClick={handleDelete}
+                  >
+                    <FontAwesomeIcon icon={faTrash} className="mr-2" />
+                    Supprimer
+                  </button>
+                </div>)
                 : (<div className="flex flex-col w-1/2 space-y-4">
                   <p className="text-2xl font-semibold text-darkGreen">{itemsData.category}</p>
-                    {/* Bouton "Réserver" */}
-                    <ReservationSwal id={id} />
-                    <button 
-                      className="bg-oliveGreen bg-opacity-60 text-white px-6 py-3 text-lg font-semibold rounded-md hover:bg-opacity-50 transition duration-200 h-14"
-                      onClick={handleContactSeller}
-                    >
-                      <FontAwesomeIcon icon={faEnvelope} className="mr-2 text-xl"/>
-                      Contacter le donneur
-                    </button>
-                  </div>)
+                  {/* Bouton "Réserver" */}
+                  <ReservationSwal id={id} isAdmin={isAdmin} />
+                  <button
+                    className={`bg-oliveGreen bg-opacity-60 text-white px-6 py-3 text-lg font-semibold rounded-md 
+                        hover:bg-opacity-50 transition duration-200 h-14 
+                        ${isAdmin ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    onClick={handleContactSeller}
+                    disabled={isAdmin}
+                  >
+                    <FontAwesomeIcon icon={faEnvelope} className="mr-2 text-xl" />
+                    Contacter le donneur
+                  </button>
+                </div>)
               }
               {/* Deuxième colonne (description) */}
               <div className="flex flex-col w-1/2 space-y-4">
@@ -390,26 +533,26 @@ const DetailsDeposit = () => {
                       day: 'numeric'
                     })} par {companySeller.nom}
                   </p>
-                  </div>
-                  </div>
-                  </div>
+                </div>
+              </div>
+            </div>
 
-                  <div className="space-y-2 mt-4 bg-darkGreen bg-opacity-20 rounded-lg h-72">
-                  {/* Localisation */}
+            <div className="space-y-2 mt-4 bg-darkGreen bg-opacity-20 rounded-lg h-72">
+              {/* Localisation */}
               <div className="rounded-lg p-3">
                 <h3 className="font-semibold text-lg text-darkGreen">Localisation</h3>
-                <p className="text-sm text-gray-600">{itemsData.adress + ", " + itemsData.zipcode + ", " + itemsData.city}</p>  
+                <p className="text-sm text-gray-600">{itemsData.adress + ", " + itemsData.zipcode + ", " + itemsData.city}</p>
               </div>
               <div className="bg-white m-3 h-48 flex flex-col">
                 <div className="flex-grow"><Map adress={itemsData.adress} zipcode={itemsData.zipcode} city={itemsData.city} /></div>
               </div>
             </div>
-          </div> 
+          </div>
         </div>
       </div>
-                    
+
       {/* Section Recommandations */}
-      {depositThumbnails[0] &&<div className="p-8">
+      {depositThumbnails[0] && <div className="p-8">
         <Carousel items={depositThumbnails} title={"Ces objets pourraient vous intéressser..."} />
       </div>}
     </div>

@@ -6,6 +6,8 @@ const {getAllElearning, getElearningCategory} = require("../elearning/elearningF
 const {getAllEvents, insertEventAdmin, deleteEventAdmin} = require("../admin/eventAdmin")
 const {getAllArticles, insertArticleAdmin, deleteArticleAdmin} = require("../admin/articleAdmin")
 const {insertElearningAdmin} = require("../admin/elearningAdmin")
+const getDbConnection = require("../db_utils/db_connection");
+const { validateObject } = require("../object/objectValidation");
 
 const getAdminSession = (req, res) => {
     if ((req.session.admin)){
@@ -244,5 +246,77 @@ const insertElearning = async (req, res) => {
     }
 }
 
-module.exports = { allUsers, getSusObject, deleteDepot , deleteELearning,allElearning, insertEvent, insertArticle, deleteArticle, deleteEvent, allEvents, allArticles, elearningCategories, insertElearning }
+const validateDepot = async (req, res) => {
+    try {
+        console.log("📩 Requête reçue sur /validateDepot avec idItem :", req.query.idItem);
+
+        const admin = getAdminSession(req);
+        if (!admin) {
+            return res.status(403).json({ error: "Pas de session admin en cours" });
+        }
+
+        const { idItem } = req.query;
+
+        if (!idItem) {
+            return res.status(400).json({ error: "ID de l'objet requis" });
+        }
+
+        const result = await validateObject(idItem);
+
+        if (!result) {
+            console.error("❌ Erreur lors de la validation SQL");
+            return res.status(500).json({ error: "Erreur lors de la validation de l'objet" });
+        }
+        
+        console.log("✅ Objet validé avec succès !");
+        res.status(200).json({ success: true, message: "Objet validé avec succès" });
+
+    } catch (error) {
+        console.error("Erreur lors de la validation de l'objet :", error);
+        res.status(500).json({ error: "Erreur interne du serveur" });
+    }
+};
+
+const deleteMessage = async (req, res) => {
+    const connection = getDbConnection('vue_user');
+    const promiseConnection = connection.promise();
+    
+    try {
+        const { messageId } = req.query;
+
+        const admin = getAdminSession(req);
+        if (!admin) {
+            return res.status(403).json({ error: "Pas de session admin en cours" });
+        }
+
+        if (!messageId) {
+            return res.status(400).json({ error: "ID du message requis" });
+        }
+
+        await promiseConnection.beginTransaction();
+
+        // Suppression du message
+        const [result] = await promiseConnection.execute(
+            `DELETE FROM message WHERE id = ?`,
+            [messageId]
+        );
+
+        await promiseConnection.commit();
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ error: "Message non trouvé ou déjà supprimé" });
+        }
+
+        res.status(200).json({ success: true, message: "Message supprimé avec succès" });
+
+    } catch (error) {
+        await promiseConnection.rollback();
+        console.error("❌ Erreur lors de la suppression du message :", error);
+        res.status(500).json({ error: "Erreur interne du serveur" });
+    } finally {
+        await promiseConnection.end();
+    }
+};
+
+module.exports = { allUsers, getSusObject, deleteDepot , deleteELearning,allElearning, insertEvent, insertArticle, deleteArticle, deleteEvent, allEvents, allArticles, elearningCategories, insertElearning, validateDepot, deleteMessage }
 
