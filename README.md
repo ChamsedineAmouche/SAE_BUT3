@@ -1,40 +1,43 @@
 # Lancer le projet en local
 
-# 1) Prérequis
-node —version vérifier si NodeJs est installé
+## 1) Prérequis
 
-cd client
-npm install
+* **Node.js :** Assurez-vous que Node.js est installé (version v20.11.0 recommandée). Vérifiez la version avec la commande : `node --version`
+* **Dépendances client :**
+    * Naviguez vers le répertoire client : `cd client`
+    * Installez les dépendances : `npm install`
+    * Retournez au répertoire racine : `cd ..`
+* **Dépendances serveur :**
+    * Naviguez vers le répertoire serveur : `cd server`
+    * Installez les dépendances : `npm install`
+* **Serveur MySQL :**
+    * Hébergez un serveur MySQL en local.
+    * Créez un fichier `db_connection.js` dans `server/db_utils` à partir du modèle fourni dans ce répertoire.
+    * Renseignez les informations de connexion à votre base de données MySQL dans `db_connection.js`.
+* **Scripts de création de tables :**
+    * Naviguez vers le répertoire des scripts : `cd script_table`
+    * **Pour Linux/MacOS :**
+        * Créez un fichier `runScriptPerso.sh` à partir du modèle `runScriptTemplate.sh`.
+        * Exécutez le script dans un terminal : `sh runScriptPerso.sh`
+    * **Pour Windows :**
+        * Créez un fichier `runScriptPerso.bat` à partir du modèle `runScriptTemplate.bat`.
+        * Exécutez le script en double-cliquant sur le fichier ou via la ligne de commande : `runScriptPerso.bat`
 
-cd ..
+## 2) Démarrer l'application en local
 
-cd server
-npm install
+### Backend
 
-Héberger un serveur MySQL en local.
-Créer un ficichier db_connection.js dans server/db_utils a partir du template disponible dans server/db_utils
-Renseigner les informations pour se connecter à ta base mysql dans le fichier.
+1.  Ouvrez un terminal.
+2.  Naviguez vers le répertoire du serveur : `cd server`
+3.  Démarrez le serveur : `node server.js`
 
-cd script_table
-# Pour Linux/MacOS
-Créer un fichier 'runScriptPerso.sh' a partir de la template runScriptTemplate.sh
-sh runScriptPerso.sh
+### Frontend
 
-# Pour Windows
-Créer un fichier 'runScriptPerso.bat' a partir de la template runScriptTemplate.bat
-double clique sur le fichier runScriptPerso.bat ou ecrire en ligne de commande 'runScriptPerso.bat'
-# 2) Démarrer l'application en local
+1.  Ouvrez un nouveau terminal.
+2.  Naviguez vers le répertoire du client : `cd client`
+3.  Démarrez l'application : `npm start`
 
-## Backend
+## 3) Points importants
 
-Ouvrir un terminal
-cd server
-node server.js
-
-## Frontend
-Ouvrir un terminal
-cd server
-npm start
-
-# 3) Faire attention
-S'assurer que les ports 3000 et 5001 sont disponible sur son PC
+* Assurez-vous que les ports 3000 (frontend) et 5001 (backend) sont disponibles sur votre machine.
+* Si vous avez des problèmes de dépendances, essayez de supprimer les dossiers `node_modules` et de relancer `npm install` dans les répertoires `client` et `server`.
