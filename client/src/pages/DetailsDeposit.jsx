@@ -203,6 +203,7 @@ const DetailsDeposit = () => {
         if (!message) {
           Swal.showValidationMessage("Veuillez remplir tous les champs");
           return false;
+        }
         try {
           // 1️⃣ Vérifier si la discussion existe déjà
           const discussionResponse = await fetch(`/specificDiscussion?siren=${companySeller.siren}&idItem=${itemsData.id_item}`, {
